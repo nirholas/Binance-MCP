@@ -1,246 +1,389 @@
-# Binance MCP Server
+<div align="center">
 
-[![Status](https://img.shields.io/badge/status-100%25%20complete-brightgreen)]()
-[![Tools](https://img.shields.io/badge/tools-478+-blue)]()
+# 🔶 Binance MCP Server
 
-A comprehensive Model Context Protocol (MCP) server for the **Binance.com** global exchange API.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-≥18.0.0-green)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
+[![MCP](https://img.shields.io/badge/MCP-1.11.0-purple)](https://modelcontextprotocol.io/)
 
-## Overview
+**The most comprehensive Model Context Protocol server for Binance — 478+ tools covering the entire Binance.com API**
 
-This MCP server provides **478+ tools** covering the **complete** Binance.com API including:
+[Quick Start](#-quick-start) •
+[Features](#-features) •
+[Configuration](#%EF%B8%8F-configuration) •
+[Documentation](#-documentation) •
+[Contributing](#-contributing)
 
-- **Spot Trading** - Market data, orders, account info ✅
-- **Margin Trading** - Cross & Isolated margin ✅
-- **Futures (USD-M)** - Perpetual futures trading ✅
-- **Options** - Options trading ✅
-- **Portfolio Margin** - Unified margin account ✅
-- **Wallet** - Deposits, withdrawals, transfers ✅
-- **Sub-Account** - Sub-account management ✅
-- **Staking** - ETH & SOL staking operations ✅
-- **Simple Earn** - Flexible/locked products ✅
-- **Auto-Invest** - DCA & recurring buys ✅
-- **Convert** - Asset conversion ✅
-- **Mining** - Pool mining operations ✅
-- **Algo Trading** - TWAP, VP algorithms ✅
-- **VIP Loan** - Institutional lending ✅
-- **Crypto Loans** - Flexible loans ✅
-- **NFT** - NFT transactions ✅
-- **Pay** - Binance Pay ✅
-- **Gift Card** - Gift card creation & redemption ✅
-- **Copy Trading** - Lead trader features ✅
-- **Dual Investment** - Structured products ✅
-- **C2C/P2P** - Peer-to-peer trading ✅
-- **Fiat** - Fiat deposit/withdrawal ✅
-- **Rebate** - Referral rebates ✅
+</div>
 
-## Installation
+---
+
+## 🎯 Overview
+
+Binance MCP Server enables AI assistants like **Claude**, **ChatGPT**, and other MCP-compatible clients to interact directly with the Binance cryptocurrency exchange. Execute trades, manage portfolios, analyze markets, and automate strategies through natural language.
+
+### Why Binance MCP?
+
+- **Complete Coverage** — 478+ tools spanning every Binance API endpoint
+- **🔐 Secure by Design** — API credentials never leave your machine
+- **⚡ Production Ready** — Built with official Binance SDKs and TypeScript
+- **🔌 Universal Compatibility** — Works with Claude Desktop, Cursor, ChatGPT, and any MCP client
+- **📡 Dual Transport** — STDIO for desktop apps, SSE for web applications
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### Trading & Markets
+- **Spot Trading** — Orders, market data, account info
+- **Margin Trading** — Cross & isolated margin
+- **Futures (USD-M & COIN-M)** — Perpetual contracts
+- **Options** — European-style options
+- **Portfolio Margin** — Unified margin accounts
+- **Algo Trading** — TWAP, VP algorithms
+
+</td>
+<td width="50%">
+
+### Earn & Invest
+- **Simple Earn** — Flexible & locked products
+- **Staking** — ETH & SOL staking
+- **Auto-Invest** — DCA & recurring buys
+- **Dual Investment** — Structured products
+- **Crypto Loans** — Flexible rate loans
+- **VIP Loans** — Institutional lending
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Wallet & Transfers
+- **Wallet** — Deposits, withdrawals, transfers
+- **Sub-Accounts** — Multi-account management
+- **Convert** — Instant asset conversion
+- **Pay** — Binance Pay integration
+- **Gift Cards** — Create & redeem
+
+</td>
+<td width="50%">
+
+### Additional Services
+- **Copy Trading** — Lead trader features
+- **Mining** — Pool mining operations
+- **NFT** — NFT marketplace
+- **C2C/P2P** — Peer-to-peer trading
+- **Fiat** — Fiat on/off ramps
+- **Rebate** — Referral program
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js ≥ 18.0.0
+- Binance account with API credentials
+- An MCP-compatible client (Claude Desktop, Cursor, etc.)
+
+### Installation
 
 ```bash
-cd binance-mcp-server
+# Clone the repository
+git clone https://github.com/nirholas/Binance-MCP.git
+cd Binance-MCP
+
+# Install dependencies
 npm install
+
+# Build the project
+npm run build
 ```
 
-## Configuration
+### Interactive Setup
 
-Create a `.env` file or set environment variables:
+Run the setup wizard to configure your environment:
+
+```bash
+npm run init
+```
+
+This will guide you through:
+- Setting up your Binance API credentials
+- Choosing your transport method (STDIO/SSE)
+- Configuring your MCP client
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env` file in the project root:
 
 ```env
-BINANCE_API_KEY=your_api_key
-BINANCE_API_SECRET=your_api_secret
+BINANCE_API_KEY=your_api_key_here
+BINANCE_API_SECRET=your_api_secret_here
 ```
 
-## Usage
+> **🔒 Security Note:** Never commit your `.env` file. It's already in `.gitignore`.
 
-### STDIO Transport (Claude Desktop, Cursor)
+### Running the Server
+
+#### STDIO Transport (Claude Desktop, Cursor)
 
 ```bash
 npm run start
-# or
-npx ts-node src/index.ts
 ```
 
-### SSE Transport (ChatGPT, Web Apps)
+#### SSE Transport (ChatGPT, Web Apps)
 
 ```bash
 npm run start:sse
-# or
-npx ts-node src/index.ts --sse
 ```
 
-## Project Structure
+#### Development Mode (Hot Reload)
 
-```
-binance-mcp-server/
-├── src/
-│   ├── index.ts              # Entry point
-│   ├── binance.ts            # Module registration
-│   ├── config/
-│   │   ├── binanceClient.ts  # API client with signing
-│   │   └── client.ts         # HTTP client
-│   ├── server/
-│   │   ├── base.ts           # Base server setup
-│   │   ├── stdio.ts          # STDIO transport
-│   │   └── sse.ts            # SSE transport
-│   ├── modules/              # All API modules
-│   │   ├── spot/             # Spot trading
-│   │   ├── margin/           # Cross & Isolated margin
-│   │   ├── futures-usdm/     # USD-M futures
-│   │   ├── options/          # Options trading
-│   │   ├── portfolio-margin/ # Portfolio margin
-│   │   ├── wallet/           # Wallet operations
-│   │   ├── staking/          # ETH & SOL staking
-│   │   ├── simple-earn/      # Flexible & locked products
-│   │   ├── auto-invest/      # Auto-invest plans
-│   │   ├── convert/          # Asset conversion
-│   │   ├── mining/           # Pool mining
-│   │   ├── algo/             # TWAP, VP algorithms
-│   │   ├── vip-loan/         # VIP lending
-│   │   ├── crypto-loans/     # Crypto loans
-│   │   ├── nft/              # NFT operations
-│   │   ├── pay/              # Binance Pay
-│   │   ├── gift-card/        # Gift cards
-│   │   ├── copy-trading/     # Copy trading
-│   │   ├── dual-investment/  # Dual investment
-│   │   ├── c2c/              # P2P trading
-│   │   ├── fiat/             # Fiat operations
-│   │   └── rebate/           # Referral rebates
-│   ├── tools/                # Tool implementations
-│   │   ├── binance-spot/
-│   │   ├── binance-margin/
-│   │   │   ├── cross-margin-api/
-│   │   │   └── isolated-margin-api/
-│   │   ├── binance-futures-usdm/
-│   │   ├── binance-options/
-│   │   ├── binance-portfolio-margin/
-│   │   ├── binance-sub-account/
-│   │   ├── binance-wallet/
-│   │   ├── binance-staking/
-│   │   ├── binance-simple-earn/
-│   │   ├── binance-auto-invest/
-│   │   ├── binance-gift-card/
-│   │   └── ... (all other modules)
-│   └── utils/
-│       └── logger.ts
-├── package.json
-└── tsconfig.json
+```bash
+npm run dev      # STDIO
+npm run dev:sse  # SSE
 ```
 
-## Module Coverage
+---
 
-| Module | Tools | Status |
-|--------|------:|--------|
-| Wallet | 40+ | ✅ 100% |
-| Spot | 35+ | ✅ 100% |
-| Futures (USD-M) | 40+ | ✅ 100% |
-| Margin (Cross) | 26 | ✅ 100% |
-| Margin (Isolated) | 15 | ✅ 100% |
-| Options | 27 | ✅ 100% |
-| Portfolio Margin | 15 | ✅ 100% |
-| Sub-Account | 22 | ✅ 100% |
-| Staking | 22+ | ✅ 100% |
-| Simple Earn | 15+ | ✅ 100% |
-| Auto-Invest | 13 | ✅ 100% |
-| Mining | 13+ | ✅ 100% |
-| Algo | 11+ | ✅ 100% |
-| VIP Loan | 9+ | ✅ 100% |
-| Convert | 9+ | ✅ 100% |
-| Dual Investment | 10+ | ✅ 100% |
-| NFT | 10+ | ✅ 100% |
-| Gift Card | 8 | ✅ 100% |
-| Copy Trading | 10+ | ✅ 100% |
-| Fiat | 5+ | ✅ 100% |
-| Pay | 5+ | ✅ 100% |
-| C2C | 5+ | ✅ 100% |
-| Rebate | 5+ | ✅ 100% |
-| Crypto Loans | 5+ | ✅ 100% |
+## 🖥️ Client Configuration
 
-**Total: 478+ tools** - Full Binance API Coverage
+### Claude Desktop
 
-## API Coverage
-
-🎉 **All major Binance APIs are now fully implemented!**
-
-- ✅ Margin Trading (Cross & Isolated)
-- ✅ Futures Trading (USD-M)
-- ✅ Options Trading
-- ✅ Portfolio Margin
-- ✅ Auto-Invest
-- ✅ Crypto Loans
-- ✅ Sub-Account Management
-- ✅ Gift Card
-- ✅ All other trading & utility APIs
-
-## Claude Desktop Configuration
-
-Add to `claude_desktop_config.json`:
+Add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "binance": {
-      "command": "npx",
-      "args": ["ts-node", "/path/to/binance-mcp-server/src/index.ts"],
+      "command": "node",
+      "args": ["/absolute/path/to/Binance-MCP/build/index.js"],
       "env": {
-        "BINANCE_API_KEY": "your_key",
-        "BINANCE_API_SECRET": "your_secret"
+        "BINANCE_API_KEY": "your_api_key",
+        "BINANCE_API_SECRET": "your_api_secret"
       }
     }
   }
 }
 ```
 
-## Example Tools
+### Cursor
 
-### Get Account Info
-```
-Tool: binance_account_info
-```
+Add to your Cursor MCP settings:
 
-### Place Spot Order
-```
-Tool: binance_spot_new_order
-Parameters:
-  - symbol: "BTCUSDT"
-  - side: "BUY"
-  - type: "LIMIT"
-  - quantity: 0.001
-  - price: 50000
-  - timeInForce: "GTC"
+```json
+{
+  "binance": {
+    "command": "node",
+    "args": ["/absolute/path/to/Binance-MCP/build/index.js"],
+    "env": {
+      "BINANCE_API_KEY": "your_api_key",
+      "BINANCE_API_SECRET": "your_api_secret"
+    }
+  }
+}
 ```
 
-### Get Order Book
+### ChatGPT (via SSE)
+
+1. Start the SSE server: `npm run start:sse`
+2. Connect to `http://localhost:3000/sse`
+
+---
+
+## 📖 Usage Examples
+
+### Check Account Balance
+
 ```
-Tool: binance_order_book
-Parameters:
-  - symbol: "BTCUSDT"
-  - limit: 100
+"What's my current Binance account balance?"
 ```
 
-## Development
+### Place a Market Order
+
+```
+"Buy 0.01 BTC at market price"
+```
+
+### Get Market Data
+
+```
+"Show me the order book for BTCUSDT with 20 levels"
+```
+
+### Set Up Auto-Invest
+
+```
+"Create a daily auto-invest plan to buy $100 of ETH"
+```
+
+### Manage Futures Position
+
+```
+"Open a 5x long position on ETHUSDT futures with $1000"
+```
+
+---
+
+## 📊 Module Coverage
+
+| Module | Tools | Description |
+|--------|------:|-------------|
+| Wallet | 40+ | Deposits, withdrawals, transfers, asset management |
+| Spot | 35+ | Market data, trading, order management |
+| Futures (USD-M) | 40+ | Perpetual futures, positions, leverage |
+| Futures (COIN-M) | 35+ | Coin-margined futures contracts |
+| Margin (Cross) | 26 | Cross-margin trading and borrowing |
+| Margin (Isolated) | 15 | Isolated margin pairs |
+| Options | 27 | European-style options trading |
+| Portfolio Margin | 15 | Unified margin account management |
+| Sub-Account | 22 | Sub-account creation and management |
+| Staking | 22+ | ETH, SOL, and other staking products |
+| Simple Earn | 15+ | Flexible and locked savings products |
+| Auto-Invest | 13 | DCA and recurring purchase plans |
+| Mining | 13+ | Mining pool statistics and earnings |
+| Algo Trading | 11+ | TWAP, VP, and algorithmic orders |
+| VIP Loan | 9+ | Institutional lending services |
+| Convert | 9+ | Instant asset conversion |
+| Dual Investment | 10+ | Structured yield products |
+| NFT | 10+ | NFT marketplace operations |
+| Gift Card | 8 | Gift card creation and redemption |
+| Copy Trading | 10+ | Lead trader and copy features |
+| Crypto Loans | 12+ | Flexible rate crypto loans |
+| Fiat | 5+ | Fiat deposit and withdrawal |
+| Pay | 5+ | Binance Pay transactions |
+| C2C/P2P | 5+ | Peer-to-peer trading |
+| Rebate | 5+ | Referral rebate tracking |
+
+**Total: 478+ tools**
+
+---
+
+## 🏗️ Project Structure
+
+```
+Binance-MCP/
+├── src/
+│   ├── index.ts                 # Entry point
+│   ├── binance.ts               # Module registration
+│   ├── init.ts                  # Setup wizard
+│   ├── config/
+│   │   ├── binanceClient.ts     # API clients with signing
+│   │   └── client.ts            # HTTP utilities
+│   ├── server/
+│   │   ├── base.ts              # Base MCP server
+│   │   ├── stdio.ts             # STDIO transport
+│   │   └── sse.ts               # SSE transport
+│   ├── modules/                 # API module definitions
+│   │   ├── spot/
+│   │   ├── margin/
+│   │   ├── futures-usdm/
+│   │   ├── futures-coinm/
+│   │   └── ... (24 modules)
+│   ├── tools/                   # Tool implementations
+│   │   ├── binance-spot/
+│   │   ├── binance-margin/
+│   │   ├── binance-futures-usdm/
+│   │   └── ... (24 tool sets)
+│   └── utils/
+│       └── logger.ts
+├── docs/
+│   ├── QUICK_START.md           # Getting started guide
+│   └── TOOLS_REFERENCE.md       # Complete tool documentation
+├── build/                       # Compiled JavaScript
+├── package.json
+├── tsconfig.json
+└── config.json                  # Runtime configuration
+```
+
+---
+
+## 🛠️ Development
 
 ### Build
+
 ```bash
 npm run build
 ```
 
 ### Type Check
+
 ```bash
 npx tsc --noEmit
 ```
 
-### Add New Tool
+### Test with MCP Inspector
 
-1. Create file in appropriate module folder
+```bash
+npm run test
+```
+
+### Adding New Tools
+
+1. Create tool file in `src/tools/binance-{module}/`
 2. Export registration function
-3. Import in module's `index.ts`
-4. Register in `src/binance.ts`
+3. Import and register in module's `index.ts`
+4. Register module in `src/binance.ts`
 
-## API Documentation
+---
 
-- [Quick Start Guide](./docs/QUICK_START.md) - Get started in minutes
-- [Tools Reference](./docs/TOOLS_REFERENCE.md) - Complete guide to all 478+ tools with examples
-- [Binance API Docs](https://developers.binance.com/docs/binance-spot-api-docs)
+## 📚 Documentation
 
-## License
+| Resource | Description |
+|----------|-------------|
+| [Quick Start Guide](./docs/QUICK_START.md) | Get running in 5 minutes |
+| [Tools Reference](./docs/TOOLS_REFERENCE.md) | Complete API for all 478+ tools |
+| [Binance API Docs](https://developers.binance.com/docs/) | Official Binance documentation |
+| [MCP Specification](https://modelcontextprotocol.io/) | Model Context Protocol spec |
 
-MIT
+---
+
+## ⚠️ Disclaimer
+
+This software is provided for educational and informational purposes only. 
+
+- **Not Financial Advice** — This tool does not provide financial, investment, or trading advice
+- **Use at Your Own Risk** — Cryptocurrency trading involves substantial risk of loss
+- **API Security** — Protect your API credentials; use IP restrictions and withdrawal limits
+- **No Warranty** — The software is provided "as is" without warranty of any kind
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**nich** — [@nichxbt](https://x.com/nichxbt)
+
+---
+
