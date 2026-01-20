@@ -1,60 +1,38 @@
 // src/tools/binance-crypto-loans/index.ts
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-// Standard Crypto Loans
-import { registerBinanceCryptoLoanGetLoanableAssets } from "./getLoanableAssets.js";
-import { registerBinanceCryptoLoanGetCollateralAssets } from "./getCollateralAssets.js";
+// Crypto Loans - Info
 import { registerBinanceCryptoLoanGetCollateralRepayRate } from "./getCollateralRepayRate.js";
-import { registerBinanceCryptoLoanCustomizeMarginCall } from "./customizeMarginCall.js";
-import { registerBinanceCryptoLoanBorrow } from "./borrow.js";
-import { registerBinanceCryptoLoanBorrowHistory } from "./borrowHistory.js";
-import { registerBinanceCryptoLoanOngoingOrders } from "./ongoingOrders.js";
-import { registerBinanceCryptoLoanRepay } from "./repay.js";
-import { registerBinanceCryptoLoanRepayHistory } from "./repayHistory.js";
-import { registerBinanceCryptoLoanAdjustLTV } from "./adjustLTV.js";
-import { registerBinanceCryptoLoanLTVAdjustmentHistory } from "./ltvAdjustmentHistory.js";
-
-// V2 / Flexible Loans
 import { registerBinanceCryptoLoanGetLoanableAssetsDataV2 } from "./getLoanableAssetsData.js";
 import { registerBinanceCryptoLoanGetCollateralAssetsDataV2 } from "./getCollateralAssetsData.js";
+import { registerBinanceCryptoLoanFlexibleLoanCollateralAssets } from "./flexibleLoanCollateralAssets.js";
+import { registerBinanceCryptoLoanFlexibleLoanableAssets } from "./flexibleLoanLoanableAssets.js";
+
+// Crypto Loans - Trading
 import { registerBinanceCryptoLoanFlexibleLoanBorrow } from "./flexibleLoanBorrow.js";
+import { registerBinanceCryptoLoanFlexibleLoanRepay } from "./flexibleLoanRepay.js";
+import { registerBinanceCryptoLoanFlexibleLoanAdjustLTV } from "./flexibleLoanAdjustLTV.js";
+
+// Crypto Loans - History
 import { registerBinanceCryptoLoanFlexibleLoanOngoingOrders } from "./flexibleLoanOngoingOrders.js";
 import { registerBinanceCryptoLoanFlexibleLoanBorrowHistory } from "./flexibleLoanBorrowHistory.js";
-import { registerBinanceCryptoLoanFlexibleLoanRepay } from "./flexibleLoanRepay.js";
 import { registerBinanceCryptoLoanFlexibleLoanRepayHistory } from "./flexibleLoanRepayHistory.js";
-import { registerBinanceCryptoLoanFlexibleLoanAdjustLTV } from "./flexibleLoanAdjustLTV.js";
 import { registerBinanceCryptoLoanFlexibleLoanLTVAdjustmentHistory } from "./flexibleLoanLTVAdjustmentHistory.js";
-import { registerBinanceCryptoLoanFlexibleLoanCollateralAssets } from "./flexibleLoanCollateralAssets.js";
 
 export function registerBinanceCryptoLoansTools(server: McpServer) {
-    // Fixed-Term Loan - Info
-    registerBinanceCryptoLoanGetLoanableAssets(server);
-    registerBinanceCryptoLoanGetCollateralAssets(server);
+    // Crypto Loans - Info
     registerBinanceCryptoLoanGetCollateralRepayRate(server);
-    
-    // Fixed-Term Loan - Trading
-    registerBinanceCryptoLoanBorrow(server);
-    registerBinanceCryptoLoanRepay(server);
-    registerBinanceCryptoLoanAdjustLTV(server);
-    registerBinanceCryptoLoanCustomizeMarginCall(server);
-    
-    // Fixed-Term Loan - History
-    registerBinanceCryptoLoanOngoingOrders(server);
-    registerBinanceCryptoLoanBorrowHistory(server);
-    registerBinanceCryptoLoanRepayHistory(server);
-    registerBinanceCryptoLoanLTVAdjustmentHistory(server);
-    
-    // Flexible Loan - Info
     registerBinanceCryptoLoanGetLoanableAssetsDataV2(server);
     registerBinanceCryptoLoanGetCollateralAssetsDataV2(server);
     registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server);
+    registerBinanceCryptoLoanFlexibleLoanableAssets(server);
     
-    // Flexible Loan - Trading
+    // Crypto Loans - Trading
     registerBinanceCryptoLoanFlexibleLoanBorrow(server);
     registerBinanceCryptoLoanFlexibleLoanRepay(server);
     registerBinanceCryptoLoanFlexibleLoanAdjustLTV(server);
     
-    // Flexible Loan - History
+    // Crypto Loans - History
     registerBinanceCryptoLoanFlexibleLoanOngoingOrders(server);
     registerBinanceCryptoLoanFlexibleLoanBorrowHistory(server);
     registerBinanceCryptoLoanFlexibleLoanRepayHistory(server);

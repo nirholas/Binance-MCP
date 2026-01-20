@@ -40,7 +40,7 @@ export function registerBinanceFuturesCOINMListenKeyRenew(server: McpServer) {
         {},
         async () => {
             try {
-                const data = await deliveryClient.renewListenKey();
+                const data = await deliveryClient.keepAliveListenKey();
                 
 
                 return {

@@ -25,7 +25,7 @@ export function registerBinanceCryptoLoanFlexibleLoanLTVAdjustmentHistory(server
                 if (current !== undefined) params.current = current;
                 if (limit !== undefined) params.limit = limit;
                 
-                const response = await cryptoLoanClient.restAPI.flexibleLoanLtvAdjustmentHistory(params);
+                const response = await cryptoLoanClient.restAPI.getFlexibleLoanLtvAdjustmentHistory(params);
                 const data = await response.data();
                 return {
                     content: [

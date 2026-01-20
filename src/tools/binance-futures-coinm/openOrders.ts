@@ -14,7 +14,7 @@ export function registerBinanceFuturesCOINMOpenOrders(server: McpServer) {
         },
         async (params) => {
             try {
-                const data = await deliveryClient.getOpenOrders({
+                const data = await deliveryClient.openOrders({
                     ...(params.symbol && { symbol: params.symbol }),
                     ...(params.pair && { pair: params.pair }),
                     ...(params.recvWindow && { recvWindow: params.recvWindow })
