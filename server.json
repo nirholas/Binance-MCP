@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.nirholas/binance-mcp",
+  "title": "Binance MCP",
+  "description": "Binance.com API MCP server - spot trading, wallets, staking, earn, futures, options, NFTs, pay, copy trading, sub-accounts",
+  "repository": {
+    "url": "https://github.com/nirholas/Binance-MCP",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "icons": {
+    "light": "https://raw.githubusercontent.com/nirholas/g1t/d9a0ee206b8136472c04384905999369f198b3c9/milady.svg",
+    "dark": "https://raw.githubusercontent.com/nirholas/g1t/d9a0ee206b8136472c04384905999369f198b3c9/bg.svg"
+  },
+  "packages": {
+    "npm": "@nirholas/binance-mcp-server"
+  },
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "keywords": ["binance", "crypto", "trading", "exchange", "spot", "futures", "options", "staking", "nft", "wallet", "defi", "mcp", "ai"],
+      "category": "Crypto Trading"
+    }
+  }
+}
