@@ -1,38 +1,47 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginFee.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { marginClient } from "../../../config/binanceClient.js";
-import { z } from "zod";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+
+import { z } from "zod"
+
+import { marginClient } from "../../../config/binanceClient.js"
 
 export function registerBinanceCrossMarginFee(server: McpServer) {
-    server.tool(
-        "BinanceCrossMarginFee",
-        "Query cross margin fee data including interest rates and collateral ratios for margin pairs.",
-        {
-            vipLevel: z.number().int().optional().describe("VIP level (default uses current account VIP level)"),
-            coin: z.string().optional().describe("Filter by specific coin"),
-            recvWindow: z.number().int().optional().describe("Time window for request validity")
-        },
-        async (params) => {
-            try {
-                const data = await marginClient.getCrossMarginFee({
-                    ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
-                    ...(params.coin && { coin: params.coin }),
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+  server.tool(
+    "BinanceCrossMarginFee",
+    "Query cross margin fee data including interest rates and collateral ratios for margin pairs.",
+    {
+      vipLevel: z
+        .number()
+        .int()
+        .optional()
+        .describe("VIP level (default uses current account VIP level)"),
+      coin: z.string().optional().describe("Filter by specific coin"),
+      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+    },
+    async (params) => {
+      try {
+        const data = await marginClient.getCrossMarginFee({
+          ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
+          ...(params.coin && { coin: params.coin }),
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        })
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Cross Margin Fee Data: ${JSON.stringify(data, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to query cross margin fee: ${errorMessage}` }],
-                    isError: true
-                };
-            }
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Cross Margin Fee Data: ${JSON.stringify(data, null, 2)}`,
+            },
+          ],
         }
-    );
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error)
+
+        return {
+          content: [{ type: "text", text: `Failed to query cross margin fee: ${errorMessage}` }],
+          isError: true,
+        }
+      }
+    },
+  )
 }

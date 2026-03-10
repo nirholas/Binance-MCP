@@ -1,18 +1,19 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import { spotClient } from "../config/client.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+
+import { z } from "zod"
+
+import { spotClient } from "../config/client.js"
 
 export function registerBinanceOrderBook(server: McpServer) {
   server.tool(
     "binanceOrderBook",
     "check binance order book",
     {
-        symbol: z.string().describe("symbol: exemple: BTCUSDT"),
+      symbol: z.string().describe("symbol: exemple: BTCUSDT"),
     },
     async ({ symbol }) => {
       try {
-
-        const orderBook = await spotClient.orderBook(symbol, {limit: 50});
+        const orderBook = await spotClient.orderBook(symbol, { limit: 50 })
 
         return {
           content: [
@@ -21,17 +22,15 @@ export function registerBinanceOrderBook(server: McpServer) {
               text: `Get binance order book successfully. data: ${JSON.stringify(orderBook)}}`,
             },
           ],
-        };
+        }
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
+        const errorMessage = error instanceof Error ? error.message : String(error)
+
         return {
-          content: [
-            { type: "text", text: `Server failed: ${errorMessage}` },
-          ],
+          content: [{ type: "text", text: `Server failed: ${errorMessage}` }],
           isError: true,
-        };
+        }
       }
-    }
-  );
+    },
+  )
 }

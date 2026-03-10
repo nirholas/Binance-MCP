@@ -1,12 +1,13 @@
-// src/server/sse.ts
-import "dotenv/config"
-
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js"
-import express from "express"
 import cors from "cors"
+import express from "express"
 
 import Logger from "../utils/logger.js"
+
 import { startServer } from "./base.js"
+
+// src/server/sse.ts
+import "dotenv/config"
 
 const PORT = process.env.PORT || 3002
 
@@ -18,19 +19,19 @@ export const startSSEServer = async () => {
     app.use(express.json())
 
     const server = startServer()
-    
+
     // Store active transports
-    const transports: Map<string, SSEServerTransport> = new Map()
+    const transports = new Map<string, SSEServerTransport>()
 
     // SSE endpoint
     app.get("/sse", async (req, res) => {
-      const sessionId = req.query.sessionId as string || crypto.randomUUID()
-      
+      const sessionId = (req.query.sessionId as string) || crypto.randomUUID()
+
       Logger.info(`New SSE connection: ${sessionId}`)
-      
+
       const transport = new SSEServerTransport("/message", res)
       transports.set(sessionId, transport)
-      
+
       res.on("close", () => {
         Logger.info(`SSE connection closed: ${sessionId}`)
         transports.delete(sessionId)
@@ -43,9 +44,10 @@ export const startSSEServer = async () => {
     app.post("/message", async (req, res) => {
       const sessionId = req.query.sessionId as string
       const transport = transports.get(sessionId)
-      
+
       if (!transport) {
         res.status(404).json({ error: "Session not found" })
+
         return
       }
 

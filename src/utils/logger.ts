@@ -6,7 +6,7 @@ const LOG_LEVELS: Record<LogLevel, number> = {
   DEBUG: 0,
   INFO: 1,
   WARN: 2,
-  ERROR: 3
+  ERROR: 3,
 }
 
 const currentLevel = (process.env.LOG_LEVEL as LogLevel) || "INFO"
@@ -17,7 +17,8 @@ function shouldLog(level: LogLevel): boolean {
 
 function formatMessage(level: LogLevel, message: string, ...args: unknown[]): string {
   const timestamp = new Date().toISOString()
-  const formattedArgs = args.length > 0 ? " " + args.map(a => JSON.stringify(a)).join(" ") : ""
+  const formattedArgs = args.length > 0 ? " " + args.map((a) => JSON.stringify(a)).join(" ") : ""
+
   return `[${timestamp}] [${level}] ${message}${formattedArgs}`
 }
 
@@ -41,7 +42,7 @@ const Logger = {
     if (shouldLog("ERROR")) {
       console.error(formatMessage("ERROR", message, ...args))
     }
-  }
+  },
 }
 
 export default Logger
