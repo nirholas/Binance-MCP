@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-sub-account/management-api/getSubAccountStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountStatus(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerBinanceSubAccountStatus(server: McpServer) {
         const response = await spotClient.restAPI.getSubAccountStatus({
           ...(params.email && { email: params.email }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,15 +35,15 @@ export function registerBinanceSubAccountStatus(server: McpServer) {
               text: `Sub-Account Status:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get sub-account status: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/marginType.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMMarginType(server: McpServer) {
   server.tool(
@@ -15,7 +15,7 @@ export function registerBinanceFuturesUSDMMarginType(server: McpServer) {
     },
     async ({ symbol, marginType }) => {
       try {
-        const data = await futuresClient.marginType({ symbol, marginType })
+        const data = await futuresClient.marginType({ symbol, marginType });
 
         return {
           content: [
@@ -24,17 +24,17 @@ export function registerBinanceFuturesUSDMMarginType(server: McpServer) {
               text: `USD-M Futures margin type changed to ${marginType} for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to change USD-M Futures margin type: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

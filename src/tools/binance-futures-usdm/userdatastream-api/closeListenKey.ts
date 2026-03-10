@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/userdatastream-api/closeListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCloseListenKey(server: McpServer) {
   server.tool(
@@ -27,9 +27,9 @@ export function registerBinanceFuturesCloseListenKey(server: McpServer) {
         const response = await futuresClient.restAPI.closeListenKey({
           ...(params.listenKey && { listenKey: params.listenKey }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -38,15 +38,15 @@ export function registerBinanceFuturesCloseListenKey(server: McpServer) {
               text: `✅ Listen Key Closed!\n\nThe listen key has been invalidated and the stream is closed.\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to close listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

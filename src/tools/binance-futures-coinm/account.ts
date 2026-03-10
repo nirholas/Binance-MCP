@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/account.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMAccount(server: McpServer) {
   server.tool(
@@ -16,19 +16,19 @@ export function registerBinanceFuturesCOINMAccount(server: McpServer) {
       try {
         const data = await deliveryClient.getAccount({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [{ type: "text", text: `COIN-M account info: ${JSON.stringify(data)}` }],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get COIN-M account: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

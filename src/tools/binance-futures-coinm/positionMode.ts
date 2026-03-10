@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/positionMode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
   server.tool(
@@ -16,7 +16,7 @@ export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
       try {
         const data = await deliveryClient.positionSideDual({
           dualSidePosition: dualSidePosition ? "true" : "false",
-        })
+        });
 
         return {
           content: [
@@ -25,9 +25,9 @@ export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
               text: `COIN-M Futures position mode changed to ${dualSidePosition ? "Hedge Mode" : "One-way Mode"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -37,8 +37,8 @@ export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

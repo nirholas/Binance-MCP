@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/forceOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMForceOrders(server: McpServer) {
   server.tool(
@@ -21,14 +21,14 @@ export function registerBinanceFuturesUSDMForceOrders(server: McpServer) {
     },
     async ({ symbol, autoCloseType, startTime, endTime, limit }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
-        if (autoCloseType) params.autoCloseType = autoCloseType
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
+        if (autoCloseType) params.autoCloseType = autoCloseType;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.forceOrders(params)
+        const data = await futuresClient.forceOrders(params);
 
         return {
           content: [
@@ -37,9 +37,9 @@ export function registerBinanceFuturesUSDMForceOrders(server: McpServer) {
               text: `Retrieved ${data.length || 0} USD-M Futures force orders. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -49,8 +49,8 @@ export function registerBinanceFuturesUSDMForceOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

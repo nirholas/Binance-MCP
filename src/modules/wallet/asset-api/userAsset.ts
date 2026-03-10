@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/userAsset.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletUserAsset(server: McpServer) {
   server.tool(
@@ -15,12 +15,12 @@ export function registerBinanceWalletUserAsset(server: McpServer) {
     },
     async ({ recvWindow, needBtcValuation }) => {
       try {
-        const params: any = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
-        if (needBtcValuation !== undefined) params.needBtcValuation = needBtcValuation
+        const params: any = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
+        if (needBtcValuation !== undefined) params.needBtcValuation = needBtcValuation;
 
-        const response = await walletClient.restAPI.userAsset(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.userAsset(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceWalletUserAsset(server: McpServer) {
               text: `Retrieved user assets. Number of assets: ${data.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve user assets: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

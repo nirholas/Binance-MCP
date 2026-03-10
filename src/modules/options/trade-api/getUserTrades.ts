@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/trade-api/getUserTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetUserTrades(server: McpServer) {
   server.tool(
@@ -40,29 +40,29 @@ export function registerOptionsGetUserTrades(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Trade History\n\n`
+        let result = `✅ Options Trade History\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total trades: ${data.length}\n\n`
+          result += `Total trades: ${data.length}\n\n`;
           data.slice(0, 20).forEach((trade: any, index: number) => {
-            result += `**${index + 1}. ${trade.symbol}**\n`
-            result += `  Trade ID: ${trade.id}\n`
-            result += `  Order ID: ${trade.orderId}\n`
-            result += `  Side: ${trade.side}\n`
-            result += `  Price: ${trade.price} | Qty: ${trade.quantity}\n`
-            result += `  Fee: ${trade.fee} ${trade.feeAsset}\n`
-            result += `  Realized PnL: ${trade.realizedProfit}\n`
-            result += `  Time: ${new Date(trade.time).toISOString()}\n\n`
-          })
+            result += `**${index + 1}. ${trade.symbol}**\n`;
+            result += `  Trade ID: ${trade.id}\n`;
+            result += `  Order ID: ${trade.orderId}\n`;
+            result += `  Side: ${trade.side}\n`;
+            result += `  Price: ${trade.price} | Qty: ${trade.quantity}\n`;
+            result += `  Fee: ${trade.fee} ${trade.feeAsset}\n`;
+            result += `  Realized PnL: ${trade.realizedProfit}\n`;
+            result += `  Time: ${new Date(trade.time).toISOString()}\n\n`;
+          });
           if (data.length > 20) {
-            result += `... and ${data.length - 20} more trades`
+            result += `... and ${data.length - 20} more trades`;
           }
         } else {
-          result += `No trades found`
+          result += `No trades found`;
         }
 
         return {
@@ -72,9 +72,9 @@ export function registerOptionsGetUserTrades(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -84,8 +84,8 @@ export function registerOptionsGetUserTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

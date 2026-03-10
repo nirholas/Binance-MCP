@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/countdownCancelAll.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCountdownCancelAll(server: McpServer) {
   server.tool(
@@ -29,14 +29,14 @@ export function registerBinanceFuturesCountdownCancelAll(server: McpServer) {
           symbol: params.symbol,
           countdownTime: params.countdownTime,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         const message =
           params.countdownTime === 0
             ? `✅ Countdown cancelled for ${params.symbol}`
-            : `✅ Countdown set for ${params.symbol}\nOrders will be cancelled in ${params.countdownTime}ms if no heartbeat received`
+            : `✅ Countdown set for ${params.symbol}\nOrders will be cancelled in ${params.countdownTime}ms if no heartbeat received`;
 
         return {
           content: [
@@ -45,15 +45,15 @@ export function registerBinanceFuturesCountdownCancelAll(server: McpServer) {
               text: `${message}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to set countdown: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

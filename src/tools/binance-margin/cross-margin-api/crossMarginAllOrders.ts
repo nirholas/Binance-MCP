@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginAllOrders(server: McpServer) {
   server.tool(
@@ -28,7 +28,7 @@ export function registerBinanceCrossMarginAllOrders(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -37,15 +37,15 @@ export function registerBinanceCrossMarginAllOrders(server: McpServer) {
               text: `All Margin Orders for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query all orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

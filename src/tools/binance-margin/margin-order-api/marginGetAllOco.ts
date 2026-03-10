@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-margin/margin-order-api/marginGetAllOco.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginGetAllOco(server: McpServer) {
   server.tool(
@@ -40,9 +40,9 @@ export function registerBinanceMarginGetAllOco(server: McpServer) {
           ...(params.limit && { limit: params.limit }),
           ...(params.isIsolated && { isIsolated: params.isIsolated }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -51,17 +51,17 @@ export function registerBinanceMarginGetAllOco(server: McpServer) {
               text: `All Margin OCO orders: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to query all margin OCO orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-convert/trade-api/orderStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { convertClient } from "../../../config/binanceClient.js"
+import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertOrderStatus(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceConvertOrderStatus(server: McpServer) {
         const response = await convertClient.restAPI.orderStatus({
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.quoteId && { quoteId: params.quoteId }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -31,9 +31,9 @@ export function registerBinanceConvertOrderStatus(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -43,8 +43,8 @@ export function registerBinanceConvertOrderStatus(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

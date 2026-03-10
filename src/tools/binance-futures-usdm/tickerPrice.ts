@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/tickerPrice.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTickerPrice(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceFuturesUSDMTickerPrice(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await futuresClient.tickerPrice(params)
+        const data = await futuresClient.tickerPrice(params);
 
         return {
           content: [
@@ -31,9 +31,9 @@ export function registerBinanceFuturesUSDMTickerPrice(server: McpServer) {
               text: `Retrieved USD-M Futures ticker price${symbol ? ` for ${symbol}` : " for all symbols"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -43,8 +43,8 @@ export function registerBinanceFuturesUSDMTickerPrice(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

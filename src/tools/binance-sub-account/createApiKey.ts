@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/createApiKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreateApiKey(server: McpServer) {
   server.tool(
@@ -18,12 +18,12 @@ export function registerBinanceSubAccountCreateApiKey(server: McpServer) {
     },
     async ({ subAccountId, canTrade, marginTrade, futuresTrade, recvWindow }) => {
       try {
-        const params: any = { subAccountId, canTrade }
-        if (marginTrade !== undefined) params.marginTrade = marginTrade
-        if (futuresTrade !== undefined) params.futuresTrade = futuresTrade
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { subAccountId, canTrade };
+        if (marginTrade !== undefined) params.marginTrade = marginTrade;
+        if (futuresTrade !== undefined) params.futuresTrade = futuresTrade;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.createSubAccountApiKey(params)
+        const data = await subAccountApiClient.createSubAccountApiKey(params);
 
         return {
           content: [
@@ -32,17 +32,17 @@ export function registerBinanceSubAccountCreateApiKey(server: McpServer) {
               text: `API key created for sub-account. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create sub-account API key: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

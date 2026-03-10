@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/multiAssetsMode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMMultiAssetsMode(server: McpServer) {
   server.tool(
@@ -18,7 +18,7 @@ export function registerBinanceFuturesUSDMMultiAssetsMode(server: McpServer) {
       try {
         const data = await futuresClient.multiAssetsMargin({
           multiAssetsMargin: multiAssetsMargin ? "true" : "false",
-        })
+        });
 
         return {
           content: [
@@ -27,9 +27,9 @@ export function registerBinanceFuturesUSDMMultiAssetsMode(server: McpServer) {
               text: `USD-M Futures multi-assets mode ${multiAssetsMargin ? "enabled" : "disabled"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -39,8 +39,8 @@ export function registerBinanceFuturesUSDMMultiAssetsMode(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

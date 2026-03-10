@@ -1,9 +1,9 @@
 // src/tools/binance-spot/trade-api/orderOco.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceOrderOco(server: McpServer) {
   server.tool(
@@ -45,18 +45,18 @@ export function registerBinanceOrderOco(server: McpServer) {
           quantity,
           price,
           stopPrice,
-        }
+        };
 
-        if (stopLimitPrice !== undefined) params.stopLimitPrice = stopLimitPrice
-        if (stopLimitTimeInForce) params.stopLimitTimeInForce = stopLimitTimeInForce
-        if (newClientOrderId) params.newClientOrderId = newClientOrderId
-        if (stopClientOrderId) params.stopClientOrderId = stopClientOrderId
-        if (limitIcebergQty !== undefined) params.limitIcebergQty = limitIcebergQty
-        if (stopIcebergQty !== undefined) params.stopIcebergQty = stopIcebergQty
+        if (stopLimitPrice !== undefined) params.stopLimitPrice = stopLimitPrice;
+        if (stopLimitTimeInForce) params.stopLimitTimeInForce = stopLimitTimeInForce;
+        if (newClientOrderId) params.newClientOrderId = newClientOrderId;
+        if (stopClientOrderId) params.stopClientOrderId = stopClientOrderId;
+        if (limitIcebergQty !== undefined) params.limitIcebergQty = limitIcebergQty;
+        if (stopIcebergQty !== undefined) params.stopIcebergQty = stopIcebergQty;
 
-        const response = await spotClient.restAPI.orderOco(params)
+        const response = await spotClient.restAPI.orderOco(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -65,15 +65,15 @@ export function registerBinanceOrderOco(server: McpServer) {
               text: `OCO order successfully created. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create OCO order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

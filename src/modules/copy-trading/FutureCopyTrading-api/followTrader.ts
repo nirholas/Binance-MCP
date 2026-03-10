@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/copy-trading/FutureCopyTrading-api/followTrader.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { copyTradingClient } from "../../../config/binanceClient.js"
+import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingFollowTrader(server: McpServer) {
   server.tool(
@@ -41,9 +41,9 @@ export function registerBinanceCopyTradingFollowTrader(server: McpServer) {
           ...(params.stopLossRatio && { stopLossRatio: params.stopLossRatio }),
           ...(params.takeProfitRatio && { takeProfitRatio: params.takeProfitRatio }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const _data = await response.data()
+        const _data = await response.data();
 
         return {
           content: [
@@ -52,9 +52,9 @@ export function registerBinanceCopyTradingFollowTrader(server: McpServer) {
               text: `✅ Now Following Trader!\n\nPortfolio: ${params.leadPortfolioId}\nCopy Ratio: ${params.copyRatio}x\nStop Loss: ${params.stopLossRatio ? params.stopLossRatio * 100 + "%" : "Not set"}\nTake Profit: ${params.takeProfitRatio ? params.takeProfitRatio * 100 + "%" : "Not set"}\n\n⚠️ Your trades will now automatically copy this trader.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -64,8 +64,8 @@ export function registerBinanceCopyTradingFollowTrader(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

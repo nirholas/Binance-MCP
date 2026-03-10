@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/flexibleLoanRepay.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanRepay(server: McpServer) {
   server.tool(
@@ -18,12 +18,12 @@ export function registerBinanceCryptoLoanFlexibleLoanRepay(server: McpServer) {
     },
     async ({ loanCoin, collateralCoin, repayAmount, collateralReturn, fullRepayment }) => {
       try {
-        const params: any = { loanCoin, collateralCoin, repayAmount }
-        if (collateralReturn !== undefined) params.collateralReturn = collateralReturn
-        if (fullRepayment !== undefined) params.fullRepayment = fullRepayment
+        const params: any = { loanCoin, collateralCoin, repayAmount };
+        if (collateralReturn !== undefined) params.collateralReturn = collateralReturn;
+        if (fullRepayment !== undefined) params.fullRepayment = fullRepayment;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanRepay(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.flexibleLoanRepay(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -32,15 +32,15 @@ export function registerBinanceCryptoLoanFlexibleLoanRepay(server: McpServer) {
               text: `Flexible loan repaid successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to repay flexible loan: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

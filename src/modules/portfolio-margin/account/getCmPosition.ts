@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/account/getCmPosition.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetCmPosition(server: McpServer) {
   server.tool(
@@ -26,32 +26,32 @@ export function registerPortfolioMarginGetCmPosition(server: McpServer) {
           ...(params.marginAsset && { marginAsset: params.marginAsset }),
           ...(params.pair && { pair: params.pair }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Portfolio Margin CM Position Risk\n\n`
+        let result = `✅ Portfolio Margin CM Position Risk\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          const activePositions = data.filter((p: any) => parseFloat(p.positionAmt) !== 0)
+          const activePositions = data.filter((p: any) => parseFloat(p.positionAmt) !== 0);
 
           if (activePositions.length > 0) {
-            result += `Active Positions: ${activePositions.length}\n\n`
+            result += `Active Positions: ${activePositions.length}\n\n`;
             activePositions.forEach((pos: any) => {
-              result += `**${pos.symbol}**\n`
-              result += `  Position: ${pos.positionAmt} contracts\n`
-              result += `  Entry Price: ${pos.entryPrice}\n`
-              result += `  Mark Price: ${pos.markPrice}\n`
-              result += `  Unrealized PnL: ${pos.unrealizedProfit}\n`
-              result += `  Liquidation Price: ${pos.liquidationPrice}\n`
-              result += `  Leverage: ${pos.leverage}x\n`
-              result += `  Margin Type: ${pos.marginType}\n\n`
-            })
+              result += `**${pos.symbol}**\n`;
+              result += `  Position: ${pos.positionAmt} contracts\n`;
+              result += `  Entry Price: ${pos.entryPrice}\n`;
+              result += `  Mark Price: ${pos.markPrice}\n`;
+              result += `  Unrealized PnL: ${pos.unrealizedProfit}\n`;
+              result += `  Liquidation Price: ${pos.liquidationPrice}\n`;
+              result += `  Leverage: ${pos.leverage}x\n`;
+              result += `  Margin Type: ${pos.marginType}\n\n`;
+            });
           } else {
-            result += `No active CM positions`
+            result += `No active CM positions`;
           }
         } else {
-          result += `No position data found`
+          result += `No position data found`;
         }
 
         return {
@@ -61,9 +61,9 @@ export function registerPortfolioMarginGetCmPosition(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -73,8 +73,8 @@ export function registerPortfolioMarginGetCmPosition(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

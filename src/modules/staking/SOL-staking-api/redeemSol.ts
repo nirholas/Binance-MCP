@@ -1,9 +1,9 @@
 // src/tools/binance-staking/SOL-staking-api/getUnclaimedRewards.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { stakingClient } from "../../../config/binanceClient.js"
+import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceRedeemSol(server: McpServer) {
   server.tool(
@@ -22,9 +22,9 @@ export function registerBinanceRedeemSol(server: McpServer) {
         const response = await stakingClient.restAPI.redeemSol({
           amount: params.amount,
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerBinanceRedeemSol(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerBinanceRedeemSol(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

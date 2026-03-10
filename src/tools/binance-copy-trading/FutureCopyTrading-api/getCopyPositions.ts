@@ -1,9 +1,9 @@
 // src/tools/binance-copy-trading/FutureCopyTrading-api/getCopyPositions.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { copyTradingClient } from "../../../config/binanceClient.js"
+import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetPositions(server: McpServer) {
   server.tool(
@@ -20,9 +20,9 @@ export function registerBinanceCopyTradingGetPositions(server: McpServer) {
           ...(params.portfolioId && { portfolioId: params.portfolioId }),
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -31,15 +31,15 @@ export function registerBinanceCopyTradingGetPositions(server: McpServer) {
               text: `Copy Trading Positions:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get copy positions: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/changeMultiAssetsMode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesChangeMultiAssetsMode(server: McpServer) {
   server.tool(
@@ -24,10 +24,10 @@ export function registerBinanceFuturesChangeMultiAssetsMode(server: McpServer) {
         const response = await futuresClient.restAPI.changeMultiAssetsMode({
           multiAssetsMargin: params.multiAssetsMargin,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
-        const mode = params.multiAssetsMargin ? "Enabled" : "Disabled"
+        const data = await response.data();
+        const mode = params.multiAssetsMargin ? "Enabled" : "Disabled";
 
         return {
           content: [
@@ -36,17 +36,17 @@ export function registerBinanceFuturesChangeMultiAssetsMode(server: McpServer) {
               text: `✅ Multi-Assets Mode ${mode}!\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `❌ Failed to change multi-assets mode: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

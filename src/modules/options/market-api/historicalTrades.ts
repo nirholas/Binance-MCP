@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/historicalTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketHistoricalTrades(server: McpServer) {
   server.tool(
@@ -36,23 +36,23 @@ export function registerOptionsMarketHistoricalTrades(server: McpServer) {
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
           ...(params.fromId && { fromId: params.fromId }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Historical Trades - ${params.symbol}\n\n`
+        let result = `✅ Historical Trades - ${params.symbol}\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total trades returned: ${data.length}\n\n`
+          result += `Total trades returned: ${data.length}\n\n`;
           data.slice(0, 20).forEach((trade: any, index: number) => {
-            const time = new Date(trade.time).toISOString()
-            result += `${index + 1}. ID: ${trade.id} | Price: ${trade.price} | Qty: ${trade.qty} | Time: ${time}\n`
-          })
+            const time = new Date(trade.time).toISOString();
+            result += `${index + 1}. ID: ${trade.id} | Price: ${trade.price} | Qty: ${trade.qty} | Time: ${time}\n`;
+          });
           if (data.length > 20) {
-            result += `\n... and ${data.length - 20} more trades`
+            result += `\n... and ${data.length - 20} more trades`;
           }
         } else {
-          result += `No historical trades found`
+          result += `No historical trades found`;
         }
 
         return {
@@ -62,9 +62,9 @@ export function registerOptionsMarketHistoricalTrades(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -74,8 +74,8 @@ export function registerOptionsMarketHistoricalTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

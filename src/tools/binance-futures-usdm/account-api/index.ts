@@ -5,49 +5,49 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/account-api/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { registerBinanceFuturesAccount } from "./account.js"
-import { registerBinanceFuturesADLQuantile } from "./adlQuantile.js"
-import { registerBinanceFuturesApiTradingStatus } from "./apiTradingStatus.js"
-import { registerBinanceFuturesBalance } from "./balance.js"
-import { registerBinanceFuturesCommissionRate } from "./commissionRate.js"
-import { registerBinanceFuturesDownloadIdForFuturesTransactionHistory } from "./downloadId.js"
-import { registerBinanceFuturesForceOrders } from "./forceOrders.js"
-import { registerBinanceFuturesIncome } from "./income.js"
-import { registerBinanceFuturesLeverage } from "./leverage.js"
-import { registerBinanceFuturesLeverageBracket } from "./leverageBracket.js"
-import { registerBinanceFuturesMarginType } from "./marginType.js"
-import { registerBinanceFuturesMultiAssetsMode } from "./multiAssetsMode.js"
-import { registerBinanceFuturesPositionMargin } from "./positionMargin.js"
-import { registerBinanceFuturesPositionMode } from "./positionMode.js"
-import { registerBinanceFuturesPositionRisk } from "./positionRisk.js"
-import { registerBinanceFuturesUserTrades } from "./userTrades.js"
+import { registerBinanceFuturesAccount } from "./account.js";
+import { registerBinanceFuturesADLQuantile } from "./adlQuantile.js";
+import { registerBinanceFuturesApiTradingStatus } from "./apiTradingStatus.js";
+import { registerBinanceFuturesBalance } from "./balance.js";
+import { registerBinanceFuturesCommissionRate } from "./commissionRate.js";
+import { registerBinanceFuturesDownloadIdForFuturesTransactionHistory } from "./downloadId.js";
+import { registerBinanceFuturesForceOrders } from "./forceOrders.js";
+import { registerBinanceFuturesIncome } from "./income.js";
+import { registerBinanceFuturesLeverage } from "./leverage.js";
+import { registerBinanceFuturesLeverageBracket } from "./leverageBracket.js";
+import { registerBinanceFuturesMarginType } from "./marginType.js";
+import { registerBinanceFuturesMultiAssetsMode } from "./multiAssetsMode.js";
+import { registerBinanceFuturesPositionMargin } from "./positionMargin.js";
+import { registerBinanceFuturesPositionMode } from "./positionMode.js";
+import { registerBinanceFuturesPositionRisk } from "./positionRisk.js";
+import { registerBinanceFuturesUserTrades } from "./userTrades.js";
 
 export function registerBinanceFuturesAccountApiTools(server: McpServer) {
   // Account Info
-  registerBinanceFuturesAccount(server)
-  registerBinanceFuturesBalance(server)
-  registerBinanceFuturesPositionRisk(server)
-  registerBinanceFuturesPositionMode(server)
-  registerBinanceFuturesMultiAssetsMode(server)
+  registerBinanceFuturesAccount(server);
+  registerBinanceFuturesBalance(server);
+  registerBinanceFuturesPositionRisk(server);
+  registerBinanceFuturesPositionMode(server);
+  registerBinanceFuturesMultiAssetsMode(server);
 
   // Leverage & Margin
-  registerBinanceFuturesLeverage(server)
-  registerBinanceFuturesMarginType(server)
-  registerBinanceFuturesPositionMargin(server)
+  registerBinanceFuturesLeverage(server);
+  registerBinanceFuturesMarginType(server);
+  registerBinanceFuturesPositionMargin(server);
 
   // Trades & History
-  registerBinanceFuturesUserTrades(server)
-  registerBinanceFuturesIncome(server)
-  registerBinanceFuturesForceOrders(server)
-  registerBinanceFuturesDownloadIdForFuturesTransactionHistory(server)
+  registerBinanceFuturesUserTrades(server);
+  registerBinanceFuturesIncome(server);
+  registerBinanceFuturesForceOrders(server);
+  registerBinanceFuturesDownloadIdForFuturesTransactionHistory(server);
 
   // Risk & Limits
-  registerBinanceFuturesLeverageBracket(server)
-  registerBinanceFuturesADLQuantile(server)
+  registerBinanceFuturesLeverageBracket(server);
+  registerBinanceFuturesADLQuantile(server);
 
   // Status & Commission
-  registerBinanceFuturesApiTradingStatus(server)
-  registerBinanceFuturesCommissionRate(server)
+  registerBinanceFuturesApiTradingStatus(server);
+  registerBinanceFuturesCommissionRate(server);
 }

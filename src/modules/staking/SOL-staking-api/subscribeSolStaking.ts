@@ -1,9 +1,9 @@
 // src/tools/binance-staking/SOL-staking-api/subscribeSolStaking.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { stakingClient } from "../../../config/binanceClient.js"
+import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeSolStaking(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceSubscribeSolStaking(server: McpServer) {
         const response = await stakingClient.restAPI.subscribeSolStaking({
           amount: params.amount,
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -29,9 +29,9 @@ export function registerBinanceSubscribeSolStaking(server: McpServer) {
               text: `Successfully stake SOL and receive BNSOL in return: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -41,8 +41,8 @@ export function registerBinanceSubscribeSolStaking(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

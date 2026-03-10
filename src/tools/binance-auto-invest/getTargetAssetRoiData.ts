@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-auto-invest/getTargetAssetRoiData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetTargetAssetRoiData(server: McpServer) {
   server.tool(
@@ -28,8 +28,8 @@ export function registerBinanceAutoInvestGetTargetAssetRoiData(server: McpServer
           targetAsset: params.targetAsset,
           hisRoiType: params.hisRoiType,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -38,15 +38,15 @@ export function registerBinanceAutoInvestGetTargetAssetRoiData(server: McpServer
               text: `ROI data for ${params.targetAsset} (${params.hisRoiType}):\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get ROI data: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginBorrow.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginBorrow(server: McpServer) {
   server.tool(
@@ -27,7 +27,7 @@ export function registerBinanceCrossMarginBorrow(server: McpServer) {
           ...(params.isIsolated && { isIsolated: params.isIsolated }),
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceCrossMarginBorrow(server: McpServer) {
               text: `Successfully borrowed ${params.amount} ${params.asset} in Cross Margin. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to borrow: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

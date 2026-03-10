@@ -1,9 +1,9 @@
 // src/tools/binance-pay/pay-api/getPayTradeHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { payClient } from "../../../config/binanceClient.js"
+import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetPayTradeHistory(server: McpServer) {
   server.tool(
@@ -27,9 +27,9 @@ export function registerBinanceGetPayTradeHistory(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -38,9 +38,9 @@ export function registerBinanceGetPayTradeHistory(server: McpServer) {
               text: `Successfully retrieved Binance Pay trade history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -50,8 +50,8 @@ export function registerBinanceGetPayTradeHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

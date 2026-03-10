@@ -1,9 +1,9 @@
 // src/tools/binance-spot/market-api/depth.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDepth(server: McpServer) {
   server.tool(
@@ -15,12 +15,12 @@ export function registerBinanceDepth(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: any = { symbol }
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.depth(params)
+        const response = await spotClient.restAPI.depth(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceDepth(server: McpServer) {
               text: `Retrieved order book depth for ${symbol}. Bids: ${data.bids?.length || 0}, Asks: ${data.asks?.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve order book depth: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

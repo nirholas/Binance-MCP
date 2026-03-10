@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/editPlan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestEditPlan(server: McpServer) {
   server.tool(
@@ -37,16 +37,16 @@ export function registerBinanceAutoInvestEditPlan(server: McpServer) {
       details,
     }) => {
       try {
-        const params: any = { planId }
-        if (subscriptionAmount !== undefined) params.subscriptionAmount = subscriptionAmount
-        if (subscriptionCycle) params.subscriptionCycle = subscriptionCycle
-        if (subscriptionStartTime) params.subscriptionStartTime = subscriptionStartTime
-        if (sourceAsset) params.sourceAsset = sourceAsset
-        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse
-        if (details) params.details = details
+        const params: any = { planId };
+        if (subscriptionAmount !== undefined) params.subscriptionAmount = subscriptionAmount;
+        if (subscriptionCycle) params.subscriptionCycle = subscriptionCycle;
+        if (subscriptionStartTime) params.subscriptionStartTime = subscriptionStartTime;
+        if (sourceAsset) params.sourceAsset = sourceAsset;
+        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
+        if (details) params.details = details;
 
-        const response = await autoInvestClient.restAPI.investmentPlanAdjustment(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.investmentPlanAdjustment(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -55,15 +55,15 @@ export function registerBinanceAutoInvestEditPlan(server: McpServer) {
               text: `Investment plan edited successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to edit plan: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { algoClient } from "../config/client.js"
+import { algoClient } from "../config/client.js";
 
 export function registerBinanceTimeWeightedAveragePriceFutureAlgo(server: McpServer) {
   server.tool(
@@ -20,14 +20,14 @@ export function registerBinanceTimeWeightedAveragePriceFutureAlgo(server: McpSer
     },
     async ({ symbol, side, quantity, duration }) => {
       try {
-        console.log({ symbol, side, quantity, duration })
+        console.log({ symbol, side, quantity, duration });
 
         const result = await algoClient.restAPI.timeWeightedAveragePriceSpotAlgo({
           symbol,
           side,
           quantity,
           duration,
-        })
+        });
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceTimeWeightedAveragePriceFutureAlgo(server: McpSer
               text: `Place a new spot TWAP order with Algo service successfully. result: ${JSON.stringify(result)}}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Server failed: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

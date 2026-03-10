@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginPriceIndex.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginPriceIndex(server: McpServer) {
   server.tool(
@@ -16,7 +16,7 @@ export function registerBinanceCrossMarginPriceIndex(server: McpServer) {
       try {
         const data = await marginClient.getPriceIndex({
           symbol: params.symbol,
-        })
+        });
 
         return {
           content: [
@@ -25,15 +25,15 @@ export function registerBinanceCrossMarginPriceIndex(server: McpServer) {
               text: `Margin Price Index for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query price index: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

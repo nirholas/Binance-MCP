@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/simple-earn/locked/subscribeLocked.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSubscribeLocked(server: McpServer) {
   server.tool(
@@ -33,9 +33,9 @@ export function registerSimpleEarnSubscribeLocked(server: McpServer) {
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),
           ...(params.sourceAccount && { sourceAccount: params.sourceAccount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -44,9 +44,9 @@ export function registerSimpleEarnSubscribeLocked(server: McpServer) {
               text: `✅ Locked Product Subscription Successful!\n\nProject ID: ${params.projectId}\nAmount: ${params.amount}\nPosition ID: ${data.positionId || "N/A"}\n\n⚠️ Your funds are now locked. Rewards will be distributed based on the product terms.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -56,8 +56,8 @@ export function registerSimpleEarnSubscribeLocked(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

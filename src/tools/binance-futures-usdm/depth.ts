@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/depth.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMDepth(server: McpServer) {
   server.tool(
@@ -20,10 +20,10 @@ export function registerBinanceFuturesUSDMDepth(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: any = { symbol }
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.depth(params)
+        const data = await futuresClient.depth(params);
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceFuturesUSDMDepth(server: McpServer) {
               text: `Retrieved USD-M Futures order book depth for ${symbol}. Bids: ${data.bids?.length || 0}, Asks: ${data.asks?.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceFuturesUSDMDepth(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

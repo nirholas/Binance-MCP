@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/cancelAllOpenOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCancelAllOpenOrders(server: McpServer) {
   server.tool(
@@ -20,7 +20,7 @@ export function registerBinanceFuturesCancelAllOpenOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await futuresClient.restAPI.cancelAllOpenOrders(params.symbol)
+        const response = await futuresClient.restAPI.cancelAllOpenOrders(params.symbol);
 
         return {
           content: [
@@ -29,9 +29,9 @@ export function registerBinanceFuturesCancelAllOpenOrders(server: McpServer) {
               text: JSON.stringify(response.data, null, 2),
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred"
+        const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
 
         return {
           content: [
@@ -41,8 +41,8 @@ export function registerBinanceFuturesCancelAllOpenOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

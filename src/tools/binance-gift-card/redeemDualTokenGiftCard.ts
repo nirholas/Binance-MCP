@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-gift-card/redeemDualTokenGiftCard.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRedeemDualToken(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerBinanceGiftCardRedeemDualToken(server: McpServer) {
           code: params.code,
           ...(params.externalUid && { externalUid: params.externalUid }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,17 +37,17 @@ export function registerBinanceGiftCardRedeemDualToken(server: McpServer) {
               text: `✅ Dual-Token Gift Card Redeemed!\n\nReference No: ${data.referenceNo}\nToken Received: ${data.token}\nAmount: ${data.amount}\n\nTokens have been credited to your spot wallet.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `❌ Failed to redeem dual-token gift card: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

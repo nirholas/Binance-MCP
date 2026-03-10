@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/getAssetsThatCanBeConvertedIntoBnb.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletGetAssetsThatCanBeConvertedIntoBnb(server: McpServer) {
   server.tool(
@@ -14,11 +14,11 @@ export function registerBinanceWalletGetAssetsThatCanBeConvertedIntoBnb(server: 
     },
     async ({ recvWindow }) => {
       try {
-        const params: any = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.getAssetsThatCanBeConvertedIntoBnb(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.getAssetsThatCanBeConvertedIntoBnb(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -27,17 +27,17 @@ export function registerBinanceWalletGetAssetsThatCanBeConvertedIntoBnb(server: 
               text: `Retrieved assets that can be converted to BNB. Total: ${data.details?.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve convertible assets: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

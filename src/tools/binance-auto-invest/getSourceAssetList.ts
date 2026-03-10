@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getSourceAssetList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetSourceAssetList(server: McpServer) {
   server.tool(
@@ -20,14 +20,14 @@ export function registerBinanceAutoInvestGetSourceAssetList(server: McpServer) {
     },
     async ({ usageType, targetAsset, indexId, flexibleAllowedToUse }) => {
       try {
-        const params: any = {}
-        if (usageType) params.usageType = usageType
-        if (targetAsset) params.targetAsset = targetAsset
-        if (indexId !== undefined) params.indexId = indexId
-        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse
+        const params: any = {};
+        if (usageType) params.usageType = usageType;
+        if (targetAsset) params.targetAsset = targetAsset;
+        if (indexId !== undefined) params.indexId = indexId;
+        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
 
-        const response = await autoInvestClient.restAPI.querySourceAssetList(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.querySourceAssetList(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceAutoInvestGetSourceAssetList(server: McpServer) {
               text: `Source asset list retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get source asset list: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

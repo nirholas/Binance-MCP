@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/simple-earn/locked/getRedemptionRecord.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
   server.tool(
@@ -36,9 +36,9 @@ export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
           ...(params.current && { current: params.current }),
           ...(params.size && { size: params.size }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -47,9 +47,9 @@ export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
               text: `📜 Locked Redemption Records\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -59,8 +59,8 @@ export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-spot/trade-api/newOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceNewOrder(server: McpServer) {
   server.tool(
@@ -51,19 +51,19 @@ export function registerBinanceNewOrder(server: McpServer) {
           side,
           type,
           quantity,
-        }
+        };
 
-        if (timeInForce) params.timeInForce = timeInForce
-        if (quoteOrderQty !== undefined) params.quoteOrderQty = quoteOrderQty
-        if (price !== undefined) params.price = price
-        if (newClientOrderId) params.newClientOrderId = newClientOrderId
-        if (stopPrice !== undefined) params.stopPrice = stopPrice
-        if (icebergQty !== undefined) params.icebergQty = icebergQty
-        if (newOrderRespType) params.newOrderRespType = newOrderRespType
+        if (timeInForce) params.timeInForce = timeInForce;
+        if (quoteOrderQty !== undefined) params.quoteOrderQty = quoteOrderQty;
+        if (price !== undefined) params.price = price;
+        if (newClientOrderId) params.newClientOrderId = newClientOrderId;
+        if (stopPrice !== undefined) params.stopPrice = stopPrice;
+        if (icebergQty !== undefined) params.icebergQty = icebergQty;
+        if (newOrderRespType) params.newOrderRespType = newOrderRespType;
 
-        const response = await spotClient.restAPI.newOrder(params)
+        const response = await spotClient.restAPI.newOrder(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -72,15 +72,15 @@ export function registerBinanceNewOrder(server: McpServer) {
               text: `New order successfully created. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create new order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

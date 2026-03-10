@@ -2,11 +2,11 @@
 // Binance.US Credit Line Tools
 // For institutional clients with credit line agreements
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US Credit Line tools
@@ -52,10 +52,10 @@ Returns comprehensive account information including:
     },
     async (params) => {
       try {
-        const requestParams: Record<string, any> = {}
-        if (params.recvWindow) requestParams.recvWindow = params.recvWindow
+        const requestParams: Record<string, any> = {};
+        if (params.recvWindow) requestParams.recvWindow = params.recvWindow;
 
-        const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", requestParams)
+        const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", requestParams);
 
         // Format key metrics for easy reading
         const summary = `Credit Line Account Summary:
@@ -84,7 +84,7 @@ Contract Period:
   End:   ${new Date(response.contractEndTime).toISOString()}
 
 Required Deposit: ${response.requiredDepositAmount}
-Available to Withdraw: ${response.availableAmountToTransferOut}`
+Available to Withdraw: ${response.availableAmountToTransferOut}`;
 
         return {
           content: [
@@ -93,17 +93,17 @@ Available to Withdraw: ${response.availableAmountToTransferOut}`
               text: `${summary}\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get credit line account: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Calls/Liquidations)
@@ -138,26 +138,26 @@ when margin calls or liquidation warnings have occurred.`,
     },
     async (params) => {
       try {
-        const requestParams: Record<string, any> = {}
-        if (params.alertType) requestParams.alertType = params.alertType
-        if (params.startTime) requestParams.startTime = params.startTime
-        if (params.endTime) requestParams.endTime = params.endTime
-        if (params.limit) requestParams.limit = params.limit
-        if (params.recvWindow) requestParams.recvWindow = params.recvWindow
+        const requestParams: Record<string, any> = {};
+        if (params.alertType) requestParams.alertType = params.alertType;
+        if (params.startTime) requestParams.startTime = params.startTime;
+        if (params.endTime) requestParams.endTime = params.endTime;
+        if (params.limit) requestParams.limit = params.limit;
+        if (params.recvWindow) requestParams.recvWindow = params.recvWindow;
 
-        const response = await makeSignedRequest("GET", "/sapi/v1/cl/alert/history", requestParams)
+        const response = await makeSignedRequest("GET", "/sapi/v1/cl/alert/history", requestParams);
 
         // Format alerts for readability
-        let alertSummary = "Credit Line Alert History:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        let alertSummary = "Credit Line Alert History:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
         if (Array.isArray(response) && response.length > 0) {
           response.forEach((alert: any, index: number) => {
-            alertSummary += `\n[${index + 1}] ${alert.alertType}\n`
-            alertSummary += `    Time: ${new Date(alert.alertTime).toISOString()}\n`
-            alertSummary += `    Current LTV: ${(parseFloat(alert.currentLTV) * 100).toFixed(2)}%\n`
-            alertSummary += `    Total Balance: $${alert.totalBalance}\n`
-          })
+            alertSummary += `\n[${index + 1}] ${alert.alertType}\n`;
+            alertSummary += `    Time: ${new Date(alert.alertTime).toISOString()}\n`;
+            alertSummary += `    Current LTV: ${(parseFloat(alert.currentLTV) * 100).toFixed(2)}%\n`;
+            alertSummary += `    Total Balance: $${alert.totalBalance}\n`;
+          });
         } else {
-          alertSummary += "No alerts found.\n"
+          alertSummary += "No alerts found.\n";
         }
 
         return {
@@ -167,17 +167,17 @@ when margin calls or liquidation warnings have occurred.`,
               text: `${alertSummary}\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get alert history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/cl/transferHistory - Get Transfer History
@@ -211,32 +211,32 @@ Use this to track deposits and withdrawals from your credit line account.`,
     },
     async (params) => {
       try {
-        const requestParams: Record<string, any> = {}
-        if (params.transferType) requestParams.transferType = params.transferType
-        if (params.asset) requestParams.asset = params.asset.toUpperCase()
-        if (params.startTime) requestParams.startTime = params.startTime
-        if (params.endTime) requestParams.endTime = params.endTime
-        if (params.limit) requestParams.limit = params.limit
-        if (params.recvWindow) requestParams.recvWindow = params.recvWindow
+        const requestParams: Record<string, any> = {};
+        if (params.transferType) requestParams.transferType = params.transferType;
+        if (params.asset) requestParams.asset = params.asset.toUpperCase();
+        if (params.startTime) requestParams.startTime = params.startTime;
+        if (params.endTime) requestParams.endTime = params.endTime;
+        if (params.limit) requestParams.limit = params.limit;
+        if (params.recvWindow) requestParams.recvWindow = params.recvWindow;
 
         const response = await makeSignedRequest(
           "GET",
           "/sapi/v1/cl/transferHistory",
           requestParams,
-        )
+        );
 
         // Format transfers for readability
-        let transferSummary = "Credit Line Transfer History:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        let transferSummary = "Credit Line Transfer History:\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
         if (Array.isArray(response) && response.length > 0) {
           response.forEach((transfer: any, index: number) => {
-            const direction = transfer.transferType === "TRANSFER_IN" ? "→ IN" : "← OUT"
-            transferSummary += `\n[${index + 1}] ${direction} ${transfer.amount} ${transfer.asset}\n`
-            transferSummary += `    ID: ${transfer.transferId}\n`
-            transferSummary += `    Status: ${transfer.status}\n`
-            transferSummary += `    Time: ${new Date(transfer.transferTime).toISOString()}\n`
-          })
+            const direction = transfer.transferType === "TRANSFER_IN" ? "→ IN" : "← OUT";
+            transferSummary += `\n[${index + 1}] ${direction} ${transfer.amount} ${transfer.asset}\n`;
+            transferSummary += `    ID: ${transfer.transferId}\n`;
+            transferSummary += `    Status: ${transfer.status}\n`;
+            transferSummary += `    Time: ${new Date(transfer.transferTime).toISOString()}\n`;
+          });
         } else {
-          transferSummary += "No transfers found.\n"
+          transferSummary += "No transfers found.\n";
         }
 
         return {
@@ -246,17 +246,17 @@ Use this to track deposits and withdrawals from your credit line account.`,
               text: `${transferSummary}\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get transfer history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/cl/transfer - Execute Transfer
@@ -289,12 +289,12 @@ Check availableAmountToTransferOut in binance_us_cl_account first.`,
           transferType: params.transferType,
           transferAssetType: params.transferAssetType.toUpperCase(),
           quantity: params.quantity,
-        }
-        if (params.recvWindow) requestParams.recvWindow = params.recvWindow
+        };
+        if (params.recvWindow) requestParams.recvWindow = params.recvWindow;
 
-        const response = await makeSignedRequest("POST", "/sapi/v1/cl/transfer", requestParams)
+        const response = await makeSignedRequest("POST", "/sapi/v1/cl/transfer", requestParams);
 
-        const direction = params.transferType === "TRANSFER_IN" ? "deposited to" : "withdrawn from"
+        const direction = params.transferType === "TRANSFER_IN" ? "deposited to" : "withdrawn from";
 
         return {
           content: [
@@ -303,15 +303,15 @@ Check availableAmountToTransferOut in binance_us_cl_account first.`,
               text: `Transfer completed!\n\nTransfer ID: ${response.transferId}\nStatus: ${response.status}\n${params.quantity} ${params.transferAssetType.toUpperCase()} ${direction} credit line account.\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to execute transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

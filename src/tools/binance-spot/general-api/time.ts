@@ -1,17 +1,17 @@
 // src/tools/binance-spot/general-api/time.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTime(server: McpServer) {
   server.tool("BinanceTime", "Get the current server time from Binance API.", {}, async () => {
     try {
-      const response = await spotClient.restAPI.time()
+      const response = await spotClient.restAPI.time();
 
-      const data = await response.data()
+      const data = await response.data();
 
       // @ts-expect-error - serverTime not in generated type definition
-      const serverTime = new Date(data.serverTime).toISOString()
+      const serverTime = new Date(data.serverTime).toISOString();
 
       return {
         content: [
@@ -22,14 +22,14 @@ export function registerBinanceTime(server: McpServer) {
             }). Response: ${JSON.stringify(data)}`,
           },
         ],
-      }
+      };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
       return {
         content: [{ type: "text", text: `Failed to retrieve server time: ${errorMessage}` }],
         isError: true,
-      }
+      };
     }
-  })
+  });
 }

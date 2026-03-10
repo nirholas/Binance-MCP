@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/userTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMUserTrades(server: McpServer) {
   server.tool(
@@ -19,14 +19,14 @@ export function registerBinanceFuturesUSDMUserTrades(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, fromId, limit }) => {
       try {
-        const params: any = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (fromId !== undefined) params.fromId = fromId
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (fromId !== undefined) params.fromId = fromId;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.userTrades(params)
+        const data = await futuresClient.userTrades(params);
 
         return {
           content: [
@@ -35,17 +35,17 @@ export function registerBinanceFuturesUSDMUserTrades(server: McpServer) {
               text: `Retrieved ${data.length || 0} USD-M Futures trades for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve USD-M Futures user trades: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

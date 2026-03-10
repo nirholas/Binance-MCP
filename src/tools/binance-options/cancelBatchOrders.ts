@@ -1,9 +1,9 @@
 // src/tools/binance-options/cancelBatchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCancelBatchOrders(server: McpServer) {
   server.tool(
@@ -19,11 +19,11 @@ export function registerBinanceOptionsCancelBatchOrders(server: McpServer) {
     },
     async ({ symbol, orderIds, clientOrderIds }) => {
       try {
-        const params: any = { symbol }
-        if (orderIds) params.orderIds = orderIds
-        if (clientOrderIds) params.clientOrderIds = clientOrderIds
+        const params: any = { symbol };
+        if (orderIds) params.orderIds = orderIds;
+        if (clientOrderIds) params.clientOrderIds = clientOrderIds;
 
-        const data = await optionsClient.cancelBatchOrders(params)
+        const data = await optionsClient.cancelBatchOrders(params);
 
         return {
           content: [
@@ -32,15 +32,15 @@ export function registerBinanceOptionsCancelBatchOrders(server: McpServer) {
               text: `Batch orders cancelled successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel batch orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

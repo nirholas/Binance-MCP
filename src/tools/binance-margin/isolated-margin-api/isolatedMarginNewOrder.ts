@@ -1,9 +1,9 @@
 // src/tools/binance-margin/isolated-margin-api/isolatedMarginNewOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginNewOrder(server: McpServer) {
   server.tool(
@@ -68,7 +68,7 @@ export function registerBinanceIsolatedMarginNewOrder(server: McpServer) {
             autoRepayAtCancel: params.autoRepayAtCancel,
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -77,17 +77,17 @@ export function registerBinanceIsolatedMarginNewOrder(server: McpServer) {
               text: `Isolated margin order placed successfully: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to place isolated margin order: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

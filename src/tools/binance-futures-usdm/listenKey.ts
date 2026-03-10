@@ -1,7 +1,7 @@
 // src/tools/binance-futures-usdm/listenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMListenKeyCreate(server: McpServer) {
   server.tool(
@@ -10,7 +10,7 @@ export function registerBinanceFuturesUSDMListenKeyCreate(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await futuresClient.createListenKey()
+        const data = await futuresClient.createListenKey();
 
         return {
           content: [
@@ -19,19 +19,19 @@ export function registerBinanceFuturesUSDMListenKeyCreate(server: McpServer) {
               text: `USD-M Futures listen key created. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create USD-M Futures listen key: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 export function registerBinanceFuturesUSDMListenKeyRenew(server: McpServer) {
@@ -41,7 +41,7 @@ export function registerBinanceFuturesUSDMListenKeyRenew(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await futuresClient.keepAliveListenKey()
+        const data = await futuresClient.keepAliveListenKey();
 
         return {
           content: [
@@ -50,19 +50,19 @@ export function registerBinanceFuturesUSDMListenKeyRenew(server: McpServer) {
               text: `USD-M Futures listen key renewed. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to renew USD-M Futures listen key: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 export function registerBinanceFuturesUSDMListenKeyClose(server: McpServer) {
@@ -72,7 +72,7 @@ export function registerBinanceFuturesUSDMListenKeyClose(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await futuresClient.closeListenKey()
+        const data = await futuresClient.closeListenKey();
 
         return {
           content: [
@@ -81,17 +81,17 @@ export function registerBinanceFuturesUSDMListenKeyClose(server: McpServer) {
               text: `USD-M Futures listen key closed. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to close USD-M Futures listen key: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

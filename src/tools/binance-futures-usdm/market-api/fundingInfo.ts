@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/market-api/fundingInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesFundingInfo(server: McpServer) {
   server.tool(
@@ -16,8 +16,8 @@ export function registerBinanceFuturesFundingInfo(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await futuresClient.restAPI.fundingInfo()
-        const data = await response.data()
+        const response = await futuresClient.restAPI.fundingInfo();
+        const data = await response.data();
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinanceFuturesFundingInfo(server: McpServer) {
               text: `Funding Info: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get funding info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

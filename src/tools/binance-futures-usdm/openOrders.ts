@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/openOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMOpenOrders(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceFuturesUSDMOpenOrders(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await futuresClient.openOrders(params)
+        const data = await futuresClient.openOrders(params);
 
         return {
           content: [
@@ -31,17 +31,17 @@ export function registerBinanceFuturesUSDMOpenOrders(server: McpServer) {
               text: `Retrieved USD-M Futures open orders${symbol ? ` for ${symbol}` : ""}. Count: ${data.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve USD-M Futures open orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

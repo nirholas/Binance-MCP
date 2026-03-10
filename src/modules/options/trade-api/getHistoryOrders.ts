@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/trade-api/getHistoryOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetHistoryOrders(server: McpServer) {
   server.tool(
@@ -38,28 +38,28 @@ export function registerOptionsGetHistoryOrders(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Order History - ${params.symbol}\n\n`
+        let result = `✅ Options Order History - ${params.symbol}\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total orders: ${data.length}\n\n`
+          result += `Total orders: ${data.length}\n\n`;
           data.slice(0, 20).forEach((order: any, index: number) => {
-            result += `**${index + 1}. Order ID: ${order.orderId}**\n`
-            result += `  Side: ${order.side} | Type: ${order.type}\n`
-            result += `  Price: ${order.price} | Qty: ${order.quantity}\n`
-            result += `  Executed Qty: ${order.executedQty}\n`
-            result += `  Avg Price: ${order.avgPrice}\n`
-            result += `  Status: ${order.status}\n`
-            result += `  Time: ${new Date(order.createTime).toISOString()}\n\n`
-          })
+            result += `**${index + 1}. Order ID: ${order.orderId}**\n`;
+            result += `  Side: ${order.side} | Type: ${order.type}\n`;
+            result += `  Price: ${order.price} | Qty: ${order.quantity}\n`;
+            result += `  Executed Qty: ${order.executedQty}\n`;
+            result += `  Avg Price: ${order.avgPrice}\n`;
+            result += `  Status: ${order.status}\n`;
+            result += `  Time: ${new Date(order.createTime).toISOString()}\n\n`;
+          });
           if (data.length > 20) {
-            result += `... and ${data.length - 20} more orders`
+            result += `... and ${data.length - 20} more orders`;
           }
         } else {
-          result += `No historical orders found`
+          result += `No historical orders found`;
         }
 
         return {
@@ -69,9 +69,9 @@ export function registerOptionsGetHistoryOrders(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -81,8 +81,8 @@ export function registerOptionsGetHistoryOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

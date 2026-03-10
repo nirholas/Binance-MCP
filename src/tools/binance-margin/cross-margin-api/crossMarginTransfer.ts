@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginTransfer.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginTransfer(server: McpServer) {
   server.tool(
@@ -22,7 +22,7 @@ export function registerBinanceCrossMarginTransfer(server: McpServer) {
           amount: params.amount,
           type: parseInt(params.type),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -31,15 +31,15 @@ export function registerBinanceCrossMarginTransfer(server: McpServer) {
               text: `Successfully transferred ${params.amount} ${params.asset}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

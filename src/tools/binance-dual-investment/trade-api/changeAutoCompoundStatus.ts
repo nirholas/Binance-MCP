@@ -1,9 +1,9 @@
 // src/tools/binance-dual-investment/trade-api/changeAutoCompoundStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { dualInvestmentClient } from "../../../config/binanceClient.js"
+import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceChangeAutoCompoundStatus(server: McpServer) {
   server.tool(
@@ -28,9 +28,9 @@ export function registerBinanceChangeAutoCompoundStatus(server: McpServer) {
           positionId: params.positionId,
           autoCompoundPlan: params.autoCompoundPlan,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -41,9 +41,9 @@ export function registerBinanceChangeAutoCompoundStatus(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -53,8 +53,8 @@ export function registerBinanceChangeAutoCompoundStatus(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/cancelBatchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCancelBatchOrders(server: McpServer) {
   server.tool(
@@ -40,7 +40,7 @@ export function registerBinanceFuturesCancelBatchOrders(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await futuresClient.restAPI.cancelMultipleOrders({
@@ -50,23 +50,23 @@ export function registerBinanceFuturesCancelBatchOrders(server: McpServer) {
             origClientOrderIdList: JSON.stringify(params.origClientOrderIdList),
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         const results = Array.isArray(data)
           ? data
               .map((order: any, index: number) => {
                 if (order.orderId && order.status === "CANCELED") {
-                  return `Order ${index + 1}: ✅ Cancelled - ID: ${order.orderId}`
+                  return `Order ${index + 1}: ✅ Cancelled - ID: ${order.orderId}`;
                 } else if (order.code) {
-                  return `Order ${index + 1}: ❌ Failed - ${order.msg || "Unknown error"}`
+                  return `Order ${index + 1}: ❌ Failed - ${order.msg || "Unknown error"}`;
                 } else {
-                  return `Order ${index + 1}: ${order.status} - ID: ${order.orderId}`
+                  return `Order ${index + 1}: ${order.status} - ID: ${order.orderId}`;
                 }
               })
               .join("\n")
-          : "Unexpected response format"
+          : "Unexpected response format";
 
         return {
           content: [
@@ -75,15 +75,15 @@ export function registerBinanceFuturesCancelBatchOrders(server: McpServer) {
               text: `Batch Cancel Results:\n${results}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to cancel batch orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

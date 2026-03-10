@@ -1,9 +1,10 @@
 // src/tools/binance-spot/account-api/getAccount.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
+import { safeJsonStringify } from "../../../utils/json.js";
 
 export function registerBinanceGetAccount(server: McpServer) {
   server.tool(
@@ -14,31 +15,31 @@ export function registerBinanceGetAccount(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: any = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.getAccount(params)
+        const response = await spotClient.restAPI.getAccount(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
             {
               type: "text",
-              text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${JSON.stringify(data)}`,
+              text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${safeJsonStringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve account information: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

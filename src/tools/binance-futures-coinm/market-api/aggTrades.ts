@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/market-api/aggTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryAggTrades(server: McpServer) {
   server.tool(
@@ -30,9 +30,9 @@ export function registerBinanceDeliveryAggTrades(server: McpServer) {
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -41,15 +41,15 @@ export function registerBinanceDeliveryAggTrades(server: McpServer) {
               text: `📊 Aggregate Trades for ${params.symbol}\n\nTrades: ${Array.isArray(data) ? data.length : 0}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get aggregate trades: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

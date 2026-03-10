@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/capital-api/depositAddress.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDepositAddress(server: McpServer) {
   server.tool(
@@ -16,12 +16,12 @@ export function registerBinanceWalletDepositAddress(server: McpServer) {
     },
     async ({ coin, network, recvWindow }) => {
       try {
-        const params: any = { coin }
-        if (network !== undefined) params.network = network
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { coin };
+        if (network !== undefined) params.network = network;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.depositAddress(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.depositAddress(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -30,15 +30,15 @@ export function registerBinanceWalletDepositAddress(server: McpServer) {
               text: `Retrieved deposit address for ${coin}. Address: ${data.address}${data.tag ? `, Tag: ${data.tag}` : ""}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve deposit address: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

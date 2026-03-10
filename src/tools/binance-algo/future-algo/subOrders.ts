@@ -1,9 +1,9 @@
 // src/tools/binance-algo/future-algo/subOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { algoClient } from "../../../config/binanceClient.js"
+import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFutureSubOrders(server: McpServer) {
   server.tool(
@@ -29,9 +29,9 @@ export function registerBinanceFutureSubOrders(server: McpServer) {
           page: params.page,
           pageSize: params.pageSize,
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -42,9 +42,9 @@ export function registerBinanceFutureSubOrders(server: McpServer) {
               }. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -54,8 +54,8 @@ export function registerBinanceFutureSubOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

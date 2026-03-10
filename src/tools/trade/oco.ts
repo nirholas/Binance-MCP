@@ -1,13 +1,13 @@
 // src/tools/trade/oco.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
 import {
   BINANCE_US_CONFIG,
   hasApiCredentials,
   makeSignedRequest,
-} from "../../config/binanceUsClient.js"
+} from "../../config/binanceUsClient.js";
 
 // Common Binance error codes for better error messages
 const BINANCE_ERROR_CODES: Record<number, string> = {
@@ -26,13 +26,13 @@ const BINANCE_ERROR_CODES: Record<number, string> = {
   [-2015]: "Rejected - invalid API key, IP, or permissions",
   [-2018]: "Balance is insufficient",
   [-2021]: "Order would immediately trigger stop price",
-}
+};
 
 /**
  * Get human-readable error message for Binance error code
  */
 function getBinanceErrorMessage(code: number): string {
-  return BINANCE_ERROR_CODES[code] || `Unknown error code: ${code}`
+  return BINANCE_ERROR_CODES[code] || `Unknown error code: ${code}`;
 }
 
 /**
@@ -40,10 +40,10 @@ function getBinanceErrorMessage(code: number): string {
  */
 function checkCredentials(): string | null {
   if (!hasApiCredentials()) {
-    return "❌ API credentials not configured. Please set BINANCE_US_API_KEY and BINANCE_US_API_SECRET environment variables."
+    return "❌ API credentials not configured. Please set BINANCE_US_API_KEY and BINANCE_US_API_SECRET environment variables.";
   }
 
-  return null
+  return null;
 }
 
 /**
@@ -51,10 +51,10 @@ function checkCredentials(): string | null {
  */
 function validateRecvWindow(recvWindow?: number): string | null {
   if (recvWindow !== undefined && recvWindow > BINANCE_US_CONFIG.MAX_RECV_WINDOW) {
-    return `❌ recvWindow cannot exceed ${BINANCE_US_CONFIG.MAX_RECV_WINDOW}ms (60 seconds).`
+    return `❌ recvWindow cannot exceed ${BINANCE_US_CONFIG.MAX_RECV_WINDOW}ms (60 seconds).`;
   }
 
-  return null
+  return null;
 }
 
 /**
@@ -62,26 +62,26 @@ function validateRecvWindow(recvWindow?: number): string | null {
  */
 function validateSymbol(symbol: string): string | null {
   if (!symbol || symbol.length < 2 || symbol.length > 20) {
-    return "❌ Invalid symbol format. Symbol should be 2-20 characters (e.g., BTCUSD, ETHUSD)."
+    return "❌ Invalid symbol format. Symbol should be 2-20 characters (e.g., BTCUSD, ETHUSD).";
   }
   if (!/^[A-Z0-9]+$/.test(symbol.toUpperCase())) {
-    return "❌ Invalid symbol format. Symbol should contain only letters and numbers."
+    return "❌ Invalid symbol format. Symbol should contain only letters and numbers.";
   }
 
-  return null
+  return null;
 }
 
 // Order side enum
-const OrderSide = z.enum(["BUY", "SELL"])
+const OrderSide = z.enum(["BUY", "SELL"]);
 
 // Time in force enum
-const TimeInForce = z.enum(["GTC", "IOC", "FOK"])
+const TimeInForce = z.enum(["GTC", "IOC", "FOK"]);
 
 // Response type enum
-const OrderRespType = z.enum(["ACK", "RESULT", "FULL"])
+const OrderRespType = z.enum(["ACK", "RESULT", "FULL"]);
 
 // Self trade prevention mode enum
-const SelfTradePreventionMode = z.enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"])
+const SelfTradePreventionMode = z.enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"]);
 
 /**
  * Register new OCO order tool
@@ -120,29 +120,29 @@ export function registerBinanceUsNewOco(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         // Validate OCO parameters
-        const validationError = validateOcoParams(params)
+        const validationError = validateOcoParams(params);
         if (validationError) {
           return {
             content: [{ type: "text", text: validationError }],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("POST", "/api/v3/order/oco", params)
+        const response = await makeSignedRequest("POST", "/api/v3/order/oco", params);
 
-        const orders = response.orders || []
-        const orderReports = response.orderReports || []
+        const orders = response.orders || [];
+        const orderReports = response.orderReports || [];
 
         return {
           content: [
@@ -174,14 +174,14 @@ export function registerBinanceUsNewOco(server: McpServer) {
                 `\n\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -191,10 +191,10 @@ export function registerBinanceUsNewOco(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -212,11 +212,11 @@ export function registerBinanceUsGetOco(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         if (!params.orderListId && !params.origClientOrderId) {
           return {
@@ -227,12 +227,12 @@ export function registerBinanceUsGetOco(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("GET", "/api/v3/orderList", params)
+        const response = await makeSignedRequest("GET", "/api/v3/orderList", params);
 
-        const orders = response.orders || []
+        const orders = response.orders || [];
 
         return {
           content: [
@@ -257,24 +257,24 @@ export function registerBinanceUsGetOco(server: McpServer) {
                 `\n\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
             { type: "text", text: `❌ Failed to get OCO order: ${errorMessage}${additionalHelp}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -297,13 +297,13 @@ export function registerBinanceUsCancelOco(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         if (!params.orderListId && !params.listClientOrderId) {
           return {
@@ -314,12 +314,12 @@ export function registerBinanceUsCancelOco(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("DELETE", "/api/v3/orderList", params)
+        const response = await makeSignedRequest("DELETE", "/api/v3/orderList", params);
 
-        const orderReports = response.orderReports || []
+        const orderReports = response.orderReports || [];
 
         return {
           content: [
@@ -343,14 +343,14 @@ export function registerBinanceUsCancelOco(server: McpServer) {
                 `\n\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -360,10 +360,10 @@ export function registerBinanceUsCancelOco(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -379,13 +379,13 @@ export function registerBinanceUsOpenOco(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
-        const response = await makeSignedRequest("GET", "/api/v3/openOrderList", params)
+        const response = await makeSignedRequest("GET", "/api/v3/openOrderList", params);
 
         if (!response || response.length === 0) {
           return {
@@ -395,12 +395,12 @@ export function registerBinanceUsOpenOco(server: McpServer) {
                 text: `📋 No open OCO orders found`,
               },
             ],
-          }
+          };
         }
 
         const ocoList = response
           .map((oco: any) => {
-            const orders = oco.orders || []
+            const orders = oco.orders || [];
 
             return (
               `\n📦 Order List ID: ${oco.orderListId}\n` +
@@ -414,9 +414,9 @@ export function registerBinanceUsOpenOco(server: McpServer) {
                     `     • Order ID: ${order.orderId} | Client ID: ${order.clientOrderId}`,
                 )
                 .join("\n")
-            )
+            );
           })
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -429,14 +429,14 @@ export function registerBinanceUsOpenOco(server: McpServer) {
                 `Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -446,10 +446,10 @@ export function registerBinanceUsOpenOco(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -478,11 +478,11 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         // Validate mutually exclusive parameters
         if (params.fromId && (params.startTime || params.endTime)) {
@@ -494,7 +494,7 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
         // Validate limit
@@ -502,10 +502,10 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
           return {
             content: [{ type: "text", text: "❌ limit must be between 1 and 1000." }],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("GET", "/api/v3/allOrderList", params)
+        const response = await makeSignedRequest("GET", "/api/v3/allOrderList", params);
 
         if (!response || response.length === 0) {
           return {
@@ -515,22 +515,22 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
                 text: `📋 No OCO order history found`,
               },
             ],
-          }
+          };
         }
 
         const ocoList = response
           .slice(0, 10)
           .map((oco: any) => {
-            const orders = oco.orders || []
+            const orders = oco.orders || [];
 
             return (
               `• List ID: ${oco.orderListId} | ${oco.symbol} | ` +
               `Status: ${oco.listOrderStatus} | ` +
               `Orders: ${orders.length} | ` +
               `${new Date(oco.transactionTime).toISOString()}`
-            )
+            );
           })
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -543,14 +543,14 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
                 `Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -560,36 +560,36 @@ export function registerBinanceUsAllOcoOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
  * Validate OCO order parameters
  */
 function validateOcoParams(params: any): string | null {
-  const { side, price, stopPrice, stopLimitPrice, stopLimitTimeInForce, quantity } = params
+  const { side, price, stopPrice, stopLimitPrice, stopLimitTimeInForce, quantity } = params;
 
   // Validate quantity
   if (!quantity || quantity <= 0) {
-    return "❌ quantity must be greater than 0."
+    return "❌ quantity must be greater than 0.";
   }
 
   // Validate price
   if (!price || price <= 0) {
-    return "❌ price must be greater than 0."
+    return "❌ price must be greater than 0.";
   }
 
   // Validate stopPrice
   if (!stopPrice || stopPrice <= 0) {
-    return "❌ stopPrice must be greater than 0."
+    return "❌ stopPrice must be greater than 0.";
   }
 
   // Validate stop limit price requires time in force
   if (stopLimitPrice && !stopLimitTimeInForce) {
-    return "❌ stopLimitTimeInForce is required when stopLimitPrice is provided."
+    return "❌ stopLimitTimeInForce is required when stopLimitPrice is provided.";
   }
 
   // Validate price restrictions based on side with helpful warnings
@@ -597,26 +597,26 @@ function validateOcoParams(params: any): string | null {
     return (
       "⚠️ For SELL OCO orders, limit price should typically be greater than stop price. " +
       "Price restrictions: Limit Price > Last Price > Stop Price"
-    )
+    );
   }
 
   if (side === "BUY" && price >= stopPrice) {
     return (
       "⚠️ For BUY OCO orders, limit price should typically be less than stop price. " +
       "Price restrictions: Limit Price < Last Price < Stop Price"
-    )
+    );
   }
 
-  return null
+  return null;
 }
 
 /**
  * Register all OCO order tools
  */
 export function registerBinanceUsOcoTools(server: McpServer) {
-  registerBinanceUsNewOco(server)
-  registerBinanceUsGetOco(server)
-  registerBinanceUsCancelOco(server)
-  registerBinanceUsOpenOco(server)
-  registerBinanceUsAllOcoOrders(server)
+  registerBinanceUsNewOco(server);
+  registerBinanceUsGetOco(server);
+  registerBinanceUsCancelOco(server);
+  registerBinanceUsOpenOco(server);
+  registerBinanceUsAllOcoOrders(server);
 }

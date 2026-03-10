@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/flexibleLoanOngoingOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanOngoingOrders(server: McpServer) {
   server.tool(
@@ -17,14 +17,14 @@ export function registerBinanceCryptoLoanFlexibleLoanOngoingOrders(server: McpSe
     },
     async ({ loanCoin, collateralCoin, current, limit }) => {
       try {
-        const params: any = {}
-        if (loanCoin) params.loanCoin = loanCoin
-        if (collateralCoin) params.collateralCoin = collateralCoin
-        if (current !== undefined) params.current = current
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (loanCoin) params.loanCoin = loanCoin;
+        if (collateralCoin) params.collateralCoin = collateralCoin;
+        if (current !== undefined) params.current = current;
+        if (limit !== undefined) params.limit = limit;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanOngoingOrders(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.flexibleLoanOngoingOrders(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -33,17 +33,17 @@ export function registerBinanceCryptoLoanFlexibleLoanOngoingOrders(server: McpSe
               text: `Flexible loan ongoing orders retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get flexible loan ongoing orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

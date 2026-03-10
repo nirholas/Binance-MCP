@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/trade-api/getOpenOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetOpenOrders(server: McpServer) {
   server.tool(
@@ -26,25 +26,25 @@ export function registerOptionsGetOpenOrders(server: McpServer) {
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.underlying && { underlying: params.underlying }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Open Options Orders\n\n`
+        let result = `✅ Open Options Orders\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total open orders: ${data.length}\n\n`
+          result += `Total open orders: ${data.length}\n\n`;
           data.forEach((order: any, index: number) => {
-            result += `**${index + 1}. ${order.symbol}**\n`
-            result += `  Order ID: ${order.orderId}\n`
-            result += `  Side: ${order.side} | Type: ${order.type}\n`
-            result += `  Price: ${order.price} | Qty: ${order.quantity}\n`
-            result += `  Executed Qty: ${order.executedQty}\n`
-            result += `  Status: ${order.status}\n`
-            result += `  Time: ${new Date(order.createTime).toISOString()}\n\n`
-          })
+            result += `**${index + 1}. ${order.symbol}**\n`;
+            result += `  Order ID: ${order.orderId}\n`;
+            result += `  Side: ${order.side} | Type: ${order.type}\n`;
+            result += `  Price: ${order.price} | Qty: ${order.quantity}\n`;
+            result += `  Executed Qty: ${order.executedQty}\n`;
+            result += `  Status: ${order.status}\n`;
+            result += `  Time: ${new Date(order.createTime).toISOString()}\n\n`;
+          });
         } else {
-          result += `No open orders found`
+          result += `No open orders found`;
         }
 
         return {
@@ -54,9 +54,9 @@ export function registerOptionsGetOpenOrders(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -66,8 +66,8 @@ export function registerOptionsGetOpenOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

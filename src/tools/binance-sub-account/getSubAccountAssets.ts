@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountAssets.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetAssets(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceSubAccountGetAssets(server: McpServer) {
     },
     async ({ email, recvWindow }) => {
       try {
-        const params: any = { email }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { email };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountAssets(params)
+        const data = await subAccountApiClient.getSubAccountAssets(params);
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceSubAccountGetAssets(server: McpServer) {
               text: `Retrieved assets for sub-account ${email}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account assets: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

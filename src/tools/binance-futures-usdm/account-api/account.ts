@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/account-api/account.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesAccount(server: McpServer) {
   server.tool(
@@ -22,8 +22,8 @@ export function registerBinanceFuturesAccount(server: McpServer) {
       try {
         const response = await futuresClient.restAPI.account({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -32,15 +32,15 @@ export function registerBinanceFuturesAccount(server: McpServer) {
               text: `Futures Account: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get account info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

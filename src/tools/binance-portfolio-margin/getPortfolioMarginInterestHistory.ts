@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/getPortfolioMarginInterestHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetInterestHistory(server: McpServer) {
   server.tool(
@@ -18,14 +18,14 @@ export function registerBinancePortfolioMarginGetInterestHistory(server: McpServ
     },
     async ({ asset, startTime, endTime, size, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (asset !== undefined) params.asset = asset
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (size !== undefined) params.size = size
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (asset !== undefined) params.asset = asset;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (size !== undefined) params.size = size;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.getInterestHistory(params)
+        const data = await portfolioMarginClient.getInterestHistory(params);
 
         return {
           content: [
@@ -34,15 +34,15 @@ export function registerBinancePortfolioMarginGetInterestHistory(server: McpServ
               text: `Retrieved interest history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve interest history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

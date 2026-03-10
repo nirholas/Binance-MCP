@@ -1,9 +1,9 @@
 // src/tools/binance-gift-card/rsaPublicKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRsaPublicKey(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinanceGiftCardRsaPublicKey(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await giftCardClient.rsaPublicKey(params)
+        const data = await giftCardClient.rsaPublicKey(params);
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinanceGiftCardRsaPublicKey(server: McpServer) {
               text: `Retrieved RSA public key. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to fetch RSA public key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

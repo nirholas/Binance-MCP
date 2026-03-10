@@ -1,9 +1,9 @@
 // src/tools/account/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Account-related tools for Binance.US
@@ -31,17 +31,17 @@ export function registerAccountTools(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/api/v3/account", params)
+        const data = await makeSignedRequest("GET", "/api/v3/account", params);
 
         // Format balances for readability
         const nonZeroBalances =
           data.balances?.filter(
             (b: { free: string; locked: string }) =>
               parseFloat(b.free) > 0 || parseFloat(b.locked) > 0,
-          ) || []
+          ) || [];
 
         return {
           content: [
@@ -66,17 +66,17 @@ export function registerAccountTools(server: McpServer) {
               ),
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get account info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_my_trades
@@ -99,15 +99,15 @@ export function registerAccountTools(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, fromId, limit, recvWindow }) => {
       try {
-        const params: Record<string, any> = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (fromId !== undefined) params.fromId = fromId
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (fromId !== undefined) params.fromId = fromId;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/api/v3/myTrades", params)
+        const data = await makeSignedRequest("GET", "/api/v3/myTrades", params);
 
         return {
           content: [
@@ -116,17 +116,17 @@ export function registerAccountTools(server: McpServer) {
               text: `Trade history for ${symbol}:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get trade history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_rate_limits
@@ -140,10 +140,10 @@ export function registerAccountTools(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/api/v3/rateLimit/order", params)
+        const data = await makeSignedRequest("GET", "/api/v3/rateLimit/order", params);
 
         return {
           content: [
@@ -152,17 +152,17 @@ export function registerAccountTools(server: McpServer) {
               text: `Order Rate Limits:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get rate limits: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_trade_fee
@@ -180,11 +180,11 @@ export function registerAccountTools(server: McpServer) {
     },
     async ({ symbol, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (symbol !== undefined) params.symbol = symbol
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (symbol !== undefined) params.symbol = symbol;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/asset/query/trading-fee", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/asset/query/trading-fee", params);
 
         return {
           content: [
@@ -193,17 +193,17 @@ export function registerAccountTools(server: McpServer) {
               text: `Trading Fees:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get trading fees: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_trade_volume
@@ -217,10 +217,10 @@ export function registerAccountTools(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/asset/query/trading-volume", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/asset/query/trading-volume", params);
 
         return {
           content: [
@@ -229,15 +229,15 @@ export function registerAccountTools(server: McpServer) {
               text: `Past 30 Days Trading Volume: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get trading volume: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-options/cancelAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCancelAllOrders(server: McpServer) {
   server.tool(
@@ -14,9 +14,9 @@ export function registerBinanceOptionsCancelAllOrders(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = { symbol }
+        const params: any = { symbol };
 
-        const data = await optionsClient.cancelAllOrders(params)
+        const data = await optionsClient.cancelAllOrders(params);
 
         return {
           content: [
@@ -25,15 +25,15 @@ export function registerBinanceOptionsCancelAllOrders(server: McpServer) {
               text: `All orders cancelled successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel all orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

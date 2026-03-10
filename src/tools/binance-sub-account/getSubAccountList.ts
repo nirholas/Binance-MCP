@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetList(server: McpServer) {
   server.tool(
@@ -18,14 +18,14 @@ export function registerBinanceSubAccountGetList(server: McpServer) {
     },
     async ({ email, isFreeze, page, limit, recvWindow }) => {
       try {
-        const params: any = {}
-        if (email !== undefined) params.email = email
-        if (isFreeze !== undefined) params.isFreeze = isFreeze
-        if (page !== undefined) params.page = page
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (email !== undefined) params.email = email;
+        if (isFreeze !== undefined) params.isFreeze = isFreeze;
+        if (page !== undefined) params.page = page;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountList(params)
+        const data = await subAccountApiClient.getSubAccountList(params);
 
         return {
           content: [
@@ -34,15 +34,15 @@ export function registerBinanceSubAccountGetList(server: McpServer) {
               text: `Retrieved sub-account list. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account list: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-pay/rebate-api/getSpotRebateHistoryRecords.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { rebateClient } from "../../../config/binanceClient.js"
+import { rebateClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSpotRebateHistoryRecords(server: McpServer) {
   server.tool(
@@ -22,9 +22,9 @@ export function registerBinanceGetSpotRebateHistoryRecords(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.page && { page: params.page }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerBinanceGetSpotRebateHistoryRecords(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerBinanceGetSpotRebateHistoryRecords(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-margin/margin-order-api/marginCancelOco.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginCancelOco(server: McpServer) {
   server.tool(
@@ -38,7 +38,7 @@ export function registerBinanceMarginCancelOco(server: McpServer) {
               { type: "text", text: "Either orderListId or listClientOrderId must be provided" },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await marginClient.restAPI.marginAccountCancelOco({
@@ -48,9 +48,9 @@ export function registerBinanceMarginCancelOco(server: McpServer) {
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
           ...(params.isIsolated && { isIsolated: params.isIsolated }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -59,15 +59,15 @@ export function registerBinanceMarginCancelOco(server: McpServer) {
               text: `Margin OCO order cancelled successfully: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel margin OCO order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

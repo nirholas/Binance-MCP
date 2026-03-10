@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/historicalTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMHistoricalTrades(server: McpServer) {
   server.tool(
@@ -19,11 +19,11 @@ export function registerBinanceFuturesCOINMHistoricalTrades(server: McpServer) {
     },
     async ({ symbol, limit, fromId }) => {
       try {
-        const params: any = { symbol }
-        if (limit !== undefined) params.limit = limit
-        if (fromId !== undefined) params.fromId = fromId
+        const params: any = { symbol };
+        if (limit !== undefined) params.limit = limit;
+        if (fromId !== undefined) params.fromId = fromId;
 
-        const data = await deliveryClient.historicalTrades(params)
+        const data = await deliveryClient.historicalTrades(params);
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceFuturesCOINMHistoricalTrades(server: McpServer) {
               text: `Retrieved ${data.length || 0} historical trades for COIN-M Futures ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceFuturesCOINMHistoricalTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,7 +1,7 @@
 // src/tools/binance-options/time.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsTime(server: McpServer) {
   server.tool(
@@ -10,7 +10,7 @@ export function registerBinanceOptionsTime(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await optionsClient.time()
+        const data = await optionsClient.time();
 
         return {
           content: [
@@ -19,15 +19,15 @@ export function registerBinanceOptionsTime(server: McpServer) {
               text: `Server time retrieved successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get server time: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

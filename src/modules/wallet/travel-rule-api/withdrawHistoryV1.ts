@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/travel-rule-api/withdrawHistoryV1.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletWithdrawHistoryV1(server: McpServer) {
   server.tool(
@@ -20,17 +20,17 @@ export function registerBinanceWalletWithdrawHistoryV1(server: McpServer) {
     },
     async ({ coin, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {
-        const params: any = {}
-        if (coin !== undefined) params.coin = coin
-        if (status !== undefined) params.status = status
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (offset !== undefined) params.offset = offset
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (coin !== undefined) params.coin = coin;
+        if (status !== undefined) params.status = status;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (offset !== undefined) params.offset = offset;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.withdrawHistoryV1(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.withdrawHistoryV1(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceWalletWithdrawHistoryV1(server: McpServer) {
               text: `Retrieved withdraw history v1. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve withdraw history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

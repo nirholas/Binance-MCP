@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/depth.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketDepth(server: McpServer) {
   server.tool(
@@ -30,29 +30,29 @@ export function registerOptionsMarketDepth(server: McpServer) {
         const response = await optionsClient.restAPI.depth({
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Order Book - ${params.symbol}\n\n`
+        let result = `✅ Options Order Book - ${params.symbol}\n\n`;
 
         // Format asks (sell orders)
-        result += `**Asks (Sell Orders)**:\n`
+        result += `**Asks (Sell Orders)**:\n`;
         if (data.asks && data.asks.length > 0) {
           data.asks.slice(0, 10).forEach((ask: [string, string]) => {
-            result += `  Price: ${ask[0]} | Qty: ${ask[1]}\n`
-          })
+            result += `  Price: ${ask[0]} | Qty: ${ask[1]}\n`;
+          });
         } else {
-          result += `  No asks available\n`
+          result += `  No asks available\n`;
         }
 
-        result += `\n**Bids (Buy Orders)**:\n`
+        result += `\n**Bids (Buy Orders)**:\n`;
         if (data.bids && data.bids.length > 0) {
           data.bids.slice(0, 10).forEach((bid: [string, string]) => {
-            result += `  Price: ${bid[0]} | Qty: ${bid[1]}\n`
-          })
+            result += `  Price: ${bid[0]} | Qty: ${bid[1]}\n`;
+          });
         } else {
-          result += `  No bids available\n`
+          result += `  No bids available\n`;
         }
 
         return {
@@ -62,9 +62,9 @@ export function registerOptionsMarketDepth(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -74,8 +74,8 @@ export function registerOptionsMarketDepth(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

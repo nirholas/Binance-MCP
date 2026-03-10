@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/cancelBatchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMCancelBatchOrders(server: McpServer) {
   server.tool(
@@ -19,11 +19,11 @@ export function registerBinanceFuturesCOINMCancelBatchOrders(server: McpServer) 
     },
     async ({ symbol, orderIdList, origClientOrderIdList }) => {
       try {
-        const params: any = { symbol }
-        if (orderIdList) params.orderIdList = orderIdList
-        if (origClientOrderIdList) params.origClientOrderIdList = origClientOrderIdList
+        const params: any = { symbol };
+        if (orderIdList) params.orderIdList = orderIdList;
+        if (origClientOrderIdList) params.origClientOrderIdList = origClientOrderIdList;
 
-        const data = await deliveryClient.cancelBatchOrders(params)
+        const data = await deliveryClient.cancelBatchOrders(params);
 
         return {
           content: [
@@ -32,17 +32,17 @@ export function registerBinanceFuturesCOINMCancelBatchOrders(server: McpServer) 
               text: `COIN-M Futures batch orders cancelled. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to cancel COIN-M Futures batch orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

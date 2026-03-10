@@ -1,9 +1,9 @@
 // src/tools/binance-options/exerciseHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsExerciseHistory(server: McpServer) {
   server.tool(
@@ -17,13 +17,13 @@ export function registerBinanceOptionsExerciseHistory(server: McpServer) {
     },
     async ({ underlying, startTime, endTime, limit }) => {
       try {
-        const params: any = {}
-        if (underlying) params.underlying = underlying
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (underlying) params.underlying = underlying;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await optionsClient.exerciseHistory(params)
+        const data = await optionsClient.exerciseHistory(params);
 
         return {
           content: [
@@ -32,15 +32,15 @@ export function registerBinanceOptionsExerciseHistory(server: McpServer) {
               text: `Exercise history retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get exercise history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

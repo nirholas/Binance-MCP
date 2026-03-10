@@ -1,9 +1,9 @@
 // src/tools/binance-spot/userdatastream-api/putUserDataStream.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePutUserDataStream(server: McpServer) {
   server.tool(
@@ -16,9 +16,9 @@ export function registerBinancePutUserDataStream(server: McpServer) {
       try {
         const response = await spotClient.restAPI.putUserDataStream({
           listenKey: listenKey,
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -27,17 +27,17 @@ export function registerBinancePutUserDataStream(server: McpServer) {
               text: `Successfully extended validity of listen key: ${listenKey}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to extend listen key validity: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

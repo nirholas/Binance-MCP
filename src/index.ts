@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import type { Server } from "http"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { Server } from "http";
 
-import { logTestnetStatus } from "./config/testnet.js"
-import { startSSEServer } from "./server/sse.js"
-import { startStdioServer } from "./server/stdio.js"
-import Logger from "./utils/logger.js"
+import { logTestnetStatus } from "./config/testnet.js";
+import { startSSEServer } from "./server/sse.js";
+import { startStdioServer } from "./server/stdio.js";
+import Logger from "./utils/logger.js";
 
-const args = process.argv.slice(2)
+const args = process.argv.slice(2);
 
 // Transport mode flags
-const sseMode = args.includes("--sse") || args.includes("-s")
+const sseMode = args.includes("--sse") || args.includes("-s");
 
 function printUsage() {
   console.log(`
@@ -35,42 +35,42 @@ Examples:
 
   # SSE mode
   binance-mcp --sse
-`)
+`);
 }
 
 async function main() {
   if (args.includes("--help")) {
-    printUsage()
-    process.exit(0)
+    printUsage();
+    process.exit(0);
   }
 
-  logTestnetStatus()
+  logTestnetStatus();
 
-  let handle: McpServer | Server | undefined
+  let handle: McpServer | Server | undefined;
 
   if (sseMode) {
-    Logger.info("Starting in SSE mode")
-    handle = await startSSEServer()
+    Logger.info("Starting in SSE mode");
+    handle = await startSSEServer();
   } else {
-    handle = await startStdioServer()
+    handle = await startStdioServer();
   }
 
   if (!handle) {
-    Logger.error("Failed to start server")
-    process.exit(1)
+    Logger.error("Failed to start server");
+    process.exit(1);
   }
 
-  const server = handle
+  const server = handle;
 
   const handleShutdown = async () => {
     if ("close" in server && typeof server.close === "function") {
-      await server.close()
+      await server.close();
     }
-    process.exit(0)
-  }
+    process.exit(0);
+  };
 
-  process.on("SIGINT", handleShutdown)
-  process.on("SIGTERM", handleShutdown)
+  process.on("SIGINT", handleShutdown);
+  process.on("SIGTERM", handleShutdown);
 }
 
-main()
+main();

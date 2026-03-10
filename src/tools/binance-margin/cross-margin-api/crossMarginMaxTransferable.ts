@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginMaxTransferable.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
   server.tool(
@@ -20,7 +20,7 @@ export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
           asset: params.asset,
           ...(params.isolatedSymbol && { isolatedSymbol: params.isolatedSymbol }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
               text: `Max Transferable for ${params.asset}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query max transferable: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

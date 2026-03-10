@@ -1,34 +1,34 @@
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
-import Logger from "../utils/logger.js"
+import Logger from "../utils/logger.js";
 
-import { startServer } from "./base.js"
+import { startServer } from "./base.js";
 
 // src/server/stdio.ts
-import "dotenv/config"
+import "dotenv/config";
 
 // Start the server in stdio mode
 export const startStdioServer = async () => {
   try {
-    const server = startServer()
-    const transport = new StdioServerTransport()
+    const server = startServer();
+    const transport = new StdioServerTransport();
 
-    Logger.info("Binance MCP Server running on stdio mode")
+    Logger.info("Binance MCP Server running on stdio mode");
 
     transport.onmessage = (message) => {
-      Logger.debug("Received message:", message)
-    }
+      Logger.debug("Received message:", message);
+    };
     transport.onclose = () => {
-      Logger.info("Stdio server closed")
-    }
+      Logger.info("Stdio server closed");
+    };
     transport.onerror = (error) => {
-      Logger.error("Stdio server error:", error)
-    }
+      Logger.error("Stdio server error:", error);
+    };
 
-    await server.connect(transport)
+    await server.connect(transport);
 
-    return server
+    return server;
   } catch (error) {
-    Logger.error("Error starting Binance MCP Stdio server:", error)
+    Logger.error("Error starting Binance MCP Stdio server:", error);
   }
-}
+};

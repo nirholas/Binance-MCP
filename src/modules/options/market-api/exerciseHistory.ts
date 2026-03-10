@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/exerciseHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketExerciseHistory(server: McpServer) {
   server.tool(
@@ -34,24 +34,24 @@ export function registerOptionsMarketExerciseHistory(server: McpServer) {
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Exercise History\n\n`
+        let result = `✅ Options Exercise History\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total records: ${data.length}\n\n`
+          result += `Total records: ${data.length}\n\n`;
           data.forEach((record: any) => {
-            const exerciseTime = new Date(record.expiryDate).toISOString()
-            result += `**${record.symbol}**\n`
-            result += `  Strike Price: ${record.strikePrice}\n`
-            result += `  Real Strike Price: ${record.realStrikePrice}\n`
-            result += `  Exercise Price: ${record.exercisePrice}\n`
-            result += `  Expiry Date: ${exerciseTime}\n\n`
-          })
+            const exerciseTime = new Date(record.expiryDate).toISOString();
+            result += `**${record.symbol}**\n`;
+            result += `  Strike Price: ${record.strikePrice}\n`;
+            result += `  Real Strike Price: ${record.realStrikePrice}\n`;
+            result += `  Exercise Price: ${record.exercisePrice}\n`;
+            result += `  Expiry Date: ${exerciseTime}\n\n`;
+          });
         } else {
-          result += `No exercise history found`
+          result += `No exercise history found`;
         }
 
         return {
@@ -61,9 +61,9 @@ export function registerOptionsMarketExerciseHistory(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -73,8 +73,8 @@ export function registerOptionsMarketExerciseHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

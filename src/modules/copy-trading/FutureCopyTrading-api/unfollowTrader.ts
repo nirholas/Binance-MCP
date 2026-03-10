@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/copy-trading/FutureCopyTrading-api/unfollowTrader.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { copyTradingClient } from "../../../config/binanceClient.js"
+import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
         const response = await copyTradingClient.restAPI.unfollowTrader({
           leadPortfolioId: params.leadPortfolioId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const _data = await response.data()
+        const _data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
               text: `✅ Stopped Following Trader!\n\nPortfolio: ${params.leadPortfolioId}\n\n💡 Note: Existing positions from copy trading are still open. You may want to close them manually.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

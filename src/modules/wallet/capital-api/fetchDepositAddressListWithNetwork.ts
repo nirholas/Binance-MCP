@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/capital-api/fetchDepositAddressListWithNetwork.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletFetchDepositAddressListWithNetwork(server: McpServer) {
   server.tool(
@@ -16,12 +16,12 @@ export function registerBinanceWalletFetchDepositAddressListWithNetwork(server: 
     },
     async ({ coin, network, recvWindow }) => {
       try {
-        const params: any = { coin }
-        if (network !== undefined) params.network = network
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { coin };
+        if (network !== undefined) params.network = network;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.fetchDepositAddressListWithNetwork(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.fetchDepositAddressListWithNetwork(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -30,17 +30,17 @@ export function registerBinanceWalletFetchDepositAddressListWithNetwork(server: 
               text: `Retrieved deposit addresses for ${coin}. Total addresses: ${data.length || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve deposit addresses: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

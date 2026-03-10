@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/getPortfolioMarginAssetIndexPrice.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAssetIndexPrice(server: McpServer) {
   server.tool(
@@ -18,11 +18,11 @@ export function registerBinancePortfolioMarginGetAssetIndexPrice(server: McpServ
     },
     async ({ asset, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (asset !== undefined) params.asset = asset
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (asset !== undefined) params.asset = asset;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.getAssetIndexPrice(params)
+        const data = await portfolioMarginClient.getAssetIndexPrice(params);
 
         return {
           content: [
@@ -31,17 +31,17 @@ export function registerBinancePortfolioMarginGetAssetIndexPrice(server: McpServ
               text: `Retrieved asset index price. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve asset index price: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

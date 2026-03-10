@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getOneTimePlans.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetOneTimePlans(server: McpServer) {
   server.tool(
@@ -15,11 +15,11 @@ export function registerBinanceAutoInvestGetOneTimePlans(server: McpServer) {
     },
     async ({ planId, requestId }) => {
       try {
-        const params: any = { planId }
-        if (requestId) params.requestId = requestId
+        const params: any = { planId };
+        if (requestId) params.requestId = requestId;
 
-        const response = await autoInvestClient.restAPI.queryOneTimeTransactionStatus(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.queryOneTimeTransactionStatus(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -28,15 +28,15 @@ export function registerBinanceAutoInvestGetOneTimePlans(server: McpServer) {
               text: `Plan details retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get plan details: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

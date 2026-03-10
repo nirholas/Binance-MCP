@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/userdatastream-api/keepAliveListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryKeepAliveListenKey(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerBinanceDeliveryKeepAliveListenKey(server: McpServer) {
         const response = await deliveryClient.restAPI.renewListenKey({
           ...(params.listenKey && { listenKey: params.listenKey }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        await response.data()
+        await response.data();
 
         return {
           content: [
@@ -35,15 +35,15 @@ export function registerBinanceDeliveryKeepAliveListenKey(server: McpServer) {
               text: `✅ Listen Key Extended!\n\nYour COIN-M Futures listen key has been renewed for another 60 minutes.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to extend listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginCancelOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginCancelOrder(server: McpServer) {
   server.tool(
@@ -27,7 +27,7 @@ export function registerBinanceCrossMarginCancelOrder(server: McpServer) {
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceCrossMarginCancelOrder(server: McpServer) {
               text: `Margin order cancelled successfully: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel margin order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

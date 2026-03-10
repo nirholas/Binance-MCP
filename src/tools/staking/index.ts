@@ -2,11 +2,11 @@
 // Binance.US Staking Tools
 // Earn rewards by staking supported cryptocurrencies
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US Staking tools
@@ -45,7 +45,7 @@ If no asset is specified, returns information for all staking assets.`,
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/asset", {
           ...(params.stakingAsset && { stakingAsset: params.stakingAsset.toUpperCase() }),
-        })
+        });
 
         return {
           content: [
@@ -54,17 +54,17 @@ If no asset is specified, returns information for all staking assets.`,
               text: `Successfully retrieved staking asset information. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get staking asset info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/staking/stake - Stake Asset
@@ -102,7 +102,7 @@ Response includes:
           stakingAsset: params.stakingAsset.toUpperCase(),
           amount: params.amount,
           autoRestake: params.autoRestake,
-        })
+        });
 
         return {
           content: [
@@ -111,17 +111,17 @@ Response includes:
               text: `Staking request submitted. Result: ${response.data?.result || response.result}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to stake asset: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/staking/unstake - Unstake Asset
@@ -150,7 +150,7 @@ Response includes:
         const response = await makeSignedRequest("POST", "/sapi/v1/staking/unstake", {
           stakingAsset: params.stakingAsset.toUpperCase(),
           amount: params.amount,
-        })
+        });
 
         return {
           content: [
@@ -159,17 +159,17 @@ Response includes:
               text: `Unstaking request submitted. Result: ${response.data?.result || response.result}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to unstake asset: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/staking/stakingBalance - Get Staking Balance
@@ -199,7 +199,7 @@ If no asset is specified, returns balances for all staked assets.`,
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/stakingBalance", {
           ...(params.asset && { asset: params.asset.toUpperCase() }),
-        })
+        });
 
         return {
           content: [
@@ -208,17 +208,17 @@ If no asset is specified, returns balances for all staked assets.`,
               text: `Successfully retrieved staking balance. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get staking balance: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/staking/history - Get Staking History
@@ -262,7 +262,7 @@ If no asset is specified, returns history for all assets.`,
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.page && { page: params.page }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -271,17 +271,17 @@ If no asset is specified, returns history for all assets.`,
               text: `Successfully retrieved staking history. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get staking history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/staking/stakingRewardsHistory - Get Staking Rewards History
@@ -330,7 +330,7 @@ If no asset is specified, returns rewards for all staked assets.`,
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.page && { page: params.page }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -339,17 +339,17 @@ If no asset is specified, returns rewards for all staked assets.`,
               text: `Successfully retrieved staking rewards history. Total: ${response.total || "N/A"}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get staking rewards history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

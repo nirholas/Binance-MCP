@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/cm-trade/getAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginCmGetAllOrders(server: McpServer) {
   server.tool(
@@ -40,26 +40,26 @@ export function registerPortfolioMarginCmGetAllOrders(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Portfolio Margin CM All Orders\n\n`
+        let result = `✅ Portfolio Margin CM All Orders\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total orders: ${data.length}\n\n`
+          result += `Total orders: ${data.length}\n\n`;
           data.slice(0, 20).forEach((order: any, index: number) => {
-            result += `**${index + 1}. ${order.symbol}**\n`
-            result += `  Order ID: ${order.orderId}\n`
-            result += `  Side: ${order.side} | Type: ${order.type}\n`
-            result += `  Price: ${order.price} | Qty: ${order.origQty}\n`
-            result += `  Executed: ${order.executedQty} | Status: ${order.status}\n\n`
-          })
+            result += `**${index + 1}. ${order.symbol}**\n`;
+            result += `  Order ID: ${order.orderId}\n`;
+            result += `  Side: ${order.side} | Type: ${order.type}\n`;
+            result += `  Price: ${order.price} | Qty: ${order.origQty}\n`;
+            result += `  Executed: ${order.executedQty} | Status: ${order.status}\n\n`;
+          });
           if (data.length > 20) {
-            result += `... and ${data.length - 20} more orders`
+            result += `... and ${data.length - 20} more orders`;
           }
         } else {
-          result += `No orders found`
+          result += `No orders found`;
         }
 
         return {
@@ -69,9 +69,9 @@ export function registerPortfolioMarginCmGetAllOrders(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -81,8 +81,8 @@ export function registerPortfolioMarginCmGetAllOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

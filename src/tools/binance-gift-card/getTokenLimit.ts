@@ -1,9 +1,9 @@
 // src/tools/binance-gift-card/getTokenLimit.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardGetTokenLimit(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceGiftCardGetTokenLimit(server: McpServer) {
     },
     async ({ baseToken, recvWindow }) => {
       try {
-        const params: Record<string, any> = { baseToken }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { baseToken };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await giftCardClient.getTokenLimit(params)
+        const data = await giftCardClient.getTokenLimit(params);
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceGiftCardGetTokenLimit(server: McpServer) {
               text: `Token limit for ${baseToken}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to fetch token limit: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

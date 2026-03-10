@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-auto-invest/changeIndexPlanStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestChangeIndexPlanStatus(server: McpServer) {
   server.tool(
@@ -26,8 +26,8 @@ export function registerBinanceAutoInvestChangeIndexPlanStatus(server: McpServer
           indexId: params.indexId,
           status: params.status,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceAutoInvestChangeIndexPlanStatus(server: McpServer
               text: `✅ Index plan status changed to ${params.status}\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to change index plan status: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

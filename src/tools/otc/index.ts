@@ -2,11 +2,11 @@
 // Binance.US OTC (Over-The-Counter) Trading Tools
 // Large block trades executed outside the regular order book
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US OTC trading tools
@@ -41,7 +41,7 @@ Example: Convert large amounts of BTC to USDT without affecting market price.`,
         const response = await makeSignedRequest("GET", "/sapi/v1/otc/coinPairs", {
           ...(params.fromCoin && { fromCoin: params.fromCoin.toUpperCase() }),
           ...(params.toCoin && { toCoin: params.toCoin.toUpperCase() }),
-        })
+        });
 
         return {
           content: [
@@ -50,17 +50,17 @@ Example: Convert large amounts of BTC to USDT without affecting market price.`,
               text: `Successfully retrieved OTC coin pairs. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get OTC coin pairs: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/otc/quotes - Request Quote for OTC Trade
@@ -101,7 +101,7 @@ Response includes:
           toCoin: params.toCoin.toUpperCase(),
           requestCoin: params.requestCoin.toUpperCase(),
           requestAmount: params.requestAmount,
-        })
+        });
 
         return {
           content: [
@@ -110,17 +110,17 @@ Response includes:
               text: `OTC Quote received successfully. ⚠️ Quote expires at timestamp ${response.validTimestamp}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get OTC quote: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/otc/orders - Place OTC Trade Order
@@ -153,7 +153,7 @@ Response includes:
       try {
         const response = await makeSignedRequest("POST", "/sapi/v1/otc/orders", {
           quoteId: params.quoteId,
-        })
+        });
 
         return {
           content: [
@@ -162,17 +162,17 @@ Response includes:
               text: `OTC order placed successfully. Order ID: ${response.orderId}, Status: ${response.orderStatus}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place OTC order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/otc/orders/{orderId} - Get OTC Order Details
@@ -196,7 +196,7 @@ Response includes:
     },
     async (params) => {
       try {
-        const response = await makeSignedRequest("GET", `/sapi/v1/otc/orders/${params.orderId}`)
+        const response = await makeSignedRequest("GET", `/sapi/v1/otc/orders/${params.orderId}`);
 
         return {
           content: [
@@ -205,17 +205,17 @@ Response includes:
               text: `OTC order details retrieved. Status: ${response.orderStatus}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get OTC order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/otc/orders - Get All OTC Trade Orders
@@ -257,7 +257,7 @@ toCoin, toAmount, ratio, inverseRatio, createTime`,
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.page && { page: params.page }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -266,17 +266,17 @@ toCoin, toAmount, ratio, inverseRatio, createTime`,
               text: `Retrieved ${response.total} OTC orders. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get OTC orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/ocbs/orders - Get All OCBS (Fiat) Orders
@@ -320,7 +320,7 @@ Each order contains:
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.page && { page: params.page }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -329,15 +329,15 @@ Each order contains:
               text: `Retrieved ${response.total} OCBS orders. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get OCBS orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

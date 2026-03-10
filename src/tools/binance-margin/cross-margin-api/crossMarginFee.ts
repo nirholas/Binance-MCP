@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginFee.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginFee(server: McpServer) {
   server.tool(
@@ -24,7 +24,7 @@ export function registerBinanceCrossMarginFee(server: McpServer) {
           ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
           ...(params.coin && { coin: params.coin }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -33,15 +33,15 @@ export function registerBinanceCrossMarginFee(server: McpServer) {
               text: `Cross Margin Fee Data: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query cross margin fee: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

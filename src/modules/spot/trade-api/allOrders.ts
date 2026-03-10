@@ -1,9 +1,9 @@
 // src/tools/binance-spot/trade-api/allOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAllOrders(server: McpServer) {
   server.tool(
@@ -21,16 +21,16 @@ export function registerBinanceAllOrders(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, limit }) => {
       try {
-        const params: any = { symbol }
+        const params: any = { symbol };
 
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.allOrders(params)
+        const response = await spotClient.restAPI.allOrders(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceAllOrders(server: McpServer) {
               text: `Retrieved all orders for ${symbol}. Total orders: ${data.length}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve all orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

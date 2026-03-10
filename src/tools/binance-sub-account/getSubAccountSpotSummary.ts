@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountSpotSummary.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetSpotSummary(server: McpServer) {
   server.tool(
@@ -20,13 +20,13 @@ export function registerBinanceSubAccountGetSpotSummary(server: McpServer) {
     },
     async ({ email, page, size, recvWindow }) => {
       try {
-        const params: any = {}
-        if (email !== undefined) params.email = email
-        if (page !== undefined) params.page = page
-        if (size !== undefined) params.size = size
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (email !== undefined) params.email = email;
+        if (page !== undefined) params.page = page;
+        if (size !== undefined) params.size = size;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountSpotSummary(params)
+        const data = await subAccountApiClient.getSubAccountSpotSummary(params);
 
         return {
           content: [
@@ -35,17 +35,17 @@ export function registerBinanceSubAccountGetSpotSummary(server: McpServer) {
               text: `Retrieved sub-account spot summary. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get sub-account spot summary: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

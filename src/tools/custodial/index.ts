@@ -2,16 +2,16 @@
 // Binance.US Custodial Solution Tools
 // For institutional custody partners (e.g., Anchorage, BitGo)
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 // Common schema for rail parameter (custodial partner)
 const railSchema = z
   .string()
-  .describe("Custodial partner name (e.g., ANCHORAGE, BITGO). Must be uppercase.")
+  .describe("Custodial partner name (e.g., ANCHORAGE, BITGO). Must be uppercase.");
 
 // Order type enum
 const orderTypeEnum = z.enum([
@@ -22,13 +22,13 @@ const orderTypeEnum = z.enum([
   "TAKE_PROFIT",
   "TAKE_PROFIT_LIMIT",
   "LIMIT_MAKER",
-])
+]);
 
 // Order side enum
-const orderSideEnum = z.enum(["BUY", "SELL"])
+const orderSideEnum = z.enum(["BUY", "SELL"]);
 
 // Time in force enum
-const timeInForceEnum = z.enum(["GTC", "IOC", "FOK"])
+const timeInForceEnum = z.enum(["GTC", "IOC", "FOK"]);
 
 /**
  * Register all Binance.US Custodial Solution tools
@@ -69,7 +69,7 @@ Each balance entry contains:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/balance", {
           rail: params.rail.toUpperCase(),
-        })
+        });
 
         return {
           content: [
@@ -78,17 +78,17 @@ Each balance entry contains:
               text: `Successfully retrieved custodial balance. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get custodial balance: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/supportedAssetList - Get Supported Assets
@@ -114,7 +114,7 @@ Each asset entry contains:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/supportedAssetList", {
           rail: params.rail.toUpperCase(),
-        })
+        });
 
         return {
           content: [
@@ -123,17 +123,17 @@ Each asset entry contains:
               text: `Successfully retrieved supported assets. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get supported assets: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/walletTransfer - Transfer from Exchange Wallet
@@ -170,7 +170,7 @@ Response includes:
           asset: params.asset.toUpperCase(),
           amount: params.amount,
           ...(params.clientOrderId && { clientOrderId: params.clientOrderId }),
-        })
+        });
 
         return {
           content: [
@@ -179,17 +179,17 @@ Response includes:
               text: `Wallet transfer completed. Transfer ID: ${response.transferId}, Status: ${response.status}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to execute wallet transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/custodianTransfer - Transfer from Custodian
@@ -226,7 +226,7 @@ Response includes:
           asset: params.asset.toUpperCase(),
           amount: params.amount,
           ...(params.clientOrderId && { clientOrderId: params.clientOrderId }),
-        })
+        });
 
         return {
           content: [
@@ -235,19 +235,19 @@ Response includes:
               text: `Custodian transfer initiated. Transfer ID: ${response.transferId}, Status: ${response.status}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to execute custodian transfer: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/undoTransfer - Undo Transfer
@@ -273,7 +273,7 @@ Response includes:
         const response = await makeSignedRequest("POST", "/sapi/v1/custodian/undoTransfer", {
           rail: params.rail.toUpperCase(),
           originTransferId: params.originTransferId,
-        })
+        });
 
         return {
           content: [
@@ -282,17 +282,17 @@ Response includes:
               text: `Transfer undo completed. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to undo transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/walletTransferHistory - Wallet Transfer History
@@ -341,7 +341,7 @@ status, createTime, updateTime`,
             ...(params.page && { page: params.page }),
             ...(params.limit && { limit: params.limit }),
           },
-        )
+        );
 
         return {
           content: [
@@ -350,19 +350,19 @@ status, createTime, updateTime`,
               text: `Retrieved ${response.total} wallet transfers. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get wallet transfer history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/custodianTransferHistory - Custodian Transfer History
@@ -421,7 +421,7 @@ expressTrade flag, createTime, updateTime`,
             ...(params.page && { page: params.page }),
             ...(params.limit && { limit: params.limit }),
           },
-        )
+        );
 
         return {
           content: [
@@ -430,19 +430,19 @@ expressTrade flag, createTime, updateTime`,
               text: `Retrieved ${response.total} custodian transfers. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get custodian transfer history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/availableBalance - Get Available Balance
@@ -463,7 +463,7 @@ Returns the balance available for placing new orders.`,
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/availableBalance", {
           rail: params.rail.toUpperCase(),
           ...(params.asset && { asset: params.asset.toUpperCase() }),
-        })
+        });
 
         return {
           content: [
@@ -472,17 +472,17 @@ Returns the balance available for placing new orders.`,
               text: `Successfully retrieved available balance. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get available balance: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/order - Place Custodial Order
@@ -549,7 +549,7 @@ executedQty, and expressTradeFlag`,
           ...(params.allowExpressTrade !== undefined && {
             allowExpressTrade: params.allowExpressTrade,
           }),
-        })
+        });
 
         return {
           content: [
@@ -558,17 +558,17 @@ executedQty, and expressTradeFlag`,
               text: `Custodial order placed. Order ID: ${response.orderId}, Status: ${response.status}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place custodial order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/ocoOrder - Place Custodial OCO Order
@@ -626,7 +626,7 @@ Response includes orderListId, orders array, and orderReports with details.`,
           ...(params.allowExpressTrade !== undefined && {
             allowExpressTrade: params.allowExpressTrade,
           }),
-        })
+        });
 
         return {
           content: [
@@ -635,17 +635,17 @@ Response includes orderListId, orders array, and orderReports with details.`,
               text: `Custodial OCO order placed. Order List ID: ${response.orderListId}, Status: ${response.listOrderStatus}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place custodial OCO order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/openOrders - Get Open Orders
@@ -673,7 +673,7 @@ expressTradeFlag`,
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/openOrders", {
           rail: params.rail.toUpperCase(),
           ...(params.symbol && { symbol: params.symbol.toUpperCase() }),
-        })
+        });
 
         return {
           content: [
@@ -682,17 +682,17 @@ expressTradeFlag`,
               text: `Retrieved ${Array.isArray(response) ? response.length : 0} open orders. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get open orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/order - Get Order
@@ -717,7 +717,7 @@ icebergQty, time, updateTime, isWorking, expressTradeFlag`,
           rail: params.rail.toUpperCase(),
           symbol: params.symbol.toUpperCase(),
           orderId: params.orderId,
-        })
+        });
 
         return {
           content: [
@@ -726,17 +726,17 @@ icebergQty, time, updateTime, isWorking, expressTradeFlag`,
               text: `Order retrieved. Status: ${response.status}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/orderHistory - Get Order History
@@ -778,7 +778,7 @@ executedQty, and expressTradeFlag.`,
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.fromId && { fromId: params.fromId }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -787,17 +787,17 @@ executedQty, and expressTradeFlag.`,
               text: `Retrieved ${Array.isArray(response) ? response.length : 0} historical orders. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get order history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/tradeHistory - Get Trade History
@@ -838,7 +838,7 @@ isBuyer, isMaker, isBestMatch, orderId, commission, commissionAsset`,
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.fromId && { fromId: params.fromId }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
         return {
           content: [
@@ -847,17 +847,17 @@ isBuyer, isMaker, isBestMatch, orderId, commission, commissionAsset`,
               text: `Retrieved ${Array.isArray(response) ? response.length : 0} trades. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get trade history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOrder - Cancel Order
@@ -884,7 +884,7 @@ Response includes the canceled order details with status: CANCELED`,
     async (params) => {
       try {
         if (!params.orderId && !params.origClientOrderId) {
-          throw new Error("Either orderId or origClientOrderId must be provided")
+          throw new Error("Either orderId or origClientOrderId must be provided");
         }
 
         const response = await makeSignedRequest("DELETE", "/sapi/v1/custodian/cancelOrder", {
@@ -893,7 +893,7 @@ Response includes the canceled order details with status: CANCELED`,
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
-        })
+        });
 
         return {
           content: [
@@ -902,17 +902,17 @@ Response includes the canceled order details with status: CANCELED`,
               text: `Order canceled. Order ID: ${response.orderId}, Status: ${response.status}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOrdersBySymbol - Cancel All Orders for Symbol
@@ -939,7 +939,7 @@ Response is an array of all canceled orders.`,
             rail: params.rail.toUpperCase(),
             symbol: params.symbol.toUpperCase(),
           },
-        )
+        );
 
         return {
           content: [
@@ -948,17 +948,17 @@ Response is an array of all canceled orders.`,
               text: `All orders canceled for ${params.symbol}. Canceled ${Array.isArray(response) ? response.length : 0} orders. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOcoOrder - Cancel OCO Order
@@ -988,7 +988,7 @@ canceled order details.`,
           orderListId: params.orderListId,
           ...(params.listClientOrderId && { listClientOrderId: params.listClientOrderId }),
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
-        })
+        });
 
         return {
           content: [
@@ -997,17 +997,17 @@ canceled order details.`,
               text: `OCO order canceled. List ID: ${response.orderListId}, Status: ${response.listOrderStatus}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel OCO order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/settlementSetting - Get Settlement Settings
@@ -1031,7 +1031,7 @@ Response includes:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/settlementSetting", {
           rail: params.rail.toUpperCase(),
-        })
+        });
 
         return {
           content: [
@@ -1040,17 +1040,17 @@ Response includes:
               text: `Settlement settings retrieved. Active: ${response.settlementActive}, Next: ${new Date(response.nextTriggerTime).toISOString()}. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get settlement settings: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/settlementHistory - Get Settlement History
@@ -1094,7 +1094,7 @@ Each record contains:
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.page && { page: params.page }),
-        })
+        });
 
         return {
           content: [
@@ -1103,15 +1103,15 @@ Each record contains:
               text: `Retrieved ${response.total} settlement records. Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get settlement history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

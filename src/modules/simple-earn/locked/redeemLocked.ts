@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/simple-earn/locked/redeemLocked.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnRedeemLocked(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerSimpleEarnRedeemLocked(server: McpServer) {
         const response = await simpleEarnClient.restAPI.redeemLockedProduct({
           positionId: params.positionId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerSimpleEarnRedeemLocked(server: McpServer) {
               text: `✅ Locked Product Redemption Initiated!\n\nPosition ID: ${params.positionId}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerSimpleEarnRedeemLocked(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

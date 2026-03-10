@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/cancelOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCancelOrder(server: McpServer) {
   server.tool(
@@ -29,7 +29,7 @@ export function registerBinanceFuturesCancelOrder(server: McpServer) {
               { type: "text", text: "Either orderId or origClientOrderId must be provided" },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await futuresClient.restAPI.cancelOrder({
@@ -37,9 +37,9 @@ export function registerBinanceFuturesCancelOrder(server: McpServer) {
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -48,15 +48,15 @@ export function registerBinanceFuturesCancelOrder(server: McpServer) {
               text: `✅ Order cancelled successfully!\n\nSymbol: ${data.symbol}\nOrder ID: ${data.orderId}\nClient Order ID: ${data.clientOrderId}\nStatus: ${data.status}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to cancel order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/exchangeInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketExchangeInfo(server: McpServer) {
   server.tool(
@@ -16,29 +16,29 @@ export function registerOptionsMarketExchangeInfo(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await optionsClient.restAPI.exchangeInfo()
-        const data = await response.data()
+        const response = await optionsClient.restAPI.exchangeInfo();
+        const data = await response.data();
 
         // Summarize the response
-        const optionSymbols = data.optionSymbols || []
-        const assets = data.optionAssets || []
+        const optionSymbols = data.optionSymbols || [];
+        const assets = data.optionAssets || [];
 
-        let summary = `✅ Options Exchange Information\n\n`
-        summary += `**Timezone**: ${data.timezone}\n`
-        summary += `**Server Time**: ${new Date(data.serverTime).toISOString()}\n\n`
-        summary += `**Available Assets**: ${assets.length}\n`
-        summary += `**Option Contracts**: ${optionSymbols.length}\n\n`
+        let summary = `✅ Options Exchange Information\n\n`;
+        summary += `**Timezone**: ${data.timezone}\n`;
+        summary += `**Server Time**: ${new Date(data.serverTime).toISOString()}\n\n`;
+        summary += `**Available Assets**: ${assets.length}\n`;
+        summary += `**Option Contracts**: ${optionSymbols.length}\n\n`;
 
         if (assets.length > 0) {
-          summary += `**Assets**: ${assets.map((a: any) => a.name || a).join(", ")}\n\n`
+          summary += `**Assets**: ${assets.map((a: any) => a.name || a).join(", ")}\n\n`;
         }
 
         // Show first few contracts as examples
         if (optionSymbols.length > 0) {
-          summary += `**Sample Contracts** (first 5):\n`
+          summary += `**Sample Contracts** (first 5):\n`;
           optionSymbols.slice(0, 5).forEach((sym: any) => {
-            summary += `- ${sym.symbol}: ${sym.underlying} ${sym.side} Strike: ${sym.strikePrice} Expiry: ${sym.expiryDate}\n`
-          })
+            summary += `- ${sym.symbol}: ${sym.underlying} ${sym.side} Strike: ${sym.strikePrice} Expiry: ${sym.expiryDate}\n`;
+          });
         }
 
         return {
@@ -48,9 +48,9 @@ export function registerOptionsMarketExchangeInfo(server: McpServer) {
               text: summary,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -60,8 +60,8 @@ export function registerOptionsMarketExchangeInfo(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-vip-loan/trade-api/vipLoanBorrow.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { vipLoanClient } from "../../../config/binanceClient.js"
+import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceVipLoanBorrow(server: McpServer) {
   server.tool(
@@ -37,9 +37,9 @@ export function registerBinanceVipLoanBorrow(server: McpServer) {
           isFlexibleRate: params.isFlexibleRate,
           ...(params.loanTerm !== undefined && { loanTerm: params.loanTerm }),
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -50,9 +50,9 @@ export function registerBinanceVipLoanBorrow(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -62,8 +62,8 @@ export function registerBinanceVipLoanBorrow(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

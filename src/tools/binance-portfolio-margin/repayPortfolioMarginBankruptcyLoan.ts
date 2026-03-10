@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/repayPortfolioMarginBankruptcyLoan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginRepayBankruptcyLoan(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinancePortfolioMarginRepayBankruptcyLoan(server: McpSer
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.repayBankruptcyLoan(params)
+        const data = await portfolioMarginClient.repayBankruptcyLoan(params);
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinancePortfolioMarginRepayBankruptcyLoan(server: McpSer
               text: `Successfully repaid bankruptcy loan. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to repay bankruptcy loan: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

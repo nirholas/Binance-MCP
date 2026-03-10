@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/trade-api/batchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsBatchOrders(server: McpServer) {
   server.tool(
@@ -40,25 +40,25 @@ export function registerOptionsBatchOrders(server: McpServer) {
         const response = await optionsClient.restAPI.batchOrders({
           orders: JSON.stringify(params.orders),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Batch Options Orders Placed\n\n`
+        let result = `✅ Batch Options Orders Placed\n\n`;
 
         if (Array.isArray(data)) {
           data.forEach((order: any, index: number) => {
             if (order.orderId) {
-              result += `Order ${index + 1}: ✅ Success\n`
-              result += `  Order ID: ${order.orderId}\n`
-              result += `  Symbol: ${order.symbol}\n`
-              result += `  Side: ${order.side} | Qty: ${order.quantity}\n`
-              result += `  Price: ${order.price} | Status: ${order.status}\n\n`
+              result += `Order ${index + 1}: ✅ Success\n`;
+              result += `  Order ID: ${order.orderId}\n`;
+              result += `  Symbol: ${order.symbol}\n`;
+              result += `  Side: ${order.side} | Qty: ${order.quantity}\n`;
+              result += `  Price: ${order.price} | Status: ${order.status}\n\n`;
             } else {
-              result += `Order ${index + 1}: ❌ Failed\n`
-              result += `  Error: ${order.msg || "Unknown error"}\n\n`
+              result += `Order ${index + 1}: ❌ Failed\n`;
+              result += `  Error: ${order.msg || "Unknown error"}\n\n`;
             }
-          })
+          });
         }
 
         return {
@@ -68,9 +68,9 @@ export function registerOptionsBatchOrders(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -80,8 +80,8 @@ export function registerOptionsBatchOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

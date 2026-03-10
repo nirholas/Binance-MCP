@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/account/getUmAccount.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetUmAccount(server: McpServer) {
   server.tool(
@@ -22,28 +22,28 @@ export function registerPortfolioMarginGetUmAccount(server: McpServer) {
       try {
         const response = await portfolioMarginClient.restAPI.umAccount({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Portfolio Margin UM (USDT-M) Account\n\n`
+        let result = `✅ Portfolio Margin UM (USDT-M) Account\n\n`;
 
         if (data) {
-          result += `**Account Overview**\n`
-          result += `Total Wallet Balance: ${data.totalWalletBalance}\n`
-          result += `Total Unrealized Profit: ${data.totalUnrealizedProfit}\n`
-          result += `Total Margin Balance: ${data.totalMarginBalance}\n`
-          result += `Total Position Initial Margin: ${data.totalPositionInitialMargin}\n`
-          result += `Total Open Order Initial Margin: ${data.totalOpenOrderInitialMargin}\n`
-          result += `Total Cross Wallet Balance: ${data.totalCrossWalletBalance}\n`
-          result += `Available Balance: ${data.availableBalance}\n`
-          result += `Max Withdraw Amount: ${data.maxWithdrawAmount}\n\n`
+          result += `**Account Overview**\n`;
+          result += `Total Wallet Balance: ${data.totalWalletBalance}\n`;
+          result += `Total Unrealized Profit: ${data.totalUnrealizedProfit}\n`;
+          result += `Total Margin Balance: ${data.totalMarginBalance}\n`;
+          result += `Total Position Initial Margin: ${data.totalPositionInitialMargin}\n`;
+          result += `Total Open Order Initial Margin: ${data.totalOpenOrderInitialMargin}\n`;
+          result += `Total Cross Wallet Balance: ${data.totalCrossWalletBalance}\n`;
+          result += `Available Balance: ${data.availableBalance}\n`;
+          result += `Max Withdraw Amount: ${data.maxWithdrawAmount}\n\n`;
 
           if (data.assets && data.assets.length > 0) {
-            result += `**Assets**\n`
+            result += `**Assets**\n`;
             data.assets.slice(0, 10).forEach((asset: any) => {
-              result += `- ${asset.asset}: Balance ${asset.walletBalance}, Available ${asset.availableBalance}\n`
-            })
+              result += `- ${asset.asset}: Balance ${asset.walletBalance}, Available ${asset.availableBalance}\n`;
+            });
           }
         }
 
@@ -54,9 +54,9 @@ export function registerPortfolioMarginGetUmAccount(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -66,8 +66,8 @@ export function registerPortfolioMarginGetUmAccount(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

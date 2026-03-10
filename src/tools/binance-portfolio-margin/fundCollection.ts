@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/fundCollection.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginFundCollection(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinancePortfolioMarginFundCollection(server: McpServer) 
     },
     async ({ asset, recvWindow }) => {
       try {
-        const params: Record<string, any> = { asset }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { asset };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.fundCollection(params)
+        const data = await portfolioMarginClient.fundCollection(params);
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinancePortfolioMarginFundCollection(server: McpServer) 
               text: `Fund collection triggered for ${asset}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to trigger fund collection: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

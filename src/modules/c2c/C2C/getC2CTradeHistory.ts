@@ -1,9 +1,9 @@
 // src/tools/binance-c2c/getC2CTradeHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { c2cClient } from "../../../config/binanceClient.js"
+import { c2cClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetC2CTradeHistory(server: McpServer) {
   server.tool(
@@ -22,8 +22,8 @@ export function registerBinanceGetC2CTradeHistory(server: McpServer) {
           ...(params.endTime !== undefined && { endTime: params.endTime }),
           ...(params.page !== undefined && { page: params.page }),
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceGetC2CTradeHistory(server: McpServer) {
               text: `Successfully retrieved the past C2C trades. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceGetC2CTradeHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

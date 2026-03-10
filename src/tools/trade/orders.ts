@@ -1,13 +1,13 @@
 // src/tools/trade/orders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
 import {
   BINANCE_US_CONFIG,
   hasApiCredentials,
   makeSignedRequest,
-} from "../../config/binanceUsClient.js"
+} from "../../config/binanceUsClient.js";
 
 // Common Binance error codes for better error messages
 const BINANCE_ERROR_CODES: Record<number, string> = {
@@ -58,13 +58,13 @@ const BINANCE_ERROR_CODES: Record<number, string> = {
   [-2022]: "ReduceOnly rejected - position already reduced",
   [-2024]: "Position does not exist",
   [-2026]: "Order would immediately match and trade",
-}
+};
 
 /**
  * Get human-readable error message for Binance error code
  */
 function getBinanceErrorMessage(code: number): string {
-  return BINANCE_ERROR_CODES[code] || `Unknown error code: ${code}`
+  return BINANCE_ERROR_CODES[code] || `Unknown error code: ${code}`;
 }
 
 /**
@@ -72,10 +72,10 @@ function getBinanceErrorMessage(code: number): string {
  */
 function checkCredentials(): string | null {
   if (!hasApiCredentials()) {
-    return "❌ API credentials not configured. Please set BINANCE_US_API_KEY and BINANCE_US_API_SECRET environment variables."
+    return "❌ API credentials not configured. Please set BINANCE_US_API_KEY and BINANCE_US_API_SECRET environment variables.";
   }
 
-  return null
+  return null;
 }
 
 /**
@@ -83,10 +83,10 @@ function checkCredentials(): string | null {
  */
 function validateRecvWindow(recvWindow?: number): string | null {
   if (recvWindow !== undefined && recvWindow > BINANCE_US_CONFIG.MAX_RECV_WINDOW) {
-    return `❌ recvWindow cannot exceed ${BINANCE_US_CONFIG.MAX_RECV_WINDOW}ms (60 seconds).`
+    return `❌ recvWindow cannot exceed ${BINANCE_US_CONFIG.MAX_RECV_WINDOW}ms (60 seconds).`;
   }
 
-  return null
+  return null;
 }
 
 /**
@@ -94,13 +94,13 @@ function validateRecvWindow(recvWindow?: number): string | null {
  */
 function validateSymbol(symbol: string): string | null {
   if (!symbol || symbol.length < 2 || symbol.length > 20) {
-    return "❌ Invalid symbol format. Symbol should be 2-20 characters (e.g., BTCUSD, ETHUSD)."
+    return "❌ Invalid symbol format. Symbol should be 2-20 characters (e.g., BTCUSD, ETHUSD).";
   }
   if (!/^[A-Z0-9]+$/.test(symbol.toUpperCase())) {
-    return "❌ Invalid symbol format. Symbol should contain only letters and numbers."
+    return "❌ Invalid symbol format. Symbol should contain only letters and numbers.";
   }
 
-  return null
+  return null;
 }
 
 // Order type enum
@@ -112,25 +112,25 @@ const OrderType = z.enum([
   "TAKE_PROFIT",
   "TAKE_PROFIT_LIMIT",
   "LIMIT_MAKER",
-])
+]);
 
 // Time in force enum
-const TimeInForce = z.enum(["GTC", "IOC", "FOK"])
+const TimeInForce = z.enum(["GTC", "IOC", "FOK"]);
 
 // Order side enum
-const OrderSide = z.enum(["BUY", "SELL"])
+const OrderSide = z.enum(["BUY", "SELL"]);
 
 // Response type enum
-const OrderRespType = z.enum(["ACK", "RESULT", "FULL"])
+const OrderRespType = z.enum(["ACK", "RESULT", "FULL"]);
 
 // Self trade prevention mode enum
-const SelfTradePreventionMode = z.enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"])
+const SelfTradePreventionMode = z.enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"]);
 
 // Cancel replace mode enum
-const CancelReplaceMode = z.enum(["STOP_ON_FAILURE", "ALLOW_FAILURE"])
+const CancelReplaceMode = z.enum(["STOP_ON_FAILURE", "ALLOW_FAILURE"]);
 
 // Cancel restrictions enum
-const CancelRestrictions = z.enum(["ONLY_NEW", "ONLY_PARTIALLY_FILLED"])
+const CancelRestrictions = z.enum(["ONLY_NEW", "ONLY_PARTIALLY_FILLED"]);
 
 /**
  * Register new order tool
@@ -189,28 +189,28 @@ export function registerBinanceUsNewOrder(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
 
         // Validate recvWindow
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         // Validate order type requirements
-        const validationError = validateOrderParams(params)
+        const validationError = validateOrderParams(params);
         if (validationError) {
           return {
             content: [{ type: "text", text: validationError }],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("POST", "/api/v3/order", params)
+        const response = await makeSignedRequest("POST", "/api/v3/order", params);
 
         return {
           content: [
@@ -229,25 +229,25 @@ export function registerBinanceUsNewOrder(server: McpServer) {
                 `\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
         // Try to extract Binance error code for better messaging
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
             { type: "text", text: `❌ Failed to place order: ${errorMessage}${additionalHelp}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -283,25 +283,25 @@ export function registerBinanceUsTestOrder(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
-        const validationError = validateOrderParams(params)
+        const validationError = validateOrderParams(params);
         if (validationError) {
           return {
             content: [{ type: "text", text: validationError }],
             isError: true,
-          }
+          };
         }
 
-        await makeSignedRequest("POST", "/api/v3/order/test", params)
+        await makeSignedRequest("POST", "/api/v3/order/test", params);
 
         return {
           content: [
@@ -317,14 +317,14 @@ export function registerBinanceUsTestOrder(server: McpServer) {
                 `\nThe order parameters are valid and can be submitted.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -334,10 +334,10 @@ export function registerBinanceUsTestOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -356,15 +356,15 @@ export function registerBinanceUsGetOrder(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         if (!params.orderId && !params.origClientOrderId) {
           return {
@@ -372,10 +372,10 @@ export function registerBinanceUsGetOrder(server: McpServer) {
               { type: "text", text: "❌ Either orderId or origClientOrderId must be provided." },
             ],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("GET", "/api/v3/order", params)
+        const response = await makeSignedRequest("GET", "/api/v3/order", params);
 
         return {
           content: [
@@ -398,24 +398,24 @@ export function registerBinanceUsGetOrder(server: McpServer) {
                 `\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
             { type: "text", text: `❌ Failed to get order: ${errorMessage}${additionalHelp}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -441,15 +441,15 @@ export function registerBinanceUsCancelOrder(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         if (!params.orderId && !params.origClientOrderId) {
           return {
@@ -457,10 +457,10 @@ export function registerBinanceUsCancelOrder(server: McpServer) {
               { type: "text", text: "❌ Either orderId or origClientOrderId must be provided." },
             ],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("DELETE", "/api/v3/order", params)
+        const response = await makeSignedRequest("DELETE", "/api/v3/order", params);
 
         return {
           content: [
@@ -479,24 +479,24 @@ export function registerBinanceUsCancelOrder(server: McpServer) {
                 `\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
             { type: "text", text: `❌ Failed to cancel order: ${errorMessage}${additionalHelp}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -540,15 +540,15 @@ export function registerBinanceUsCancelReplace(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         if (!params.cancelOrderId && !params.cancelOrigClientOrderId) {
           return {
@@ -559,10 +559,10 @@ export function registerBinanceUsCancelReplace(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("POST", "/api/v3/order/cancelReplace", params)
+        const response = await makeSignedRequest("POST", "/api/v3/order/cancelReplace", params);
 
         return {
           content: [
@@ -587,14 +587,14 @@ export function registerBinanceUsCancelReplace(server: McpServer) {
                 `\nFull Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -604,10 +604,10 @@ export function registerBinanceUsCancelReplace(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -629,19 +629,19 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate optional symbol and recvWindow
         if (params.symbol) {
-          const symbolError = validateSymbol(params.symbol)
-          if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
+          const symbolError = validateSymbol(params.symbol);
+          if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
         }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
-        const response = await makeSignedRequest("GET", "/api/v3/openOrders", params)
+        const response = await makeSignedRequest("GET", "/api/v3/openOrders", params);
 
         if (!response || response.length === 0) {
           return {
@@ -653,7 +653,7 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
                   : `📋 No open orders found`,
               },
             ],
-          }
+          };
         }
 
         const orderList = response
@@ -663,7 +663,7 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
               `Qty: ${order.origQty} @ ${order.price} | ` +
               `Status: ${order.status} | ID: ${order.orderId}`,
           )
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -676,14 +676,14 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
                 `Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -693,10 +693,10 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -720,25 +720,25 @@ export function registerBinanceUsAllOrders(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol and recvWindow
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
         // Validate limit
         if (params.limit !== undefined && (params.limit < 1 || params.limit > 1000)) {
           return {
             content: [{ type: "text", text: "❌ limit must be between 1 and 1000." }],
             isError: true,
-          }
+          };
         }
 
-        const response = await makeSignedRequest("GET", "/api/v3/allOrders", params)
+        const response = await makeSignedRequest("GET", "/api/v3/allOrders", params);
 
         if (!response || response.length === 0) {
           return {
@@ -748,7 +748,7 @@ export function registerBinanceUsAllOrders(server: McpServer) {
                 text: `📋 No orders found for ${params.symbol}`,
               },
             ],
-          }
+          };
         }
 
         const orderList = response
@@ -758,7 +758,7 @@ export function registerBinanceUsAllOrders(server: McpServer) {
               `• ${order.side} ${order.type} | Qty: ${order.origQty} @ ${order.price} | ` +
               `Status: ${order.status} | ID: ${order.orderId} | ${new Date(order.time).toISOString()}`,
           )
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -771,14 +771,14 @@ export function registerBinanceUsAllOrders(server: McpServer) {
                 `Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -788,10 +788,10 @@ export function registerBinanceUsAllOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
@@ -807,60 +807,60 @@ function validateOrderParams(params: any): string | null {
     stopPrice,
     trailingDelta,
     icebergQty,
-  } = params
+  } = params;
 
   switch (type) {
     case "LIMIT":
-      if (!timeInForce) return "❌ LIMIT orders require timeInForce parameter."
-      if (!quantity) return "❌ LIMIT orders require quantity parameter."
-      if (!price) return "❌ LIMIT orders require price parameter."
-      break
+      if (!timeInForce) return "❌ LIMIT orders require timeInForce parameter.";
+      if (!quantity) return "❌ LIMIT orders require quantity parameter.";
+      if (!price) return "❌ LIMIT orders require price parameter.";
+      break;
 
     case "MARKET":
       if (!quantity && !quoteOrderQty)
-        return "❌ MARKET orders require either quantity or quoteOrderQty."
-      break
+        return "❌ MARKET orders require either quantity or quoteOrderQty.";
+      break;
 
     case "STOP_LOSS":
-      if (!quantity) return "❌ STOP_LOSS orders require quantity parameter."
+      if (!quantity) return "❌ STOP_LOSS orders require quantity parameter.";
       if (!stopPrice && !trailingDelta)
-        return "❌ STOP_LOSS orders require stopPrice or trailingDelta."
-      break
+        return "❌ STOP_LOSS orders require stopPrice or trailingDelta.";
+      break;
 
     case "STOP_LOSS_LIMIT":
-      if (!timeInForce) return "❌ STOP_LOSS_LIMIT orders require timeInForce parameter."
-      if (!quantity) return "❌ STOP_LOSS_LIMIT orders require quantity parameter."
-      if (!price) return "❌ STOP_LOSS_LIMIT orders require price parameter."
+      if (!timeInForce) return "❌ STOP_LOSS_LIMIT orders require timeInForce parameter.";
+      if (!quantity) return "❌ STOP_LOSS_LIMIT orders require quantity parameter.";
+      if (!price) return "❌ STOP_LOSS_LIMIT orders require price parameter.";
       if (!stopPrice && !trailingDelta)
-        return "❌ STOP_LOSS_LIMIT orders require stopPrice or trailingDelta."
-      break
+        return "❌ STOP_LOSS_LIMIT orders require stopPrice or trailingDelta.";
+      break;
 
     case "TAKE_PROFIT":
-      if (!quantity) return "❌ TAKE_PROFIT orders require quantity parameter."
+      if (!quantity) return "❌ TAKE_PROFIT orders require quantity parameter.";
       if (!stopPrice && !trailingDelta)
-        return "❌ TAKE_PROFIT orders require stopPrice or trailingDelta."
-      break
+        return "❌ TAKE_PROFIT orders require stopPrice or trailingDelta.";
+      break;
 
     case "TAKE_PROFIT_LIMIT":
-      if (!timeInForce) return "❌ TAKE_PROFIT_LIMIT orders require timeInForce parameter."
-      if (!quantity) return "❌ TAKE_PROFIT_LIMIT orders require quantity parameter."
-      if (!price) return "❌ TAKE_PROFIT_LIMIT orders require price parameter."
+      if (!timeInForce) return "❌ TAKE_PROFIT_LIMIT orders require timeInForce parameter.";
+      if (!quantity) return "❌ TAKE_PROFIT_LIMIT orders require quantity parameter.";
+      if (!price) return "❌ TAKE_PROFIT_LIMIT orders require price parameter.";
       if (!stopPrice && !trailingDelta)
-        return "❌ TAKE_PROFIT_LIMIT orders require stopPrice or trailingDelta."
-      break
+        return "❌ TAKE_PROFIT_LIMIT orders require stopPrice or trailingDelta.";
+      break;
 
     case "LIMIT_MAKER":
-      if (!quantity) return "❌ LIMIT_MAKER orders require quantity parameter."
-      if (!price) return "❌ LIMIT_MAKER orders require price parameter."
-      break
+      if (!quantity) return "❌ LIMIT_MAKER orders require quantity parameter.";
+      if (!price) return "❌ LIMIT_MAKER orders require price parameter.";
+      break;
   }
 
   // Iceberg order validation
   if (icebergQty && timeInForce !== "GTC") {
-    return "❌ Iceberg orders must have timeInForce set to GTC."
+    return "❌ Iceberg orders must have timeInForce set to GTC.";
   }
 
-  return null
+  return null;
 }
 
 /**
@@ -881,19 +881,19 @@ export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
     async (params) => {
       try {
         // Check API credentials first
-        const credError = checkCredentials()
-        if (credError) return { content: [{ type: "text", text: credError }], isError: true }
+        const credError = checkCredentials();
+        if (credError) return { content: [{ type: "text", text: credError }], isError: true };
 
         // Validate symbol
-        const symbolError = validateSymbol(params.symbol)
-        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true }
+        const symbolError = validateSymbol(params.symbol);
+        if (symbolError) return { content: [{ type: "text", text: symbolError }], isError: true };
 
         // Validate recvWindow
-        const recvWindowError = validateRecvWindow(params.recvWindow)
+        const recvWindowError = validateRecvWindow(params.recvWindow);
         if (recvWindowError)
-          return { content: [{ type: "text", text: recvWindowError }], isError: true }
+          return { content: [{ type: "text", text: recvWindowError }], isError: true };
 
-        const response = await makeSignedRequest("DELETE", "/api/v3/openOrders", params)
+        const response = await makeSignedRequest("DELETE", "/api/v3/openOrders", params);
 
         if (!response || response.length === 0) {
           return {
@@ -903,7 +903,7 @@ export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
                 text: `📋 No open orders found to cancel for ${params.symbol}`,
               },
             ],
-          }
+          };
         }
 
         const cancelledList = response
@@ -912,7 +912,7 @@ export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
               `• Order ID: ${order.orderId} | ${order.side} ${order.type} | ` +
               `Qty: ${order.origQty} @ ${order.price} | Status: ${order.status}`,
           )
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -924,14 +924,14 @@ export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
                 `Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
-        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/)
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const codeMatch = errorMessage.match(/code:\s*(-?\d+)/);
         const additionalHelp =
           codeMatch && codeMatch[1]
             ? `\n\nHint: ${getBinanceErrorMessage(parseInt(codeMatch[1]))}`
-            : ""
+            : "";
 
         return {
           content: [
@@ -941,22 +941,22 @@ export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 /**
  * Register all standard order tools
  */
 export function registerBinanceUsOrderTools(server: McpServer) {
-  registerBinanceUsNewOrder(server)
-  registerBinanceUsTestOrder(server)
-  registerBinanceUsGetOrder(server)
-  registerBinanceUsCancelOrder(server)
-  registerBinanceUsCancelReplace(server)
-  registerBinanceUsCancelAllOpenOrders(server)
-  registerBinanceUsOpenOrders(server)
-  registerBinanceUsAllOrders(server)
+  registerBinanceUsNewOrder(server);
+  registerBinanceUsTestOrder(server);
+  registerBinanceUsGetOrder(server);
+  registerBinanceUsCancelOrder(server);
+  registerBinanceUsCancelReplace(server);
+  registerBinanceUsCancelAllOpenOrders(server);
+  registerBinanceUsOpenOrders(server);
+  registerBinanceUsAllOrders(server);
 }

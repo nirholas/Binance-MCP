@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-gift-card/createDualTokenGiftCard.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardCreateDualToken(server: McpServer) {
   server.tool(
@@ -30,9 +30,9 @@ export function registerBinanceGiftCardCreateDualToken(server: McpServer) {
           baseTokenAmount: params.baseTokenAmount,
           ...(params.discount !== undefined && { discount: params.discount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -41,17 +41,17 @@ export function registerBinanceGiftCardCreateDualToken(server: McpServer) {
               text: `✅ Dual-Token Gift Card Created!\n\nReference No: ${data.referenceNo}\nCode: ${data.code}\nPaid: ${params.baseTokenAmount} ${params.baseToken}\nRecipient Gets: ${data.faceTokenAmount || "N/A"} ${params.faceToken}\n\n⚠️ Keep the code secure!`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `❌ Failed to create dual-token gift card: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

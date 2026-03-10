@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/getOpenOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesGetOpenOrder(server: McpServer) {
   server.tool(
@@ -29,7 +29,7 @@ export function registerBinanceFuturesGetOpenOrder(server: McpServer) {
               { type: "text", text: "Either orderId or origClientOrderId must be provided" },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await futuresClient.restAPI.queryCurrentOpenOrder({
@@ -37,9 +37,9 @@ export function registerBinanceFuturesGetOpenOrder(server: McpServer) {
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -48,15 +48,15 @@ export function registerBinanceFuturesGetOpenOrder(server: McpServer) {
               text: `Open Order Details:\n\nSymbol: ${data.symbol}\nOrder ID: ${data.orderId}\nClient Order ID: ${data.clientOrderId}\nSide: ${data.side}\nType: ${data.type}\nStatus: ${data.status}\nPrice: ${data.price}\nQty: ${data.origQty}\nExecuted Qty: ${data.executedQty}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query open order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

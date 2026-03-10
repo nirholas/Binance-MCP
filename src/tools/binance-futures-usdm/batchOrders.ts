@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/batchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMBatchOrders(server: McpServer) {
   server.tool(
@@ -18,7 +18,7 @@ export function registerBinanceFuturesUSDMBatchOrders(server: McpServer) {
     },
     async ({ batchOrders }) => {
       try {
-        const data = await futuresClient.batchOrders({ batchOrders })
+        const data = await futuresClient.batchOrders({ batchOrders });
 
         return {
           content: [
@@ -27,17 +27,17 @@ export function registerBinanceFuturesUSDMBatchOrders(server: McpServer) {
               text: `USD-M Futures batch orders created. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create USD-M Futures batch orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

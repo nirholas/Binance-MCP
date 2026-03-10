@@ -1,9 +1,9 @@
 // src/tools/binance-staking/SOL-staking-api/getSolRedemptionHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { stakingClient } from "../../../config/binanceClient.js"
+import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSolRedemptionHistory(server: McpServer) {
   server.tool(
@@ -37,9 +37,9 @@ export function registerBinanceGetSolRedemptionHistory(server: McpServer) {
           ...(params.current !== undefined && { current: params.current }),
           ...(params.size !== undefined && { size: params.size }),
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -48,9 +48,9 @@ export function registerBinanceGetSolRedemptionHistory(server: McpServer) {
               text: `Successfully retrieved SOL redemption history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -60,8 +60,8 @@ export function registerBinanceGetSolRedemptionHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

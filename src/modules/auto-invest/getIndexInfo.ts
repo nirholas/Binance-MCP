@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getIndexInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetIndexInfo(server: McpServer) {
   server.tool(
@@ -24,28 +24,28 @@ export function registerAutoInvestGetIndexInfo(server: McpServer) {
         const response = await autoInvestClient.restAPI.indexInfo({
           ...(params.indexId && { indexId: params.indexId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Index Information\n\n`
+        let result = `✅ Auto-Invest Index Information\n\n`;
 
         if (data.indexId) {
-          result += `**Index ID: ${data.indexId}**\n`
-          result += `Status: ${data.status}\n\n`
+          result += `**Index ID: ${data.indexId}**\n`;
+          result += `Status: ${data.status}\n\n`;
           if (data.assetAllocation && Array.isArray(data.assetAllocation)) {
-            result += `**Asset Allocation**\n`
+            result += `**Asset Allocation**\n`;
             data.assetAllocation.forEach((asset: any) => {
-              result += `- ${asset.targetAsset}: ${asset.allocation}%\n`
-            })
+              result += `- ${asset.targetAsset}: ${asset.allocation}%\n`;
+            });
           }
         } else if (Array.isArray(data)) {
           data.forEach((index: any) => {
-            result += `**Index ID: ${index.indexId}**\n`
-            result += `Status: ${index.status}\n\n`
-          })
+            result += `**Index ID: ${index.indexId}**\n`;
+            result += `Status: ${index.status}\n\n`;
+          });
         } else {
-          result += `Index Info: ${JSON.stringify(data)}`
+          result += `Index Info: ${JSON.stringify(data)}`;
         }
 
         return {
@@ -55,9 +55,9 @@ export function registerAutoInvestGetIndexInfo(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -67,8 +67,8 @@ export function registerAutoInvestGetIndexInfo(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

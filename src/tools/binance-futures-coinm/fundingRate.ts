@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/fundingRate.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMFundingRate(server: McpServer) {
   server.tool(
@@ -17,13 +17,13 @@ export function registerBinanceFuturesCOINMFundingRate(server: McpServer) {
     },
     async ({ symbol, startTime, endTime, limit }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await deliveryClient.fundingRate(params)
+        const data = await deliveryClient.fundingRate(params);
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceFuturesCOINMFundingRate(server: McpServer) {
               text: `Retrieved ${data.length || 0} funding rate records for COIN-M Futures${symbol ? ` ${symbol}` : ""}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceFuturesCOINMFundingRate(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

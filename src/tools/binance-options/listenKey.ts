@@ -1,9 +1,9 @@
 // src/tools/binance-options/listenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCreateListenKey(server: McpServer) {
   server.tool(
@@ -12,7 +12,7 @@ export function registerBinanceOptionsCreateListenKey(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await optionsClient.createListenKey()
+        const data = await optionsClient.createListenKey();
 
         return {
           content: [
@@ -21,17 +21,17 @@ export function registerBinanceOptionsCreateListenKey(server: McpServer) {
               text: `Listen key created successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 export function registerBinanceOptionsKeepAliveListenKey(server: McpServer) {
@@ -43,7 +43,7 @@ export function registerBinanceOptionsKeepAliveListenKey(server: McpServer) {
     },
     async ({ listenKey: _listenKey }) => {
       try {
-        const data = await optionsClient.keepAliveListenKey()
+        const data = await optionsClient.keepAliveListenKey();
 
         return {
           content: [
@@ -52,17 +52,17 @@ export function registerBinanceOptionsKeepAliveListenKey(server: McpServer) {
               text: `Listen key renewed successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to renew listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
 
 export function registerBinanceOptionsDeleteListenKey(server: McpServer) {
@@ -74,7 +74,7 @@ export function registerBinanceOptionsDeleteListenKey(server: McpServer) {
     },
     async ({ listenKey: _listenKey }) => {
       try {
-        const data = await optionsClient.closeListenKey()
+        const data = await optionsClient.closeListenKey();
 
         return {
           content: [
@@ -83,15 +83,15 @@ export function registerBinanceOptionsDeleteListenKey(server: McpServer) {
               text: `Listen key deleted successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to delete listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

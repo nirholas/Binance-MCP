@@ -1,9 +1,9 @@
 // src/tools/binance-staking/SOL-staking-api/getBnsolRewardsHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { stakingClient } from "../../../config/binanceClient.js"
+import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetBnsolRewardsHistory(server: McpServer) {
   server.tool(
@@ -42,9 +42,9 @@ export function registerBinanceGetBnsolRewardsHistory(server: McpServer) {
           ...(params.size !== undefined && { size: params.size }),
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
           ...(params.type && { type: params.type }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -55,9 +55,9 @@ export function registerBinanceGetBnsolRewardsHistory(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -67,8 +67,8 @@ export function registerBinanceGetBnsolRewardsHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

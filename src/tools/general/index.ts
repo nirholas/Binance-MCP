@@ -1,9 +1,9 @@
 // src/tools/general/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { binanceUsRequest } from "../../config/binanceUsClient.js"
+import { binanceUsRequest } from "../../config/binanceUsClient.js";
 
 export function registerGeneralTools(server: McpServer) {
   // binance_us_ping - Test connectivity to Binance.US
@@ -13,7 +13,7 @@ export function registerGeneralTools(server: McpServer) {
     {},
     async () => {
       try {
-        const result = await binanceUsRequest("GET", "/api/v3/ping", {}, false)
+        const result = await binanceUsRequest("GET", "/api/v3/ping", {}, false);
 
         return {
           content: [
@@ -22,17 +22,17 @@ export function registerGeneralTools(server: McpServer) {
               text: `Binance.US API connection successful. Response: ${JSON.stringify(result)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to ping Binance.US API: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // binance_us_server_time - Get server time
   server.tool(
@@ -41,8 +41,8 @@ export function registerGeneralTools(server: McpServer) {
     {},
     async () => {
       try {
-        const result = await binanceUsRequest("GET", "/api/v3/time", {}, false)
-        const serverTime = new Date(result.serverTime).toISOString()
+        const result = await binanceUsRequest("GET", "/api/v3/time", {}, false);
+        const serverTime = new Date(result.serverTime).toISOString();
 
         return {
           content: [
@@ -51,17 +51,17 @@ export function registerGeneralTools(server: McpServer) {
               text: `Binance.US server time: ${serverTime} (${result.serverTime}). Response: ${JSON.stringify(result)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get server time: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // binance_us_system_status - Get system maintenance status (SIGNED)
   server.tool(
@@ -70,8 +70,8 @@ export function registerGeneralTools(server: McpServer) {
     {},
     async () => {
       try {
-        const result = await binanceUsRequest("GET", "/sapi/v1/system/status", {}, true)
-        const statusText = result.status === 0 ? "Normal" : "System Maintenance"
+        const result = await binanceUsRequest("GET", "/sapi/v1/system/status", {}, true);
+        const statusText = result.status === 0 ? "Normal" : "System Maintenance";
 
         return {
           content: [
@@ -80,17 +80,17 @@ export function registerGeneralTools(server: McpServer) {
               text: `Binance.US system status: ${statusText} (${result.status}). Response: ${JSON.stringify(result)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get system status: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // binance_us_exchange_info - Get exchange information
   server.tool(
@@ -116,7 +116,7 @@ export function registerGeneralTools(server: McpServer) {
     },
     async ({ symbol, symbols, permissions }) => {
       try {
-        const params: Record<string, any> = {}
+        const params: Record<string, any> = {};
 
         // symbol and symbols are mutually exclusive
         if (symbol && symbols) {
@@ -128,22 +128,22 @@ export function registerGeneralTools(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
         if (symbol) {
-          params.symbol = symbol
+          params.symbol = symbol;
         } else if (symbols && symbols.length > 0) {
-          params.symbols = JSON.stringify(symbols)
+          params.symbols = JSON.stringify(symbols);
         }
 
         if (permissions && permissions.length > 0) {
-          params.permissions = permissions.join(",")
+          params.permissions = permissions.join(",");
         }
 
-        const result = await binanceUsRequest("GET", "/api/v3/exchangeInfo", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/exchangeInfo", params, false);
 
-        const symbolCount = result.symbols?.length || 0
+        const symbolCount = result.symbols?.length || 0;
 
         return {
           content: [
@@ -152,15 +152,15 @@ export function registerGeneralTools(server: McpServer) {
               text: `Retrieved exchange info. Total symbols: ${symbolCount}. Server time: ${result.serverTime}. Timezone: ${result.timezone}. Response: ${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get exchange info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

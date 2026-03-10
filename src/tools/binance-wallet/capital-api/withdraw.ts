@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/capital-api/withdraw.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletWithdraw(server: McpServer) {
   server.tool(
@@ -38,17 +38,17 @@ export function registerBinanceWalletWithdraw(server: McpServer) {
           coin,
           address,
           amount,
-        }
-        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId
-        if (network !== undefined) params.network = network
-        if (addressTag !== undefined) params.addressTag = addressTag
-        if (name !== undefined) params.name = name
-        if (walletType !== undefined) params.walletType = walletType
-        if (transactionFeeFlag !== undefined) params.transactionFeeFlag = transactionFeeFlag
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId;
+        if (network !== undefined) params.network = network;
+        if (addressTag !== undefined) params.addressTag = addressTag;
+        if (name !== undefined) params.name = name;
+        if (walletType !== undefined) params.walletType = walletType;
+        if (transactionFeeFlag !== undefined) params.transactionFeeFlag = transactionFeeFlag;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.withdraw(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.withdraw(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -57,15 +57,15 @@ export function registerBinanceWalletWithdraw(server: McpServer) {
               text: `Withdraw request submitted. Withdrawal ID: ${data.id}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to submit withdraw request: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

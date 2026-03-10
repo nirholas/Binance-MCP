@@ -1,9 +1,9 @@
 // src/tools/binance-convert/market-data-api/listAllConvertPairs.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { convertClient } from "../../../config/binanceClient.js"
+import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertGetListAllConvertPairs(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceConvertGetListAllConvertPairs(server: McpServer) 
         const response = await convertClient.restAPI.listAllConvertPairs({
           ...(params.fromAsset && { fromAsset: params.fromAsset }),
           ...(params.toAsset && { toAsset: params.toAsset }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -29,9 +29,9 @@ export function registerBinanceConvertGetListAllConvertPairs(server: McpServer) 
               text: `Successfully queried available conversion pairs. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -41,8 +41,8 @@ export function registerBinanceConvertGetListAllConvertPairs(server: McpServer) 
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

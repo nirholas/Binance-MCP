@@ -1,9 +1,9 @@
 // src/tools/binance-spot/account-api/myTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMyTrades(server: McpServer) {
   server.tool(
@@ -20,18 +20,18 @@ export function registerBinanceMyTrades(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, fromId, limit, recvWindow }) => {
       try {
-        const params: any = { symbol }
+        const params: any = { symbol };
 
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (fromId !== undefined) params.fromId = fromId
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (fromId !== undefined) params.fromId = fromId;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.myTrades(params)
+        const response = await spotClient.restAPI.myTrades(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -40,15 +40,15 @@ export function registerBinanceMyTrades(server: McpServer) {
               text: `Retrieved trades for ${symbol}. Total trades: ${data.length}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve account trades: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-simple-earn/earn-api/subscribeFlexibleProduct.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeFlexibleProduct(server: McpServer) {
   server.tool(
@@ -27,9 +27,9 @@ export function registerBinanceSubscribeFlexibleProduct(server: McpServer) {
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),
           ...(params.sourceAccount && { sourceAccount: params.sourceAccount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -40,9 +40,9 @@ export function registerBinanceSubscribeFlexibleProduct(server: McpServer) {
               } and amount${params.amount}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -52,8 +52,8 @@ export function registerBinanceSubscribeFlexibleProduct(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

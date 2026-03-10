@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/openOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMOpenOrders(server: McpServer) {
   server.tool(
@@ -20,19 +20,19 @@ export function registerBinanceFuturesCOINMOpenOrders(server: McpServer) {
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.pair && { pair: params.pair }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [{ type: "text", text: `COIN-M open orders: ${JSON.stringify(data)}` }],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get COIN-M open orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

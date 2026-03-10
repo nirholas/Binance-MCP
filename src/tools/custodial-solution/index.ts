@@ -3,11 +3,11 @@
 // ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY - Not available to regular users
 // Only for users with a Custody Exchange Network agreement
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US Custodial Solution tools
@@ -50,7 +50,7 @@ Each balance includes:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/balance", {
           rail: rail.toUpperCase(),
-        })
+        });
 
         return {
           content: [
@@ -59,17 +59,17 @@ Each balance includes:
               text: `Custodial Balance Information:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get custodial balance: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/supportedAssetList - Get Supported Assets
@@ -95,7 +95,7 @@ Each asset includes:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/supportedAssetList", {
           rail: rail.toUpperCase(),
-        })
+        });
 
         return {
           content: [
@@ -104,17 +104,17 @@ Each asset includes:
               text: `Custodial Supported Assets:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get supported assets: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/walletTransfer - Transfer From Exchange Wallet
@@ -143,14 +143,14 @@ which can then be traded or settled to your custodial partner.`,
           rail: rail.toUpperCase(),
           asset: asset.toUpperCase(),
           amount,
-        }
-        if (clientOrderId) params.clientOrderId = clientOrderId
+        };
+        if (clientOrderId) params.clientOrderId = clientOrderId;
 
         const response = await makeSignedRequest(
           "POST",
           "/sapi/v1/custodian/walletTransfer",
           params,
-        )
+        );
 
         return {
           content: [
@@ -159,17 +159,17 @@ which can then be traded or settled to your custodial partner.`,
               text: `Wallet Transfer Submitted!\n\nTransfer ID: ${response.transferId}\nAsset: ${response.asset}\nAmount: ${response.amount}\nStatus: ${response.status}\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to execute wallet transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/custodianTransfer - Transfer From Custodian
@@ -198,14 +198,14 @@ The actual transfer is executed by the custody partner.`,
           rail: rail.toUpperCase(),
           asset: asset.toUpperCase(),
           amount,
-        }
-        if (clientOrderId) params.clientOrderId = clientOrderId
+        };
+        if (clientOrderId) params.clientOrderId = clientOrderId;
 
         const response = await makeSignedRequest(
           "POST",
           "/sapi/v1/custodian/custodianTransfer",
           params,
-        )
+        );
 
         return {
           content: [
@@ -214,19 +214,19 @@ The actual transfer is executed by the custody partner.`,
               text: `Custodian Transfer Requested!\n\nTransfer ID: ${response.transferId}\nAsset: ${response.asset}\nAmount: ${response.amount}\nStatus: ${response.status}\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to request custodian transfer: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/undoTransfer - Undo Transfer
@@ -248,7 +248,7 @@ This reverses a previous custodian transfer by its transfer ID.`,
         const response = await makeSignedRequest("POST", "/sapi/v1/custodian/undoTransfer", {
           rail: rail.toUpperCase(),
           originTransferId,
-        })
+        });
 
         return {
           content: [
@@ -257,17 +257,17 @@ This reverses a previous custodian transfer by its transfer ID.`,
               text: `Transfer Undone!\n\nUndo Transfer ID: ${response.transferId}\nAsset: ${response.asset}\nAmount: ${response.amount}\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to undo transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/walletTransferHistory - Wallet Transfer History
@@ -294,20 +294,20 @@ Returns transfer history with status, amounts, and timestamps.`,
     },
     async ({ rail, transferId, clientOrderId, asset, startTime, endTime, page, limit }) => {
       try {
-        const params: Record<string, any> = { rail: rail.toUpperCase() }
-        if (transferId) params.transferId = transferId
-        if (clientOrderId) params.clientOrderId = clientOrderId
-        if (asset) params.asset = asset.toUpperCase()
-        if (startTime) params.startTime = startTime
-        if (endTime) params.endTime = endTime
-        if (page) params.page = page
-        if (limit) params.limit = limit
+        const params: Record<string, any> = { rail: rail.toUpperCase() };
+        if (transferId) params.transferId = transferId;
+        if (clientOrderId) params.clientOrderId = clientOrderId;
+        if (asset) params.asset = asset.toUpperCase();
+        if (startTime) params.startTime = startTime;
+        if (endTime) params.endTime = endTime;
+        if (page) params.page = page;
+        if (limit) params.limit = limit;
 
         const response = await makeSignedRequest(
           "GET",
           "/sapi/v1/custodian/walletTransferHistory",
           params,
-        )
+        );
 
         return {
           content: [
@@ -316,19 +316,19 @@ Returns transfer history with status, amounts, and timestamps.`,
               text: `Wallet Transfer History:\n\nTotal: ${response.total}\n\n${JSON.stringify(response.data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get wallet transfer history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/custodianTransferHistory - Custodian Transfer History
@@ -366,21 +366,21 @@ Returns transfer history with status, amounts, and timestamps.`,
       limit,
     }) => {
       try {
-        const params: Record<string, any> = { rail: rail.toUpperCase() }
-        if (transferId) params.transferId = transferId
-        if (clientOrderId) params.clientOrderId = clientOrderId
-        if (expressTradeTransfer !== undefined) params.expressTradeTransfer = expressTradeTransfer
-        if (asset) params.asset = asset.toUpperCase()
-        if (startTime) params.startTime = startTime
-        if (endTime) params.endTime = endTime
-        if (page) params.page = page
-        if (limit) params.limit = limit
+        const params: Record<string, any> = { rail: rail.toUpperCase() };
+        if (transferId) params.transferId = transferId;
+        if (clientOrderId) params.clientOrderId = clientOrderId;
+        if (expressTradeTransfer !== undefined) params.expressTradeTransfer = expressTradeTransfer;
+        if (asset) params.asset = asset.toUpperCase();
+        if (startTime) params.startTime = startTime;
+        if (endTime) params.endTime = endTime;
+        if (page) params.page = page;
+        if (limit) params.limit = limit;
 
         const response = await makeSignedRequest(
           "GET",
           "/sapi/v1/custodian/custodianTransferHistory",
           params,
-        )
+        );
 
         return {
           content: [
@@ -389,19 +389,19 @@ Returns transfer history with status, amounts, and timestamps.`,
               text: `Custodian Transfer History:\n\nTotal: ${response.total}\n\n${JSON.stringify(response.data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get custodian transfer history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/custodian/settlement - Request Settlement
@@ -430,10 +430,10 @@ to your custody partner's vault.`,
           rail: rail.toUpperCase(),
           asset: asset.toUpperCase(),
           amount,
-        }
-        if (clientOrderId) params.clientOrderId = clientOrderId
+        };
+        if (clientOrderId) params.clientOrderId = clientOrderId;
 
-        const response = await makeSignedRequest("POST", "/sapi/v1/custodian/settlement", params)
+        const response = await makeSignedRequest("POST", "/sapi/v1/custodian/settlement", params);
 
         return {
           content: [
@@ -442,17 +442,17 @@ to your custody partner's vault.`,
               text: `Settlement Requested!\n\nSettlement ID: ${response.settlementId}\nAsset: ${response.asset}\nAmount: ${response.amount}\nStatus: ${response.status}\n\nFull Response:\n${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to request settlement: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/custodian/settlementHistory - Settlement History
@@ -476,20 +476,20 @@ Returns settlement history with status, amounts, and timestamps.`,
     },
     async ({ rail, settlementId, clientOrderId, asset, startTime, endTime, page, limit }) => {
       try {
-        const params: Record<string, any> = { rail: rail.toUpperCase() }
-        if (settlementId) params.settlementId = settlementId
-        if (clientOrderId) params.clientOrderId = clientOrderId
-        if (asset) params.asset = asset.toUpperCase()
-        if (startTime) params.startTime = startTime
-        if (endTime) params.endTime = endTime
-        if (page) params.page = page
-        if (limit) params.limit = limit
+        const params: Record<string, any> = { rail: rail.toUpperCase() };
+        if (settlementId) params.settlementId = settlementId;
+        if (clientOrderId) params.clientOrderId = clientOrderId;
+        if (asset) params.asset = asset.toUpperCase();
+        if (startTime) params.startTime = startTime;
+        if (endTime) params.endTime = endTime;
+        if (page) params.page = page;
+        if (limit) params.limit = limit;
 
         const response = await makeSignedRequest(
           "GET",
           "/sapi/v1/custodian/settlementHistory",
           params,
-        )
+        );
 
         return {
           content: [
@@ -498,15 +498,15 @@ Returns settlement history with status, amounts, and timestamps.`,
               text: `Settlement History:\n\nTotal: ${response.total}\n\n${JSON.stringify(response.data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get settlement history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

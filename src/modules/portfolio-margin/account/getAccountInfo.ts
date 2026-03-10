@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/account/getAccountInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetAccountInfo(server: McpServer) {
   server.tool(
@@ -22,22 +22,22 @@ export function registerPortfolioMarginGetAccountInfo(server: McpServer) {
       try {
         const response = await portfolioMarginClient.restAPI.account({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Portfolio Margin Account Information\n\n`
+        let result = `✅ Portfolio Margin Account Information\n\n`;
 
         if (data) {
-          result += `**Account Status**\n`
-          result += `UniMMR: ${data.uniMMR}\n`
-          result += `Account Equity: ${data.accountEquity}\n`
-          result += `Actual Equity: ${data.actualEquity}\n`
-          result += `Account Maint. Margin: ${data.accountMaintMargin}\n`
-          result += `Account Status: ${data.accountStatus}\n\n`
+          result += `**Account Status**\n`;
+          result += `UniMMR: ${data.uniMMR}\n`;
+          result += `Account Equity: ${data.accountEquity}\n`;
+          result += `Actual Equity: ${data.actualEquity}\n`;
+          result += `Account Maint. Margin: ${data.accountMaintMargin}\n`;
+          result += `Account Status: ${data.accountStatus}\n\n`;
 
           if (data.accountType) {
-            result += `Account Type: ${data.accountType}\n`
+            result += `Account Type: ${data.accountType}\n`;
           }
         }
 
@@ -48,9 +48,9 @@ export function registerPortfolioMarginGetAccountInfo(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -60,8 +60,8 @@ export function registerPortfolioMarginGetAccountInfo(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,5 +1,5 @@
 // src/config/binanceUsClient.ts
-import crypto from "crypto"
+import crypto from "crypto";
 
 /**
  * Binance.US API Client Configuration
@@ -25,11 +25,11 @@ export const BINANCE_US_CONFIG = {
   WS_URL: "wss://stream.binance.us:9443",
   DEFAULT_RECV_WINDOW: 5000,
   MAX_RECV_WINDOW: 60000,
-} as const
+} as const;
 
-const API_KEY = process.env.BINANCE_US_API_KEY || ""
-const API_SECRET = process.env.BINANCE_US_API_SECRET || ""
-const BASE_URL = BINANCE_US_CONFIG.BASE_URL
+const API_KEY = process.env.BINANCE_US_API_KEY || "";
+const API_SECRET = process.env.BINANCE_US_API_SECRET || "";
+const BASE_URL = BINANCE_US_CONFIG.BASE_URL;
 
 // ============================================================================
 // Type Definitions
@@ -37,34 +37,34 @@ const BASE_URL = BINANCE_US_CONFIG.BASE_URL
 
 /** Rate limit information from API response headers */
 export interface RateLimitInfo {
-  usedWeight: number
-  weightLimit: number
-  orderCount?: number
-  retryAfter?: number
+  usedWeight: number;
+  weightLimit: number;
+  orderCount?: number;
+  retryAfter?: number;
 }
 
 /** API response wrapper with rate limit info */
 export interface BinanceUsResponse<T> {
-  data: T
-  rateLimitInfo?: RateLimitInfo
+  data: T;
+  rateLimitInfo?: RateLimitInfo;
 }
 
 /** Ping response (empty object) */
-export type PingResponse = Record<string, never>
+export type PingResponse = Record<string, never>;
 
 /** Server time response */
 export interface ServerTimeResponse {
-  serverTime: number
+  serverTime: number;
 }
 
 /** System status response */
 export interface SystemStatusResponse {
-  status: 0 | 1 // 0: normal, 1: system maintenance
+  status: 0 | 1; // 0: normal, 1: system maintenance
 }
 
 /** Symbol information in exchange info */
 export interface SymbolInfo {
-  symbol: string
+  symbol: string;
   status:
     | "PRE_TRADING"
     | "TRADING"
@@ -72,79 +72,79 @@ export interface SymbolInfo {
     | "END_OF_DAY"
     | "HALT"
     | "AUCTION_MATCH"
-    | "BREAK"
-  baseAsset: string
-  baseAssetPrecision: number
-  quoteAsset: string
-  quotePrecision: number
-  quoteAssetPrecision: number
-  baseCommissionPrecision: number
-  quoteCommissionPrecision: number
-  orderTypes: string[]
-  icebergAllowed: boolean
-  ocoAllowed: boolean
-  quoteOrderQtyMarketAllowed: boolean
-  allowTrailingStop: boolean
-  cancelReplaceAllowed: boolean
-  isSpotTradingAllowed: boolean
-  isMarginTradingAllowed: boolean
-  filters: any[]
-  permissions: string[]
+    | "BREAK";
+  baseAsset: string;
+  baseAssetPrecision: number;
+  quoteAsset: string;
+  quotePrecision: number;
+  quoteAssetPrecision: number;
+  baseCommissionPrecision: number;
+  quoteCommissionPrecision: number;
+  orderTypes: string[];
+  icebergAllowed: boolean;
+  ocoAllowed: boolean;
+  quoteOrderQtyMarketAllowed: boolean;
+  allowTrailingStop: boolean;
+  cancelReplaceAllowed: boolean;
+  isSpotTradingAllowed: boolean;
+  isMarginTradingAllowed: boolean;
+  filters: any[];
+  permissions: string[];
 }
 
 /** Exchange information response */
 export interface ExchangeInfoResponse {
-  timezone: string
-  serverTime: number
-  rateLimits: any[]
-  exchangeFilters: any[]
-  symbols: SymbolInfo[]
-  permissions: string[]
-  defaultSelfTradePreventionMode?: string
-  allowedSelfTradePreventionModes?: string[]
+  timezone: string;
+  serverTime: number;
+  rateLimits: any[];
+  exchangeFilters: any[];
+  symbols: SymbolInfo[];
+  permissions: string[];
+  defaultSelfTradePreventionMode?: string;
+  allowedSelfTradePreventionModes?: string[];
 }
 
 /** Order book response */
 export interface OrderBookResponse {
-  lastUpdateId: number
-  bids: [string, string][] // [price, quantity][]
-  asks: [string, string][] // [price, quantity][]
+  lastUpdateId: number;
+  bids: [string, string][]; // [price, quantity][]
+  asks: [string, string][]; // [price, quantity][]
 }
 
 /** Trade response */
 export interface TradeResponse {
-  id: number
-  price: string
-  qty: string
-  quoteQty: string
-  time: number
-  isBuyerMaker: boolean
-  isBestMatch: boolean
+  id: number;
+  price: string;
+  qty: string;
+  quoteQty: string;
+  time: number;
+  isBuyerMaker: boolean;
+  isBestMatch: boolean;
 }
 
 /** Aggregate trade response */
 export interface AggTradeResponse {
-  a: number // Aggregate tradeId
-  p: string // Price
-  q: string // Quantity
-  f: number // First tradeId
-  l: number // Last tradeId
-  T: number // Timestamp
-  m: boolean // Was the buyer the maker?
-  M: boolean // Was the trade the best price match?
+  a: number; // Aggregate tradeId
+  p: string; // Price
+  q: string; // Quantity
+  f: number; // First tradeId
+  l: number; // Last tradeId
+  T: number; // Timestamp
+  m: boolean; // Was the buyer the maker?
+  M: boolean; // Was the trade the best price match?
 }
 
 /** Formatted aggregate trade (human-readable) */
 export interface FormattedAggTrade {
-  aggregateTradeId: number
-  price: string
-  quantity: string
-  firstTradeId: number
-  lastTradeId: number
-  timestamp: number
-  timestampISO: string
-  isBuyerMaker: boolean
-  isBestMatch: boolean
+  aggregateTradeId: number;
+  price: string;
+  quantity: string;
+  firstTradeId: number;
+  lastTradeId: number;
+  timestamp: number;
+  timestampISO: string;
+  isBuyerMaker: boolean;
+  isBestMatch: boolean;
 }
 
 /** Raw kline data (array format from API) */
@@ -161,88 +161,88 @@ export type KlineRaw = [
   string, // 9: Taker buy base asset volume
   string, // 10: Taker buy quote asset volume
   string, // 11: Ignore
-]
+];
 
 /** Formatted kline (human-readable) */
 export interface FormattedKline {
-  openTime: number
-  openTimeISO: string
-  open: string
-  high: string
-  low: string
-  close: string
-  volume: string
-  closeTime: number
-  closeTimeISO: string
-  quoteAssetVolume: string
-  numberOfTrades: number
-  takerBuyBaseVolume: string
-  takerBuyQuoteVolume: string
+  openTime: number;
+  openTimeISO: string;
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  volume: string;
+  closeTime: number;
+  closeTimeISO: string;
+  quoteAssetVolume: string;
+  numberOfTrades: number;
+  takerBuyBaseVolume: string;
+  takerBuyQuoteVolume: string;
 }
 
 /** Average price response */
 export interface AvgPriceResponse {
-  mins: number
-  price: string
+  mins: number;
+  price: string;
 }
 
 /** Ticker price response */
 export interface TickerPriceResponse {
-  symbol: string
-  price: string
+  symbol: string;
+  price: string;
 }
 
 /** Book ticker response */
 export interface BookTickerResponse {
-  symbol: string
-  bidPrice: string
-  bidQty: string
-  askPrice: string
-  askQty: string
+  symbol: string;
+  bidPrice: string;
+  bidQty: string;
+  askPrice: string;
+  askQty: string;
 }
 
 /** 24hr ticker response */
 export interface Ticker24hrResponse {
-  symbol: string
-  priceChange: string
-  priceChangePercent: string
-  weightedAvgPrice: string
-  prevClosePrice: string
-  lastPrice: string
-  lastQty: string
-  bidPrice: string
-  bidQty: string
-  askPrice: string
-  askQty: string
-  openPrice: string
-  highPrice: string
-  lowPrice: string
-  volume: string
-  quoteVolume: string
-  openTime: number
-  closeTime: number
-  firstId: number
-  lastId: number
-  count: number
+  symbol: string;
+  priceChange: string;
+  priceChangePercent: string;
+  weightedAvgPrice: string;
+  prevClosePrice: string;
+  lastPrice: string;
+  lastQty: string;
+  bidPrice: string;
+  bidQty: string;
+  askPrice: string;
+  askQty: string;
+  openPrice: string;
+  highPrice: string;
+  lowPrice: string;
+  volume: string;
+  quoteVolume: string;
+  openTime: number;
+  closeTime: number;
+  firstId: number;
+  lastId: number;
+  count: number;
 }
 
 /** Rolling window ticker response */
 export interface RollingWindowTickerResponse {
-  symbol: string
-  priceChange: string
-  priceChangePercent: string
-  weightedAvgPrice: string
-  openPrice: string
-  highPrice: string
-  lowPrice: string
-  lastPrice: string
-  volume: string
-  quoteVolume: string
-  openTime: number
-  closeTime: number
-  firstId: number
-  lastId: number
-  count: number
+  symbol: string;
+  priceChange: string;
+  priceChangePercent: string;
+  weightedAvgPrice: string;
+  openPrice: string;
+  highPrice: string;
+  lowPrice: string;
+  lastPrice: string;
+  volume: string;
+  quoteVolume: string;
+  openTime: number;
+  closeTime: number;
+  firstId: number;
+  lastId: number;
+  count: number;
 }
 
 // ============================================================================
@@ -257,8 +257,8 @@ export class BinanceUsApiError extends Error {
     public readonly httpStatus: number,
     public readonly rateLimitInfo?: RateLimitInfo,
   ) {
-    super(message)
-    this.name = "BinanceUsApiError"
+    super(message);
+    this.name = "BinanceUsApiError";
   }
 }
 
@@ -269,8 +269,8 @@ export class RateLimitError extends BinanceUsApiError {
     public readonly retryAfter: number,
     rateLimitInfo?: RateLimitInfo,
   ) {
-    super(-1003, message, 429, rateLimitInfo)
-    this.name = "RateLimitError"
+    super(-1003, message, 429, rateLimitInfo);
+    this.name = "RateLimitError";
   }
 }
 
@@ -281,8 +281,8 @@ export class IpBanError extends BinanceUsApiError {
     public readonly retryAfter: number,
     rateLimitInfo?: RateLimitInfo,
   ) {
-    super(-1003, message, 418, rateLimitInfo)
-    this.name = "IpBanError"
+    super(-1003, message, 418, rateLimitInfo);
+    this.name = "IpBanError";
   }
 }
 
@@ -294,7 +294,7 @@ export class IpBanError extends BinanceUsApiError {
  * Generate HMAC SHA256 signature for Binance.US API requests
  */
 export function generateSignature(queryString: string): string {
-  return crypto.createHmac("sha256", API_SECRET).update(queryString).digest("hex")
+  return crypto.createHmac("sha256", API_SECRET).update(queryString).digest("hex");
 }
 
 /**
@@ -304,46 +304,46 @@ export function buildQueryString(params: Record<string, any>): string {
   const filteredParams = Object.entries(params)
     .filter(([_, value]) => value !== undefined && value !== null)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
-    .join("&")
+    .join("&");
 
-  return filteredParams
+  return filteredParams;
 }
 
 /**
  * Check if API credentials are configured
  */
 export function hasApiCredentials(): boolean {
-  return !!(API_KEY && API_SECRET)
+  return !!(API_KEY && API_SECRET);
 }
 
 /**
  * Check if API key is configured (for MARKET_DATA requests)
  */
 export function hasApiKey(): boolean {
-  return !!API_KEY
+  return !!API_KEY;
 }
 
 /**
  * Get current timestamp in milliseconds
  */
 export function getTimestamp(): number {
-  return Date.now()
+  return Date.now();
 }
 
 /**
  * Parse rate limit info from response headers
  */
 function parseRateLimitInfo(headers: Headers): RateLimitInfo | undefined {
-  const usedWeight = headers.get("X-MBX-USED-WEIGHT-1M")
-  const retryAfter = headers.get("Retry-After")
+  const usedWeight = headers.get("X-MBX-USED-WEIGHT-1M");
+  const retryAfter = headers.get("Retry-After");
 
-  if (!usedWeight && !retryAfter) return undefined
+  if (!usedWeight && !retryAfter) return undefined;
 
   return {
     usedWeight: usedWeight ? parseInt(usedWeight, 10) : 0,
     weightLimit: 1200, // Default weight limit per minute
     retryAfter: retryAfter ? parseInt(retryAfter, 10) : undefined,
-  }
+  };
 }
 
 /**
@@ -364,7 +364,7 @@ export function formatKline(kline: KlineRaw): FormattedKline {
     numberOfTrades: kline[8],
     takerBuyBaseVolume: kline[9],
     takerBuyQuoteVolume: kline[10],
-  }
+  };
 }
 
 /**
@@ -381,7 +381,7 @@ export function formatAggTrade(trade: AggTradeResponse): FormattedAggTrade {
     timestampISO: new Date(trade.T).toISOString(),
     isBuyerMaker: trade.m,
     isBestMatch: trade.M,
-  }
+  };
 }
 
 // ============================================================================
@@ -407,78 +407,78 @@ export async function makeSignedRequest(
       -2015,
       "API credentials required. Set BINANCE_US_API_KEY and BINANCE_US_API_SECRET environment variables.",
       401,
-    )
+    );
   }
 
   // Validate recvWindow
   if (recvWindow > BINANCE_US_CONFIG.MAX_RECV_WINDOW) {
-    recvWindow = BINANCE_US_CONFIG.MAX_RECV_WINDOW
+    recvWindow = BINANCE_US_CONFIG.MAX_RECV_WINDOW;
   }
 
   // Add timestamp and recvWindow to params
-  const timestamp = Date.now()
-  const paramsWithTimestamp = { ...params, timestamp, recvWindow }
+  const timestamp = Date.now();
+  const paramsWithTimestamp = { ...params, timestamp, recvWindow };
 
   // Build query string and generate signature
-  const queryString = buildQueryString(paramsWithTimestamp)
-  const signature = generateSignature(queryString)
-  const signedQueryString = `${queryString}&signature=${signature}`
+  const queryString = buildQueryString(paramsWithTimestamp);
+  const signature = generateSignature(queryString);
+  const signedQueryString = `${queryString}&signature=${signature}`;
 
   // Build URL and headers
   const url =
     method === "GET" || method === "DELETE"
       ? `${BASE_URL}${endpoint}?${signedQueryString}`
-      : `${BASE_URL}${endpoint}`
+      : `${BASE_URL}${endpoint}`;
 
   const headers: HeadersInit = {
     "X-MBX-APIKEY": API_KEY,
     "Content-Type": "application/x-www-form-urlencoded",
-  }
+  };
 
   const fetchOptions: RequestInit = {
     method,
     headers,
-  }
+  };
 
   // For POST and PUT requests, send data in body
   if (method === "POST" || method === "PUT") {
-    fetchOptions.body = signedQueryString
+    fetchOptions.body = signedQueryString;
   }
 
-  const response = await fetch(url, fetchOptions)
-  const rateLimitInfo = parseRateLimitInfo(response.headers)
+  const response = await fetch(url, fetchOptions);
+  const rateLimitInfo = parseRateLimitInfo(response.headers);
 
   // Handle rate limiting (429)
   if (response.status === 429) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10);
     throw new RateLimitError(
       `Rate limit exceeded. Retry after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   // Handle IP ban (418)
   if (response.status === 418) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10);
     throw new IpBanError(
       `IP temporarily banned. Ban lifted after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }))
+    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
     throw new BinanceUsApiError(
       errorData.code || response.status,
       errorData.msg || response.statusText,
       response.status,
       rateLimitInfo,
-    )
+    );
   }
 
-  return response.json()
+  return response.json();
 }
 
 /**
@@ -489,43 +489,43 @@ export async function makePublicRequest(
   endpoint: string,
   params: Record<string, any> = {},
 ): Promise<any> {
-  const queryString = buildQueryString(params)
-  const url = queryString ? `${BASE_URL}${endpoint}?${queryString}` : `${BASE_URL}${endpoint}`
+  const queryString = buildQueryString(params);
+  const url = queryString ? `${BASE_URL}${endpoint}?${queryString}` : `${BASE_URL}${endpoint}`;
 
-  const response = await fetch(url, { method })
-  const rateLimitInfo = parseRateLimitInfo(response.headers)
+  const response = await fetch(url, { method });
+  const rateLimitInfo = parseRateLimitInfo(response.headers);
 
   // Handle rate limiting (429)
   if (response.status === 429) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10);
     throw new RateLimitError(
       `Rate limit exceeded. Retry after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   // Handle IP ban (418)
   if (response.status === 418) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10);
     throw new IpBanError(
       `IP temporarily banned. Ban lifted after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }))
+    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
     throw new BinanceUsApiError(
       errorData.code || response.status,
       errorData.msg || response.statusText,
       response.status,
       rateLimitInfo,
-    )
+    );
   }
 
-  return response.json()
+  return response.json();
 }
 
 export const binanceUsConfig = {
@@ -533,7 +533,7 @@ export const binanceUsConfig = {
   apiSecret: API_SECRET,
   baseUrl: BASE_URL,
   wsUrl: BINANCE_US_CONFIG.WS_URL,
-}
+};
 
 /**
  * Make a MARKET_DATA request (requires API key but no signature)
@@ -549,50 +549,50 @@ export async function makeMarketDataRequest(
       -2015,
       "API key required for MARKET_DATA endpoints. Set BINANCE_US_API_KEY environment variable.",
       401,
-    )
+    );
   }
 
-  const queryString = buildQueryString(params)
-  const url = queryString ? `${BASE_URL}${endpoint}?${queryString}` : `${BASE_URL}${endpoint}`
+  const queryString = buildQueryString(params);
+  const url = queryString ? `${BASE_URL}${endpoint}?${queryString}` : `${BASE_URL}${endpoint}`;
 
   const headers: HeadersInit = {
     "X-MBX-APIKEY": API_KEY,
-  }
+  };
 
-  const response = await fetch(url, { method, headers })
-  const rateLimitInfo = parseRateLimitInfo(response.headers)
+  const response = await fetch(url, { method, headers });
+  const rateLimitInfo = parseRateLimitInfo(response.headers);
 
   // Handle rate limiting (429)
   if (response.status === 429) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "60", 10);
     throw new RateLimitError(
       `Rate limit exceeded. Retry after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   // Handle IP ban (418)
   if (response.status === 418) {
-    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10)
+    const retryAfter = parseInt(response.headers.get("Retry-After") || "120", 10);
     throw new IpBanError(
       `IP temporarily banned. Ban lifted after ${retryAfter} seconds.`,
       retryAfter,
       rateLimitInfo,
-    )
+    );
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }))
+    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
     throw new BinanceUsApiError(
       errorData.code || response.status,
       errorData.msg || response.statusText,
       response.status,
       rateLimitInfo,
-    )
+    );
   }
 
-  return response.json()
+  return response.json();
 }
 
 /**
@@ -613,11 +613,11 @@ export async function binanceUsRequest<T = any>(
   recvWindow?: number,
 ): Promise<T> {
   if (signed) {
-    return makeSignedRequest(method, path, params, recvWindow) as Promise<T>
+    return makeSignedRequest(method, path, params, recvWindow) as Promise<T>;
   } else if (apiKeyRequired) {
-    return makeMarketDataRequest("GET", path, params) as Promise<T>
+    return makeMarketDataRequest("GET", path, params) as Promise<T>;
   } else {
-    return makePublicRequest("GET", path, params) as Promise<T>
+    return makePublicRequest("GET", path, params) as Promise<T>;
   }
 }
 
@@ -626,7 +626,7 @@ export async function binanceUsRequest<T = any>(
 // ============================================================================
 
 /** Valid limit values for order book depth endpoint */
-export const ORDER_BOOK_VALID_LIMITS = [5, 10, 20, 50, 100, 500, 1000, 5000] as const
+export const ORDER_BOOK_VALID_LIMITS = [5, 10, 20, 50, 100, 500, 1000, 5000] as const;
 
 /** Valid kline intervals */
 export const KLINE_INTERVALS = [
@@ -645,7 +645,7 @@ export const KLINE_INTERVALS = [
   "3d",
   "1w",
   "1M",
-] as const
+] as const;
 
 /** Valid rolling window sizes */
 export const ROLLING_WINDOW_SIZES = [
@@ -665,12 +665,12 @@ export const ROLLING_WINDOW_SIZES = [
   "1d",
   "3d",
   "7d",
-] as const
+] as const;
 
 /** Max results for trade endpoints */
-export const MAX_TRADES_LIMIT = 1000
-export const DEFAULT_TRADES_LIMIT = 500
+export const MAX_TRADES_LIMIT = 1000;
+export const DEFAULT_TRADES_LIMIT = 500;
 
 /** Max results for klines endpoint */
-export const MAX_KLINES_LIMIT = 1000
-export const DEFAULT_KLINES_LIMIT = 500
+export const MAX_KLINES_LIMIT = 1000;
+export const DEFAULT_KLINES_LIMIT = 500;

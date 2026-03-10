@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/simple-earn/locked/setAutoSubscribe.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
           positionId: params.positionId,
           autoSubscribe: params.autoSubscribe,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,9 +37,9 @@ export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
               text: `✅ Auto-Subscribe Updated!\n\nPosition ID: ${params.positionId}\nAuto-Subscribe: ${params.autoSubscribe ? "Enabled" : "Disabled"}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -49,8 +49,8 @@ export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

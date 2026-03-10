@@ -1,9 +1,9 @@
 // src/tools/binance-margin/isolated-margin-api/isolatedMarginOpenOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginOpenOrders(server: McpServer) {
   server.tool(
@@ -19,7 +19,7 @@ export function registerBinanceIsolatedMarginOpenOrders(server: McpServer) {
           symbol: params.symbol,
           isIsolated: "TRUE",
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -28,15 +28,15 @@ export function registerBinanceIsolatedMarginOpenOrders(server: McpServer) {
               text: `Isolated Margin Open Orders for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query open orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

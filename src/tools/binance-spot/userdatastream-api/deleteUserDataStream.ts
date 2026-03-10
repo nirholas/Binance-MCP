@@ -1,9 +1,9 @@
 // src/tools/binance-spot/userdatastream-api/deleteUserDataStream.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeleteUserDataStream(server: McpServer) {
   server.tool(
@@ -16,9 +16,9 @@ export function registerBinanceDeleteUserDataStream(server: McpServer) {
       try {
         const response = await spotClient.restAPI.deleteUserDataStream({
           listenKey: listenKey,
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceDeleteUserDataStream(server: McpServer) {
               text: `Successfully closed user data stream with listen key: ${listenKey}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to close user data stream: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

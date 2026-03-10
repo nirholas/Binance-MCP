@@ -1,9 +1,9 @@
 // src/tools/binance-margin/isolated-margin-api/isolatedMarginTierData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginTierData(server: McpServer) {
   server.tool(
@@ -20,7 +20,7 @@ export function registerBinanceIsolatedMarginTierData(server: McpServer) {
           symbol: params.symbol,
           ...(params.tier !== undefined && { tier: params.tier }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceIsolatedMarginTierData(server: McpServer) {
               text: `Isolated Margin Tier Data for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query tier data: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

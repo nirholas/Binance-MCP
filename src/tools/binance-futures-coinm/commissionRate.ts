@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/commissionRate.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMCommissionRate(server: McpServer) {
   server.tool(
@@ -14,7 +14,7 @@ export function registerBinanceFuturesCOINMCommissionRate(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const data = await deliveryClient.commissionRate({ symbol })
+        const data = await deliveryClient.commissionRate({ symbol });
 
         return {
           content: [
@@ -23,9 +23,9 @@ export function registerBinanceFuturesCOINMCommissionRate(server: McpServer) {
               text: `Retrieved COIN-M Futures commission rate for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -35,8 +35,8 @@ export function registerBinanceFuturesCOINMCommissionRate(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

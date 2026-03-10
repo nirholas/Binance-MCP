@@ -1,9 +1,9 @@
 // src/tools/binance-gift-card/buyCode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardBuyCode(server: McpServer) {
   server.tool(
@@ -17,10 +17,10 @@ export function registerBinanceGiftCardBuyCode(server: McpServer) {
     },
     async ({ baseToken, faceToken, baseTokenAmount, recvWindow }) => {
       try {
-        const params: Record<string, any> = { baseToken, faceToken, baseTokenAmount }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { baseToken, faceToken, baseTokenAmount };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await giftCardClient.buyCode(params)
+        const data = await giftCardClient.buyCode(params);
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceGiftCardBuyCode(server: McpServer) {
               text: `Gift card purchased: ${baseTokenAmount} ${baseToken} -> ${faceToken}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to buy gift card: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

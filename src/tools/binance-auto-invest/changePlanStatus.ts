@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/changePlanStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestChangePlanStatus(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceAutoInvestChangePlanStatus(server: McpServer) {
     },
     async ({ planId, status }) => {
       try {
-        const params: any = { planId, status }
+        const params: any = { planId, status };
 
-        const response = await autoInvestClient.restAPI.changePlanStatus(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.changePlanStatus(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceAutoInvestChangePlanStatus(server: McpServer) {
               text: `Plan status changed successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to change plan status: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

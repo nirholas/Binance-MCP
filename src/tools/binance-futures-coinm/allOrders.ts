@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/allOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMAllOrders(server: McpServer) {
   server.tool(
@@ -19,15 +19,15 @@ export function registerBinanceFuturesCOINMAllOrders(server: McpServer) {
     },
     async ({ symbol, pair, orderId, startTime, endTime, limit }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
-        if (pair) params.pair = pair
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
+        if (pair) params.pair = pair;
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await deliveryClient.allOrders(params)
+        const data = await deliveryClient.allOrders(params);
 
         return {
           content: [
@@ -36,17 +36,17 @@ export function registerBinanceFuturesCOINMAllOrders(server: McpServer) {
               text: `Retrieved ${data.length || 0} COIN-M Futures orders. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve COIN-M Futures all orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

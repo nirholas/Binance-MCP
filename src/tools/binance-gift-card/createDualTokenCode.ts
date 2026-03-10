@@ -1,9 +1,9 @@
 // src/tools/binance-gift-card/createDualTokenCode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardCreateDualTokenCode(server: McpServer) {
   server.tool(
@@ -20,11 +20,11 @@ export function registerBinanceGiftCardCreateDualTokenCode(server: McpServer) {
     },
     async ({ baseToken, faceToken, baseTokenAmount, discount, recvWindow }) => {
       try {
-        const params: Record<string, any> = { baseToken, faceToken, baseTokenAmount }
-        if (discount !== undefined) params.discount = discount
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { baseToken, faceToken, baseTokenAmount };
+        if (discount !== undefined) params.discount = discount;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await giftCardClient.createDualTokenCode(params)
+        const data = await giftCardClient.createDualTokenCode(params);
 
         return {
           content: [
@@ -33,17 +33,17 @@ export function registerBinanceGiftCardCreateDualTokenCode(server: McpServer) {
               text: `Dual-token gift card created: ${baseTokenAmount} ${baseToken} -> ${faceToken}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create dual-token gift card: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

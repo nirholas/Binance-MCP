@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/market-api/ping.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPing(server: McpServer) {
   server.tool(
@@ -16,8 +16,8 @@ export function registerBinanceDeliveryPing(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await deliveryClient.restAPI.ping()
-        const data = await response.data()
+        const response = await deliveryClient.restAPI.ping();
+        const data = await response.data();
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinanceDeliveryPing(server: McpServer) {
               text: `✅ COIN-M Futures API is reachable\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ COIN-M Futures API ping failed: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

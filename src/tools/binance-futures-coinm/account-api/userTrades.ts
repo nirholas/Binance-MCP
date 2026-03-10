@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/account-api/userTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryUserTrades(server: McpServer) {
   server.tool(
@@ -34,9 +34,9 @@ export function registerBinanceDeliveryUserTrades(server: McpServer) {
           ...(params.fromId && { fromId: params.fromId }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -45,15 +45,15 @@ export function registerBinanceDeliveryUserTrades(server: McpServer) {
               text: `📈 COIN-M Trade History\n\nTrades: ${Array.isArray(data) ? data.length : 0}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get user trades: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

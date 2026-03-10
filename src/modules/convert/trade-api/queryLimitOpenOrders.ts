@@ -1,9 +1,9 @@
 // src/tools/binance-convert/trade-api/queryLimitOpenOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { convertClient } from "../../../config/binanceClient.js"
+import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertQueryLimitOpenOrders(server: McpServer) {
   server.tool(
@@ -21,9 +21,9 @@ export function registerBinanceConvertQueryLimitOpenOrders(server: McpServer) {
       try {
         const response = await convertClient.restAPI.queryLimitOpenOrders({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -34,9 +34,9 @@ export function registerBinanceConvertQueryLimitOpenOrders(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -46,8 +46,8 @@ export function registerBinanceConvertQueryLimitOpenOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

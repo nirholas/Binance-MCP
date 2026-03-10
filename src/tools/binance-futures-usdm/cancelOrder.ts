@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/cancelOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMCancelOrder(server: McpServer) {
   server.tool(
@@ -16,11 +16,11 @@ export function registerBinanceFuturesUSDMCancelOrder(server: McpServer) {
     },
     async ({ symbol, orderId, origClientOrderId }) => {
       try {
-        const params: any = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (origClientOrderId) params.origClientOrderId = origClientOrderId
+        const params: any = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (origClientOrderId) params.origClientOrderId = origClientOrderId;
 
-        const data = await futuresClient.cancelOrder(params)
+        const data = await futuresClient.cancelOrder(params);
 
         return {
           content: [
@@ -29,17 +29,17 @@ export function registerBinanceFuturesUSDMCancelOrder(server: McpServer) {
               text: `USD-M Futures order cancelled successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to cancel USD-M Futures order: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

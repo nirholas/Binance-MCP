@@ -1,9 +1,9 @@
 // src/tools/binance-convert/trade-api/placeLimitOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { convertClient } from "../../../config/binanceClient.js"
+import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertPlaceLimitOrder(server: McpServer) {
   server.tool(
@@ -53,9 +53,9 @@ export function registerBinanceConvertPlaceLimitOrder(server: McpServer) {
           ...(params.quoteAmount !== undefined && { quoteAmount: params.quoteAmount }),
           ...(params.walletType && { walletType: params.walletType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -64,9 +64,9 @@ export function registerBinanceConvertPlaceLimitOrder(server: McpServer) {
               text: `Successfully placed the limit order. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -76,8 +76,8 @@ export function registerBinanceConvertPlaceLimitOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

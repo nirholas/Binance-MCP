@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/getCloudMiningPaymentAndRefundHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletGetCloudMiningPaymentAndRefundHistory(server: McpServer) {
   server.tool(
@@ -21,13 +21,13 @@ export function registerBinanceWalletGetCloudMiningPaymentAndRefundHistory(serve
         const params: any = {
           startTime,
           endTime,
-        }
-        if (page !== undefined) params.page = page
-        if (pageSize !== undefined) params.pageSize = pageSize
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (page !== undefined) params.page = page;
+        if (pageSize !== undefined) params.pageSize = pageSize;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.getCloudMiningPaymentAndRefundHistory(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.getCloudMiningPaymentAndRefundHistory(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -36,17 +36,17 @@ export function registerBinanceWalletGetCloudMiningPaymentAndRefundHistory(serve
               text: `Retrieved cloud mining payment and refund history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve cloud mining history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

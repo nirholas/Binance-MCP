@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/um-trade/changeMarginType.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmChangeMarginType(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerPortfolioMarginUmChangeMarginType(server: McpServer) {
           symbol: params.symbol,
           marginType: params.marginType,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,9 +37,9 @@ export function registerPortfolioMarginUmChangeMarginType(server: McpServer) {
               text: `✅ Portfolio Margin UM Margin Type Changed!\n\nSymbol: ${params.symbol}\nNew Margin Type: ${params.marginType}\n\nResponse: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -49,8 +49,8 @@ export function registerPortfolioMarginUmChangeMarginType(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

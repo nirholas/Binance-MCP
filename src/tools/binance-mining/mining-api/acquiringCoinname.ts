@@ -1,7 +1,7 @@
 // src/tools/binance-mining/mining-api/acquiringCoinname.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { miningClient } from "../../../config/binanceClient.js"
+import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAcquiringCoinName(server: McpServer) {
   server.tool(
@@ -10,9 +10,9 @@ export function registerBinanceAcquiringCoinName(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await miningClient.restAPI.acquiringCoinname()
+        const response = await miningClient.restAPI.acquiringCoinname();
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -21,9 +21,9 @@ export function registerBinanceAcquiringCoinName(server: McpServer) {
               text: `Successfully fetched supported mining coins. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -33,8 +33,8 @@ export function registerBinanceAcquiringCoinName(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/editPlan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestEditPlan(server: McpServer) {
   server.tool(
@@ -53,9 +53,9 @@ export function registerAutoInvestEditPlan(server: McpServer) {
             flexibleAllowedToUse: params.flexibleAllowedToUse,
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -64,9 +64,9 @@ export function registerAutoInvestEditPlan(server: McpServer) {
               text: `✅ Auto-invest plan updated!\n\nPlan ID: ${params.planId}\nNext Execution: ${data.nextExecutionDateTime || "Scheduled"}\n\nYour plan has been modified.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -76,8 +76,8 @@ export function registerAutoInvestEditPlan(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

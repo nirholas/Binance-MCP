@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/transferToMaster.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
   server.tool(
@@ -16,10 +16,10 @@ export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
     },
     async ({ asset, amount, recvWindow }) => {
       try {
-        const params: any = { asset, amount }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { asset, amount };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.transferToMaster(params)
+        const data = await subAccountApiClient.transferToMaster(params);
 
         return {
           content: [
@@ -28,17 +28,17 @@ export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
               text: `Transferred ${amount} ${asset} to master account. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to transfer to master account: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

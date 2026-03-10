@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginAvailableInventory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginAvailableInventory(server: McpServer) {
   server.tool(
@@ -20,7 +20,7 @@ export function registerBinanceCrossMarginAvailableInventory(server: McpServer) 
         const data = await marginClient.getAvailableInventory({
           type: params.type,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceCrossMarginAvailableInventory(server: McpServer) 
               text: `Margin Available Inventory: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query available inventory: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

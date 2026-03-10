@@ -1,7 +1,7 @@
 // src/tools/binance-futures-usdm/ping.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMPing(server: McpServer) {
   server.tool(
@@ -10,7 +10,7 @@ export function registerBinanceFuturesUSDMPing(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await futuresClient.ping()
+        const data = await futuresClient.ping();
 
         return {
           content: [
@@ -19,15 +19,15 @@ export function registerBinanceFuturesUSDMPing(server: McpServer) {
               text: `USD-M Futures API connectivity test successful. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to ping USD-M Futures API: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

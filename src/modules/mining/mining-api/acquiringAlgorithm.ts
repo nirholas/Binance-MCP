@@ -1,7 +1,7 @@
 // src/tools/binance-mining/mining-api/acquiringAlgorithm.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { miningClient } from "../../../config/binanceClient.js"
+import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAcquiringAlgorithm(server: McpServer) {
   server.tool(
@@ -10,9 +10,9 @@ export function registerBinanceAcquiringAlgorithm(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await miningClient.restAPI.acquiringAlgorithm()
+        const response = await miningClient.restAPI.acquiringAlgorithm();
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -23,9 +23,9 @@ export function registerBinanceAcquiringAlgorithm(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -35,8 +35,8 @@ export function registerBinanceAcquiringAlgorithm(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

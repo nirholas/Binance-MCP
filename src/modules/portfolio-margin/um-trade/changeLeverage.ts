@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/um-trade/changeLeverage.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmChangeLeverage(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerPortfolioMarginUmChangeLeverage(server: McpServer) {
           symbol: params.symbol,
           leverage: params.leverage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,9 +37,9 @@ export function registerPortfolioMarginUmChangeLeverage(server: McpServer) {
               text: `✅ Portfolio Margin UM Leverage Changed!\n\nSymbol: ${data.symbol}\nNew Leverage: ${data.leverage}x\nMax Notional Value: ${data.maxNotionalValue}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -49,8 +49,8 @@ export function registerPortfolioMarginUmChangeLeverage(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/getCollateralRepayRate.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanGetCollateralRepayRate(server: McpServer) {
   server.tool(
@@ -16,10 +16,10 @@ export function registerBinanceCryptoLoanGetCollateralRepayRate(server: McpServe
     },
     async ({ loanCoin, collateralCoin, repayAmount }) => {
       try {
-        const params: any = { loanCoin, collateralCoin, repayAmount }
+        const params: any = { loanCoin, collateralCoin, repayAmount };
 
-        const response = await cryptoLoanClient.restAPI.checkCollateralRepayRate(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.checkCollateralRepayRate(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -28,15 +28,15 @@ export function registerBinanceCryptoLoanGetCollateralRepayRate(server: McpServe
               text: `Collateral repay rate retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get collateral repay rate: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

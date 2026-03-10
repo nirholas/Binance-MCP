@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/trades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTrades(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceFuturesUSDMTrades(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: any = { symbol }
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.trades(params)
+        const data = await futuresClient.trades(params);
 
         return {
           content: [
@@ -27,9 +27,9 @@ export function registerBinanceFuturesUSDMTrades(server: McpServer) {
               text: `Retrieved ${data.length || 0} recent trades for USD-M Futures ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -39,8 +39,8 @@ export function registerBinanceFuturesUSDMTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

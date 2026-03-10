@@ -5,19 +5,19 @@
  * @license Apache-2.0
  */
 // src/tools/binance-margin/margin-order-api/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { registerBinanceMarginCancelOco } from "./marginCancelOco.js"
-import { registerBinanceMarginGetAllOco } from "./marginGetAllOco.js"
-import { registerBinanceMarginGetOco } from "./marginGetOco.js"
-import { registerBinanceMarginGetOpenOco } from "./marginGetOpenOco.js"
-import { registerBinanceMarginNewOco } from "./marginNewOco.js"
+import { registerBinanceMarginCancelOco } from "./marginCancelOco.js";
+import { registerBinanceMarginGetAllOco } from "./marginGetAllOco.js";
+import { registerBinanceMarginGetOco } from "./marginGetOco.js";
+import { registerBinanceMarginGetOpenOco } from "./marginGetOpenOco.js";
+import { registerBinanceMarginNewOco } from "./marginNewOco.js";
 
 export function registerBinanceMarginOrderTools(server: McpServer) {
   // OCO Orders
-  registerBinanceMarginNewOco(server)
-  registerBinanceMarginCancelOco(server)
-  registerBinanceMarginGetOco(server)
-  registerBinanceMarginGetAllOco(server)
-  registerBinanceMarginGetOpenOco(server)
+  registerBinanceMarginNewOco(server);
+  registerBinanceMarginCancelOco(server);
+  registerBinanceMarginGetOco(server);
+  registerBinanceMarginGetAllOco(server);
+  registerBinanceMarginGetOpenOco(server);
 }

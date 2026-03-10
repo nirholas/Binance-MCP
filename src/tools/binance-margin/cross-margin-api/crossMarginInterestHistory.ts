@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginInterestHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginInterestHistory(server: McpServer) {
   server.tool(
@@ -30,7 +30,7 @@ export function registerBinanceCrossMarginInterestHistory(server: McpServer) {
           ...(params.size && { size: params.size }),
           ...(params.archived !== undefined && { archived: params.archived }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceCrossMarginInterestHistory(server: McpServer) {
               text: `Interest History: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query interest history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

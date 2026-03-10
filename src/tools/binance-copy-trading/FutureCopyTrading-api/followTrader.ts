@@ -1,9 +1,9 @@
 // src/tools/binance-copy-trading/FutureCopyTrading-api/followTrader.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { copyTradingClient } from "../../../config/binanceClient.js"
+import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingFollow(server: McpServer) {
   server.tool(
@@ -40,9 +40,9 @@ export function registerBinanceCopyTradingFollow(server: McpServer) {
           ...(params.takeProfitRatio && { takeProfitRatio: params.takeProfitRatio }),
           ...(params.fixedAmount && { fixedAmount: params.fixedAmount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -51,15 +51,15 @@ export function registerBinanceCopyTradingFollow(server: McpServer) {
               text: `✅ Now following trader ${params.portfolioId}!\n\nCopy Ratio: ${params.copyRatio || 1}x\nStop Loss: ${params.stopLossRatio ? params.stopLossRatio * 100 + "%" : "Not set"}\nTake Profit: ${params.takeProfitRatio ? params.takeProfitRatio * 100 + "%" : "Not set"}\n\n⚠️ Monitor your positions regularly.\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to follow trader: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/updateIpRestriction.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountUpdateIpRestriction(server: McpServer) {
   server.tool(
@@ -18,11 +18,11 @@ export function registerBinanceSubAccountUpdateIpRestriction(server: McpServer) 
     },
     async ({ subAccountId, subAccountApiKey, status, ipAddress, recvWindow }) => {
       try {
-        const params: any = { subAccountId, subAccountApiKey, status }
-        if (ipAddress !== undefined) params.ipAddress = ipAddress
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { subAccountId, subAccountApiKey, status };
+        if (ipAddress !== undefined) params.ipAddress = ipAddress;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.updateSubAccountApiKeyIpRestriction(params)
+        const data = await subAccountApiClient.updateSubAccountApiKeyIpRestriction(params);
 
         return {
           content: [
@@ -31,15 +31,15 @@ export function registerBinanceSubAccountUpdateIpRestriction(server: McpServer) 
               text: `IP restriction updated for sub-account API key. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to update IP restriction: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

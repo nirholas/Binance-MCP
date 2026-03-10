@@ -1,9 +1,9 @@
 // src/tools/binance-algo/future-algo/cancelAlgoOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { algoClient } from "../../../config/binanceClient.js"
+import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFutureCancelAlgoOrder(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceFutureCancelAlgoOrder(server: McpServer) {
         const response = await algoClient.restAPI.cancelAlgoOrderFutureAlgo({
           algoId: params.algoId,
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -29,9 +29,9 @@ export function registerBinanceFutureCancelAlgoOrder(server: McpServer) {
               text: `Algo order ${params.algoId} canceled successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -41,8 +41,8 @@ export function registerBinanceFutureCancelAlgoOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

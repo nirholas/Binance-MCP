@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/oneTimeTransaction.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestOneTimeTransaction(server: McpServer) {
   server.tool(
@@ -46,10 +46,10 @@ export function registerAutoInvestOneTimeTransaction(server: McpServer) {
           ...(params.indexId && { indexId: params.indexId }),
           ...(params.details && { details: JSON.stringify(params.details) }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        }
+        };
 
-        const response = await autoInvestClient.restAPI.oneOff(requestParams)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.oneOff(requestParams);
+        const data = await response.data();
 
         return {
           content: [
@@ -58,9 +58,9 @@ export function registerAutoInvestOneTimeTransaction(server: McpServer) {
               text: `✅ One-time auto-invest purchase executed!\n\nTransaction ID: ${data.transactionId || data.tranId || "Completed"}\nAmount: ${params.subscriptionAmount} ${params.sourceAsset}\n\nResponse: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -70,8 +70,8 @@ export function registerAutoInvestOneTimeTransaction(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

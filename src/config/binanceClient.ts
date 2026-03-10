@@ -1,81 +1,81 @@
-import crypto from "crypto"
+import crypto from "crypto";
 
-import { Algo } from "@binance/algo"
-import { AutoInvest } from "@binance/auto-invest"
-import { C2C } from "@binance/c2c"
-import { Spot as ConnectorSpot } from "@binance/connector-typescript"
-import { Convert } from "@binance/convert"
-import { CopyTrading } from "@binance/copy-trading"
-import { CryptoLoan } from "@binance/crypto-loan"
-import { DualInvestment } from "@binance/dual-investment"
-import { Fiat } from "@binance/fiat"
-import { Mining } from "@binance/mining"
-import { NFT } from "@binance/nft"
-import { Pay } from "@binance/pay"
-import { Rebate } from "@binance/rebate"
-import { SimpleEarn } from "@binance/simple-earn"
+import { Algo } from "@binance/algo";
+import { AutoInvest } from "@binance/auto-invest";
+import { C2C } from "@binance/c2c";
+import { Spot as ConnectorSpot } from "@binance/connector-typescript";
+import { Convert } from "@binance/convert";
+import { CopyTrading } from "@binance/copy-trading";
+import { CryptoLoan } from "@binance/crypto-loan";
+import { DualInvestment } from "@binance/dual-investment";
+import { Fiat } from "@binance/fiat";
+import { Mining } from "@binance/mining";
+import { NFT } from "@binance/nft";
+import { Pay } from "@binance/pay";
+import { Rebate } from "@binance/rebate";
+import { SimpleEarn } from "@binance/simple-earn";
 // src/config/binanceClient.ts
-import { Spot } from "@binance/spot"
-import { Staking } from "@binance/staking"
-import { SubAccount } from "@binance/sub-account"
-import { VIPLoan } from "@binance/vip-loan"
-import { Wallet } from "@binance/wallet"
+import { Spot } from "@binance/spot";
+import { Staking } from "@binance/staking";
+import { SubAccount } from "@binance/sub-account";
+import { VIPLoan } from "@binance/vip-loan";
+import { Wallet } from "@binance/wallet";
 
-import { assertNotTestnet, IS_TESTNET, URLS } from "./testnet.js"
+import { assertNotTestnet, IS_TESTNET, URLS } from "./testnet.js";
 
-export { assertNotTestnet, IS_TESTNET }
+export { assertNotTestnet, IS_TESTNET };
 
-const API_KEY = process.env.BINANCE_API_KEY ?? ""
-const API_SECRET = process.env.BINANCE_API_SECRET ?? ""
-const BASE_URL = URLS.SPOT_BASE_URL
+const API_KEY = process.env.BINANCE_API_KEY ?? "";
+const API_SECRET = process.env.BINANCE_API_SECRET ?? "";
+const BASE_URL = URLS.SPOT_BASE_URL;
 
 const configurationRestAPI = {
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   basePath: BASE_URL,
-}
+};
 
 // Spot Trading
-export const spotClient = new Spot({ configurationRestAPI })
+export const spotClient = new Spot({ configurationRestAPI });
 
 // Connector-typescript client (for margin and other APIs)
-export const connectorClient = new ConnectorSpot(API_KEY, API_SECRET, { baseURL: BASE_URL })
+export const connectorClient = new ConnectorSpot(API_KEY, API_SECRET, { baseURL: BASE_URL });
 
 // Algo Trading
-export const algoClient = new Algo({ configurationRestAPI })
+export const algoClient = new Algo({ configurationRestAPI });
 
 // Earn & Investment
-export const simpleEarnClient = new SimpleEarn({ configurationRestAPI })
-export const dualInvestmentClient = new DualInvestment({ configurationRestAPI })
-export const stakingClient = new Staking({ configurationRestAPI })
-export const autoInvestClient = new AutoInvest({ configurationRestAPI })
+export const simpleEarnClient = new SimpleEarn({ configurationRestAPI });
+export const dualInvestmentClient = new DualInvestment({ configurationRestAPI });
+export const stakingClient = new Staking({ configurationRestAPI });
+export const autoInvestClient = new AutoInvest({ configurationRestAPI });
 
 // Trading
-export const c2cClient = new C2C({ configurationRestAPI })
-export const convertClient = new Convert({ configurationRestAPI })
-export const copyTradingClient = new CopyTrading({ configurationRestAPI })
+export const c2cClient = new C2C({ configurationRestAPI });
+export const convertClient = new Convert({ configurationRestAPI });
+export const copyTradingClient = new CopyTrading({ configurationRestAPI });
 
 // Loans
-export const vipLoanClient = new VIPLoan({ configurationRestAPI })
-export const cryptoLoanClient = new CryptoLoan({ configurationRestAPI })
+export const vipLoanClient = new VIPLoan({ configurationRestAPI });
+export const cryptoLoanClient = new CryptoLoan({ configurationRestAPI });
 
 // Wallet & Finance
-export const walletClient = new Wallet({ configurationRestAPI })
-export const fiatClient = new Fiat({ configurationRestAPI })
+export const walletClient = new Wallet({ configurationRestAPI });
+export const fiatClient = new Fiat({ configurationRestAPI });
 
 // Sub-Account Management
-export const subAccountClient = new SubAccount({ configurationRestAPI })
+export const subAccountClient = new SubAccount({ configurationRestAPI });
 
 // Other
-export const nftClient = new NFT({ configurationRestAPI })
-export const payClient = new Pay({ configurationRestAPI })
-export const rebateClient = new Rebate({ configurationRestAPI })
-export const miningClient = new Mining({ configurationRestAPI })
+export const nftClient = new NFT({ configurationRestAPI });
+export const payClient = new Pay({ configurationRestAPI });
+export const rebateClient = new Rebate({ configurationRestAPI });
+export const miningClient = new Mining({ configurationRestAPI });
 
 // Generic REST client for APIs without dedicated packages
 // (Margin, Futures, Options, Gift Card, Portfolio Margin)
 function generateSignature(queryString: string): string {
-  return crypto.createHmac("sha256", API_SECRET).update(queryString).digest("hex")
+  return crypto.createHmac("sha256", API_SECRET).update(queryString).digest("hex");
 }
 
 async function makeSignedRequest(
@@ -87,16 +87,16 @@ async function makeSignedRequest(
     throw new Error(
       `[Testnet] Endpoint ${endpoint} is not available on the Binance Spot Test Network. ` +
         `Only /api endpoints are supported.`,
-    )
+    );
   }
 
-  const timestamp = Date.now()
-  const queryParams = { ...params, timestamp }
+  const timestamp = Date.now();
+  const queryParams = { ...params, timestamp };
   const queryString = new URLSearchParams(
     Object.fromEntries(Object.entries(queryParams).map(([k, v]) => [k, String(v)])),
-  ).toString()
-  const signature = generateSignature(queryString)
-  const url = `${BASE_URL}${endpoint}?${queryString}&signature=${signature}`
+  ).toString();
+  const signature = generateSignature(queryString);
+  const url = `${BASE_URL}${endpoint}?${queryString}&signature=${signature}`;
 
   const response = await fetch(url, {
     method,
@@ -104,14 +104,14 @@ async function makeSignedRequest(
       "X-MBX-APIKEY": API_KEY,
       "Content-Type": "application/json",
     },
-  })
+  });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`)
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 async function makePublicRequest(endpoint: string, params: Record<string, any> = {}): Promise<any> {
@@ -119,27 +119,27 @@ async function makePublicRequest(endpoint: string, params: Record<string, any> =
     throw new Error(
       `[Testnet] Endpoint ${endpoint} is not available on the Binance Spot Test Network. ` +
         `Only /api endpoints are supported.`,
-    )
+    );
   }
 
   const queryString = new URLSearchParams(
     Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])),
-  ).toString()
-  const url = `${BASE_URL}${endpoint}${queryString ? "?" + queryString : ""}`
+  ).toString();
+  const url = `${BASE_URL}${endpoint}${queryString ? "?" + queryString : ""}`;
 
   const response = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-  })
+  });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`)
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 // Portfolio Margin client wrapper
@@ -172,7 +172,7 @@ export const portfolioMarginClient = {
     makeSignedRequest("GET", "/sapi/v1/portfolio/margin-asset-leverage", params),
   getBalance: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/portfolio/balance", params),
-}
+};
 
 // Gift Card client wrapper
 export const giftCardClient = {
@@ -190,7 +190,7 @@ export const giftCardClient = {
     makeSignedRequest("POST", "/sapi/v1/giftcard/buyCode", params),
   getTokenLimit: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/giftcard/buyCode/token-limit", params),
-}
+};
 
 // Margin client wrapper
 export const marginClient = {
@@ -262,10 +262,10 @@ export const marginClient = {
     makePublicRequest("/sapi/v1/margin/allAssets", params),
   getInterestRateHistory: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/margin/interestRateHistory", params),
-}
+};
 
-const FUTURES_USD_BASE_URL = URLS.FUTURES_USD_BASE_URL
-const FUTURES_COIN_BASE_URL = URLS.FUTURES_COIN_BASE_URL
+const FUTURES_USD_BASE_URL = URLS.FUTURES_USD_BASE_URL;
+const FUTURES_COIN_BASE_URL = URLS.FUTURES_COIN_BASE_URL;
 
 async function makeFuturesSignedRequest(
   baseUrl: string,
@@ -273,13 +273,13 @@ async function makeFuturesSignedRequest(
   endpoint: string,
   params: Record<string, any> = {},
 ): Promise<any> {
-  const timestamp = Date.now()
-  const queryParams = { ...params, timestamp }
+  const timestamp = Date.now();
+  const queryParams = { ...params, timestamp };
   const queryString = new URLSearchParams(
     Object.fromEntries(Object.entries(queryParams).map(([k, v]) => [k, String(v)])),
-  ).toString()
-  const signature = generateSignature(queryString)
-  const url = `${baseUrl}${endpoint}?${queryString}&signature=${signature}`
+  ).toString();
+  const signature = generateSignature(queryString);
+  const url = `${baseUrl}${endpoint}?${queryString}&signature=${signature}`;
 
   const response = await fetch(url, {
     method,
@@ -287,14 +287,14 @@ async function makeFuturesSignedRequest(
       "X-MBX-APIKEY": API_KEY,
       "Content-Type": "application/json",
     },
-  })
+  });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`)
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 async function makeFuturesPublicRequest(
@@ -304,20 +304,20 @@ async function makeFuturesPublicRequest(
 ): Promise<any> {
   const queryString = new URLSearchParams(
     Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])),
-  ).toString()
-  const url = `${baseUrl}${endpoint}${queryString ? "?" + queryString : ""}`
+  ).toString();
+  const url = `${baseUrl}${endpoint}${queryString ? "?" + queryString : ""}`;
 
   const response = await fetch(url, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
-  })
+  });
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`)
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`);
   }
 
-  return response.json()
+  return response.json();
 }
 
 // Futures USD-M client wrapper
@@ -404,7 +404,7 @@ export const futuresClient = {
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "PUT", "/fapi/v1/listenKey", {}),
   closeListenKey: () =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "DELETE", "/fapi/v1/listenKey", {}),
-}
+};
 
 // Futures COIN-M client wrapper (delivery)
 export const deliveryClient = {
@@ -490,7 +490,7 @@ export const deliveryClient = {
     makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "PUT", "/dapi/v1/listenKey", {}),
   closeListenKey: () =>
     makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "DELETE", "/dapi/v1/listenKey", {}),
-}
+};
 
 // Sub-Account client wrapper (using REST API)
 export const subAccountApiClient = {
@@ -536,9 +536,9 @@ export const subAccountApiClient = {
     makeSignedRequest("GET", "/sapi/v1/sub-account/subAccountApi/ipRestriction", params),
   updateSubAccountApiKeyIpRestriction: (params: Record<string, any>) =>
     makeSignedRequest("POST", "/sapi/v1/sub-account/subAccountApi/ipRestriction", params),
-}
+};
 
-const OPTIONS_BASE_URL = URLS.OPTIONS_BASE_URL
+const OPTIONS_BASE_URL = URLS.OPTIONS_BASE_URL;
 
 export const optionsClient = {
   // Market Data
@@ -591,4 +591,4 @@ export const optionsClient = {
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "PUT", "/eapi/v1/listenKey", {}),
   closeListenKey: () =>
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "DELETE", "/eapi/v1/listenKey", {}),
-}
+};

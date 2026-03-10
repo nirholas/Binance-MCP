@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getSubscriptionHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetSubscriptionHistory(server: McpServer) {
   server.tool(
@@ -20,17 +20,17 @@ export function registerBinanceAutoInvestGetSubscriptionHistory(server: McpServe
     },
     async ({ planId, startTime, endTime, targetAsset, planType, current, size }) => {
       try {
-        const params: any = {}
-        if (planId !== undefined) params.planId = planId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (targetAsset) params.targetAsset = targetAsset
-        if (planType) params.planType = planType
-        if (current !== undefined) params.current = current
-        if (size !== undefined) params.size = size
+        const params: any = {};
+        if (planId !== undefined) params.planId = planId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (targetAsset) params.targetAsset = targetAsset;
+        if (planType) params.planType = planType;
+        if (current !== undefined) params.current = current;
+        if (size !== undefined) params.size = size;
 
-        const response = await autoInvestClient.restAPI.querySubscriptionTransactionHistory(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.querySubscriptionTransactionHistory(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceAutoInvestGetSubscriptionHistory(server: McpServe
               text: `Subscription history retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get subscription history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

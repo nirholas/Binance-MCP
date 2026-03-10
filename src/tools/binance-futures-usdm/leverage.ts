@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/leverage.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMLeverage(server: McpServer) {
   server.tool(
@@ -15,7 +15,7 @@ export function registerBinanceFuturesUSDMLeverage(server: McpServer) {
     },
     async ({ symbol, leverage }) => {
       try {
-        const data = await futuresClient.leverage({ symbol, leverage })
+        const data = await futuresClient.leverage({ symbol, leverage });
 
         return {
           content: [
@@ -24,17 +24,17 @@ export function registerBinanceFuturesUSDMLeverage(server: McpServer) {
               text: `USD-M Futures leverage changed to ${leverage}x for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to change USD-M Futures leverage: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

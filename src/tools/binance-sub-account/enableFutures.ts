@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/enableFutures.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountEnableFutures(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceSubAccountEnableFutures(server: McpServer) {
     },
     async ({ email, recvWindow }) => {
       try {
-        const params: any = { email }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { email };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.enableFuturesForSubAccount(params)
+        const data = await subAccountApiClient.enableFuturesForSubAccount(params);
 
         return {
           content: [
@@ -27,17 +27,17 @@ export function registerBinanceSubAccountEnableFutures(server: McpServer) {
               text: `Futures enabled for sub-account ${email}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to enable futures for sub-account: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

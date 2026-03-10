@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountMarginSummary.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetMarginSummary(server: McpServer) {
   server.tool(
@@ -15,11 +15,11 @@ export function registerBinanceSubAccountGetMarginSummary(server: McpServer) {
     },
     async ({ email, recvWindow }) => {
       try {
-        const params: any = {}
-        if (email !== undefined) params.email = email
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (email !== undefined) params.email = email;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountMarginSummary(params)
+        const data = await subAccountApiClient.getSubAccountMarginSummary(params);
 
         return {
           content: [
@@ -28,17 +28,17 @@ export function registerBinanceSubAccountGetMarginSummary(server: McpServer) {
               text: `Retrieved sub-account margin summary. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get sub-account margin summary: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

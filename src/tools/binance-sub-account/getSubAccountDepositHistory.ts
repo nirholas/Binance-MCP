@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountDepositHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetDepositHistory(server: McpServer) {
   server.tool(
@@ -24,16 +24,16 @@ export function registerBinanceSubAccountGetDepositHistory(server: McpServer) {
     },
     async ({ email, coin, status, startTime, endTime, limit, offset, recvWindow }) => {
       try {
-        const params: any = { email }
-        if (coin !== undefined) params.coin = coin
-        if (status !== undefined) params.status = status
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
-        if (offset !== undefined) params.offset = offset
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { email };
+        if (coin !== undefined) params.coin = coin;
+        if (status !== undefined) params.status = status;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
+        if (offset !== undefined) params.offset = offset;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountDepositHistory(params)
+        const data = await subAccountApiClient.getSubAccountDepositHistory(params);
 
         return {
           content: [
@@ -42,17 +42,17 @@ export function registerBinanceSubAccountGetDepositHistory(server: McpServer) {
               text: `Retrieved deposit history for ${email}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get sub-account deposit history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/bookTicker.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMBookTicker(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceFuturesUSDMBookTicker(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await futuresClient.bookTicker(params)
+        const data = await futuresClient.bookTicker(params);
 
         return {
           content: [
@@ -31,17 +31,17 @@ export function registerBinanceFuturesUSDMBookTicker(server: McpServer) {
               text: `Retrieved USD-M Futures book ticker${symbol ? ` for ${symbol}` : " for all symbols"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve USD-M Futures book ticker: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/userdata/createListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginCreateListenKey(server: McpServer) {
   server.tool(
@@ -16,8 +16,8 @@ export function registerPortfolioMarginCreateListenKey(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await portfolioMarginClient.restAPI.createListenKey()
-        const data = await response.data()
+        const response = await portfolioMarginClient.restAPI.createListenKey();
+        const data = await response.data();
 
         return {
           content: [
@@ -26,9 +26,9 @@ export function registerPortfolioMarginCreateListenKey(server: McpServer) {
               text: `✅ Portfolio Margin Listen Key Created\n\nListen Key: ${data.listenKey}\n\n**Note**: This listen key is valid for 60 minutes. Use BinancePortfolioMarginRenewListenKey to extend validity.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -38,8 +38,8 @@ export function registerPortfolioMarginCreateListenKey(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

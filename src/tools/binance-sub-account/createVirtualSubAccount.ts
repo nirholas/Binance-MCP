@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/createVirtualSubAccount.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreateVirtual(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceSubAccountCreateVirtual(server: McpServer) {
     },
     async ({ subAccountString, recvWindow }) => {
       try {
-        const params: any = { subAccountString }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { subAccountString };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.createVirtualSubAccount(params)
+        const data = await subAccountApiClient.createVirtualSubAccount(params);
 
         return {
           content: [
@@ -27,17 +27,17 @@ export function registerBinanceSubAccountCreateVirtual(server: McpServer) {
               text: `Virtual sub-account created: ${subAccountString}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create virtual sub-account: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

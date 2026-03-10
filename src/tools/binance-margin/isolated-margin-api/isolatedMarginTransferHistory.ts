@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-margin/isolated-margin-api/isolatedMarginTransferHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginTransferHistory(server: McpServer) {
   server.tool(
@@ -40,9 +40,9 @@ export function registerBinanceIsolatedMarginTransferHistory(server: McpServer) 
           ...(params.size && { size: params.size }),
           ...(params.archived !== undefined && { archived: params.archived }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -51,15 +51,15 @@ export function registerBinanceIsolatedMarginTransferHistory(server: McpServer) 
               text: `Isolated Margin Transfer History: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query transfer history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

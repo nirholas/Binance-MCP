@@ -1,9 +1,9 @@
 // src/tools/binance-spot/market-api/ticker.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTicker(server: McpServer) {
   server.tool(
@@ -18,18 +18,18 @@ export function registerBinanceTicker(server: McpServer) {
     },
     async ({ symbol, windowSize }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
-        if (windowSize) params.windowSize = windowSize
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
+        if (windowSize) params.windowSize = windowSize;
 
-        const response = await spotClient.restAPI.ticker(params)
+        const response = await spotClient.restAPI.ticker(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
-        const isArray = Array.isArray(data)
+        const isArray = Array.isArray(data);
         const responseText = isArray
           ? `Retrieved ticker statistics for all symbols${windowSize ? ` with window size ${windowSize}` : ""}. Total items: ${data.length}.`
-          : `Retrieved ticker statistics for ${symbol}${windowSize ? ` with window size ${windowSize}` : ""}.`
+          : `Retrieved ticker statistics for ${symbol}${windowSize ? ` with window size ${windowSize}` : ""}.`;
 
         return {
           content: [
@@ -38,17 +38,17 @@ export function registerBinanceTicker(server: McpServer) {
               text: `${responseText} Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve ticker statistics: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

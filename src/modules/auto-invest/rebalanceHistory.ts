@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/rebalanceHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestRebalanceHistory(server: McpServer) {
   server.tool(
@@ -36,27 +36,27 @@ export function registerAutoInvestRebalanceHistory(server: McpServer) {
           ...(params.size && { size: params.size }),
           ...(params.current && { current: params.current }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Rebalance History\n\n`
+        let result = `✅ Auto-Invest Rebalance History\n\n`;
 
-        const history = data.list || data.data || data
+        const history = data.list || data.data || data;
 
         if (Array.isArray(history) && history.length > 0) {
-          result += `Total rebalances: ${data.total || history.length}\n\n`
+          result += `Total rebalances: ${data.total || history.length}\n\n`;
           history.forEach((rebalance: any, index: number) => {
-            result += `**${index + 1}. Rebalance ID: ${rebalance.id || rebalance.rebalanceId}**\n`
-            result += `  Status: ${rebalance.status}\n`
-            result += `  Time: ${rebalance.rebalanceDateTime || new Date(rebalance.time).toISOString()}\n`
+            result += `**${index + 1}. Rebalance ID: ${rebalance.id || rebalance.rebalanceId}**\n`;
+            result += `  Status: ${rebalance.status}\n`;
+            result += `  Time: ${rebalance.rebalanceDateTime || new Date(rebalance.time).toISOString()}\n`;
             if (rebalance.details) {
-              result += `  Details: ${JSON.stringify(rebalance.details)}\n`
+              result += `  Details: ${JSON.stringify(rebalance.details)}\n`;
             }
-            result += "\n"
-          })
+            result += "\n";
+          });
         } else {
-          result += `No rebalance history found`
+          result += `No rebalance history found`;
         }
 
         return {
@@ -66,9 +66,9 @@ export function registerAutoInvestRebalanceHistory(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -78,8 +78,8 @@ export function registerAutoInvestRebalanceHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

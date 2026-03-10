@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getIndexUserSummary.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetIndexUserSummary(server: McpServer) {
   server.tool(
@@ -24,18 +24,18 @@ export function registerAutoInvestGetIndexUserSummary(server: McpServer) {
         const response = await autoInvestClient.restAPI.indexUserSummary({
           indexId: params.indexId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Index User Summary\n\n`
-        result += `Index ID: ${params.indexId}\n\n`
+        let result = `✅ Auto-Invest Index User Summary\n\n`;
+        result += `Index ID: ${params.indexId}\n\n`;
 
         if (data) {
-          result += `Total Invested: ${data.totalInvestedInUSD || data.totalInvested || "N/A"}\n`
-          result += `Current Value: ${data.currentInvestedInUSD || data.currentValue || "N/A"}\n`
-          result += `PnL: ${data.pnlInUSD || data.pnl || "N/A"}\n`
-          result += `ROI: ${data.roi || "N/A"}%\n`
+          result += `Total Invested: ${data.totalInvestedInUSD || data.totalInvested || "N/A"}\n`;
+          result += `Current Value: ${data.currentInvestedInUSD || data.currentValue || "N/A"}\n`;
+          result += `PnL: ${data.pnlInUSD || data.pnl || "N/A"}\n`;
+          result += `ROI: ${data.roi || "N/A"}%\n`;
         }
 
         return {
@@ -45,9 +45,9 @@ export function registerAutoInvestGetIndexUserSummary(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -57,8 +57,8 @@ export function registerAutoInvestGetIndexUserSummary(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

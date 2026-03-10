@@ -1,9 +1,9 @@
 // src/tools/binance-margin/isolated-margin-api/toggleBnbBurn.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceToggleBnbBurn(server: McpServer) {
   server.tool(
@@ -26,7 +26,7 @@ export function registerBinanceToggleBnbBurn(server: McpServer) {
           ...(params.spotBNBBurn && { spotBNBBurn: params.spotBNBBurn }),
           ...(params.interestBNBBurn && { interestBNBBurn: params.interestBNBBurn }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -35,15 +35,15 @@ export function registerBinanceToggleBnbBurn(server: McpServer) {
               text: `BNB Burn settings updated: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to toggle BNB burn: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

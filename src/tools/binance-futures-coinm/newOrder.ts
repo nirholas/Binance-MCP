@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/newOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMNewOrder(server: McpServer) {
   server.tool(
@@ -49,19 +49,19 @@ export function registerBinanceFuturesCOINMNewOrder(server: McpServer) {
           ...(params.reduceOnly !== undefined && { reduceOnly: params.reduceOnly }),
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [{ type: "text", text: `COIN-M order placed: ${JSON.stringify(data)}` }],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place COIN-M order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

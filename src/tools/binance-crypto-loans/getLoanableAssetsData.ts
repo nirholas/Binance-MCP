@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/getLoanableAssetsData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanGetLoanableAssetsDataV2(server: McpServer) {
   server.tool(
@@ -15,12 +15,12 @@ export function registerBinanceCryptoLoanGetLoanableAssetsDataV2(server: McpServ
     },
     async ({ loanCoin, vipLevel }) => {
       try {
-        const params: any = {}
-        if (loanCoin) params.loanCoin = loanCoin
-        if (vipLevel !== undefined) params.vipLevel = vipLevel
+        const params: any = {};
+        if (loanCoin) params.loanCoin = loanCoin;
+        if (vipLevel !== undefined) params.vipLevel = vipLevel;
 
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanAssetsData(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.getFlexibleLoanAssetsData(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -29,17 +29,17 @@ export function registerBinanceCryptoLoanGetLoanableAssetsDataV2(server: McpServ
               text: `Loanable assets data V2 retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get loanable assets data V2: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

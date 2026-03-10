@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/flexibleLoanRepayHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanRepayHistory(server: McpServer) {
   server.tool(
@@ -19,16 +19,16 @@ export function registerBinanceCryptoLoanFlexibleLoanRepayHistory(server: McpSer
     },
     async ({ loanCoin, collateralCoin, startTime, endTime, current, limit }) => {
       try {
-        const params: any = {}
-        if (loanCoin) params.loanCoin = loanCoin
-        if (collateralCoin) params.collateralCoin = collateralCoin
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (current !== undefined) params.current = current
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (loanCoin) params.loanCoin = loanCoin;
+        if (collateralCoin) params.collateralCoin = collateralCoin;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (current !== undefined) params.current = current;
+        if (limit !== undefined) params.limit = limit;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanRepaymentHistory(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.flexibleLoanRepaymentHistory(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -37,17 +37,17 @@ export function registerBinanceCryptoLoanFlexibleLoanRepayHistory(server: McpSer
               text: `Flexible loan repay history retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get flexible loan repay history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

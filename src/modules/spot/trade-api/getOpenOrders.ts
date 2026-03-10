@@ -1,9 +1,9 @@
 // src/tools/binance-spot/trade-api/getOpenOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetOpenOrders(server: McpServer) {
   server.tool(
@@ -14,12 +14,12 @@ export function registerBinanceGetOpenOrders(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.getOpenOrders(params)
+        const response = await spotClient.restAPI.getOpenOrders(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -28,15 +28,15 @@ export function registerBinanceGetOpenOrders(server: McpServer) {
               text: `Retrieved open orders${symbol ? ` for ${symbol}` : ""}. Total open orders: ${data.length}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve open orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

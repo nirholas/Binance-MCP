@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/um-trade/getOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmGetOrder(server: McpServer) {
   server.tool(
@@ -32,7 +32,7 @@ export function registerPortfolioMarginUmGetOrder(server: McpServer) {
               },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await portfolioMarginClient.restAPI.umOrder({
@@ -40,19 +40,19 @@ export function registerPortfolioMarginUmGetOrder(server: McpServer) {
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Portfolio Margin UM Order Details\n\n`
-        result += `Order ID: ${data.orderId}\n`
-        result += `Symbol: ${data.symbol}\n`
-        result += `Side: ${data.side} | Type: ${data.type}\n`
-        result += `Price: ${data.price} | Qty: ${data.origQty}\n`
-        result += `Executed Qty: ${data.executedQty}\n`
-        result += `Avg Price: ${data.avgPrice}\n`
-        result += `Status: ${data.status}\n`
-        result += `Time: ${new Date(data.time).toISOString()}`
+        let result = `✅ Portfolio Margin UM Order Details\n\n`;
+        result += `Order ID: ${data.orderId}\n`;
+        result += `Symbol: ${data.symbol}\n`;
+        result += `Side: ${data.side} | Type: ${data.type}\n`;
+        result += `Price: ${data.price} | Qty: ${data.origQty}\n`;
+        result += `Executed Qty: ${data.executedQty}\n`;
+        result += `Avg Price: ${data.avgPrice}\n`;
+        result += `Status: ${data.status}\n`;
+        result += `Time: ${new Date(data.time).toISOString()}`;
 
         return {
           content: [
@@ -61,9 +61,9 @@ export function registerPortfolioMarginUmGetOrder(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -73,8 +73,8 @@ export function registerPortfolioMarginUmGetOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

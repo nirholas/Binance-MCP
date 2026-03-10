@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/account-api/accountApiTradingStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAccountApiTradingStatus(server: McpServer) {
   server.tool(
@@ -14,11 +14,11 @@ export function registerBinanceWalletAccountApiTradingStatus(server: McpServer) 
     },
     async ({ recvWindow }) => {
       try {
-        const params: any = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.accountApiTradingStatus(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.accountApiTradingStatus(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -27,9 +27,9 @@ export function registerBinanceWalletAccountApiTradingStatus(server: McpServer) 
               text: `Retrieved account API trading status. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -39,8 +39,8 @@ export function registerBinanceWalletAccountApiTradingStatus(server: McpServer) 
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

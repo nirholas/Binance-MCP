@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/leverage.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMLeverage(server: McpServer) {
   server.tool(
@@ -20,19 +20,19 @@ export function registerBinanceFuturesCOINMLeverage(server: McpServer) {
           symbol: params.symbol,
           leverage: params.leverage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [{ type: "text", text: `COIN-M leverage changed: ${JSON.stringify(data)}` }],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to change COIN-M leverage: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

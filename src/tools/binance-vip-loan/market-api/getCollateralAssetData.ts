@@ -1,9 +1,9 @@
 // src/tools/binance-vip-loan/market-api/getCollateralAssetData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { vipLoanClient } from "../../../config/binanceClient.js"
+import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetCollateralAssetData(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceGetCollateralAssetData(server: McpServer) {
         const response = await vipLoanClient.restAPI.getCollateralAssetData({
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -31,9 +31,9 @@ export function registerBinanceGetCollateralAssetData(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -43,8 +43,8 @@ export function registerBinanceGetCollateralAssetData(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

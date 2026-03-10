@@ -2,11 +2,11 @@
 // Binance.US Credit Line Tools
 // For institutional credit line agreements
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US Credit Line tools
@@ -72,20 +72,20 @@ Balances:
       try {
         const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", {
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         // Calculate risk level based on LTV
-        let riskLevel = "LOW"
-        const currentLTV = parseFloat(response.currentLTV)
-        const marginCallLTV = parseFloat(response.marginCallLTV)
-        const liquidationLTV = parseFloat(response.liquidationLTV)
+        let riskLevel = "LOW";
+        const currentLTV = parseFloat(response.currentLTV);
+        const marginCallLTV = parseFloat(response.marginCallLTV);
+        const liquidationLTV = parseFloat(response.liquidationLTV);
 
         if (currentLTV >= liquidationLTV) {
-          riskLevel = "CRITICAL - LIQUIDATION IMMINENT"
+          riskLevel = "CRITICAL - LIQUIDATION IMMINENT";
         } else if (currentLTV >= marginCallLTV) {
-          riskLevel = "HIGH - MARGIN CALL"
+          riskLevel = "HIGH - MARGIN CALL";
         } else if (currentLTV >= marginCallLTV * 0.9) {
-          riskLevel = "MEDIUM"
+          riskLevel = "MEDIUM";
         }
 
         return {
@@ -103,17 +103,17 @@ Balances:
 Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get credit line account: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Call & Liquidation)
@@ -171,13 +171,13 @@ Use this to:
           ...(params.limit && { limit: params.limit }),
           ...(params.alertType && { alertType: params.alertType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const alerts = Array.isArray(response) ? response : []
-        const marginCalls = alerts.filter((a: any) => a.alertType === "MARGIN_CALL").length
+        const alerts = Array.isArray(response) ? response : [];
+        const marginCalls = alerts.filter((a: any) => a.alertType === "MARGIN_CALL").length;
         const liquidationCalls = alerts.filter(
           (a: any) => a.alertType === "LIQUIDATION_CALL",
-        ).length
+        ).length;
 
         return {
           content: [
@@ -192,17 +192,17 @@ Use this to:
 Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get alert history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/cl/transferHistory - Get Transfer History
@@ -261,11 +261,11 @@ Use this to:
           ...(params.transferType && { transferType: params.transferType }),
           ...(params.asset && { asset: params.asset.toUpperCase() }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const transfers = Array.isArray(response) ? response : []
-        const transfersIn = transfers.filter((t: any) => t.transferType === "TRANSFER_IN").length
-        const transfersOut = transfers.filter((t: any) => t.transferType === "TRANSFER_OUT").length
+        const transfers = Array.isArray(response) ? response : [];
+        const transfersIn = transfers.filter((t: any) => t.transferType === "TRANSFER_IN").length;
+        const transfersOut = transfers.filter((t: any) => t.transferType === "TRANSFER_OUT").length;
 
         return {
           content: [
@@ -280,17 +280,17 @@ Use this to:
 Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get transfer history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // POST /sapi/v1/cl/transfer - Execute Transfer
@@ -337,10 +337,10 @@ Response includes:
           transferAssetType: params.transferAssetType.toUpperCase(),
           quantity: params.quantity,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         const actionText =
-          params.transferType === "TRANSFER_IN" ? "deposited into" : "withdrawn from"
+          params.transferType === "TRANSFER_IN" ? "deposited into" : "withdrawn from";
 
         return {
           content: [
@@ -357,17 +357,17 @@ ${params.transferType === "TRANSFER_OUT" ? "⚠️ Your LTV ratio has increased.
 Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to execute transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // GET /sapi/v1/cl/liquidation/history - Get Liquidation History
@@ -416,9 +416,9 @@ Use this to:
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const liquidations = Array.isArray(response) ? response : []
+        const liquidations = Array.isArray(response) ? response : [];
 
         return {
           content: [
@@ -432,15 +432,15 @@ ${liquidations.length > 0 ? "⚠️ Review your risk management strategy." : "�
 Full Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get liquidation history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

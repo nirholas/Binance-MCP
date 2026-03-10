@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/getAutoRepayFuturesStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAutoRepayFuturesStatus(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinancePortfolioMarginGetAutoRepayFuturesStatus(server: 
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.getAutoRepayFuturesStatus(params)
+        const data = await portfolioMarginClient.getAutoRepayFuturesStatus(params);
 
         return {
           content: [
@@ -26,17 +26,17 @@ export function registerBinancePortfolioMarginGetAutoRepayFuturesStatus(server: 
               text: `Retrieved auto-repay-futures status. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve auto-repay-futures status: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

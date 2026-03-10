@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-crypto-loans/flexible-api/borrow.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
   server.tool(
@@ -37,7 +37,7 @@ export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
               { type: "text", text: "❌ Either loanAmount or collateralAmount must be provided" },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await cryptoLoanClient.restAPI.flexibleLoanBorrow({
@@ -46,9 +46,9 @@ export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
           ...(params.loanAmount && { loanAmount: params.loanAmount }),
           ...(params.collateralAmount && { collateralAmount: params.collateralAmount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -57,15 +57,15 @@ export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
               text: `✅ Flexible Loan Borrowed!\n\nLoan Coin: ${params.loanCoin}\nCollateral: ${params.collateralCoin}\n\n⚠️ Monitor your LTV ratio regularly to avoid liquidation.\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to borrow: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

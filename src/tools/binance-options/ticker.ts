@@ -1,9 +1,9 @@
 // src/tools/binance-options/ticker.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsTicker(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinanceOptionsTicker(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await optionsClient.ticker(params)
+        const data = await optionsClient.ticker(params);
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinanceOptionsTicker(server: McpServer) {
               text: `24hr ticker statistics retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get ticker: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

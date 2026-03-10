@@ -1,9 +1,9 @@
 // src/tools/binance-options/batchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsBatchOrders(server: McpServer) {
   server.tool(
@@ -18,9 +18,9 @@ export function registerBinanceOptionsBatchOrders(server: McpServer) {
     },
     async ({ orders }) => {
       try {
-        const params: any = { orders }
+        const params: any = { orders };
 
-        const data = await optionsClient.batchOrders(params)
+        const data = await optionsClient.batchOrders(params);
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceOptionsBatchOrders(server: McpServer) {
               text: `Batch orders placed successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place batch orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

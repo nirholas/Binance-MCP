@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/modules/options/userdata-api/createListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCreateListenKey(server: McpServer) {
   server.tool(
@@ -16,8 +16,8 @@ export function registerOptionsCreateListenKey(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await optionsClient.restAPI.createListenKey()
-        const data = await response.data()
+        const response = await optionsClient.restAPI.createListenKey();
+        const data = await response.data();
 
         return {
           content: [
@@ -26,9 +26,9 @@ export function registerOptionsCreateListenKey(server: McpServer) {
               text: `✅ Options Listen Key Created\n\nListen Key: ${data.listenKey}\n\n**Note**: This listen key is valid for 60 minutes. Use BinanceOptionsRenewListenKey to extend validity. Use this key to connect to the WebSocket user data stream.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -38,8 +38,8 @@ export function registerOptionsCreateListenKey(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

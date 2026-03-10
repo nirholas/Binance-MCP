@@ -1,9 +1,9 @@
 // src/tools/binance-options/getOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsGetOrder(server: McpServer) {
   server.tool(
@@ -16,11 +16,11 @@ export function registerBinanceOptionsGetOrder(server: McpServer) {
     },
     async ({ symbol, orderId, clientOrderId }) => {
       try {
-        const params: any = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (clientOrderId) params.clientOrderId = clientOrderId
+        const params: any = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (clientOrderId) params.clientOrderId = clientOrderId;
 
-        const data = await optionsClient.getOrder(params)
+        const data = await optionsClient.getOrder(params);
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceOptionsGetOrder(server: McpServer) {
               text: `Order details retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

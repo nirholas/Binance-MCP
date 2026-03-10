@@ -1,9 +1,9 @@
 // src/tools/binance-spot/general-api/exchangeInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceExchangeInfo(server: McpServer) {
   server.tool(
@@ -16,18 +16,18 @@ export function registerBinanceExchangeInfo(server: McpServer) {
     },
     async ({ symbol, symbols, permissions }) => {
       try {
-        const params: any = {}
+        const params: any = {};
 
-        if (symbol) params.symbol = symbol
-        if (symbols) params.symbols = symbols
-        if (permissions) params.permissions = permissions
+        if (symbol) params.symbol = symbol;
+        if (symbols) params.symbols = symbols;
+        if (permissions) params.permissions = permissions;
 
-        const response = await spotClient.restAPI.exchangeInfo(params)
+        const response = await spotClient.restAPI.exchangeInfo(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
-        const symbolCount = data.symbols?.length || 0
-        const exchangeFiltersCount = data.exchangeFilters?.length || 0
+        const symbolCount = data.symbols?.length || 0;
+        const exchangeFiltersCount = data.exchangeFilters?.length || 0;
 
         return {
           content: [
@@ -36,17 +36,17 @@ export function registerBinanceExchangeInfo(server: McpServer) {
               text: `Retrieved exchange information. Total symbols: ${symbolCount}, Exchange filters: ${exchangeFiltersCount}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve exchange information: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

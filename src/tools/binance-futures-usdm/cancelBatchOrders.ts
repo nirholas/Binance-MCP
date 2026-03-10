@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/cancelBatchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMCancelBatchOrders(server: McpServer) {
   server.tool(
@@ -19,11 +19,11 @@ export function registerBinanceFuturesUSDMCancelBatchOrders(server: McpServer) {
     },
     async ({ symbol, orderIdList, origClientOrderIdList }) => {
       try {
-        const params: any = { symbol }
-        if (orderIdList) params.orderIdList = orderIdList
-        if (origClientOrderIdList) params.origClientOrderIdList = origClientOrderIdList
+        const params: any = { symbol };
+        if (orderIdList) params.orderIdList = orderIdList;
+        if (origClientOrderIdList) params.origClientOrderIdList = origClientOrderIdList;
 
-        const data = await futuresClient.cancelBatchOrders(params)
+        const data = await futuresClient.cancelBatchOrders(params);
 
         return {
           content: [
@@ -32,17 +32,17 @@ export function registerBinanceFuturesUSDMCancelBatchOrders(server: McpServer) {
               text: `USD-M Futures batch orders cancelled. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to cancel USD-M Futures batch orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

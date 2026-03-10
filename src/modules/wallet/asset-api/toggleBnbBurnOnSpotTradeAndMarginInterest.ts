@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/toggleBnbBurnOnSpotTradeAndMarginInterest.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest(server: McpServer) {
   server.tool(
@@ -16,14 +16,14 @@ export function registerBinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest(s
     },
     async ({ spotBNBBurn, interestBNBBurn, recvWindow }) => {
       try {
-        const params: any = {}
-        if (spotBNBBurn !== undefined) params.spotBNBBurn = spotBNBBurn
-        if (interestBNBBurn !== undefined) params.interestBNBBurn = interestBNBBurn
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (spotBNBBurn !== undefined) params.spotBNBBurn = spotBNBBurn;
+        if (interestBNBBurn !== undefined) params.interestBNBBurn = interestBNBBurn;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
         const response =
-          await walletClient.restAPI.toggleBnbBurnOnSpotTradeAndMarginInterest(params)
-        const data = await response.data()
+          await walletClient.restAPI.toggleBnbBurnOnSpotTradeAndMarginInterest(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -32,15 +32,15 @@ export function registerBinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest(s
               text: `BNB burn settings updated. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to update BNB burn settings: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

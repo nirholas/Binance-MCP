@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getUniversalTransferHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetUniversalTransferHistory(server: McpServer) {
   server.tool(
@@ -20,16 +20,16 @@ export function registerBinanceSubAccountGetUniversalTransferHistory(server: Mcp
     },
     async ({ fromEmail, toEmail, startTime, endTime, page, limit, recvWindow }) => {
       try {
-        const params: any = {}
-        if (fromEmail !== undefined) params.fromEmail = fromEmail
-        if (toEmail !== undefined) params.toEmail = toEmail
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (page !== undefined) params.page = page
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (fromEmail !== undefined) params.fromEmail = fromEmail;
+        if (toEmail !== undefined) params.toEmail = toEmail;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (page !== undefined) params.page = page;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountUniversalTransferHistory(params)
+        const data = await subAccountApiClient.getSubAccountUniversalTransferHistory(params);
 
         return {
           content: [
@@ -38,17 +38,17 @@ export function registerBinanceSubAccountGetUniversalTransferHistory(server: Mcp
               text: `Retrieved universal transfer history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get universal transfer history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

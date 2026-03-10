@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/newOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMNewOrder(server: McpServer) {
   server.tool(
@@ -58,24 +58,24 @@ export function registerBinanceFuturesUSDMNewOrder(server: McpServer) {
           symbol: params.symbol,
           side: params.side,
           type: params.type,
-        }
+        };
 
-        if (params.positionSide) requestParams.positionSide = params.positionSide
-        if (params.timeInForce) requestParams.timeInForce = params.timeInForce
-        if (params.quantity !== undefined) requestParams.quantity = params.quantity
-        if (params.reduceOnly !== undefined) requestParams.reduceOnly = params.reduceOnly
-        if (params.price !== undefined) requestParams.price = params.price
-        if (params.newClientOrderId) requestParams.newClientOrderId = params.newClientOrderId
-        if (params.stopPrice !== undefined) requestParams.stopPrice = params.stopPrice
-        if (params.closePosition !== undefined) requestParams.closePosition = params.closePosition
+        if (params.positionSide) requestParams.positionSide = params.positionSide;
+        if (params.timeInForce) requestParams.timeInForce = params.timeInForce;
+        if (params.quantity !== undefined) requestParams.quantity = params.quantity;
+        if (params.reduceOnly !== undefined) requestParams.reduceOnly = params.reduceOnly;
+        if (params.price !== undefined) requestParams.price = params.price;
+        if (params.newClientOrderId) requestParams.newClientOrderId = params.newClientOrderId;
+        if (params.stopPrice !== undefined) requestParams.stopPrice = params.stopPrice;
+        if (params.closePosition !== undefined) requestParams.closePosition = params.closePosition;
         if (params.activationPrice !== undefined)
-          requestParams.activationPrice = params.activationPrice
-        if (params.callbackRate !== undefined) requestParams.callbackRate = params.callbackRate
-        if (params.workingType) requestParams.workingType = params.workingType
-        if (params.priceProtect !== undefined) requestParams.priceProtect = params.priceProtect
-        if (params.newOrderRespType) requestParams.newOrderRespType = params.newOrderRespType
+          requestParams.activationPrice = params.activationPrice;
+        if (params.callbackRate !== undefined) requestParams.callbackRate = params.callbackRate;
+        if (params.workingType) requestParams.workingType = params.workingType;
+        if (params.priceProtect !== undefined) requestParams.priceProtect = params.priceProtect;
+        if (params.newOrderRespType) requestParams.newOrderRespType = params.newOrderRespType;
 
-        const data = await futuresClient.newOrder(requestParams)
+        const data = await futuresClient.newOrder(requestParams);
 
         return {
           content: [
@@ -84,17 +84,17 @@ export function registerBinanceFuturesUSDMNewOrder(server: McpServer) {
               text: `USD-M Futures order created successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to create USD-M Futures order: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

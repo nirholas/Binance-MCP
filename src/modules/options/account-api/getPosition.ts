@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/account-api/getPosition.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetPosition(server: McpServer) {
   server.tool(
@@ -26,26 +26,26 @@ export function registerOptionsGetPosition(server: McpServer) {
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.underlying && { underlying: params.underlying }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Positions\n\n`
+        let result = `✅ Options Positions\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total positions: ${data.length}\n\n`
+          result += `Total positions: ${data.length}\n\n`;
           data.forEach((pos: any, index: number) => {
-            result += `**${index + 1}. ${pos.symbol}**\n`
-            result += `  Side: ${pos.side}\n`
-            result += `  Quantity: ${pos.quantity}\n`
-            result += `  Entry Price: ${pos.entryPrice}\n`
-            result += `  Mark Price: ${pos.markPrice}\n`
-            result += `  Unrealized PnL: ${pos.unrealizedPNL}\n`
-            result += `  Maintenance Margin: ${pos.maintMargin}\n`
-            result += `  Expiry Date: ${pos.expiryDate}\n\n`
-          })
+            result += `**${index + 1}. ${pos.symbol}**\n`;
+            result += `  Side: ${pos.side}\n`;
+            result += `  Quantity: ${pos.quantity}\n`;
+            result += `  Entry Price: ${pos.entryPrice}\n`;
+            result += `  Mark Price: ${pos.markPrice}\n`;
+            result += `  Unrealized PnL: ${pos.unrealizedPNL}\n`;
+            result += `  Maintenance Margin: ${pos.maintMargin}\n`;
+            result += `  Expiry Date: ${pos.expiryDate}\n\n`;
+          });
         } else {
-          result += `No positions found`
+          result += `No positions found`;
         }
 
         return {
@@ -55,9 +55,9 @@ export function registerOptionsGetPosition(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -67,8 +67,8 @@ export function registerOptionsGetPosition(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

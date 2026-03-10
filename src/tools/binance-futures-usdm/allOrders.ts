@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/allOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMAllOrders(server: McpServer) {
   server.tool(
@@ -18,13 +18,13 @@ export function registerBinanceFuturesUSDMAllOrders(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, limit }) => {
       try {
-        const params: any = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.allOrders(params)
+        const data = await futuresClient.allOrders(params);
 
         return {
           content: [
@@ -33,17 +33,17 @@ export function registerBinanceFuturesUSDMAllOrders(server: McpServer) {
               text: `Retrieved ${data.length || 0} USD-M Futures orders for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve USD-M Futures all orders: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

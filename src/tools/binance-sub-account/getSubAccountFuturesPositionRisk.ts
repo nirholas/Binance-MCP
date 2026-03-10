@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountFuturesPositionRisk.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetFuturesPositionRisk(server: McpServer) {
   server.tool(
@@ -19,11 +19,11 @@ export function registerBinanceSubAccountGetFuturesPositionRisk(server: McpServe
     },
     async ({ email, futuresType, recvWindow }) => {
       try {
-        const params: any = { email }
-        if (futuresType !== undefined) params.futuresType = futuresType
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { email };
+        if (futuresType !== undefined) params.futuresType = futuresType;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountFuturesPositionRisk(params)
+        const data = await subAccountApiClient.getSubAccountFuturesPositionRisk(params);
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceSubAccountGetFuturesPositionRisk(server: McpServe
               text: `Retrieved futures position risk for ${email}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceSubAccountGetFuturesPositionRisk(server: McpServe
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

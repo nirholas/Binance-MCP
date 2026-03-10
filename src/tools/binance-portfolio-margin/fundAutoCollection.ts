@@ -1,9 +1,9 @@
 // src/tools/binance-portfolio-margin/fundAutoCollection.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginFundAutoCollection(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinancePortfolioMarginFundAutoCollection(server: McpServ
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await portfolioMarginClient.fundAutoCollection(params)
+        const data = await portfolioMarginClient.fundAutoCollection(params);
 
         return {
           content: [
@@ -26,17 +26,17 @@ export function registerBinancePortfolioMarginFundAutoCollection(server: McpServ
               text: `Fund auto-collection configured. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to configure fund auto-collection: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

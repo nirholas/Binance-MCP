@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/flexibleLoanCollateralAssets.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server: McpServer) {
   server.tool(
@@ -14,11 +14,11 @@ export function registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server: Mc
     },
     async ({ collateralCoin }) => {
       try {
-        const params: any = {}
-        if (collateralCoin) params.collateralCoin = collateralCoin
+        const params: any = {};
+        if (collateralCoin) params.collateralCoin = collateralCoin;
 
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanCollateralAssetsData(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.getFlexibleLoanCollateralAssetsData(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -27,9 +27,9 @@ export function registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server: Mc
               text: `Flexible loan collateral assets retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -39,8 +39,8 @@ export function registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server: Mc
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

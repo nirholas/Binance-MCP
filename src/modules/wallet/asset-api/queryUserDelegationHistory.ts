@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/queryUserDelegationHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletQueryUserDelegationHistory(server: McpServer) {
   server.tool(
@@ -23,13 +23,13 @@ export function registerBinanceWalletQueryUserDelegationHistory(server: McpServe
           email,
           startTime,
           endTime,
-        }
-        if (page !== undefined) params.page = page
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (page !== undefined) params.page = page;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.queryUserDelegationHistory(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.queryUserDelegationHistory(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -38,17 +38,17 @@ export function registerBinanceWalletQueryUserDelegationHistory(server: McpServe
               text: `Retrieved user delegation history. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve user delegation history: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

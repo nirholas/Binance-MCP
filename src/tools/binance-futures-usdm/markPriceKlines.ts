@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/markPriceKlines.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMMarkPriceKlines(server: McpServer) {
   server.tool(
@@ -36,12 +36,12 @@ export function registerBinanceFuturesUSDMMarkPriceKlines(server: McpServer) {
     },
     async ({ symbol, interval, startTime, endTime, limit }) => {
       try {
-        const params: any = { symbol, interval }
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol, interval };
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.markPriceKlines(params)
+        const data = await futuresClient.markPriceKlines(params);
 
         return {
           content: [
@@ -50,9 +50,9 @@ export function registerBinanceFuturesUSDMMarkPriceKlines(server: McpServer) {
               text: `Retrieved ${data.length || 0} mark price klines for USD-M Futures ${symbol} with ${interval} interval. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -62,8 +62,8 @@ export function registerBinanceFuturesUSDMMarkPriceKlines(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

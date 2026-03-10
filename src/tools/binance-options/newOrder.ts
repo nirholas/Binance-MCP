@@ -1,9 +1,9 @@
 // src/tools/binance-options/newOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsNewOrder(server: McpServer) {
   server.tool(
@@ -34,15 +34,15 @@ export function registerBinanceOptionsNewOrder(server: McpServer) {
       clientOrderId,
     }) => {
       try {
-        const params: any = { symbol, side, type, quantity }
-        if (price !== undefined) params.price = price
-        if (timeInForce) params.timeInForce = timeInForce
-        if (reduceOnly !== undefined) params.reduceOnly = reduceOnly
-        if (postOnly !== undefined) params.postOnly = postOnly
-        if (newOrderRespType) params.newOrderRespType = newOrderRespType
-        if (clientOrderId) params.clientOrderId = clientOrderId
+        const params: any = { symbol, side, type, quantity };
+        if (price !== undefined) params.price = price;
+        if (timeInForce) params.timeInForce = timeInForce;
+        if (reduceOnly !== undefined) params.reduceOnly = reduceOnly;
+        if (postOnly !== undefined) params.postOnly = postOnly;
+        if (newOrderRespType) params.newOrderRespType = newOrderRespType;
+        if (clientOrderId) params.clientOrderId = clientOrderId;
 
-        const data = await optionsClient.newOrder(params)
+        const data = await optionsClient.newOrder(params);
 
         return {
           content: [
@@ -51,15 +51,15 @@ export function registerBinanceOptionsNewOrder(server: McpServer) {
               text: `Options order created successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

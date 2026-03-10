@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginCancelAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginCancelAllOrders(server: McpServer) {
   server.tool(
@@ -18,7 +18,7 @@ export function registerBinanceCrossMarginCancelAllOrders(server: McpServer) {
         const data = await marginClient.cancelAllOpenOrders({
           symbol: params.symbol,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceCrossMarginCancelAllOrders(server: McpServer) {
               text: `All open margin orders cancelled for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to cancel all orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

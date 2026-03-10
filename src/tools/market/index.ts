@@ -1,7 +1,7 @@
 // src/tools/market/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
 import {
   type AggTradeResponse,
@@ -17,7 +17,7 @@ import {
   ORDER_BOOK_VALID_LIMITS,
   RateLimitError,
   ROLLING_WINDOW_SIZES,
-} from "../../config/binanceUsClient.js"
+} from "../../config/binanceUsClient.js";
 
 /**
  * Format error response with helpful details
@@ -32,7 +32,7 @@ function formatError(error: unknown): { content: { type: "text"; text: string }[
         },
       ],
       isError: true,
-    }
+    };
   }
   if (error instanceof IpBanError) {
     return {
@@ -43,7 +43,7 @@ function formatError(error: unknown): { content: { type: "text"; text: string }[
         },
       ],
       isError: true,
-    }
+    };
   }
   if (error instanceof BinanceUsApiError) {
     return {
@@ -54,14 +54,14 @@ function formatError(error: unknown): { content: { type: "text"; text: string }[
         },
       ],
       isError: true,
-    }
+    };
   }
-  const errorMessage = error instanceof Error ? error.message : String(error)
+  const errorMessage = error instanceof Error ? error.message : String(error);
 
   return {
     content: [{ type: "text", text: errorMessage }],
     isError: true,
-  }
+  };
 }
 
 /**
@@ -89,13 +89,13 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: Record<string, any> = { symbol }
-        if (limit !== undefined) params.limit = limit
+        const params: Record<string, any> = { symbol };
+        if (limit !== undefined) params.limit = limit;
 
-        const result = await binanceUsRequest("GET", "/api/v3/depth", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/depth", params, false);
 
-        const bestBid = result.bids?.[0] || ["N/A", "N/A"]
-        const bestAsk = result.asks?.[0] || ["N/A", "N/A"]
+        const bestBid = result.bids?.[0] || ["N/A", "N/A"];
+        const bestAsk = result.asks?.[0] || ["N/A", "N/A"];
 
         return {
           content: [
@@ -116,12 +116,12 @@ export function registerMarketTools(server: McpServer) {
                 `Full Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_recent_trades - Get recent trades
   server.tool(
@@ -139,13 +139,13 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: Record<string, any> = { symbol }
-        if (limit !== undefined) params.limit = limit
+        const params: Record<string, any> = { symbol };
+        if (limit !== undefined) params.limit = limit;
 
-        const result = await binanceUsRequest("GET", "/api/v3/trades", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/trades", params, false);
 
-        const latestTrade = result[result.length - 1]
-        const oldestTrade = result[0]
+        const latestTrade = result[result.length - 1];
+        const oldestTrade = result[0];
 
         return {
           content: [
@@ -160,12 +160,12 @@ export function registerMarketTools(server: McpServer) {
                 `Full Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_historical_trades - Get older trades (MARKET_DATA)
   server.tool(
@@ -189,9 +189,9 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol, limit, fromId }) => {
       try {
-        const params: Record<string, any> = { symbol }
-        if (limit !== undefined) params.limit = limit
-        if (fromId !== undefined) params.fromId = fromId
+        const params: Record<string, any> = { symbol };
+        if (limit !== undefined) params.limit = limit;
+        if (fromId !== undefined) params.fromId = fromId;
 
         const result = await binanceUsRequest(
           "GET",
@@ -199,10 +199,10 @@ export function registerMarketTools(server: McpServer) {
           params,
           false,
           true,
-        )
+        );
 
-        const latestTrade = result[result.length - 1]
-        const oldestTrade = result[0]
+        const latestTrade = result[result.length - 1];
+        const oldestTrade = result[0];
 
         return {
           content: [
@@ -217,12 +217,12 @@ export function registerMarketTools(server: McpServer) {
                 `Full Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_agg_trades - Get aggregate trades
   server.tool(
@@ -243,22 +243,22 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol, fromId, startTime, endTime, limit }) => {
       try {
-        const params: Record<string, any> = { symbol }
-        if (fromId !== undefined) params.fromId = fromId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: Record<string, any> = { symbol };
+        if (fromId !== undefined) params.fromId = fromId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
         const result: AggTradeResponse[] = await binanceUsRequest(
           "GET",
           "/api/v3/aggTrades",
           params,
           false,
-        )
-        const formattedTrades = result.map(formatAggTrade)
+        );
+        const formattedTrades = result.map(formatAggTrade);
 
-        const firstTrade = result[0]
-        const lastTrade = result[result.length - 1]
+        const firstTrade = result[0];
+        const lastTrade = result[result.length - 1];
         const summary =
           firstTrade && lastTrade
             ? {
@@ -267,7 +267,7 @@ export function registerMarketTools(server: McpServer) {
                 timeRange: `${new Date(firstTrade.T).toISOString()} to ${new Date(lastTrade.T).toISOString()}`,
                 latestPrice: lastTrade.p,
               }
-            : null
+            : null;
 
         return {
           content: [
@@ -286,12 +286,12 @@ export function registerMarketTools(server: McpServer) {
                 `Raw Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_klines - Get candlestick data
   server.tool(
@@ -312,28 +312,28 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol, interval, startTime, endTime, limit }) => {
       try {
-        const params: Record<string, any> = { symbol, interval }
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: Record<string, any> = { symbol, interval };
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const result: KlineRaw[] = await binanceUsRequest("GET", "/api/v3/klines", params, false)
-        const formattedKlines = result.map(formatKline)
+        const result: KlineRaw[] = await binanceUsRequest("GET", "/api/v3/klines", params, false);
+        const formattedKlines = result.map(formatKline);
 
-        const firstKline = formattedKlines[0]
-        const latestKline = formattedKlines[formattedKlines.length - 1]
+        const firstKline = formattedKlines[0];
+        const latestKline = formattedKlines[formattedKlines.length - 1];
 
-        let summaryText = ""
+        let summaryText = "";
         if (formattedKlines.length > 0 && firstKline && latestKline) {
-          const highs = formattedKlines.map((k) => parseFloat(k.high))
-          const lows = formattedKlines.map((k) => parseFloat(k.low))
-          const volumes = formattedKlines.map((k) => parseFloat(k.volume))
+          const highs = formattedKlines.map((k) => parseFloat(k.high));
+          const lows = formattedKlines.map((k) => parseFloat(k.low));
+          const volumes = formattedKlines.map((k) => parseFloat(k.volume));
 
           summaryText =
             `Period: ${firstKline.openTimeISO} to ${latestKline.closeTimeISO}\n` +
             `Latest: O:${latestKline.open} H:${latestKline.high} L:${latestKline.low} C:${latestKline.close}\n` +
             `Period High: ${Math.max(...highs)} | Period Low: ${Math.min(...lows)}\n` +
-            `Total Volume: ${volumes.reduce((a, b) => a + b, 0).toFixed(8)}\n`
+            `Total Volume: ${volumes.reduce((a, b) => a + b, 0).toFixed(8)}\n`;
         }
 
         return {
@@ -350,12 +350,12 @@ export function registerMarketTools(server: McpServer) {
                 `Full Response:\n${JSON.stringify(formattedKlines, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_avg_price - Get average price
   server.tool(
@@ -366,7 +366,7 @@ export function registerMarketTools(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const result = await binanceUsRequest("GET", "/api/v3/avgPrice", { symbol }, false)
+        const result = await binanceUsRequest("GET", "/api/v3/avgPrice", { symbol }, false);
 
         return {
           content: [
@@ -380,12 +380,12 @@ export function registerMarketTools(server: McpServer) {
                 `Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_ticker_24hr - Get 24hr statistics
   server.tool(
@@ -409,32 +409,32 @@ export function registerMarketTools(server: McpServer) {
           return {
             content: [{ type: "text", text: "Error: Cannot specify both 'symbol' and 'symbols'." }],
             isError: true,
-          }
+          };
         }
 
-        const params: Record<string, any> = {}
-        if (symbol) params.symbol = symbol
-        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()))
-        if (type) params.type = type
+        const params: Record<string, any> = {};
+        if (symbol) params.symbol = symbol;
+        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
+        if (type) params.type = type;
 
-        const result = await binanceUsRequest("GET", "/api/v3/ticker/24hr", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/ticker/24hr", params, false);
 
-        const isArray = Array.isArray(result)
-        let summaryText: string
+        const isArray = Array.isArray(result);
+        let summaryText: string;
 
         if (isArray) {
           const sorted = [...result].sort(
             (a: any, b: any) => parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume),
-          )
-          const top5 = sorted.slice(0, 5)
+          );
+          const top5 = sorted.slice(0, 5);
           summaryText =
             `Total symbols: ${result.length}\n` +
-            `Top 5 by volume:\n${top5.map((t: any) => `  ${t.symbol}: ${t.priceChangePercent}% | Vol: ${parseFloat(t.quoteVolume).toLocaleString()}`).join("\n")}`
+            `Top 5 by volume:\n${top5.map((t: any) => `  ${t.symbol}: ${t.priceChangePercent}% | Vol: ${parseFloat(t.quoteVolume).toLocaleString()}`).join("\n")}`;
         } else {
           summaryText =
             `${result.symbol}: ${result.lastPrice} (${parseFloat(result.priceChangePercent) >= 0 ? "+" : ""}${result.priceChangePercent}%)\n` +
             `High: ${result.highPrice} | Low: ${result.lowPrice}\n` +
-            `Volume: ${result.volume}`
+            `Volume: ${result.volume}`;
         }
 
         return {
@@ -449,12 +449,12 @@ export function registerMarketTools(server: McpServer) {
                 `Full Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_ticker_price - Get latest price
   server.tool(
@@ -477,19 +477,19 @@ export function registerMarketTools(server: McpServer) {
           return {
             content: [{ type: "text", text: "Error: Cannot specify both 'symbol' and 'symbols'." }],
             isError: true,
-          }
+          };
         }
 
-        const params: Record<string, any> = {}
-        if (symbol) params.symbol = symbol
-        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()))
+        const params: Record<string, any> = {};
+        if (symbol) params.symbol = symbol;
+        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
 
-        const result = await binanceUsRequest("GET", "/api/v3/ticker/price", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/ticker/price", params, false);
 
-        const isArray = Array.isArray(result)
+        const isArray = Array.isArray(result);
         const responseText = isArray
           ? `Retrieved prices for ${result.length} symbols.`
-          : `${result.symbol}: ${result.price}`
+          : `${result.symbol}: ${result.price}`;
 
         return {
           content: [
@@ -502,12 +502,12 @@ export function registerMarketTools(server: McpServer) {
                 `Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_ticker_book - Get book ticker
   server.tool(
@@ -530,31 +530,31 @@ export function registerMarketTools(server: McpServer) {
           return {
             content: [{ type: "text", text: "Error: Cannot specify both 'symbol' and 'symbols'." }],
             isError: true,
-          }
+          };
         }
 
-        const params: Record<string, any> = {}
-        if (symbol) params.symbol = symbol
-        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()))
+        const params: Record<string, any> = {};
+        if (symbol) params.symbol = symbol;
+        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
 
-        const result = await binanceUsRequest("GET", "/api/v3/ticker/bookTicker", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/ticker/bookTicker", params, false);
 
-        const isArray = Array.isArray(result)
-        let summaryText: string
+        const isArray = Array.isArray(result);
+        let summaryText: string;
 
         if (isArray) {
-          summaryText = `Total symbols: ${result.length}`
+          summaryText = `Total symbols: ${result.length}`;
         } else {
-          const spread = (parseFloat(result.askPrice) - parseFloat(result.bidPrice)).toFixed(8)
+          const spread = (parseFloat(result.askPrice) - parseFloat(result.bidPrice)).toFixed(8);
           const midPrice = (
             (parseFloat(result.askPrice) + parseFloat(result.bidPrice)) /
             2
-          ).toFixed(8)
+          ).toFixed(8);
           summaryText =
             `${result.symbol}\n` +
             `Bid: ${result.bidPrice} @ ${result.bidQty}\n` +
             `Ask: ${result.askPrice} @ ${result.askQty}\n` +
-            `Spread: ${spread} | Mid: ${midPrice}`
+            `Spread: ${spread} | Mid: ${midPrice}`;
         }
 
         return {
@@ -568,12 +568,12 @@ export function registerMarketTools(server: McpServer) {
                 `Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 
   // binance_us_rolling_window - Get rolling window stats
   server.tool(
@@ -603,35 +603,35 @@ export function registerMarketTools(server: McpServer) {
               { type: "text", text: "Error: Either 'symbol' or 'symbols' must be provided." },
             ],
             isError: true,
-          }
+          };
         }
         if (symbol && symbols) {
           return {
             content: [{ type: "text", text: "Error: Cannot specify both 'symbol' and 'symbols'." }],
             isError: true,
-          }
+          };
         }
 
-        const params: Record<string, any> = {}
-        if (symbol) params.symbol = symbol
-        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()))
-        if (windowSize) params.windowSize = windowSize
-        if (type) params.type = type
+        const params: Record<string, any> = {};
+        if (symbol) params.symbol = symbol;
+        if (symbols?.length) params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
+        if (windowSize) params.windowSize = windowSize;
+        if (type) params.type = type;
 
-        const result = await binanceUsRequest("GET", "/api/v3/ticker", params, false)
+        const result = await binanceUsRequest("GET", "/api/v3/ticker", params, false);
 
-        const isArray = Array.isArray(result)
-        const windowText = windowSize || "1d"
-        let summaryText: string
+        const isArray = Array.isArray(result);
+        const windowText = windowSize || "1d";
+        let summaryText: string;
 
         if (isArray) {
-          summaryText = `Window: ${windowText}\nTotal symbols: ${result.length}`
+          summaryText = `Window: ${windowText}\nTotal symbols: ${result.length}`;
         } else {
           summaryText =
             `${result.symbol} (${windowText})\n` +
             `Price: ${result.lastPrice} (${parseFloat(result.priceChangePercent) >= 0 ? "+" : ""}${result.priceChangePercent}%)\n` +
             `High: ${result.highPrice} | Low: ${result.lowPrice}\n` +
-            `Volume: ${result.volume} | Trades: ${result.count}`
+            `Volume: ${result.volume} | Trades: ${result.count}`;
         }
 
         return {
@@ -645,10 +645,10 @@ export function registerMarketTools(server: McpServer) {
                 `Response:\n${JSON.stringify(result, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        return formatError(error)
+        return formatError(error);
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-crypto-loans/flexibleLoanAdjustLTV.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanAdjustLTV(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceCryptoLoanFlexibleLoanAdjustLTV(server: McpServer
     },
     async ({ loanCoin, collateralCoin, adjustmentAmount, direction }) => {
       try {
-        const params: any = { loanCoin, collateralCoin, adjustmentAmount, direction }
+        const params: any = { loanCoin, collateralCoin, adjustmentAmount, direction };
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanAdjustLtv(params)
-        const data = await response.data()
+        const response = await cryptoLoanClient.restAPI.flexibleLoanAdjustLtv(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -31,15 +31,15 @@ export function registerBinanceCryptoLoanFlexibleLoanAdjustLTV(server: McpServer
               text: `Flexible loan LTV adjusted successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to adjust flexible loan LTV: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

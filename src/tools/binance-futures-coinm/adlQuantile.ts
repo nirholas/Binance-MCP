@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/adlQuantile.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMADLQuantile(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceFuturesCOINMADLQuantile(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await deliveryClient.adlQuantile(params)
+        const data = await deliveryClient.adlQuantile(params);
 
         return {
           content: [
@@ -31,9 +31,9 @@ export function registerBinanceFuturesCOINMADLQuantile(server: McpServer) {
               text: `Retrieved COIN-M Futures ADL quantile${symbol ? ` for ${symbol}` : " for all positions"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -43,8 +43,8 @@ export function registerBinanceFuturesCOINMADLQuantile(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

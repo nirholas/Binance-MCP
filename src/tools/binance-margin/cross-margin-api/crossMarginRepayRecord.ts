@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginRepayRecord.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginRepayRecord(server: McpServer) {
   server.tool(
@@ -32,7 +32,7 @@ export function registerBinanceCrossMarginRepayRecord(server: McpServer) {
           ...(params.size && { size: params.size }),
           ...(params.archived !== undefined && { archived: params.archived }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -41,15 +41,15 @@ export function registerBinanceCrossMarginRepayRecord(server: McpServer) {
               text: `Repay Records: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to query repay records: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

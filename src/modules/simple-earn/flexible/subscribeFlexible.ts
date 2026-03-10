@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/simple-earn/flexible/subscribeFlexible.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { simpleEarnClient } from "../../../config/binanceClient.js"
+import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
   server.tool(
@@ -36,9 +36,9 @@ export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),
           ...(params.sourceAccount && { sourceAccount: params.sourceAccount }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -47,9 +47,9 @@ export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
               text: `✅ Flexible Product Subscription Successful!\n\nProduct ID: ${params.productId}\nAmount: ${params.amount}\nPurchase ID: ${data.purchaseId || "N/A"}\n\n💡 Your funds will start earning rewards within 24 hours.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -59,8 +59,8 @@ export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

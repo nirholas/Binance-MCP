@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/c2c/C2C/getAds.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { c2cClient } from "../../../config/binanceClient.js"
+import { c2cClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceC2CGetAds(server: McpServer) {
   server.tool(
@@ -32,9 +32,9 @@ export function registerBinanceC2CGetAds(server: McpServer) {
           ...(params.page && { page: params.page }),
           ...(params.rows && { rows: params.rows }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -43,9 +43,9 @@ export function registerBinanceC2CGetAds(server: McpServer) {
               text: `📋 C2C Advertisements\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -55,8 +55,8 @@ export function registerBinanceC2CGetAds(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

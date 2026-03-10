@@ -1,9 +1,9 @@
 // src/tools/binance-mining/mining-api/hashrateResaleRequest.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { miningClient } from "../../../config/binanceClient.js"
+import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceHashRateResaleRequest(server: McpServer) {
   server.tool(
@@ -35,9 +35,9 @@ export function registerBinanceHashRateResaleRequest(server: McpServer) {
           toPoolUser: params.toPoolUser,
           hashRate: params.hashRate,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -48,9 +48,9 @@ export function registerBinanceHashRateResaleRequest(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -60,8 +60,8 @@ export function registerBinanceHashRateResaleRequest(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-vip-loan/trade-api/vipLoanRenew.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { vipLoanClient } from "../../../config/binanceClient.js"
+import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceVipLoanRenew(server: McpServer) {
   server.tool(
@@ -26,8 +26,8 @@ export function registerBinanceVipLoanRenew(server: McpServer) {
           orderId: params.orderId,
           loanTerm: params.loanTerm,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -36,9 +36,9 @@ export function registerBinanceVipLoanRenew(server: McpServer) {
               text: `Successfully renew an existing VIP loan. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -48,8 +48,8 @@ export function registerBinanceVipLoanRenew(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

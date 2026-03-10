@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-margin/margin-order-api/marginNewOco.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginNewOco(server: McpServer) {
   server.tool(
@@ -75,9 +75,9 @@ export function registerBinanceMarginNewOco(server: McpServer) {
             autoRepayAtCancel: params.autoRepayAtCancel,
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -86,15 +86,15 @@ export function registerBinanceMarginNewOco(server: McpServer) {
               text: `Margin OCO order placed successfully: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to place margin OCO order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

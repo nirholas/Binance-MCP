@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getPlanList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetPlanList(server: McpServer) {
   server.tool(
@@ -14,11 +14,11 @@ export function registerBinanceAutoInvestGetPlanList(server: McpServer) {
     },
     async ({ planType }) => {
       try {
-        const params: any = {}
-        if (planType) params.planType = planType
+        const params: any = {};
+        if (planType) params.planType = planType;
 
-        const response = await autoInvestClient.restAPI.getListOfPlans(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.getListOfPlans(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceAutoInvestGetPlanList(server: McpServer) {
               text: `Plan list retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get plan list: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

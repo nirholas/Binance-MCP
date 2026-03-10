@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/copy-trading/FutureCopyTrading-api/getCopyOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { copyTradingClient } from "../../../config/binanceClient.js"
+import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetCopyOrders(server: McpServer) {
   server.tool(
@@ -30,9 +30,9 @@ export function registerBinanceCopyTradingGetCopyOrders(server: McpServer) {
           ...(params.pageNumber && { pageNumber: params.pageNumber }),
           ...(params.pageSize && { pageSize: params.pageSize }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -41,9 +41,9 @@ export function registerBinanceCopyTradingGetCopyOrders(server: McpServer) {
               text: `📋 Copy Trading Orders\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -53,8 +53,8 @@ export function registerBinanceCopyTradingGetCopyOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

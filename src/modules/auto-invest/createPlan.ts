@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/createPlan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestCreatePlan(server: McpServer) {
   server.tool(
@@ -55,9 +55,9 @@ export function registerAutoInvestCreatePlan(server: McpServer) {
             flexibleAllowedToUse: params.flexibleAllowedToUse,
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -66,9 +66,9 @@ export function registerAutoInvestCreatePlan(server: McpServer) {
               text: `✅ Auto-invest plan created!\n\nPlan ID: ${data.planId}\nNext Execution: ${data.nextExecutionDateTime || "Scheduled"}\n\nYour recurring investment plan is now active.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -78,8 +78,8 @@ export function registerAutoInvestCreatePlan(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

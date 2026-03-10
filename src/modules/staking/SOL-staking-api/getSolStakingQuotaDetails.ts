@@ -1,9 +1,9 @@
 // src/tools/binance-staking/SOL-staking-api/getSolStakingQuotaDetails.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { stakingClient } from "../../../config/binanceClient.js"
+import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSolStakingQuotaDetails(server: McpServer) {
   server.tool(
@@ -16,9 +16,9 @@ export function registerBinanceGetSolStakingQuotaDetails(server: McpServer) {
       try {
         const response = await stakingClient.restAPI.getSolStakingQuotaDetails({
           ...(params.recvWindow !== undefined && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -27,9 +27,9 @@ export function registerBinanceGetSolStakingQuotaDetails(server: McpServer) {
               text: `Successfully retrieved current SOL staking quota. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -39,8 +39,8 @@ export function registerBinanceGetSolStakingQuotaDetails(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

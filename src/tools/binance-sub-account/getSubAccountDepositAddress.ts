@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/getSubAccountDepositAddress.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetDepositAddress(server: McpServer) {
   server.tool(
@@ -17,11 +17,11 @@ export function registerBinanceSubAccountGetDepositAddress(server: McpServer) {
     },
     async ({ email, coin, network, recvWindow }) => {
       try {
-        const params: any = { email, coin }
-        if (network !== undefined) params.network = network
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { email, coin };
+        if (network !== undefined) params.network = network;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.getSubAccountDepositAddress(params)
+        const data = await subAccountApiClient.getSubAccountDepositAddress(params);
 
         return {
           content: [
@@ -30,17 +30,17 @@ export function registerBinanceSubAccountGetDepositAddress(server: McpServer) {
               text: `Retrieved deposit address for ${coin} on ${email}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get sub-account deposit address: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getTargetAssetROI.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetTargetAssetROI(server: McpServer) {
   server.tool(
@@ -17,10 +17,10 @@ export function registerBinanceAutoInvestGetTargetAssetROI(server: McpServer) {
     },
     async ({ targetAsset, hisRoiType }) => {
       try {
-        const params: any = { targetAsset, hisRoiType }
+        const params: any = { targetAsset, hisRoiType };
 
-        const response = await autoInvestClient.restAPI.getTargetAssetRoiData(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.getTargetAssetRoiData(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceAutoInvestGetTargetAssetROI(server: McpServer) {
               text: `Target asset ROI data retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get target asset ROI: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

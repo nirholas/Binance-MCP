@@ -1,10 +1,10 @@
-import type { Side } from "@binance/connector-typescript"
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { Side } from "@binance/connector-typescript";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { OrderType } from "@binance/connector-typescript"
-import { z } from "zod"
+import { OrderType } from "@binance/connector-typescript";
+import { z } from "zod";
 
-import { spotClient } from "../config/client.js"
+import { spotClient } from "../config/client.js";
 
 export function registerBinanceSpotPlaceOrder(server: McpServer) {
   server.tool(
@@ -29,7 +29,7 @@ export function registerBinanceSpotPlaceOrder(server: McpServer) {
         const result = await spotClient.newOrder(symbol, side as Side, OrderType.MARKET, {
           quantity,
           quoteOrderQty,
-        })
+        });
 
         return {
           content: [
@@ -38,15 +38,15 @@ export function registerBinanceSpotPlaceOrder(server: McpServer) {
               text: `Place a new spot TWAP order with Algo service successfully. result: ${JSON.stringify(result)}}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Server failed: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

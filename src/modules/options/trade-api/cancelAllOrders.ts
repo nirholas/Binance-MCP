@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/trade-api/cancelAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCancelAllOrders(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerOptionsCancelAllOrders(server: McpServer) {
         const response = await optionsClient.restAPI.cancelAllOpenOrders({
           symbol: params.symbol,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerOptionsCancelAllOrders(server: McpServer) {
               text: `✅ All open orders cancelled for ${params.symbol}\n\nResponse: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerOptionsCancelAllOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

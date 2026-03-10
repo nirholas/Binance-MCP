@@ -1,9 +1,9 @@
 // src/tools/subaccount/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Sub-account related tools for Binance.US
@@ -33,14 +33,14 @@ export function registerSubaccountTools(server: McpServer) {
     },
     async ({ email, status, page, limit, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (email !== undefined) params.email = email
-        if (status !== undefined) params.status = status
-        if (page !== undefined) params.page = page
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (email !== undefined) params.email = email;
+        if (status !== undefined) params.status = status;
+        if (page !== undefined) params.page = page;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v3/sub-account/list", params)
+        const data = await makeSignedRequest("GET", "/sapi/v3/sub-account/list", params);
 
         return {
           content: [
@@ -49,17 +49,17 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Sub-accounts:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account list: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_subaccount_transfer_history
@@ -78,15 +78,19 @@ export function registerSubaccountTools(server: McpServer) {
     },
     async ({ email, startTime, endTime, page, limit, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (email !== undefined) params.email = email
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (page !== undefined) params.page = page
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (email !== undefined) params.email = email;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (page !== undefined) params.page = page;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v3/sub-account/transfer/history", params)
+        const data = await makeSignedRequest(
+          "GET",
+          "/sapi/v3/sub-account/transfer/history",
+          params,
+        );
 
         return {
           content: [
@@ -95,17 +99,17 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Sub-account Transfer History:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get transfer history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_subaccount_transfer
@@ -128,10 +132,10 @@ export function registerSubaccountTools(server: McpServer) {
           toEmail,
           asset,
           amount,
-        }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("POST", "/sapi/v3/sub-account/transfer", params)
+        const data = await makeSignedRequest("POST", "/sapi/v3/sub-account/transfer", params);
 
         return {
           content: [
@@ -140,17 +144,17 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Transfer completed successfully!\nTransaction ID: ${data.txnId}\nFrom: ${fromEmail}\nTo: ${toEmail}\nAsset: ${asset}\nAmount: ${amount}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to execute transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_subaccount_assets
@@ -165,17 +169,17 @@ export function registerSubaccountTools(server: McpServer) {
     },
     async ({ email, recvWindow }) => {
       try {
-        const params: Record<string, any> = { email }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { email };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v3/sub-account/assets", params)
+        const data = await makeSignedRequest("GET", "/sapi/v3/sub-account/assets", params);
 
         // Filter to show only non-zero balances
         const nonZeroBalances =
           data.balances?.filter(
             (b: { free: string | number; locked: string | number }) =>
               parseFloat(String(b.free)) > 0 || parseFloat(String(b.locked)) > 0,
-          ) || []
+          ) || [];
 
         return {
           content: [
@@ -184,17 +188,17 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Sub-account Assets for ${email}:\n\nNon-zero balances:\n${JSON.stringify(nonZeroBalances, null, 2)}\n\nFull response:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account assets: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_subaccount_summary
@@ -211,13 +215,13 @@ export function registerSubaccountTools(server: McpServer) {
     },
     async ({ email, page, size, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (email !== undefined) params.email = email
-        if (page !== undefined) params.page = page
-        if (size !== undefined) params.size = size
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (email !== undefined) params.email = email;
+        if (page !== undefined) params.page = page;
+        if (size !== undefined) params.size = size;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/sub-account/spotSummary", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/sub-account/spotSummary", params);
 
         return {
           content: [
@@ -226,17 +230,17 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Sub-account Summary:\nTotal Accounts: ${data.totalCount}\nMaster Account Total Asset (USD): ${data.masterAccountTotalAsset}\n\nSub-account Details:\n${JSON.stringify(data.spotSubUserAssetBtcVoList, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account summary: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_subaccount_status
@@ -251,11 +255,11 @@ export function registerSubaccountTools(server: McpServer) {
     },
     async ({ email, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (email !== undefined) params.email = email
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (email !== undefined) params.email = email;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/sub-account/status", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/sub-account/status", params);
 
         return {
           content: [
@@ -264,15 +268,15 @@ export function registerSubaccountTools(server: McpServer) {
               text: `Sub-account Status:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get sub-account status: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

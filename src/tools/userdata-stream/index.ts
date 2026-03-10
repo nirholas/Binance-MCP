@@ -2,11 +2,11 @@
 // User Data Stream management for real-time account updates
 // These endpoints manage listen keys for WebSocket user data streams
 
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { BINANCE_US_CONFIG, makeSignedRequest } from "../../config/binanceUsClient.js"
+import { BINANCE_US_CONFIG, makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register User Data Stream tools for Binance.US
@@ -52,7 +52,7 @@ This endpoint requires API key but does NOT require signature.`,
       try {
         // This endpoint only requires API key, not signature
         // But we use makeSignedRequest since it adds the API key header
-        const response = await makeSignedRequest("POST", "/api/v3/userDataStream", {})
+        const response = await makeSignedRequest("POST", "/api/v3/userDataStream", {});
 
         return {
           content: [
@@ -72,17 +72,17 @@ WebSocket URL: ${BINANCE_US_CONFIG.WS_URL}/ws/${response.listenKey}
 Response: ${JSON.stringify(response, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // PUT /api/v3/userDataStream - Keep-alive Listen Key
@@ -102,7 +102,7 @@ This endpoint requires API key but does NOT require signature.`,
     },
     async ({ listenKey }) => {
       try {
-        await makeSignedRequest("PUT", "/api/v3/userDataStream", { listenKey })
+        await makeSignedRequest("PUT", "/api/v3/userDataStream", { listenKey });
 
         return {
           content: [
@@ -116,17 +116,17 @@ New expiration: 60 minutes from now
 Remember to call this again in 30 minutes to maintain the connection.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to extend listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // DELETE /api/v3/userDataStream - Close Listen Key
@@ -144,7 +144,7 @@ This endpoint requires API key but does NOT require signature.`,
     },
     async ({ listenKey }) => {
       try {
-        await makeSignedRequest("DELETE", "/api/v3/userDataStream", { listenKey })
+        await makeSignedRequest("DELETE", "/api/v3/userDataStream", { listenKey });
 
         return {
           content: [
@@ -158,17 +158,17 @@ Listen Key ${listenKey} is no longer valid.
 To receive real-time updates again, create a new listen key.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to close listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================================
   // Informational tool about WebSocket streams
@@ -224,7 +224,7 @@ Returns details about:
           maxStreamsPerConnection: 1024,
           messageLimit: "5 messages per second per connection",
         },
-      }
+      };
 
       return {
         content: [
@@ -233,7 +233,7 @@ Returns details about:
             text: `Binance.US WebSocket Information:\n\n${JSON.stringify(info, null, 2)}`,
           },
         ],
-      }
+      };
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-sub-account/universalTransfer.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { subAccountApiClient } from "../../config/binanceClient.js"
+import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
   server.tool(
@@ -39,13 +39,13 @@ export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
       recvWindow,
     }) => {
       try {
-        const params: any = { fromAccountType, toAccountType, asset, amount }
-        if (fromEmail !== undefined) params.fromEmail = fromEmail
-        if (toEmail !== undefined) params.toEmail = toEmail
-        if (symbol !== undefined) params.symbol = symbol
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { fromAccountType, toAccountType, asset, amount };
+        if (fromEmail !== undefined) params.fromEmail = fromEmail;
+        if (toEmail !== undefined) params.toEmail = toEmail;
+        if (symbol !== undefined) params.symbol = symbol;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await subAccountApiClient.subAccountUniversalTransfer(params)
+        const data = await subAccountApiClient.subAccountUniversalTransfer(params);
 
         return {
           content: [
@@ -54,17 +54,17 @@ export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
               text: `Universal transfer completed: ${amount} ${asset}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to execute universal transfer: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

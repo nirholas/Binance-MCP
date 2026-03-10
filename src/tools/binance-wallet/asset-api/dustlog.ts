@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/asset-api/dustlog.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDustlog(server: McpServer) {
   server.tool(
@@ -16,13 +16,13 @@ export function registerBinanceWalletDustlog(server: McpServer) {
     },
     async ({ startTime, endTime, recvWindow }) => {
       try {
-        const params: any = {}
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = {};
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.dustlog(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.dustlog(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -31,15 +31,15 @@ export function registerBinanceWalletDustlog(server: McpServer) {
               text: `Retrieved dust log. Total transfers: ${data.total || 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve dust log: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,8 +1,8 @@
 // src/tools/trade/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { registerBinanceUsOcoTools } from "./oco.js"
-import { registerBinanceUsOrderTools } from "./orders.js"
+import { registerBinanceUsOcoTools } from "./oco.js";
+import { registerBinanceUsOrderTools } from "./orders.js";
 
 /**
  * Register all Binance.US trading tools
@@ -25,13 +25,13 @@ import { registerBinanceUsOrderTools } from "./orders.js"
  * - binance_us_all_oco_orders: Get OCO order history
  */
 export function registerBinanceUsTradeTools(server: McpServer) {
-  registerBinanceUsOrderTools(server)
-  registerBinanceUsOcoTools(server)
+  registerBinanceUsOrderTools(server);
+  registerBinanceUsOcoTools(server);
 }
 
 // Re-export individual registration functions for granular control
-export { registerBinanceUsOrderTools } from "./orders.js"
-export { registerBinanceUsOcoTools } from "./oco.js"
+export { registerBinanceUsOrderTools } from "./orders.js";
+export { registerBinanceUsOcoTools } from "./oco.js";
 
 // Re-export individual tool registration functions
 export {
@@ -43,7 +43,7 @@ export {
   registerBinanceUsCancelAllOpenOrders,
   registerBinanceUsOpenOrders,
   registerBinanceUsAllOrders,
-} from "./orders.js"
+} from "./orders.js";
 
 export {
   registerBinanceUsNewOco,
@@ -51,4 +51,4 @@ export {
   registerBinanceUsCancelOco,
   registerBinanceUsOpenOco,
   registerBinanceUsAllOcoOrders,
-} from "./oco.js"
+} from "./oco.js";

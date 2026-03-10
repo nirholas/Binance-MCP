@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/positionMargin.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMPositionMargin(server: McpServer) {
   server.tool(
@@ -20,10 +20,10 @@ export function registerBinanceFuturesCOINMPositionMargin(server: McpServer) {
     },
     async ({ symbol, positionSide, amount, type }) => {
       try {
-        const params: any = { symbol, amount, type }
-        if (positionSide) params.positionSide = positionSide
+        const params: any = { symbol, amount, type };
+        if (positionSide) params.positionSide = positionSide;
 
-        const data = await deliveryClient.positionMargin(params)
+        const data = await deliveryClient.positionMargin(params);
 
         return {
           content: [
@@ -32,9 +32,9 @@ export function registerBinanceFuturesCOINMPositionMargin(server: McpServer) {
               text: `COIN-M Futures position margin modified for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -44,8 +44,8 @@ export function registerBinanceFuturesCOINMPositionMargin(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

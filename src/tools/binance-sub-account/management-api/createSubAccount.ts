@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-sub-account/management-api/createSubAccount.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreate(server: McpServer) {
   server.tool(
@@ -28,9 +28,9 @@ export function registerBinanceSubAccountCreate(server: McpServer) {
         const response = await spotClient.restAPI.createVirtualSubAccount({
           subAccountString: params.subAccountString,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceSubAccountCreate(server: McpServer) {
               text: `✅ Sub-account created successfully!\n\nEmail: ${data.email}\n\n📝 Note: The sub-account email is auto-generated. Use it for API operations and transfers.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to create sub-account: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

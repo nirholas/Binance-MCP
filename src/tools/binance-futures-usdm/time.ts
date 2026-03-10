@@ -1,7 +1,7 @@
 // src/tools/binance-futures-usdm/time.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTime(server: McpServer) {
   server.tool(
@@ -10,7 +10,7 @@ export function registerBinanceFuturesUSDMTime(server: McpServer) {
     {},
     async () => {
       try {
-        const data = await futuresClient.time()
+        const data = await futuresClient.time();
 
         return {
           content: [
@@ -19,17 +19,17 @@ export function registerBinanceFuturesUSDMTime(server: McpServer) {
               text: `USD-M Futures server time: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to get USD-M Futures server time: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/portfolio-margin/account/getMaxWithdraw.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { portfolioMarginClient } from "../../../config/binanceClient.js"
+import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetMaxWithdraw(server: McpServer) {
   server.tool(
@@ -24,9 +24,9 @@ export function registerPortfolioMarginGetMaxWithdraw(server: McpServer) {
         const response = await portfolioMarginClient.restAPI.marginMaxWithdraw({
           asset: params.asset,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerPortfolioMarginGetMaxWithdraw(server: McpServer) {
               text: `✅ Portfolio Margin Max Withdraw\n\nAsset: ${params.asset}\nMax Withdraw Amount: ${data.amount}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerPortfolioMarginGetMaxWithdraw(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

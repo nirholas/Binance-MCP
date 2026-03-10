@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/userdatastream-api/createListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCreateListenKey(server: McpServer) {
   server.tool(
@@ -22,9 +22,9 @@ export function registerBinanceFuturesCreateListenKey(server: McpServer) {
       try {
         const response = await futuresClient.restAPI.createListenKey({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -33,15 +33,15 @@ export function registerBinanceFuturesCreateListenKey(server: McpServer) {
               text: `✅ Listen Key Created Successfully!\n\nListen Key: ${data.listenKey}\n\n⚠️ Important:\n- Valid for 60 minutes\n- Use keepAlive endpoint to extend validity\n- Use this key to connect to futures websocket stream\n\nWebSocket URL: wss://fstream.binance.com/ws/${data.listenKey}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to create listen key: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

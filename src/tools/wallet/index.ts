@@ -1,9 +1,9 @@
 // src/tools/wallet/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { makeSignedRequest } from "../../config/binanceUsClient.js"
+import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Wallet-related tools for Binance.US
@@ -29,10 +29,10 @@ export function registerWalletTools(server: McpServer) {
     },
     async ({ recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/capital/config/getall", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/capital/config/getall", params);
 
         return {
           content: [
@@ -41,17 +41,17 @@ export function registerWalletTools(server: McpServer) {
               text: `Asset Configuration:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get asset config: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_withdraw_crypto
@@ -83,12 +83,12 @@ export function registerWalletTools(server: McpServer) {
           network,
           address,
           amount,
-        }
-        if (addressTag !== undefined) params.addressTag = addressTag
-        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (addressTag !== undefined) params.addressTag = addressTag;
+        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("POST", "/sapi/v1/capital/withdraw/apply", params)
+        const data = await makeSignedRequest("POST", "/sapi/v1/capital/withdraw/apply", params);
 
         return {
           content: [
@@ -97,17 +97,17 @@ export function registerWalletTools(server: McpServer) {
               text: `Withdrawal request submitted successfully!\nWithdrawal ID: ${data.id}\nCoin: ${coin}\nAmount: ${amount}\nNetwork: ${network}\nAddress: ${address}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to submit withdrawal: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_withdraw_fiat
@@ -133,10 +133,10 @@ export function registerWalletTools(server: McpServer) {
           paymentAccount,
           amount,
           fiatCurrency: fiatCurrency || "USD",
-        }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("POST", "/sapi/v1/fiatpayment/withdraw/apply", params)
+        const data = await makeSignedRequest("POST", "/sapi/v1/fiatpayment/withdraw/apply", params);
 
         return {
           content: [
@@ -145,17 +145,17 @@ export function registerWalletTools(server: McpServer) {
               text: `Fiat withdrawal submitted!\nOrder ID: ${data.orderId}\nChannel: ${data.channelCode}\nAmount: ${data.amount} ${data.currencyCode}\nStatus: ${data.orderStatus}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to submit fiat withdrawal: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_withdraw_history
@@ -181,17 +181,17 @@ export function registerWalletTools(server: McpServer) {
     },
     async ({ coin, withdrawOrderId, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (coin !== undefined) params.coin = coin
-        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId
-        if (status !== undefined) params.status = status
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (offset !== undefined) params.offset = offset
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (coin !== undefined) params.coin = coin;
+        if (withdrawOrderId !== undefined) params.withdrawOrderId = withdrawOrderId;
+        if (status !== undefined) params.status = status;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (offset !== undefined) params.offset = offset;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/capital/withdraw/history", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/capital/withdraw/history", params);
 
         return {
           content: [
@@ -200,17 +200,17 @@ export function registerWalletTools(server: McpServer) {
               text: `Withdrawal History:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get withdrawal history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_deposit_history
@@ -233,16 +233,16 @@ export function registerWalletTools(server: McpServer) {
     },
     async ({ coin, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {
-        const params: Record<string, any> = {}
-        if (coin !== undefined) params.coin = coin
-        if (status !== undefined) params.status = status
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (offset !== undefined) params.offset = offset
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = {};
+        if (coin !== undefined) params.coin = coin;
+        if (status !== undefined) params.status = status;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (offset !== undefined) params.offset = offset;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/capital/deposit/hisrec", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/capital/deposit/hisrec", params);
 
         return {
           content: [
@@ -251,17 +251,17 @@ export function registerWalletTools(server: McpServer) {
               text: `Deposit History:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get deposit history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 
   // =====================================================
   // binance_us_deposit_address
@@ -280,11 +280,11 @@ export function registerWalletTools(server: McpServer) {
     },
     async ({ coin, network, recvWindow }) => {
       try {
-        const params: Record<string, any> = { coin }
-        if (network !== undefined) params.network = network
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { coin };
+        if (network !== undefined) params.network = network;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await makeSignedRequest("GET", "/sapi/v1/capital/deposit/address", params)
+        const data = await makeSignedRequest("GET", "/sapi/v1/capital/deposit/address", params);
 
         return {
           content: [
@@ -293,15 +293,15 @@ export function registerWalletTools(server: McpServer) {
               text: `Deposit Address for ${coin}:\nAddress: ${data.address}\nTag/Memo: ${data.tag || "N/A"}\nURL: ${data.url || "N/A"}\n\n⚠️ Only send ${coin} to this address. Sending other assets may result in permanent loss.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get deposit address: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

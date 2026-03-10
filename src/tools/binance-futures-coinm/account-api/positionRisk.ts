@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/account-api/positionRisk.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPositionRisk(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerBinanceDeliveryPositionRisk(server: McpServer) {
           ...(params.marginAsset && { marginAsset: params.marginAsset }),
           ...(params.pair && { pair: params.pair }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,15 +37,15 @@ export function registerBinanceDeliveryPositionRisk(server: McpServer) {
               text: `📊 COIN-M Position Risk\n\nPositions: ${Array.isArray(data) ? data.length : 0}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get position risk: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

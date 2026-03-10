@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/trade-api/batchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryBatchOrders(server: McpServer) {
   server.tool(
@@ -22,17 +22,17 @@ export function registerBinanceDeliveryBatchOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const orders = JSON.parse(params.batchOrders)
+        const orders = JSON.parse(params.batchOrders);
 
         if (!Array.isArray(orders) || orders.length === 0 || orders.length > 5) {
           return {
             content: [{ type: "text", text: "Error: batchOrders must be an array of 1-5 orders" }],
             isError: true,
-          }
+          };
         }
 
-        const response = await deliveryClient.restAPI.placeMultipleOrders({ batchOrders: orders })
-        const data = await response.data()
+        const response = await deliveryClient.restAPI.placeMultipleOrders({ batchOrders: orders });
+        const data = await response.data();
 
         return {
           content: [
@@ -41,15 +41,15 @@ export function registerBinanceDeliveryBatchOrders(server: McpServer) {
               text: `✅ Batch orders placed!\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to place batch orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

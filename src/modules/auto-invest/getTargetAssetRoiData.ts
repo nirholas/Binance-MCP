@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getTargetAssetRoiData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetTargetAssetRoiData(server: McpServer) {
   server.tool(
@@ -28,25 +28,25 @@ export function registerAutoInvestGetTargetAssetRoiData(server: McpServer) {
           targetAsset: params.targetAsset,
           hisRoiType: params.hisRoiType,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest ROI Data - ${params.targetAsset}\n\n`
-        result += `Period: ${params.hisRoiType}\n\n`
+        let result = `✅ Auto-Invest ROI Data - ${params.targetAsset}\n\n`;
+        result += `Period: ${params.hisRoiType}\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
           data.forEach((item: any) => {
-            result += `Date: ${item.date}\n`
-            result += `  Simulated ROI: ${item.simulatedRoi}%\n\n`
-          })
+            result += `Date: ${item.date}\n`;
+            result += `  Simulated ROI: ${item.simulatedRoi}%\n\n`;
+          });
         } else if (data.data && Array.isArray(data.data)) {
           data.data.forEach((item: any) => {
-            result += `Date: ${item.date}\n`
-            result += `  Simulated ROI: ${item.simulatedRoi}%\n\n`
-          })
+            result += `Date: ${item.date}\n`;
+            result += `  Simulated ROI: ${item.simulatedRoi}%\n\n`;
+          });
         } else {
-          result += `ROI Data: ${JSON.stringify(data)}`
+          result += `ROI Data: ${JSON.stringify(data)}`;
         }
 
         return {
@@ -56,9 +56,9 @@ export function registerAutoInvestGetTargetAssetRoiData(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -68,8 +68,8 @@ export function registerAutoInvestGetTargetAssetRoiData(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

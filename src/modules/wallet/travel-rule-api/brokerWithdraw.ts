@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/travel-rule-api/brokerWithdraw.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletBrokerWithdraw(server: McpServer) {
   server.tool(
@@ -47,14 +47,14 @@ export function registerBinanceWalletBrokerWithdraw(server: McpServer) {
           questionnaire,
           originatorPii,
           signature,
-        }
-        if (network !== undefined) params.network = network
-        if (addressTag !== undefined) params.addressTag = addressTag
-        if (name !== undefined) params.name = name
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        };
+        if (network !== undefined) params.network = network;
+        if (addressTag !== undefined) params.addressTag = addressTag;
+        if (name !== undefined) params.name = name;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.brokerWithdraw(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.brokerWithdraw(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -63,17 +63,17 @@ export function registerBinanceWalletBrokerWithdraw(server: McpServer) {
               text: `Broker withdraw request submitted. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to submit broker withdraw request: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

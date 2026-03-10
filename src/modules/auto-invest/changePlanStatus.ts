@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/changePlanStatus.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestChangePlanStatus(server: McpServer) {
   server.tool(
@@ -28,11 +28,11 @@ export function registerAutoInvestChangePlanStatus(server: McpServer) {
           planId: params.planId,
           status: params.status,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        const statusText = params.status === "ONGOING" ? "resumed" : "paused"
+        const statusText = params.status === "ONGOING" ? "resumed" : "paused";
 
         return {
           content: [
@@ -41,9 +41,9 @@ export function registerAutoInvestChangePlanStatus(server: McpServer) {
               text: `✅ Auto-invest plan ${statusText}!\n\nPlan ID: ${params.planId}\nNew Status: ${params.status}\n\nResponse: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -53,8 +53,8 @@ export function registerAutoInvestChangePlanStatus(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

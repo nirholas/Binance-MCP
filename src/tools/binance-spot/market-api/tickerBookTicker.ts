@@ -1,9 +1,9 @@
 // src/tools/binance-spot/market-api/tickerBookTicker.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTickerBookTicker(server: McpServer) {
   server.tool(
@@ -14,17 +14,17 @@ export function registerBinanceTickerBookTicker(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.tickerBookTicker(params)
+        const response = await spotClient.restAPI.tickerBookTicker(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
-        const isArray = Array.isArray(data)
+        const isArray = Array.isArray(data);
         const responseText = isArray
           ? `Retrieved best price/quantity on the order book for all symbols. Total items: ${data.length}.`
-          : `Retrieved best price/quantity on the order book for ${symbol}.`
+          : `Retrieved best price/quantity on the order book for ${symbol}.`;
 
         return {
           content: [
@@ -33,15 +33,15 @@ export function registerBinanceTickerBookTicker(server: McpServer) {
               text: `${responseText} Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve book ticker: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

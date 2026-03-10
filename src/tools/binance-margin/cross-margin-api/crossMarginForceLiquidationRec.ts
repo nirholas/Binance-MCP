@@ -1,9 +1,9 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginForceLiquidationRec.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { marginClient } from "../../../config/binanceClient.js"
+import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginForceLiquidationRec(server: McpServer) {
   server.tool(
@@ -26,7 +26,7 @@ export function registerBinanceCrossMarginForceLiquidationRec(server: McpServer)
           ...(params.current && { current: params.current }),
           ...(params.size && { size: params.size }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
         return {
           content: [
@@ -35,15 +35,15 @@ export function registerBinanceCrossMarginForceLiquidationRec(server: McpServer)
               text: `Force Liquidation Records: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get liquidation records: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

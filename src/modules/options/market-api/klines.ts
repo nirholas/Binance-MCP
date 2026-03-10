@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/klines.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketKlines(server: McpServer) {
   server.tool(
@@ -38,27 +38,27 @@ export function registerOptionsMarketKlines(server: McpServer) {
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Klines - ${params.symbol} (${params.interval})\n\n`
+        let result = `✅ Klines - ${params.symbol} (${params.interval})\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total candles: ${data.length}\n\n`
-          result += `| Open Time | Open | High | Low | Close | Volume |\n`
-          result += `|-----------|------|------|-----|-------|--------|\n`
+          result += `Total candles: ${data.length}\n\n`;
+          result += `| Open Time | Open | High | Low | Close | Volume |\n`;
+          result += `|-----------|------|------|-----|-------|--------|\n`;
 
           data.slice(-10).forEach((kline: any) => {
-            const openTime = new Date(kline[0]).toISOString().slice(0, 16)
-            result += `| ${openTime} | ${kline[1]} | ${kline[2]} | ${kline[3]} | ${kline[4]} | ${kline[5]} |\n`
-          })
+            const openTime = new Date(kline[0]).toISOString().slice(0, 16);
+            result += `| ${openTime} | ${kline[1]} | ${kline[2]} | ${kline[3]} | ${kline[4]} | ${kline[5]} |\n`;
+          });
 
           if (data.length > 10) {
-            result += `\nShowing last 10 of ${data.length} candles`
+            result += `\nShowing last 10 of ${data.length} candles`;
           }
         } else {
-          result += `No kline data found`
+          result += `No kline data found`;
         }
 
         return {
@@ -68,9 +68,9 @@ export function registerOptionsMarketKlines(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -80,8 +80,8 @@ export function registerOptionsMarketKlines(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

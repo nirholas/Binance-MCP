@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-sub-account/deposit-api/getDepositAddress.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountDepositAddress(server: McpServer) {
   server.tool(
@@ -28,9 +28,9 @@ export function registerBinanceSubAccountDepositAddress(server: McpServer) {
           coin: params.coin,
           ...(params.network && { network: params.network }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceSubAccountDepositAddress(server: McpServer) {
               text: `Deposit Address for ${params.email}:\n\nCoin: ${params.coin}\nNetwork: ${params.network || "Default"}\nAddress: ${data.address}\n${data.tag ? `Tag/Memo: ${data.tag}` : ""}\n\n⚠️ Always verify the address before sending funds!`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get deposit address: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

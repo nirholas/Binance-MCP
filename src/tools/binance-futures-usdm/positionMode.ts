@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/positionMode.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMPositionMode(server: McpServer) {
   server.tool(
@@ -16,7 +16,7 @@ export function registerBinanceFuturesUSDMPositionMode(server: McpServer) {
       try {
         const data = await futuresClient.changePositionMode({
           dualSidePosition: dualSidePosition ? "true" : "false",
-        })
+        });
 
         return {
           content: [
@@ -25,17 +25,17 @@ export function registerBinanceFuturesUSDMPositionMode(server: McpServer) {
               text: `USD-M Futures position mode changed to ${dualSidePosition ? "Hedge Mode" : "One-way Mode"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to change USD-M Futures position mode: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

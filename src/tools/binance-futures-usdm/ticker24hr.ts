@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/ticker24hr.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTicker24hr(server: McpServer) {
   server.tool(
@@ -19,10 +19,10 @@ export function registerBinanceFuturesUSDMTicker24hr(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await futuresClient.ticker24hr(params)
+        const data = await futuresClient.ticker24hr(params);
 
         return {
           content: [
@@ -31,17 +31,17 @@ export function registerBinanceFuturesUSDMTicker24hr(server: McpServer) {
               text: `Retrieved USD-M Futures 24hr ticker${symbol ? ` for ${symbol}` : " for all symbols"}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve USD-M Futures 24hr ticker: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

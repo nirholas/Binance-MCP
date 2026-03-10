@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getHistoryList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetHistoryList(server: McpServer) {
   server.tool(
@@ -45,31 +45,31 @@ export function registerAutoInvestGetHistoryList(server: McpServer) {
           ...(params.size && { size: params.size }),
           ...(params.current && { current: params.current }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Transaction History\n\n`
+        let result = `✅ Auto-Invest Transaction History\n\n`;
 
-        const history = data.list || data.data || data
+        const history = data.list || data.data || data;
 
         if (Array.isArray(history) && history.length > 0) {
-          result += `Total transactions: ${data.total || history.length}\n\n`
+          result += `Total transactions: ${data.total || history.length}\n\n`;
           history.slice(0, 20).forEach((tx: any, index: number) => {
-            result += `**${index + 1}. Transaction ID: ${tx.id || tx.transactionId}**\n`
-            result += `  Plan ID: ${tx.planId}\n`
-            result += `  Target Asset: ${tx.targetAsset}\n`
-            result += `  Source Asset: ${tx.sourceAsset}\n`
-            result += `  Source Amount: ${tx.sourceAmount || tx.sourceAssetAmount}\n`
-            result += `  Target Amount: ${tx.targetAmount || tx.targetAssetAmount}\n`
-            result += `  Status: ${tx.status}\n`
-            result += `  Time: ${tx.transactionDateTime || new Date(tx.time).toISOString()}\n\n`
-          })
+            result += `**${index + 1}. Transaction ID: ${tx.id || tx.transactionId}**\n`;
+            result += `  Plan ID: ${tx.planId}\n`;
+            result += `  Target Asset: ${tx.targetAsset}\n`;
+            result += `  Source Asset: ${tx.sourceAsset}\n`;
+            result += `  Source Amount: ${tx.sourceAmount || tx.sourceAssetAmount}\n`;
+            result += `  Target Amount: ${tx.targetAmount || tx.targetAssetAmount}\n`;
+            result += `  Status: ${tx.status}\n`;
+            result += `  Time: ${tx.transactionDateTime || new Date(tx.time).toISOString()}\n\n`;
+          });
           if (history.length > 20) {
-            result += `... and ${history.length - 20} more transactions`
+            result += `... and ${history.length - 20} more transactions`;
           }
         } else {
-          result += `No transaction history found`
+          result += `No transaction history found`;
         }
 
         return {
@@ -79,9 +79,9 @@ export function registerAutoInvestGetHistoryList(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -91,8 +91,8 @@ export function registerAutoInvestGetHistoryList(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

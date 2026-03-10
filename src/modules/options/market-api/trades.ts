@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/trades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketTrades(server: McpServer) {
   server.tool(
@@ -30,23 +30,23 @@ export function registerOptionsMarketTrades(server: McpServer) {
         const response = await optionsClient.restAPI.trades({
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Recent Trades - ${params.symbol}\n\n`
+        let result = `✅ Recent Trades - ${params.symbol}\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total trades returned: ${data.length}\n\n`
+          result += `Total trades returned: ${data.length}\n\n`;
           data.slice(0, 20).forEach((trade: any, index: number) => {
-            const time = new Date(trade.time).toISOString()
-            result += `${index + 1}. Price: ${trade.price} | Qty: ${trade.qty} | Time: ${time}\n`
-          })
+            const time = new Date(trade.time).toISOString();
+            result += `${index + 1}. Price: ${trade.price} | Qty: ${trade.qty} | Time: ${time}\n`;
+          });
           if (data.length > 20) {
-            result += `\n... and ${data.length - 20} more trades`
+            result += `\n... and ${data.length - 20} more trades`;
           }
         } else {
-          result += `No recent trades found`
+          result += `No recent trades found`;
         }
 
         return {
@@ -56,9 +56,9 @@ export function registerOptionsMarketTrades(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -68,8 +68,8 @@ export function registerOptionsMarketTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

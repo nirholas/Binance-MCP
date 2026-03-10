@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/redeemIndexLinkedPlan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestRedeemIndexLinkedPlan(server: McpServer) {
   server.tool(
@@ -16,11 +16,11 @@ export function registerBinanceAutoInvestRedeemIndexLinkedPlan(server: McpServer
     },
     async ({ indexId, redemptionPercentage, requestId }) => {
       try {
-        const params: any = { indexId, redemptionPercentage }
-        if (requestId) params.requestId = requestId
+        const params: any = { indexId, redemptionPercentage };
+        if (requestId) params.requestId = requestId;
 
-        const response = await autoInvestClient.restAPI.indexLinkedPlanRedemption(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.indexLinkedPlanRedemption(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -29,15 +29,15 @@ export function registerBinanceAutoInvestRedeemIndexLinkedPlan(server: McpServer
               text: `Index linked plan redeemed successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to redeem index linked plan: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-nft/nft-api/getNFTWithdrawHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { nftClient } from "../../../config/binanceClient.js"
+import { nftClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetNFTWithdrawHistory(server: McpServer) {
   server.tool(
@@ -29,9 +29,9 @@ export function registerBinanceGetNFTWithdrawHistory(server: McpServer) {
           ...(params.limit && { limit: params.limit }),
           ...(params.page && { page: params.page }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -42,9 +42,9 @@ export function registerBinanceGetNFTWithdrawHistory(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -54,8 +54,8 @@ export function registerBinanceGetNFTWithdrawHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

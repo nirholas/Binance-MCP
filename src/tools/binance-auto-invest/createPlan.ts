@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/createPlan.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestCreatePlan(server: McpServer) {
   server.tool(
@@ -45,11 +45,11 @@ export function registerBinanceAutoInvestCreatePlan(server: McpServer) {
           subscriptionStartTime,
           sourceAsset,
           details,
-        }
-        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse
+        };
+        if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
 
-        const response = await autoInvestClient.restAPI.investmentPlanCreation(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.investmentPlanCreation(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -58,15 +58,15 @@ export function registerBinanceAutoInvestCreatePlan(server: McpServer) {
               text: `Investment plan created successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to create plan: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

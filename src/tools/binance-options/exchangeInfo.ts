@@ -1,9 +1,9 @@
 // src/tools/binance-options/exchangeInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsExchangeInfo(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinanceOptionsExchangeInfo(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
 
-        const data = await optionsClient.exchangeInfo(params)
+        const data = await optionsClient.exchangeInfo(params);
 
         return {
           content: [
@@ -26,15 +26,15 @@ export function registerBinanceOptionsExchangeInfo(server: McpServer) {
               text: `Exchange info retrieved successfully. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get exchange info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

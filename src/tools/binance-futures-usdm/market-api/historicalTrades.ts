@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/market-api/historicalTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesHistoricalTrades(server: McpServer) {
   server.tool(
@@ -26,8 +26,8 @@ export function registerBinanceFuturesHistoricalTrades(server: McpServer) {
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
           ...(params.fromId !== undefined && { fromId: params.fromId }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -36,15 +36,15 @@ export function registerBinanceFuturesHistoricalTrades(server: McpServer) {
               text: `Historical Futures Trades for ${params.symbol}: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get historical trades: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

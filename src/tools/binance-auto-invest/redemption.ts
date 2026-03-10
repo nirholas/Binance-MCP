@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-auto-invest/redemption.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestRedemption(server: McpServer) {
   server.tool(
@@ -30,9 +30,9 @@ export function registerBinanceAutoInvestRedemption(server: McpServer) {
           indexId: params.indexId,
           redemptionPercentage: params.redemptionPercentage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -41,9 +41,9 @@ export function registerBinanceAutoInvestRedemption(server: McpServer) {
               text: `✅ Redemption executed!\n\nRedeemed ${params.redemptionPercentage}% from index ${params.indexId}\n\nDetails:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -53,8 +53,8 @@ export function registerBinanceAutoInvestRedemption(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

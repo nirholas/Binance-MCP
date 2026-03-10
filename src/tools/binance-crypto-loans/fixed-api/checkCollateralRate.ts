@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-crypto-loans/fixed-api/checkCollateralRate.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedCollateralRate(server: McpServer) {
   server.tool(
@@ -28,9 +28,9 @@ export function registerBinanceCryptoLoansFixedCollateralRate(server: McpServer)
           collateralCoin: params.collateralCoin,
           repayAmount: params.repayAmount,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -39,15 +39,15 @@ export function registerBinanceCryptoLoansFixedCollateralRate(server: McpServer)
               text: `Collateral Repay Rate:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to check collateral rate: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

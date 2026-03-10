@@ -1,9 +1,9 @@
 // src/tools/binance-auto-invest/getIndexLinkedPlanPositionList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: McpServer) {
   server.tool(
@@ -14,10 +14,10 @@ export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: 
     },
     async ({ indexId }) => {
       try {
-        const params: any = { indexId }
+        const params: any = { indexId };
 
-        const response = await autoInvestClient.restAPI.queryIndexLinkedPlanPositionDetails(params)
-        const data = await response.data()
+        const response = await autoInvestClient.restAPI.queryIndexLinkedPlanPositionDetails(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -26,9 +26,9 @@ export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: 
               text: `Index linked plan position list retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -38,8 +38,8 @@ export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: 
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

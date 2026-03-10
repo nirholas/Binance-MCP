@@ -1,9 +1,9 @@
 // src/tools/binance-spot/market-api/getTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetTrades(server: McpServer) {
   server.tool(
@@ -15,13 +15,13 @@ export function registerBinanceGetTrades(server: McpServer) {
     },
     async ({ symbol, limit }) => {
       try {
-        const params: any = { symbol }
+        const params: any = { symbol };
 
-        if (limit !== undefined) params.limit = limit
+        if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.getTrades(params)
+        const response = await spotClient.restAPI.getTrades(params);
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -30,15 +30,15 @@ export function registerBinanceGetTrades(server: McpServer) {
               text: `Retrieved recent trades for ${symbol}. Total trades: ${data.length}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve recent trades: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

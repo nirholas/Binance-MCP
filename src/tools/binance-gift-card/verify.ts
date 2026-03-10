@@ -1,9 +1,9 @@
 // src/tools/binance-gift-card/verify.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { giftCardClient } from "../../config/binanceClient.js"
+import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardVerify(server: McpServer) {
   server.tool(
@@ -15,10 +15,10 @@ export function registerBinanceGiftCardVerify(server: McpServer) {
     },
     async ({ referenceNo, recvWindow }) => {
       try {
-        const params: Record<string, any> = { referenceNo }
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: Record<string, any> = { referenceNo };
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const data = await giftCardClient.verify(params)
+        const data = await giftCardClient.verify(params);
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceGiftCardVerify(server: McpServer) {
               text: `Gift card verification result. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to verify gift card: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

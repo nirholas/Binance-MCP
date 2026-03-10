@@ -5,15 +5,15 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/userdatastream-api/index.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { registerBinanceFuturesCloseListenKey } from "./closeListenKey.js"
-import { registerBinanceFuturesCreateListenKey } from "./createListenKey.js"
-import { registerBinanceFuturesKeepAliveListenKey } from "./keepAliveListenKey.js"
+import { registerBinanceFuturesCloseListenKey } from "./closeListenKey.js";
+import { registerBinanceFuturesCreateListenKey } from "./createListenKey.js";
+import { registerBinanceFuturesKeepAliveListenKey } from "./keepAliveListenKey.js";
 
 export function registerBinanceFuturesUserDataStreamApiTools(server: McpServer) {
   // User Data Stream (Listen Key) Management
-  registerBinanceFuturesCreateListenKey(server)
-  registerBinanceFuturesKeepAliveListenKey(server)
-  registerBinanceFuturesCloseListenKey(server)
+  registerBinanceFuturesCreateListenKey(server);
+  registerBinanceFuturesKeepAliveListenKey(server);
+  registerBinanceFuturesCloseListenKey(server);
 }

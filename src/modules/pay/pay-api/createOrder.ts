@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/pay/pay-api/createOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { payClient } from "../../../config/binanceClient.js"
+import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePayCreateOrder(server: McpServer) {
   server.tool(
@@ -36,9 +36,9 @@ export function registerBinancePayCreateOrder(server: McpServer) {
           ...(params.goodsName && { goodsName: params.goodsName }),
           ...(params.goodsDetail && { goodsDetail: params.goodsDetail }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -47,9 +47,9 @@ export function registerBinancePayCreateOrder(server: McpServer) {
               text: `✅ Binance Pay Order Created!\n\nOrder ID: ${params.orderId}\nCurrency: ${params.currency}\nAmount: ${params.totalAmount}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -59,8 +59,8 @@ export function registerBinancePayCreateOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/account-api/getIncomeAsynId.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetIncomeAsynId(server: McpServer) {
   server.tool(
@@ -24,19 +24,19 @@ export function registerOptionsGetIncomeAsynId(server: McpServer) {
         const response = await optionsClient.restAPI.incomeAsynId({
           downloadId: params.downloadId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Income Download Status\n\n`
-        result += `Download ID: ${params.downloadId}\n`
-        result += `Status: ${data.status}\n`
+        let result = `✅ Options Income Download Status\n\n`;
+        result += `Download ID: ${params.downloadId}\n`;
+        result += `Status: ${data.status}\n`;
 
         if (data.url) {
-          result += `\n**Download URL**: ${data.url}\n`
-          result += `\nNote: URL is valid for a limited time.`
+          result += `\n**Download URL**: ${data.url}\n`;
+          result += `\nNote: URL is valid for a limited time.`;
         } else if (data.status === "processing") {
-          result += `\nThe download is still being processed. Please try again in a few moments.`
+          result += `\nThe download is still being processed. Please try again in a few moments.`;
         }
 
         return {
@@ -46,9 +46,9 @@ export function registerOptionsGetIncomeAsynId(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -58,8 +58,8 @@ export function registerOptionsGetIncomeAsynId(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

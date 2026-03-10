@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-sub-account/transfer-api/futuresTransfer.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountFuturesTransfer(server: McpServer) {
   server.tool(
@@ -32,9 +32,9 @@ export function registerBinanceSubAccountFuturesTransfer(server: McpServer) {
           asset: params.asset,
           amount: params.amount,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -43,15 +43,15 @@ export function registerBinanceSubAccountFuturesTransfer(server: McpServer) {
               text: `✅ Futures internal transfer successful!\n\nFrom: ${params.fromEmail}\nTo: ${params.toEmail}\nFutures Type: ${params.futuresType === "1" ? "USD-M" : "COIN-M"}\nAsset: ${params.asset}\nAmount: ${params.amount}\n\nTransaction: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to transfer: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

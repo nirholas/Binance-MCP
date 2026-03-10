@@ -1,9 +1,9 @@
 // src/tools/binance-options/bill.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsBill(server: McpServer) {
   server.tool(
@@ -18,14 +18,14 @@ export function registerBinanceOptionsBill(server: McpServer) {
     },
     async ({ currency, recordId, startTime, endTime, limit }) => {
       try {
-        const params: any = {}
-        if (currency) params.currency = currency
-        if (recordId !== undefined) params.recordId = recordId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (currency) params.currency = currency;
+        if (recordId !== undefined) params.recordId = recordId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await optionsClient.bill(params)
+        const data = await optionsClient.bill(params);
 
         return {
           content: [
@@ -34,15 +34,15 @@ export function registerBinanceOptionsBill(server: McpServer) {
               text: `Bill history retrieved. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get bill history: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

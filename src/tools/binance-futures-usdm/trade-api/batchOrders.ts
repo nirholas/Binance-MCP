@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/batchOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 const orderSchema = z.object({
   symbol: z.string(),
@@ -32,7 +32,7 @@ const orderSchema = z.object({
   workingType: z.enum(["MARK_PRICE", "CONTRACT_PRICE"]).optional(),
   priceProtect: z.boolean().optional(),
   newClientOrderId: z.string().optional(),
-})
+});
 
 export function registerBinanceFuturesBatchOrders(server: McpServer) {
   server.tool(
@@ -52,21 +52,21 @@ export function registerBinanceFuturesBatchOrders(server: McpServer) {
         const response = await futuresClient.restAPI.placeMultipleOrders({
           batchOrders: JSON.stringify(params.batchOrders),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         const results = Array.isArray(data)
           ? data
               .map((order: any, index: number) => {
                 if (order.orderId) {
-                  return `Order ${index + 1}: ✅ ${order.symbol} ${order.side} ${order.type} - ID: ${order.orderId}`
+                  return `Order ${index + 1}: ✅ ${order.symbol} ${order.side} ${order.type} - ID: ${order.orderId}`;
                 } else {
-                  return `Order ${index + 1}: ❌ Failed - ${order.msg || "Unknown error"}`
+                  return `Order ${index + 1}: ❌ Failed - ${order.msg || "Unknown error"}`;
                 }
               })
               .join("\n")
-          : "Unexpected response format"
+          : "Unexpected response format";
 
         return {
           content: [
@@ -75,9 +75,9 @@ export function registerBinanceFuturesBatchOrders(server: McpServer) {
               text: `Batch Order Results:\n${results}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -87,8 +87,8 @@ export function registerBinanceFuturesBatchOrders(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

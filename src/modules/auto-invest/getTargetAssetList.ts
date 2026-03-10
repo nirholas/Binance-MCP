@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getTargetAssetList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetTargetAssetList(server: McpServer) {
   server.tool(
@@ -34,26 +34,26 @@ export function registerAutoInvestGetTargetAssetList(server: McpServer) {
           ...(params.size && { size: params.size }),
           ...(params.current && { current: params.current }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Target Assets\n\n`
+        let result = `✅ Auto-Invest Target Assets\n\n`;
 
         if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-          result += `Total assets: ${data.total || data.data.length}\n\n`
+          result += `Total assets: ${data.total || data.data.length}\n\n`;
           data.data.forEach((asset: any) => {
-            result += `**${asset.targetAsset}**\n`
-            result += `  ROI: ${asset.roiAndDimensionTypeList ? "Available" : "N/A"}\n`
-            result += `  Available: ${asset.available !== false}\n\n`
-          })
+            result += `**${asset.targetAsset}**\n`;
+            result += `  ROI: ${asset.roiAndDimensionTypeList ? "Available" : "N/A"}\n`;
+            result += `  Available: ${asset.available !== false}\n\n`;
+          });
         } else if (Array.isArray(data) && data.length > 0) {
           data.forEach((asset: any) => {
-            result += `**${asset.targetAsset || asset.asset}**\n`
-            result += `  Available: ${asset.available !== false}\n\n`
-          })
+            result += `**${asset.targetAsset || asset.asset}**\n`;
+            result += `  Available: ${asset.available !== false}\n\n`;
+          });
         } else {
-          result += `No target assets found`
+          result += `No target assets found`;
         }
 
         return {
@@ -63,9 +63,9 @@ export function registerAutoInvestGetTargetAssetList(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -75,8 +75,8 @@ export function registerAutoInvestGetTargetAssetList(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

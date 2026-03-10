@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/continuousKlines.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMContinuousKlines(server: McpServer) {
   server.tool(
@@ -39,12 +39,12 @@ export function registerBinanceFuturesUSDMContinuousKlines(server: McpServer) {
     },
     async ({ pair, contractType, interval, startTime, endTime, limit }) => {
       try {
-        const params: any = { pair, contractType, interval }
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = { pair, contractType, interval };
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await futuresClient.continuousKlines(params)
+        const data = await futuresClient.continuousKlines(params);
 
         return {
           content: [
@@ -53,9 +53,9 @@ export function registerBinanceFuturesUSDMContinuousKlines(server: McpServer) {
               text: `Retrieved ${data.length || 0} continuous klines for USD-M Futures ${pair} ${contractType} with ${interval} interval. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -65,8 +65,8 @@ export function registerBinanceFuturesUSDMContinuousKlines(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

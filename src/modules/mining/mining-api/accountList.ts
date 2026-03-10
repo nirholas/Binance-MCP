@@ -1,9 +1,9 @@
 // src/tools/binance-mining/mining-api/accountList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { miningClient } from "../../../config/binanceClient.js"
+import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAccountList(server: McpServer) {
   server.tool(
@@ -20,9 +20,9 @@ export function registerBinanceAccountList(server: McpServer) {
           algo: params.algo,
           userName: params.userName,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -33,9 +33,9 @@ export function registerBinanceAccountList(server: McpServer) {
               )}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -45,8 +45,8 @@ export function registerBinanceAccountList(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-futures-usdm/openInterest.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../config/binanceClient.js"
+import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMOpenInterest(server: McpServer) {
   server.tool(
@@ -14,7 +14,7 @@ export function registerBinanceFuturesUSDMOpenInterest(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const data = await futuresClient.openInterest({ symbol })
+        const data = await futuresClient.openInterest({ symbol });
 
         return {
           content: [
@@ -23,9 +23,9 @@ export function registerBinanceFuturesUSDMOpenInterest(server: McpServer) {
               text: `Retrieved USD-M Futures open interest for ${symbol}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -35,8 +35,8 @@ export function registerBinanceFuturesUSDMOpenInterest(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

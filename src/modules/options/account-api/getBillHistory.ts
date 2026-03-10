@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/account-api/getBillHistory.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetBillHistory(server: McpServer) {
   server.tool(
@@ -38,27 +38,27 @@ export function registerOptionsGetBillHistory(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Bill History\n\n`
+        let result = `✅ Options Bill History\n\n`;
 
         if (Array.isArray(data) && data.length > 0) {
-          result += `Total records: ${data.length}\n\n`
+          result += `Total records: ${data.length}\n\n`;
           data.slice(0, 20).forEach((record: any, index: number) => {
-            result += `**${index + 1}. ${record.type}**\n`
-            result += `  ID: ${record.id}\n`
-            result += `  Amount: ${record.amount} ${record.currency}\n`
-            result += `  Balance: ${record.balance}\n`
-            if (record.symbol) result += `  Symbol: ${record.symbol}\n`
-            result += `  Time: ${new Date(record.createTime).toISOString()}\n\n`
-          })
+            result += `**${index + 1}. ${record.type}**\n`;
+            result += `  ID: ${record.id}\n`;
+            result += `  Amount: ${record.amount} ${record.currency}\n`;
+            result += `  Balance: ${record.balance}\n`;
+            if (record.symbol) result += `  Symbol: ${record.symbol}\n`;
+            result += `  Time: ${new Date(record.createTime).toISOString()}\n\n`;
+          });
           if (data.length > 20) {
-            result += `... and ${data.length - 20} more records`
+            result += `... and ${data.length - 20} more records`;
           }
         } else {
-          result += `No bill history found`
+          result += `No bill history found`;
         }
 
         return {
@@ -68,9 +68,9 @@ export function registerOptionsGetBillHistory(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -80,8 +80,8 @@ export function registerOptionsGetBillHistory(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

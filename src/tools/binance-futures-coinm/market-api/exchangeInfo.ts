@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/market-api/exchangeInfo.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryExchangeInfo(server: McpServer) {
   server.tool(
@@ -16,10 +16,10 @@ export function registerBinanceDeliveryExchangeInfo(server: McpServer) {
     {},
     async () => {
       try {
-        const response = await deliveryClient.restAPI.exchangeInfo()
-        const data = await response.data()
+        const response = await deliveryClient.restAPI.exchangeInfo();
+        const data = await response.data();
 
-        const symbolCount = data.symbols?.length || 0
+        const symbolCount = data.symbols?.length || 0;
 
         return {
           content: [
@@ -28,15 +28,15 @@ export function registerBinanceDeliveryExchangeInfo(server: McpServer) {
               text: `📊 COIN-M Futures Exchange Info\n\nTimezone: ${data.timezone}\nServer Time: ${new Date(data.serverTime).toISOString()}\nTotal Symbols: ${symbolCount}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get exchange info: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

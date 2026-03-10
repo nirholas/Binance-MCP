@@ -1,9 +1,9 @@
 // src/tools/binance-options/historyOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../config/binanceClient.js"
+import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsHistoryOrders(server: McpServer) {
   server.tool(
@@ -18,13 +18,13 @@ export function registerBinanceOptionsHistoryOrders(server: McpServer) {
     },
     async ({ symbol, orderId, startTime, endTime, limit }) => {
       try {
-        const params: any = { symbol }
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
+        const params: any = { symbol };
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await optionsClient.historyOrders(params)
+        const data = await optionsClient.historyOrders(params);
 
         return {
           content: [
@@ -33,15 +33,15 @@ export function registerBinanceOptionsHistoryOrders(server: McpServer) {
               text: `Historical orders retrieved. Count: ${Array.isArray(data) ? data.length : 0}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to get history orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

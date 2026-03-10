@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/trade-api/getAllOrders.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryGetAllOrders(server: McpServer) {
   server.tool(
@@ -34,10 +34,10 @@ export function registerBinanceDeliveryGetAllOrders(server: McpServer) {
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
-        const orders = Array.isArray(data) ? data : [data]
+        const data = await response.data();
+        const orders = Array.isArray(data) ? data : [data];
 
         const summary = orders
           .slice(0, 10)
@@ -45,7 +45,7 @@ export function registerBinanceDeliveryGetAllOrders(server: McpServer) {
             (o: any) =>
               `${o.symbol}: ${o.side} ${o.type} ${o.origQty} @ ${o.price || "MARKET"} - ${o.status}`,
           )
-          .join("\n")
+          .join("\n");
 
         return {
           content: [
@@ -54,15 +54,15 @@ export function registerBinanceDeliveryGetAllOrders(server: McpServer) {
               text: `📋 All Orders for ${params.symbol} (${orders.length} total)\n\n${summary}\n\nFull data: ${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get all orders: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -1,9 +1,9 @@
 // src/tools/binance-wallet/account-api/dailyAccountSnapshot.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { walletClient } from "../../../config/binanceClient.js"
+import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDailyAccountSnapshot(server: McpServer) {
   server.tool(
@@ -18,14 +18,14 @@ export function registerBinanceWalletDailyAccountSnapshot(server: McpServer) {
     },
     async ({ type, startTime, endTime, limit, recvWindow }) => {
       try {
-        const params: any = { type }
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (limit !== undefined) params.limit = limit
-        if (recvWindow !== undefined) params.recvWindow = recvWindow
+        const params: any = { type };
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (limit !== undefined) params.limit = limit;
+        if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.dailyAccountSnapshot(params)
-        const data = await response.data()
+        const response = await walletClient.restAPI.dailyAccountSnapshot(params);
+        const data = await response.data();
 
         return {
           content: [
@@ -34,17 +34,17 @@ export function registerBinanceWalletDailyAccountSnapshot(server: McpServer) {
               text: `Retrieved daily account snapshot for ${type}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
             { type: "text", text: `Failed to retrieve daily account snapshot: ${errorMessage}` },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

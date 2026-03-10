@@ -1,9 +1,9 @@
 // src/tools/binance-spot/market-api/avgPrice.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { spotClient } from "../../../config/binanceClient.js"
+import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAvgPrice(server: McpServer) {
   server.tool(
@@ -16,9 +16,9 @@ export function registerBinanceAvgPrice(server: McpServer) {
       try {
         const response = await spotClient.restAPI.avgPrice({
           symbol: symbol,
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -27,15 +27,15 @@ export function registerBinanceAvgPrice(server: McpServer) {
               text: `Retrieved current average price for ${symbol}. Average price: ${data.price}. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to retrieve average price: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

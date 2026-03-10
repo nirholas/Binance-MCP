@@ -1,9 +1,9 @@
 // src/tools/binance-futures-coinm/userTrades.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../config/binanceClient.js"
+import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMUserTrades(server: McpServer) {
   server.tool(
@@ -20,16 +20,16 @@ export function registerBinanceFuturesCOINMUserTrades(server: McpServer) {
     },
     async ({ symbol, pair, orderId, startTime, endTime, fromId, limit }) => {
       try {
-        const params: any = {}
-        if (symbol) params.symbol = symbol
-        if (pair) params.pair = pair
-        if (orderId !== undefined) params.orderId = orderId
-        if (startTime !== undefined) params.startTime = startTime
-        if (endTime !== undefined) params.endTime = endTime
-        if (fromId !== undefined) params.fromId = fromId
-        if (limit !== undefined) params.limit = limit
+        const params: any = {};
+        if (symbol) params.symbol = symbol;
+        if (pair) params.pair = pair;
+        if (orderId !== undefined) params.orderId = orderId;
+        if (startTime !== undefined) params.startTime = startTime;
+        if (endTime !== undefined) params.endTime = endTime;
+        if (fromId !== undefined) params.fromId = fromId;
+        if (limit !== undefined) params.limit = limit;
 
-        const data = await deliveryClient.userTrades(params)
+        const data = await deliveryClient.userTrades(params);
 
         return {
           content: [
@@ -38,9 +38,9 @@ export function registerBinanceFuturesCOINMUserTrades(server: McpServer) {
               text: `Retrieved ${data.length || 0} COIN-M Futures trades. Response: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -50,8 +50,8 @@ export function registerBinanceFuturesCOINMUserTrades(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

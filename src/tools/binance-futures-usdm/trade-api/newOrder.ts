@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/trade-api/newOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesNewOrder(server: McpServer) {
   server.tool(
@@ -84,9 +84,9 @@ export function registerBinanceFuturesNewOrder(server: McpServer) {
           ...(params.newClientOrderId && { newClientOrderId: params.newClientOrderId }),
           ...(params.newOrderRespType && { newOrderRespType: params.newOrderRespType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -95,9 +95,9 @@ export function registerBinanceFuturesNewOrder(server: McpServer) {
               text: `✅ Futures order placed successfully!\n\nOrder ID: ${data.orderId}\nClient Order ID: ${data.clientOrderId}\nSymbol: ${data.symbol}\nSide: ${data.side}\nPosition Side: ${data.positionSide || "BOTH"}\nType: ${data.type}\nQuantity: ${data.origQty}\nPrice: ${data.price || "MARKET"}\nStop Price: ${data.stopPrice || "N/A"}\nStatus: ${data.status}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -107,8 +107,8 @@ export function registerBinanceFuturesNewOrder(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

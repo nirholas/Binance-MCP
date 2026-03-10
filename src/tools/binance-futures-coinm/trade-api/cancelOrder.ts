@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/trade-api/cancelOrder.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCancelOrder(server: McpServer) {
   server.tool(
@@ -29,7 +29,7 @@ export function registerBinanceDeliveryCancelOrder(server: McpServer) {
               { type: "text", text: "Error: Either orderId or origClientOrderId must be provided" },
             ],
             isError: true,
-          }
+          };
         }
 
         const response = await deliveryClient.restAPI.cancelOrder({
@@ -37,9 +37,9 @@ export function registerBinanceDeliveryCancelOrder(server: McpServer) {
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -48,15 +48,15 @@ export function registerBinanceDeliveryCancelOrder(server: McpServer) {
               text: `✅ Order cancelled!\n\nSymbol: ${data.symbol}\nOrder ID: ${data.orderId}\nStatus: ${data.status}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to cancel order: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getIndexLinkedPlanPositionDetails.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpServer) {
   server.tool(
@@ -24,31 +24,31 @@ export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpS
         const response = await autoInvestClient.restAPI.planId({
           planId: params.planId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Plan Details\n\n`
-        result += `Plan ID: ${params.planId}\n\n`
+        let result = `✅ Auto-Invest Plan Details\n\n`;
+        result += `Plan ID: ${params.planId}\n\n`;
 
         if (data) {
-          result += `**Plan Configuration**\n`
-          result += `Type: ${data.planType || "N/A"}\n`
-          result += `Status: ${data.status || "N/A"}\n`
-          result += `Source Asset: ${data.sourceAsset || "N/A"}\n`
-          result += `Subscription Amount: ${data.subscriptionAmount || "N/A"}\n`
-          result += `Cycle: ${data.subscriptionCycle || "N/A"}\n`
-          result += `Next Execution: ${data.nextExecutionDateTime || "N/A"}\n\n`
+          result += `**Plan Configuration**\n`;
+          result += `Type: ${data.planType || "N/A"}\n`;
+          result += `Status: ${data.status || "N/A"}\n`;
+          result += `Source Asset: ${data.sourceAsset || "N/A"}\n`;
+          result += `Subscription Amount: ${data.subscriptionAmount || "N/A"}\n`;
+          result += `Cycle: ${data.subscriptionCycle || "N/A"}\n`;
+          result += `Next Execution: ${data.nextExecutionDateTime || "N/A"}\n\n`;
 
           if (data.details && Array.isArray(data.details)) {
-            result += `**Position Details**\n`
+            result += `**Position Details**\n`;
             data.details.forEach((detail: any) => {
-              result += `**${detail.targetAsset}** (${detail.percentage}%)\n`
-              result += `  Purchased Amount: ${detail.purchasedAmount || "0"}\n`
-              result += `  Average Price: ${detail.avgPrice || "N/A"}\n`
-              result += `  Current Value: ${detail.currentValue || "N/A"}\n`
-              result += `  PnL: ${detail.pnl || "N/A"}\n\n`
-            })
+              result += `**${detail.targetAsset}** (${detail.percentage}%)\n`;
+              result += `  Purchased Amount: ${detail.purchasedAmount || "0"}\n`;
+              result += `  Average Price: ${detail.avgPrice || "N/A"}\n`;
+              result += `  Current Value: ${detail.currentValue || "N/A"}\n`;
+              result += `  PnL: ${detail.pnl || "N/A"}\n\n`;
+            });
           }
         }
 
@@ -59,9 +59,9 @@ export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpS
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -71,8 +71,8 @@ export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpS
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-coinm/market-api/tickerPrice.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { deliveryClient } from "../../../config/binanceClient.js"
+import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryTickerPrice(server: McpServer) {
   server.tool(
@@ -27,9 +27,9 @@ export function registerBinanceDeliveryTickerPrice(server: McpServer) {
         const response = await deliveryClient.restAPI.tickerPrice({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.pair && { pair: params.pair }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -38,15 +38,15 @@ export function registerBinanceDeliveryTickerPrice(server: McpServer) {
               text: `💰 Symbol Price${params.symbol ? ` for ${params.symbol}` : ""}\n\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get ticker price: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-futures-usdm/account-api/leverage.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { futuresClient } from "../../../config/binanceClient.js"
+import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesLeverage(server: McpServer) {
   server.tool(
@@ -31,8 +31,8 @@ export function registerBinanceFuturesLeverage(server: McpServer) {
           symbol: params.symbol,
           leverage: params.leverage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -41,15 +41,15 @@ export function registerBinanceFuturesLeverage(server: McpServer) {
               text: `✅ Leverage changed for ${params.symbol}\nNew Leverage: ${data.leverage}x\nMax Notional Value: ${data.maxNotionalValue}\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `Failed to change leverage: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

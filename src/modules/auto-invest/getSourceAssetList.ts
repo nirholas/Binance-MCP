@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/auto-invest/getSourceAssetList.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { autoInvestClient } from "../../config/binanceClient.js"
+import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetSourceAssetList(server: McpServer) {
   server.tool(
@@ -35,27 +35,27 @@ export function registerAutoInvestGetSourceAssetList(server: McpServer) {
             flexibleAllowedToUse: params.flexibleAllowedToUse,
           }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Auto-Invest Source Assets\n\n`
+        let result = `✅ Auto-Invest Source Assets\n\n`;
 
         if (data.sourceAssetList && Array.isArray(data.sourceAssetList)) {
-          result += `Total: ${data.sourceAssetList.length} assets\n\n`
+          result += `Total: ${data.sourceAssetList.length} assets\n\n`;
           data.sourceAssetList.forEach((asset: any) => {
-            result += `**${asset.sourceAsset}**\n`
-            result += `  Free Amount: ${asset.freeAmount}\n`
-            result += `  Min Amount: ${asset.minAmount}\n`
-            result += `  Max Amount: ${asset.maxAmount}\n\n`
-          })
+            result += `**${asset.sourceAsset}**\n`;
+            result += `  Free Amount: ${asset.freeAmount}\n`;
+            result += `  Min Amount: ${asset.minAmount}\n`;
+            result += `  Max Amount: ${asset.maxAmount}\n\n`;
+          });
         } else if (Array.isArray(data)) {
           data.forEach((asset: any) => {
-            result += `**${asset.sourceAsset || asset.asset}**\n`
-            result += `  Available: ${asset.freeAmount || "N/A"}\n\n`
-          })
+            result += `**${asset.sourceAsset || asset.asset}**\n`;
+            result += `  Available: ${asset.freeAmount || "N/A"}\n\n`;
+          });
         } else {
-          result += `Source Assets: ${JSON.stringify(data)}`
+          result += `Source Assets: ${JSON.stringify(data)}`;
         }
 
         return {
@@ -65,9 +65,9 @@ export function registerAutoInvestGetSourceAssetList(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -77,8 +77,8 @@ export function registerAutoInvestGetSourceAssetList(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

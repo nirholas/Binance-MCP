@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/market-api/indexPrice.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketIndex(server: McpServer) {
   server.tool(
@@ -22,26 +22,26 @@ export function registerOptionsMarketIndex(server: McpServer) {
       try {
         const response = await optionsClient.restAPI.index({
           underlying: params.underlying,
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
-        let result = `✅ Options Index Price\n\n`
+        let result = `✅ Options Index Price\n\n`;
 
         if (Array.isArray(data)) {
           data.forEach((item: any) => {
-            result += `**${item.underlying || item.indexSymbol}**\n`
-            result += `Index Price: ${item.indexPrice}\n`
+            result += `**${item.underlying || item.indexSymbol}**\n`;
+            result += `Index Price: ${item.indexPrice}\n`;
             if (item.time) {
-              result += `Time: ${new Date(item.time).toISOString()}\n`
+              result += `Time: ${new Date(item.time).toISOString()}\n`;
             }
-            result += "\n"
-          })
+            result += "\n";
+          });
         } else if (data) {
-          result += `**${data.underlying || data.indexSymbol || params.underlying}**\n`
-          result += `Index Price: ${data.indexPrice}\n`
+          result += `**${data.underlying || data.indexSymbol || params.underlying}**\n`;
+          result += `Index Price: ${data.indexPrice}\n`;
           if (data.time) {
-            result += `Time: ${new Date(data.time).toISOString()}\n`
+            result += `Time: ${new Date(data.time).toISOString()}\n`;
           }
         }
 
@@ -52,9 +52,9 @@ export function registerOptionsMarketIndex(server: McpServer) {
               text: result,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -64,8 +64,8 @@ export function registerOptionsMarketIndex(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

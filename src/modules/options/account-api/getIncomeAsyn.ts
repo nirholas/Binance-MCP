@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/account-api/getIncomeAsyn.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetIncomeAsyn(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerOptionsGetIncomeAsyn(server: McpServer) {
           startTime: params.startTime,
           endTime: params.endTime,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,9 +37,9 @@ export function registerOptionsGetIncomeAsyn(server: McpServer) {
               text: `✅ Options Income Download Request Submitted\n\nDownload ID: ${data.downloadId || data.id}\n\nUse BinanceOptionsGetIncomeAsynId with this ID to retrieve the download URL.`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -49,8 +49,8 @@ export function registerOptionsGetIncomeAsyn(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

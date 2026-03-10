@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/tools/binance-crypto-loans/fixed-api/getFixedCollateralData.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { cryptoLoanClient } from "../../../config/binanceClient.js"
+import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedCollateral(server: McpServer) {
   server.tool(
@@ -26,9 +26,9 @@ export function registerBinanceCryptoLoansFixedCollateral(server: McpServer) {
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        })
+        });
 
-        const data = await response.data()
+        const data = await response.data();
 
         return {
           content: [
@@ -37,15 +37,15 @@ export function registerBinanceCryptoLoansFixedCollateral(server: McpServer) {
               text: `Fixed Loan Collateral Assets:\n${JSON.stringify(data, null, 2)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [{ type: "text", text: `❌ Failed to get collateral data: ${errorMessage}` }],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }

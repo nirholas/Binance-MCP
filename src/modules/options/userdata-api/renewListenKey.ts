@@ -5,11 +5,11 @@
  * @license Apache-2.0
  */
 // src/modules/options/userdata-api/renewListenKey.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { z } from "zod"
+import { z } from "zod";
 
-import { optionsClient } from "../../../config/binanceClient.js"
+import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsRenewListenKey(server: McpServer) {
   server.tool(
@@ -25,8 +25,8 @@ export function registerOptionsRenewListenKey(server: McpServer) {
       try {
         const response = await optionsClient.restAPI.renewListenKey({
           ...(params.listenKey && { listenKey: params.listenKey }),
-        })
-        const data = await response.data()
+        });
+        const data = await response.data();
 
         return {
           content: [
@@ -35,9 +35,9 @@ export function registerOptionsRenewListenKey(server: McpServer) {
               text: `✅ Options Listen Key Renewed\n\nThe listen key validity has been extended by 60 minutes.\n\nResponse: ${JSON.stringify(data)}`,
             },
           ],
-        }
+        };
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
         return {
           content: [
@@ -47,8 +47,8 @@ export function registerOptionsRenewListenKey(server: McpServer) {
             },
           ],
           isError: true,
-        }
+        };
       }
     },
-  )
+  );
 }
