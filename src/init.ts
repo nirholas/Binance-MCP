@@ -35,6 +35,7 @@ const showBanner = () => {
 interface UserInputs {
   BINANCE_API_KEY: string
   BINANCE_API_SECRET: string
+  BINANCE_TESTNET: boolean
 }
 
 // Ask for credentials
@@ -52,6 +53,12 @@ const getInputs = async (): Promise<UserInputs> => {
       message: " 🔐 Enter your BINANCE API SECRET:",
       validate: (val: string) => (val.trim() === "" ? "BINANCE API SECRET is required!" : true),
     },
+    {
+      type: "confirm",
+      name: "BINANCE_TESTNET",
+      message: "🧪 Use Binance Spot Test Network? (testnet.binance.vision)",
+      initial: false,
+    },
   ]
 
   return (await prompts(questions, { onCancel })) as UserInputs
@@ -61,10 +68,12 @@ const getInputs = async (): Promise<UserInputs> => {
 const generateEnvFile = async (
   BINANCE_API_KEY: string,
   BINANCE_API_SECRET: string,
+  BINANCE_TESTNET: boolean,
 ): Promise<void> => {
   const envContent = `
 BINANCE_API_KEY=${BINANCE_API_KEY}
 BINANCE_API_SECRET=${BINANCE_API_SECRET}
+BINANCE_TESTNET=${BINANCE_TESTNET}
 `.trim()
 
   await fs.writeFile(".env", envContent)
@@ -75,17 +84,24 @@ BINANCE_API_SECRET=${BINANCE_API_SECRET}
 const generateConfig = async (
   BINANCE_API_KEY: string,
   BINANCE_API_SECRET: string,
+  BINANCE_TESTNET: boolean,
 ): Promise<any> => {
   const indexPath = path.resolve(__dirname, "..", "build", "index.js") // one level up from cli/
+
+  const env: Record<string, string> = {
+    BINANCE_API_KEY: BINANCE_API_KEY,
+    BINANCE_API_SECRET: BINANCE_API_SECRET,
+  }
+
+  if (BINANCE_TESTNET) {
+    env.BINANCE_TESTNET = "true"
+  }
 
   return {
     "binance-mcp": {
       command: "bun",
       args: ["run", indexPath],
-      env: {
-        BINANCE_API_KEY: BINANCE_API_KEY,
-        BINANCE_API_SECRET: BINANCE_API_SECRET,
-      },
+      env,
       disabled: false,
       autoApprove: [],
     },
@@ -152,11 +168,20 @@ const saveFallbackConfig = async (config: object): Promise<void> => {
 const init = async () => {
   showBanner()
 
-  const { BINANCE_API_KEY, BINANCE_API_SECRET } = await getInputs()
+  const { BINANCE_API_KEY, BINANCE_API_SECRET, BINANCE_TESTNET } = await getInputs()
 
-  await generateEnvFile(BINANCE_API_KEY, BINANCE_API_SECRET)
+  await generateEnvFile(BINANCE_API_KEY, BINANCE_API_SECRET, BINANCE_TESTNET)
 
-  const config = await generateConfig(BINANCE_API_KEY, BINANCE_API_SECRET)
+  if (BINANCE_TESTNET) {
+    console.log(
+      yellow(
+        "🧪 Testnet mode enabled — API calls will go to testnet.binance.vision. " +
+          "Only /api endpoints (spot trading & market data) are available.",
+      ),
+    )
+  }
+
+  const config = await generateConfig(BINANCE_API_KEY, BINANCE_API_SECRET, BINANCE_TESTNET)
 
   const { setupClaude } = await prompts(
     {

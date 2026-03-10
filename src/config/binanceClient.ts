@@ -15,16 +15,19 @@ import { Pay } from "@binance/pay"
 import { Rebate } from "@binance/rebate"
 import { SimpleEarn } from "@binance/simple-earn"
 // src/config/binanceClient.ts
-// Existing SDK packages
 import { Spot } from "@binance/spot"
 import { Staking } from "@binance/staking"
 import { SubAccount } from "@binance/sub-account"
 import { VIPLoan } from "@binance/vip-loan"
 import { Wallet } from "@binance/wallet"
 
+import { assertNotTestnet, IS_TESTNET, URLS } from "./testnet.js"
+
+export { assertNotTestnet, IS_TESTNET }
+
 const API_KEY = process.env.BINANCE_API_KEY ?? ""
 const API_SECRET = process.env.BINANCE_API_SECRET ?? ""
-const BASE_URL = "https://api.binance.com"
+const BASE_URL = URLS.SPOT_BASE_URL
 
 const configurationRestAPI = {
   apiKey: API_KEY,
@@ -80,6 +83,13 @@ async function makeSignedRequest(
   endpoint: string,
   params: Record<string, any> = {},
 ): Promise<any> {
+  if (IS_TESTNET && endpoint.startsWith("/sapi")) {
+    throw new Error(
+      `[Testnet] Endpoint ${endpoint} is not available on the Binance Spot Test Network. ` +
+        `Only /api endpoints are supported.`,
+    )
+  }
+
   const timestamp = Date.now()
   const queryParams = { ...params, timestamp }
   const queryString = new URLSearchParams(
@@ -105,6 +115,13 @@ async function makeSignedRequest(
 }
 
 async function makePublicRequest(endpoint: string, params: Record<string, any> = {}): Promise<any> {
+  if (IS_TESTNET && endpoint.startsWith("/sapi")) {
+    throw new Error(
+      `[Testnet] Endpoint ${endpoint} is not available on the Binance Spot Test Network. ` +
+        `Only /api endpoints are supported.`,
+    )
+  }
+
   const queryString = new URLSearchParams(
     Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])),
   ).toString()
@@ -247,9 +264,8 @@ export const marginClient = {
     makeSignedRequest("GET", "/sapi/v1/margin/interestRateHistory", params),
 }
 
-// Helper for Futures API with different base URLs
-const FUTURES_USD_BASE_URL = "https://fapi.binance.com"
-const FUTURES_COIN_BASE_URL = "https://dapi.binance.com"
+const FUTURES_USD_BASE_URL = URLS.FUTURES_USD_BASE_URL
+const FUTURES_COIN_BASE_URL = URLS.FUTURES_COIN_BASE_URL
 
 async function makeFuturesSignedRequest(
   baseUrl: string,
@@ -522,8 +538,7 @@ export const subAccountApiClient = {
     makeSignedRequest("POST", "/sapi/v1/sub-account/subAccountApi/ipRestriction", params),
 }
 
-// Options client wrapper
-const OPTIONS_BASE_URL = "https://eapi.binance.com"
+const OPTIONS_BASE_URL = URLS.OPTIONS_BASE_URL
 
 export const optionsClient = {
   // Market Data

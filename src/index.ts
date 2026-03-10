@@ -2,6 +2,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import type { Server } from "http"
 
+import { logTestnetStatus } from "./config/testnet.js"
 import { startSSEServer } from "./server/sse.js"
 import { startStdioServer } from "./server/stdio.js"
 import Logger from "./utils/logger.js"
@@ -25,6 +26,7 @@ Environment Variables:
   PORT                Server port for SSE mode (default: 3002)
   BINANCE_API_KEY     Binance API key
   BINANCE_API_SECRET  Binance API secret
+  BINANCE_TESTNET     Set to "true" to use Binance Spot Test Network
   LOG_LEVEL           Logging level (DEBUG, INFO, WARN, ERROR)
 
 Examples:
@@ -41,6 +43,8 @@ async function main() {
     printUsage()
     process.exit(0)
   }
+
+  logTestnetStatus()
 
   let handle: McpServer | Server | undefined
 
