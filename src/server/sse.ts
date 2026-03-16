@@ -13,6 +13,77 @@ import "dotenv/config";
 
 const PORT = process.env.PORT || 3002;
 
+/**
+ * How tool `content` flows when the SSE server runs a tool:
+ *
+ * 1. Tool handler (e.g. getAccount.ts) returns { content: [{ type: "text", text: "..." }] }.
+ * 2. McpServer (SDK) CallTool request handler runs the handler and returns that object.
+ * 3. Server (SDK) validates it as CallToolResult and returns it from the tools/call handler.
+ * 4. Protocol (SDK) puts it in response.result and calls transport.send({ jsonrpc, id, result }).
+ * 5. SSEServerTransport.send() writes the JSON to the SSE stream (event: message, data: ...).
+ *
+ * This wrapper logs every tools/call request and every tool result content when using SSE.
+ */
+function wrapTransportWithToolLogging(transport: SSEServerTransport) {
+  const pendingToolCalls = new Map<string | number, string>();
+
+  return {
+    get sessionId() {
+      return transport.sessionId;
+    },
+    get onmessage() {
+      return transport.onmessage;
+    },
+    set onmessage(handler: typeof transport.onmessage) {
+      transport.onmessage = handler;
+    },
+    get onclose() {
+      return transport.onclose;
+    },
+    set onclose(handler: typeof transport.onclose) {
+      transport.onclose = handler;
+    },
+    get onerror() {
+      return transport.onerror;
+    },
+    set onerror(handler: typeof transport.onerror) {
+      transport.onerror = handler;
+    },
+    async start() {
+      return transport.start();
+    },
+    async close() {
+      return transport.close();
+    },
+    async send(message: Parameters<SSEServerTransport["send"]>[0]) {
+      const msg = message as { id?: string | number; result?: { content?: unknown } };
+      if (msg?.result && msg.result.content !== undefined) {
+        const toolName = pendingToolCalls.get(msg.id as string | number);
+
+        console.log(
+          "[MCP SSE] tool result content",
+          toolName !== undefined ? `(tool: ${toolName})` : "",
+          JSON.stringify(msg.result.content),
+        );
+        if (msg.id !== undefined) pendingToolCalls.delete(msg.id);
+      }
+
+      return transport.send(message);
+    },
+    async handlePostMessage(req: express.Request, res: express.Response, parsedBody?: unknown) {
+      const body = parsedBody ?? (req as express.Request & { body?: unknown }).body;
+      const parsed = typeof body === "string" ? JSON.parse(body as string) : body;
+
+      if (parsed?.method === "tools/call" && parsed.params) {
+        console.log("[MCP SSE] tools/call request", parsed.params.name, parsed.params.arguments);
+        if (parsed.id !== undefined) pendingToolCalls.set(parsed.id, parsed.params.name);
+      }
+
+      return transport.handlePostMessage(req, res, parsedBody ?? body);
+    },
+  };
+}
+
 // Start the server in SSE mode
 export const startSSEServer = async (): Promise<Server | undefined> => {
   try {
@@ -21,12 +92,13 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
     app.use(express.json());
 
     // Store active transports and their associated server instances
-    const transports = new Map<string, SSEServerTransport>();
+    const transports = new Map<string, ReturnType<typeof wrapTransportWithToolLogging>>();
 
     // SSE endpoint — each connection gets its own McpServer instance
     app.get("/sse", async (req, res) => {
       const server = startServer();
-      const transport = new SSEServerTransport("/message", res);
+      const rawTransport = new SSEServerTransport("/message", res);
+      const transport = wrapTransportWithToolLogging(rawTransport);
 
       Logger.info(`New SSE connection: ${transport.sessionId}`);
       transports.set(transport.sessionId, transport);
