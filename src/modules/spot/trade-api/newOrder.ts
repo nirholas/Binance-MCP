@@ -5,6 +5,11 @@ import { z } from "zod";
 
 import { spotClient } from "../../../config/binanceClient.js";
 
+/** Binance allows only [a-zA-Z0-9-_], max 36 chars. */
+function sanitizeNewClientOrderId(value: string): string {
+  return value.replace(/[^a-zA-Z0-9-_]/g, "").slice(0, 36);
+}
+
 export function registerBinanceNewOrder(server: McpServer) {
   server.tool(
     "BinanceNewOrder",
@@ -27,7 +32,10 @@ export function registerBinanceNewOrder(server: McpServer) {
       quantity: z.number().describe("Order quantity"),
       quoteOrderQty: z.number().optional().describe("Quote order quantity"),
       price: z.number().optional().describe("Order price"),
-      newClientOrderId: z.string().optional().describe("Client order ID"),
+      newClientOrderId: z
+        .string()
+        .optional()
+        .describe("Client order ID: only a-zA-Z0-9-_ allowed, max 36 chars"),
       stopPrice: z.number().optional().describe("Stop price"),
       icebergQty: z.number().optional().describe("Iceberg quantity"),
       newOrderRespType: z.enum(["ACK", "RESULT", "FULL"]).optional().describe("Response type"),
@@ -53,11 +61,17 @@ export function registerBinanceNewOrder(server: McpServer) {
           quantity,
         };
 
-        if (timeInForce) params.timeInForce = timeInForce;
-        if (quoteOrderQty !== undefined) params.quoteOrderQty = quoteOrderQty;
-        if (price !== undefined) params.price = price;
-        if (newClientOrderId) params.newClientOrderId = newClientOrderId;
-        if (stopPrice !== undefined) params.stopPrice = stopPrice;
+        const timeInForceTypes = ["LIMIT", "STOP_LOSS_LIMIT", "TAKE_PROFIT_LIMIT", "LIMIT_MAKER"];
+        if (timeInForce && timeInForceTypes.includes(type)) params.timeInForce = timeInForce;
+        if (type === "MARKET" && quoteOrderQty !== undefined) params.quoteOrderQty = quoteOrderQty;
+        const priceTypes = ["LIMIT", "STOP_LOSS_LIMIT", "TAKE_PROFIT_LIMIT", "LIMIT_MAKER"];
+        if (price !== undefined && priceTypes.includes(type)) params.price = price;
+        if (newClientOrderId) {
+          const sanitized = sanitizeNewClientOrderId(newClientOrderId);
+          if (sanitized) params.newClientOrderId = sanitized;
+        }
+        const stopOrderTypes = ["STOP_LOSS", "STOP_LOSS_LIMIT", "TAKE_PROFIT", "TAKE_PROFIT_LIMIT"];
+        if (stopPrice !== undefined && stopOrderTypes.includes(type)) params.stopPrice = stopPrice;
         if (icebergQty !== undefined) params.icebergQty = icebergQty;
         if (newOrderRespType) params.newOrderRespType = newOrderRespType;
 

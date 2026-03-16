@@ -1,10 +1,9 @@
-// src/tools/binance-spot/account-api/getAccount.ts
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
+import { JSONStringify } from "json-with-bigint";
 import { z } from "zod";
 
 import { spotClient } from "../../../config/binanceClient.js";
-import { safeJsonStringify } from "../../../utils/json.js";
 
 export function registerBinanceGetAccount(server: McpServer) {
   server.tool(
@@ -22,14 +21,17 @@ export function registerBinanceGetAccount(server: McpServer) {
 
         const data = await response.data();
 
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${safeJsonStringify(data)}`,
-            },
-          ],
-        };
+        // This `content` is the CallToolResult payload: it flows up through McpServer → Server → Protocol
+        // and is sent to the client via transport.send(). When using SSE, see server/sse.ts for logging.
+        const content = [
+          {
+            type: "text" as const,
+            text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${JSONStringify(data)}`,
+          },
+        ];
+        console.log("[MCP tool BinanceGetAccount] returning content (length)", content.length);
+
+        return { content };
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
 

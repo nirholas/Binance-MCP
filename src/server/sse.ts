@@ -1,4 +1,5 @@
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type { Request, Response } from "express";
 import type { Server } from "http";
 import type { IncomingMessage, ServerResponse } from "node:http";
 
@@ -127,7 +128,7 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
           const entry = sessions.get(sessionId);
           if (entry) {
             sessions.delete(sessionId);
-            entry.server.close().catch(() => {});
+            entry.server.close().catch(() => undefined);
             Logger.info(`Streamable HTTP session closed: ${sessionId}`);
           }
         },
@@ -137,8 +138,8 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
       return { transport, server };
     };
 
-    // Single endpoint for Streamable HTTP (GET for SSE, POST for JSON-RPC)
-    app.all("/mcp", async (req, res) => {
+    // Streamable HTTP handler (GET for SSE, POST for JSON-RPC)
+    const handleMcpRequest = async (req: Request, res: Response) => {
       const sessionId =
         req.get("mcp-session-id") ?? (req.headers["mcp-session-id"] as string | undefined);
       let entry: SessionEntry | undefined = sessionId ? sessions.get(sessionId) : undefined;
@@ -149,7 +150,14 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
       }
 
       await entry.transport.handleRequest(req, res, req.body);
-    });
+    };
+
+    // Primary endpoint (Streamable HTTP)
+    app.all("/mcp", handleMcpRequest);
+    // Alias for MCP Inspector and clients that default to /sse.
+    // Use transport type "streamable-http" in the inspector (not deprecated "sse") so the
+    // client sends POST initialize before GET; otherwise the server returns 400.
+    app.all("/sse", handleMcpRequest);
 
     // Health check
     app.get("/health", (req, res) => {
@@ -158,7 +166,7 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
 
     const httpServer = app.listen(PORT, () => {
       Logger.info(`Binance MCP Server running in Streamable HTTP mode at http://localhost:${PORT}`);
-      Logger.info(`MCP endpoint: http://localhost:${PORT}/mcp`);
+      Logger.info(`MCP endpoints: http://localhost:${PORT}/mcp and http://localhost:${PORT}/sse`);
     });
 
     return httpServer;

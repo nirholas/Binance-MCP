@@ -1,10 +1,9 @@
-// src/tools/binance-spot/account-api/getAccount.ts
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
+import { JSONStringify } from "json-with-bigint";
 import { z } from "zod";
 
 import { spotClient } from "../../../config/binanceClient.js";
-import { safeJsonStringify } from "../../../utils/json.js";
 
 export function registerBinanceGetAccount(server: McpServer) {
   server.tool(
@@ -26,7 +25,7 @@ export function registerBinanceGetAccount(server: McpServer) {
           content: [
             {
               type: "text",
-              text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${safeJsonStringify(data)}`,
+              text: `Retrieved account information. Account contains ${data.balances?.length || 0} balances. Response: ${JSONStringify(data)}`,
             },
           ],
         };
@@ -35,7 +34,7 @@ export function registerBinanceGetAccount(server: McpServer) {
 
         return {
           content: [
-            { type: "text", text: `Failed to retrieve account information: ${errorMessage}` },
+            { type: "text", text: `Failedddd to retrieve account information: ${errorMessage}` },
           ],
           isError: true,
         };

@@ -10,17 +10,32 @@ export function registerBinanceExchangeInfo(server: McpServer) {
     "BinanceExchangeInfo",
     "Get exchange information including rate limits, symbol configs, etc.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      symbols: z.array(z.string()).optional().describe("Array of symbols to get info for"),
+      symbol: z
+        .string()
+        .optional()
+        .describe(
+          "Single trading pair in UPPERCASE, no separators (e.g. BTCUSDT, SOLUSDT). Use this for one pair; do not use both symbol and symbols.",
+        ),
+      symbols: z
+        .array(z.string())
+        .optional()
+        .describe(
+          'Multiple pairs as array; each symbol UPPERCASE (e.g. ["BTCUSDT","ETHUSDT"]). Do not use with symbol.',
+        ),
       permissions: z.array(z.string()).optional().describe("Array of permissions to filter by"),
     },
     async ({ symbol, symbols, permissions }) => {
       try {
-        const params: any = {};
+        const params: Record<string, unknown> = {};
 
-        if (symbol) params.symbol = symbol;
-        if (symbols) params.symbols = symbols;
-        if (permissions) params.permissions = permissions;
+        if (symbol) params.symbol = symbol.toUpperCase();
+        if (symbols?.length) {
+          // Binance expects symbols as a JSON string; symbols must be UPPERCASE (legal range: [^a-z]).
+          params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
+        }
+        // Only send permissions when not filtering by symbol(s); API rejects "permissions" when symbol/symbols are present.
+        if (permissions?.length && !params.symbol && !params.symbols)
+          params.permissions = permissions;
 
         const response = await spotClient.restAPI.exchangeInfo(params);
 
