@@ -23,8 +23,9 @@ export function registerCreditLineTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v2/cl/account - Get Credit Line Account Information
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_account",
+    {},
     `Get comprehensive credit line account information.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
@@ -118,8 +119,9 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Call & Liquidation)
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_alert_history",
+    {},
     `Get margin call and liquidation alert history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
@@ -207,8 +209,9 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   // GET /sapi/v1/cl/transferHistory - Get Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_transfer_history",
+    {},
     `Get transfer history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
@@ -295,8 +298,9 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   // POST /sapi/v1/cl/transfer - Execute Transfer
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_transfer",
+    {},
     `Execute a transfer in or out of the credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
@@ -372,8 +376,9 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   // GET /sapi/v1/cl/liquidation/history - Get Liquidation History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_liquidation_history",
+    {},
     `Get liquidation history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT

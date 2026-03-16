@@ -6,16 +6,18 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMADLQuantile(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMADLQuantile",
-    "Get position ADL (Auto-Deleveraging) quantile estimate for USD-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all positions",
-        ),
+      description: "Get position ADL (Auto-Deleveraging) quantile estimate for USD-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all positions",
+          ),
+      },
     },
     async ({ symbol }) => {
       try {

@@ -12,13 +12,16 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedCollateral(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedCollateral",
-    "Get list of collateral assets for fixed-term loans. Shows LTV ratios and limits.",
     {
-      collateralCoin: z.string().optional().describe("Filter by specific collateral coin"),
-      vipLevel: z.number().int().min(0).max(9).optional().describe("VIP level"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get list of collateral assets for fixed-term loans. Shows LTV ratios and limits.",
+      inputSchema: {
+        collateralCoin: z.string().optional().describe("Filter by specific collateral coin"),
+        vipLevel: z.number().int().min(0).max(9).optional().describe("VIP level"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

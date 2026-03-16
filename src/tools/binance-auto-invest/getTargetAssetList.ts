@@ -6,13 +6,15 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetTargetAssetList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetTargetAssetList",
-    "Get target asset list for auto-invest.",
     {
-      targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
-      size: z.number().optional().describe("Page size"),
-      current: z.number().optional().describe("Current page"),
+      description: "Get target asset list for auto-invest.",
+      inputSchema: {
+        targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
+        size: z.number().optional().describe("Page size"),
+        current: z.number().optional().describe("Current page"),
+      },
     },
     async ({ targetAsset, size, current }) => {
       try {

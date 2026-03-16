@@ -6,12 +6,14 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginOpenOrders",
-    "Query all open orders in isolated margin account for a specific symbol.",
     {
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query all open orders in isolated margin account for a specific symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

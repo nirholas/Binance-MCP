@@ -12,15 +12,18 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryAggTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryAggTrades",
-    "Get compressed/aggregate trades for a COIN-M Futures symbol. Trades that fill at the same time, from the same order, with the same price will be aggregated.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      fromId: z.number().int().optional().describe("ID to get aggregate trades from INCLUSIVE"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of trades (default 500, max 1000)"),
+      description:
+        "Get compressed/aggregate trades for a COIN-M Futures symbol. Trades that fill at the same time, from the same order, with the same price will be aggregated.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        fromId: z.number().int().optional().describe("ID to get aggregate trades from INCLUSIVE"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of trades (default 500, max 1000)"),
+      },
     },
     async (params) => {
       try {

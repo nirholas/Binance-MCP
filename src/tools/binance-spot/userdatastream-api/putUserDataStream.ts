@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePutUserDataStream(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePutUserDataStream",
-    "Extend the validity of a user data stream listen key.",
     {
-      listenKey: z.string().describe("Listen key to keep alive"),
+      description: "Extend the validity of a user data stream listen key.",
+      inputSchema: {
+        listenKey: z.string().describe("Listen key to keep alive"),
+      },
     },
     async ({ listenKey }) => {
       try {

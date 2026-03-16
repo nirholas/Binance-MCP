@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMBalance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMBalance",
-    "Get current USD-M Futures account balance.",
-    {},
+    { description: "Get current USD-M Futures account balance." },
     async () => {
       try {
         const data = await futuresClient.balance();

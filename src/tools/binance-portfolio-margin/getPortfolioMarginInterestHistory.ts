@@ -6,15 +6,17 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetInterestHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetInterestHistory",
-    "Query portfolio margin interest history.",
     {
-      asset: z.string().optional().describe("Asset symbol (e.g., BTC, USDT)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      size: z.number().optional().describe("Number of results to return, default 10, max 100"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query portfolio margin interest history.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol (e.g., BTC, USDT)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        size: z.number().optional().describe("Number of results to return, default 10, max 100"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, startTime, endTime, size, recvWindow }) => {
       try {

@@ -12,12 +12,15 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetMaxBorrowable(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetMaxBorrowable",
-    "Query the maximum amount that can be borrowed for a specific asset in Portfolio Margin mode.",
     {
-      asset: z.string().describe("Asset to query (e.g., 'USDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Query the maximum amount that can be borrowed for a specific asset in Portfolio Margin mode.",
+      inputSchema: {
+        asset: z.string().describe("Asset to query (e.g., 'USDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

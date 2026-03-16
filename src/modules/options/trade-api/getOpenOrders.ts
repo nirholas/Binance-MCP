@@ -12,13 +12,18 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetOpenOrders",
-    "Get all open options orders. Can filter by symbol or underlying asset.",
     {
-      symbol: z.string().optional().describe("Option symbol to filter by"),
-      underlying: z.string().optional().describe("Underlying asset to filter by (e.g., 'BTCUSDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get all open options orders. Can filter by symbol or underlying asset.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option symbol to filter by"),
+        underlying: z
+          .string()
+          .optional()
+          .describe("Underlying asset to filter by (e.g., 'BTCUSDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

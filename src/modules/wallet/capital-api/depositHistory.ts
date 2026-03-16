@@ -6,17 +6,19 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDepositHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDepositHistory",
-    "Get deposit history.",
     {
-      coin: z.string().optional().describe("Coin symbol"),
-      status: z.number().optional().describe("Deposit status"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      offset: z.number().optional().describe("Pagination offset"),
-      limit: z.number().optional().describe("Number of records to return"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get deposit history.",
+      inputSchema: {
+        coin: z.string().optional().describe("Coin symbol"),
+        status: z.number().optional().describe("Deposit status"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        offset: z.number().optional().describe("Pagination offset"),
+        limit: z.number().optional().describe("Number of records to return"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ coin, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {

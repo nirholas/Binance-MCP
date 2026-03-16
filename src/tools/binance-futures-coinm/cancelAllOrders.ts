@@ -6,12 +6,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMCancelAllOrders",
-    "Cancel all open COIN-M futures orders for a symbol.",
     {
-      symbol: z.string().describe("Trading symbol"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Cancel all open COIN-M futures orders for a symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Trading symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

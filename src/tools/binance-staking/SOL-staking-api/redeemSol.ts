@@ -6,16 +6,19 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceRedeemSol(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "registerBinanceRedeemSol",
-    " Redeem SOL API allows users to redeem BNSOL and receive SOL in exchange. It enables the conversion of BNSOL tokens into SOL based on the specified amount",
     {
-      amount: z
-        .number()
-        .min(0)
-        .max(99999999)
-        .describe("Amount in BNSOL, limit to 8 decimals (mandatory)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        " Redeem SOL API allows users to redeem BNSOL and receive SOL in exchange. It enables the conversion of BNSOL tokens into SOL based on the specified amount",
+      inputSchema: {
+        amount: z
+          .number()
+          .min(0)
+          .max(99999999)
+          .describe("Amount in BNSOL, limit to 8 decimals (mandatory)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

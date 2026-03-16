@@ -12,11 +12,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetAccountInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetAccount",
-    "Get Portfolio Margin account information including unified account equity, margin status, and risk levels.",
     {
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get Portfolio Margin account information including unified account equity, margin status, and risk levels.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

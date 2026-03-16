@@ -6,15 +6,17 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetIndexLinkedPlanRebalanceHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetIndexLinkedPlanRebalanceHistory",
-    "Query index linked plan rebalance history for auto-invest.",
     {
-      indexId: z.number().describe("Index ID"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      current: z.number().optional().describe("Current page"),
-      size: z.number().optional().describe("Page size"),
+      description: "Query index linked plan rebalance history for auto-invest.",
+      inputSchema: {
+        indexId: z.number().describe("Index ID"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        current: z.number().optional().describe("Current page"),
+        size: z.number().optional().describe("Page size"),
+      },
     },
     async ({ indexId, startTime, endTime, current, size }) => {
       try {

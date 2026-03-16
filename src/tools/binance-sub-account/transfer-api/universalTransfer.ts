@@ -12,31 +12,34 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountUniversalTransfer",
-    "Universal transfer between master account and sub-accounts, supporting various account types (spot, margin, futures, etc.).",
     {
-      fromEmail: z
-        .string()
-        .email()
-        .optional()
-        .describe("Sender email (leave empty for master account)"),
-      toEmail: z
-        .string()
-        .email()
-        .optional()
-        .describe("Recipient email (leave empty for master account)"),
-      fromAccountType: z
-        .enum(["SPOT", "USDT_FUTURE", "COIN_FUTURE", "MARGIN", "ISOLATED_MARGIN"])
-        .describe("Source account type"),
-      toAccountType: z
-        .enum(["SPOT", "USDT_FUTURE", "COIN_FUTURE", "MARGIN", "ISOLATED_MARGIN"])
-        .describe("Destination account type"),
-      clientTranId: z.string().optional().describe("Client transfer ID for idempotency"),
-      symbol: z.string().optional().describe("Required for isolated margin transfers"),
-      asset: z.string().describe("Asset to transfer (e.g., 'BTC', 'USDT')"),
-      amount: z.number().positive().describe("Amount to transfer"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Universal transfer between master account and sub-accounts, supporting various account types (spot, margin, futures, etc.).",
+      inputSchema: {
+        fromEmail: z
+          .string()
+          .email()
+          .optional()
+          .describe("Sender email (leave empty for master account)"),
+        toEmail: z
+          .string()
+          .email()
+          .optional()
+          .describe("Recipient email (leave empty for master account)"),
+        fromAccountType: z
+          .enum(["SPOT", "USDT_FUTURE", "COIN_FUTURE", "MARGIN", "ISOLATED_MARGIN"])
+          .describe("Source account type"),
+        toAccountType: z
+          .enum(["SPOT", "USDT_FUTURE", "COIN_FUTURE", "MARGIN", "ISOLATED_MARGIN"])
+          .describe("Destination account type"),
+        clientTranId: z.string().optional().describe("Client transfer ID for idempotency"),
+        symbol: z.string().optional().describe("Required for isolated margin transfers"),
+        asset: z.string().describe("Asset to transfer (e.g., 'BTC', 'USDT')"),
+        amount: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

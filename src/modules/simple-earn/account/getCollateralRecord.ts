@@ -12,17 +12,19 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnCollateralRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnCollateralRecord",
-    "Get your collateral record history for flexible products used as collateral.",
     {
-      productId: z.string().optional().describe("Filter by product ID"),
-      asset: z.string().optional().describe("Filter by asset"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get your collateral record history for flexible products used as collateral.",
+      inputSchema: {
+        productId: z.string().optional().describe("Filter by product ID"),
+        asset: z.string().optional().describe("Filter by asset"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

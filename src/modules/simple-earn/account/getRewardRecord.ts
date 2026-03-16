@@ -12,18 +12,21 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnRewardRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnRewardRecord",
-    "Get your reward distribution history. Shows all rewards earned from Simple Earn products.",
     {
-      productId: z.string().optional().describe("Filter by product ID"),
-      asset: z.string().optional().describe("Filter by asset"),
-      type: z.enum(["BONUS", "REALTIME", "REWARDS"]).optional().describe("Filter by reward type"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your reward distribution history. Shows all rewards earned from Simple Earn products.",
+      inputSchema: {
+        productId: z.string().optional().describe("Filter by product ID"),
+        asset: z.string().optional().describe("Filter by asset"),
+        type: z.enum(["BONUS", "REALTIME", "REWARDS"]).optional().describe("Filter by reward type"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

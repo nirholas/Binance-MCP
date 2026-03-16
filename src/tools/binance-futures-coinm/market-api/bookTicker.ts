@@ -12,15 +12,17 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryTickerBookTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryTickerBookTicker",
-    "Get best bid/ask price and quantity for COIN-M Futures symbol(s).",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
-      pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+      description: "Get best bid/ask price and quantity for COIN-M Futures symbol(s).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
+        pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+      },
     },
     async (params) => {
       try {

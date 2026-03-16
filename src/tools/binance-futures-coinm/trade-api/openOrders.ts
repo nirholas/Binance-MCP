@@ -12,13 +12,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryOpenOrders",
-    "Get all current open COIN-M Futures orders.",
     {
-      symbol: z.string().optional().describe("Contract symbol filter"),
-      pair: z.string().optional().describe("Filter by underlying pair"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get all current open COIN-M Futures orders.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Contract symbol filter"),
+        pair: z.string().optional().describe("Filter by underlying pair"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

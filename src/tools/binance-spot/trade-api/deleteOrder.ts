@@ -6,13 +6,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeleteOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeleteOrder",
-    "Cancel an active order on Binance for a specific trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      orderId: z.string().optional().describe("The order ID to cancel"),
-      origClientOrderId: z.string().optional().describe("Original client order ID"),
+      description: "Cancel an active order on Binance for a specific trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        orderId: z.string().optional().describe("The order ID to cancel"),
+        origClientOrderId: z.string().optional().describe("Original client order ID"),
+      },
     },
     async ({ symbol, orderId, origClientOrderId }) => {
       try {

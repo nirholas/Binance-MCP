@@ -4,10 +4,11 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMExchangeInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMExchangeInfo",
-    "Get current exchange trading rules and symbol information for COIN-M Futures.",
-    {},
+    {
+      description: "Get current exchange trading rules and symbol information for COIN-M Futures.",
+    },
     async () => {
       try {
         const data = await deliveryClient.exchangeInfo();

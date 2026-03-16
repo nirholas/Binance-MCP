@@ -6,12 +6,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginChangeAutoRepayFutures(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginChangeAutoRepayFutures",
-    "Change the auto-repay-futures status for portfolio margin account.",
     {
-      autoRepay: z.boolean().describe("Enable or disable auto-repay for futures"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Change the auto-repay-futures status for portfolio margin account.",
+      inputSchema: {
+        autoRepay: z.boolean().describe("Enable or disable auto-repay for futures"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ autoRepay, recvWindow }) => {
       try {

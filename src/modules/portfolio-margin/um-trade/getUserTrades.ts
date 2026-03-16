@@ -12,22 +12,24 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmGetUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginUmGetUserTrades",
-    "Get USDT-M Futures trade history in Portfolio Margin mode.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      fromId: z.number().int().optional().describe("Trade ID to start from"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of trades to return (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get USDT-M Futures trade history in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        fromId: z.number().int().optional().describe("Trade ID to start from"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of trades to return (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

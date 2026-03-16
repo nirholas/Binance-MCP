@@ -6,15 +6,18 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginAccount",
-    "Query isolated margin account info including balances, margin level, and liquidation price for all symbols or a specific symbol.",
     {
-      symbols: z
-        .string()
-        .optional()
-        .describe("Comma-separated symbol list (e.g., BTCUSDT,ETHUSDT), max 5 symbols"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query isolated margin account info including balances, margin level, and liquidation price for all symbols or a specific symbol.",
+      inputSchema: {
+        symbols: z
+          .string()
+          .optional()
+          .describe("Comma-separated symbol list (e.g., BTCUSDT,ETHUSDT), max 5 symbols"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

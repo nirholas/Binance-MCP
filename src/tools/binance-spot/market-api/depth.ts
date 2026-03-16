@@ -6,12 +6,14 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDepth",
-    "Get order book depth data for a specific trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      limit: z.number().optional().describe("Depth of the order book. Default 100; max 5000."),
+      description: "Get order book depth data for a specific trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        limit: z.number().optional().describe("Depth of the order book. Default 100; max 5000."),
+      },
     },
     async ({ symbol, limit }) => {
       try {

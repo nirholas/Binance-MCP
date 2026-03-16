@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMTime(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMTime",
-    "Get the current server time from the COIN-M Futures API.",
-    {},
+    { description: "Get the current server time from the COIN-M Futures API." },
     async () => {
       try {
         const data = await deliveryClient.time();

@@ -6,17 +6,20 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceStatisticList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceStatisticList",
-    "Retrieve mining statistics for a specific account, including hash rates for the past 15 minutes and 24 hours, the number of valid and invalid mining units, and the estimated profit for today and yesterday in various cryptocurrencies.",
     {
-      algo: z.string().min(1).describe("Algorithm (e.g., sha256)"),
-      userName: z.string().min(1).describe("Mining account username"),
-      recvWindow: z
-        .number()
-        .int()
-        .optional()
-        .describe("Optional: Time window for request validity"),
+      description:
+        "Retrieve mining statistics for a specific account, including hash rates for the past 15 minutes and 24 hours, the number of valid and invalid mining units, and the estimated profit for today and yesterday in various cryptocurrencies.",
+      inputSchema: {
+        algo: z.string().min(1).describe("Algorithm (e.g., sha256)"),
+        userName: z.string().min(1).describe("Mining account username"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional: Time window for request validity"),
+      },
     },
     async (params) => {
       try {

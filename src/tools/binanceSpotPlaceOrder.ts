@@ -7,8 +7,9 @@ import { z } from "zod";
 import { spotClient } from "../config/client.js";
 
 export function registerBinanceSpotPlaceOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binanceSpotPlaceOrder",
+    {},
     `Trading for small orders will not generate significant selling pressure on the market`,
     {
       symbol: z.string().describe("symbol: exemple: BTCUSDT"),

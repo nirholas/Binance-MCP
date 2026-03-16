@@ -6,14 +6,19 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsExerciseRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsExerciseRecord",
-    "Get user's options exercise records.",
     {
-      symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of records to return. Default 100; max 1000."),
+      description: "Get user's options exercise records.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .optional()
+          .describe("Number of records to return. Default 100; max 1000."),
+      },
     },
     async ({ symbol, startTime, endTime, limit }) => {
       try {

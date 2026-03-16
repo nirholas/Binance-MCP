@@ -12,13 +12,16 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmChangeMarginType(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginUmChangeMarginType",
-    "Change margin type (ISOLATED/CROSSED) for a USDT-M Futures symbol in Portfolio Margin mode.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Change margin type (ISOLATED/CROSSED) for a USDT-M Futures symbol in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

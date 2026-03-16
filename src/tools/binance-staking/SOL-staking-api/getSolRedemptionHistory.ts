@@ -6,28 +6,31 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSolRedemptionHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetSolRedemptionHistory",
-    "Get SOL Redemption History API allows users to retrieve their SOL redemption history, detailing the amount of BNSOL redeemed for SOL and the exchange rate.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
-      endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying page. Start from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Number of results per page. Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get SOL Redemption History API allows users to retrieve their SOL redemption history, detailing the amount of BNSOL redeemed for SOL and the exchange rate.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
+        endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying page. Start from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Number of results per page. Default: 10, Max: 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

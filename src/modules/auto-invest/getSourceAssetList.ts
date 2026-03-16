@@ -12,18 +12,21 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetSourceAssetList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetSourceAssetList",
-    "Get the list of available source assets for auto-invest plans. These are the assets you can use to fund your recurring purchases.",
     {
-      usageType: z.enum(["RECURRING", "ONE_TIME"]).optional().describe("Usage type filter"),
-      targetAsset: z.string().optional().describe("Filter by target asset"),
-      indexId: z.number().int().optional().describe("Index ID filter"),
-      flexibleAllowedToUse: z
-        .boolean()
-        .optional()
-        .describe("Filter by flexible savings availability"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get the list of available source assets for auto-invest plans. These are the assets you can use to fund your recurring purchases.",
+      inputSchema: {
+        usageType: z.enum(["RECURRING", "ONE_TIME"]).optional().describe("Usage type filter"),
+        targetAsset: z.string().optional().describe("Filter by target asset"),
+        indexId: z.number().int().optional().describe("Index ID filter"),
+        flexibleAllowedToUse: z
+          .boolean()
+          .optional()
+          .describe("Filter by flexible savings availability"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

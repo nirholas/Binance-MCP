@@ -6,13 +6,15 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest",
-    "Toggle BNB burn on spot trade and margin interest.",
     {
-      spotBNBBurn: z.string().optional().describe("'true' or 'false' for spot trade"),
-      interestBNBBurn: z.string().optional().describe("'true' or 'false' for margin interest"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Toggle BNB burn on spot trade and margin interest.",
+      inputSchema: {
+        spotBNBBurn: z.string().optional().describe("'true' or 'false' for spot trade"),
+        interestBNBBurn: z.string().optional().describe("'true' or 'false' for margin interest"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ spotBNBBurn, interestBNBBurn, recvWindow }) => {
       try {

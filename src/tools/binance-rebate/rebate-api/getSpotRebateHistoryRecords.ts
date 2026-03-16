@@ -6,14 +6,21 @@ import { z } from "zod";
 import { rebateClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSpotRebateHistoryRecords(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetSpotRebateHistoryRecords",
-    "Retrieve the history of spot rebate records, including commission rebates and referral kickbacks, for the past 7 days or a custom date range (within 30 days).",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      page: z.number().int().default(1).describe("Page number, default is 1"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieve the history of spot rebate records, including commission rebates and referral kickbacks, for the past 7 days or a custom date range (within 30 days).",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        page: z.number().int().default(1).describe("Page number, default is 1"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

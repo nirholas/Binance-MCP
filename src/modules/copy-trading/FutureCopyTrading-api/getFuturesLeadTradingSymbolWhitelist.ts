@@ -6,11 +6,18 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetFuturesLeadTradingSymbolWhitelist(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetFuturesLeadTradingSymbolWhitelist",
-    "Whitelist of trading pairs (symbols) that are allowed for Futures Lead Traders in copy trading, including base and quote assets.",
     {
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Whitelist of trading pairs (symbols) that are allowed for Futures Lead Traders in copy trading, including base and quote assets.",
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

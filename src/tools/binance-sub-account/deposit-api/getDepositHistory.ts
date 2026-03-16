@@ -12,21 +12,30 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountDepositHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountDepositHistory",
-    "Get deposit history for a sub-account. Shows all incoming deposits with status, txid, and confirmation details.",
     {
-      email: z.string().email().describe("Sub-account email to get deposit history for"),
-      coin: z.string().optional().describe("Filter by specific coin"),
-      status: z
-        .enum(["0", "1", "6"])
-        .optional()
-        .describe("Filter by status: 0 = pending, 1 = success, 6 = credited but cannot withdraw"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().min(1).max(1000).optional().describe("Number of results (max 1000)"),
-      offset: z.number().int().optional().describe("Offset for pagination"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get deposit history for a sub-account. Shows all incoming deposits with status, txid, and confirmation details.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email to get deposit history for"),
+        coin: z.string().optional().describe("Filter by specific coin"),
+        status: z
+          .enum(["0", "1", "6"])
+          .optional()
+          .describe("Filter by status: 0 = pending, 1 = success, 6 = credited but cannot withdraw"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of results (max 1000)"),
+        offset: z.number().int().optional().describe("Offset for pagination"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

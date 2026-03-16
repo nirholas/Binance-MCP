@@ -12,12 +12,15 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCancelBySymbol(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCancelByUnderlying",
-    "Cancel all open options orders for all contracts of an underlying asset (e.g., all BTC options). ⚠️ This will cancel ALL open orders for the underlying.",
     {
-      underlying: z.string().describe("Underlying asset (e.g., 'BTCUSDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Cancel all open options orders for all contracts of an underlying asset (e.g., all BTC options). ⚠️ This will cancel ALL open orders for the underlying.",
+      inputSchema: {
+        underlying: z.string().describe("Underlying asset (e.g., 'BTCUSDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -12,11 +12,14 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnAccount",
-    "Get your Simple Earn account overview. Shows total amounts in flexible and locked products, and pending rewards.",
     {
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your Simple Earn account overview. Shows total amounts in flexible and locked products, and pending rewards.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

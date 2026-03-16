@@ -6,11 +6,13 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMOpenInterest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMOpenInterest",
-    "Get present open interest of a specific symbol for COIN-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+      description: "Get present open interest of a specific symbol for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+      },
     },
     async ({ symbol }) => {
       try {

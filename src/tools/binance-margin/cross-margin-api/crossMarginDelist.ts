@@ -6,11 +6,13 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginDelist(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginDelist",
-    "Get delist schedule for cross margin trading pairs. Shows upcoming delistings.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get delist schedule for cross margin trading pairs. Shows upcoming delistings.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

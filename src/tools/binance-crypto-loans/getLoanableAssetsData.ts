@@ -6,12 +6,14 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanGetLoanableAssetsDataV2(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanGetLoanableAssetsDataV2",
-    "Get loanable assets data V2 for flexible crypto loans.",
     {
-      loanCoin: z.string().optional().describe("Loan coin (e.g., USDT)"),
-      vipLevel: z.number().optional().describe("VIP level"),
+      description: "Get loanable assets data V2 for flexible crypto loans.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Loan coin (e.g., USDT)"),
+        vipLevel: z.number().optional().describe("VIP level"),
+      },
     },
     async ({ loanCoin, vipLevel }) => {
       try {

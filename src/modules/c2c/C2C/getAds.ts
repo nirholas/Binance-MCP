@@ -12,16 +12,19 @@ import { z } from "zod";
 import { c2cClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceC2CGetAds(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceC2CGetAds",
-    "Get available C2C/P2P trading advertisements. Browse buy/sell offers from other users.",
     {
-      asset: z.string().optional().describe("Filter by crypto asset (e.g., 'BTC', 'USDT')"),
-      fiat: z.string().optional().describe("Filter by fiat currency (e.g., 'USD', 'EUR')"),
-      tradeType: z.enum(["BUY", "SELL"]).optional().describe("Filter by trade type"),
-      page: z.number().int().min(1).default(1).optional().describe("Page number"),
-      rows: z.number().int().min(1).max(20).default(10).optional().describe("Number of rows"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get available C2C/P2P trading advertisements. Browse buy/sell offers from other users.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by crypto asset (e.g., 'BTC', 'USDT')"),
+        fiat: z.string().optional().describe("Filter by fiat currency (e.g., 'USD', 'EUR')"),
+        tradeType: z.enum(["BUY", "SELL"]).optional().describe("Filter by trade type"),
+        page: z.number().int().min(1).default(1).optional().describe("Page number"),
+        rows: z.number().int().min(1).max(20).default(10).optional().describe("Number of rows"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

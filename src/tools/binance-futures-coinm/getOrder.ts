@@ -6,14 +6,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMGetOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMGetOrder",
-    "Query a COIN-M futures order.",
     {
-      symbol: z.string().describe("Trading symbol"),
-      orderId: z.number().int().optional().describe("Order ID"),
-      origClientOrderId: z.string().optional().describe("Original client order ID"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query a COIN-M futures order.",
+      inputSchema: {
+        symbol: z.string().describe("Trading symbol"),
+        orderId: z.number().int().optional().describe("Order ID"),
+        origClientOrderId: z.string().optional().describe("Original client order ID"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

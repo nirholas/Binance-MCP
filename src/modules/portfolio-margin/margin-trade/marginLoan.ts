@@ -12,13 +12,16 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginMarginLoan(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginMarginLoan",
-    "Borrow funds for margin trading in Portfolio Margin mode. ⚠️ Borrowed funds accrue interest.",
     {
-      asset: z.string().describe("Asset to borrow (e.g., 'USDT')"),
-      amount: z.string().describe("Amount to borrow"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Borrow funds for margin trading in Portfolio Margin mode. ⚠️ Borrowed funds accrue interest.",
+      inputSchema: {
+        asset: z.string().describe("Asset to borrow (e.g., 'USDT')"),
+        amount: z.string().describe("Amount to borrow"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

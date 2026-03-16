@@ -11,34 +11,36 @@ function sanitizeNewClientOrderId(value: string): string {
 }
 
 export function registerBinanceNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceNewOrder",
-    "Create a new order on Binance for a specific trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
-      type: z
-        .enum([
-          "LIMIT",
-          "MARKET",
-          "STOP_LOSS",
-          "STOP_LOSS_LIMIT",
-          "TAKE_PROFIT",
-          "TAKE_PROFIT_LIMIT",
-          "LIMIT_MAKER",
-        ])
-        .describe("Order type"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
-      quantity: z.number().describe("Order quantity"),
-      quoteOrderQty: z.number().optional().describe("Quote order quantity"),
-      price: z.number().optional().describe("Order price"),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("Client order ID: only a-zA-Z0-9-_ allowed, max 36 chars"),
-      stopPrice: z.number().optional().describe("Stop price"),
-      icebergQty: z.number().optional().describe("Iceberg quantity"),
-      newOrderRespType: z.enum(["ACK", "RESULT", "FULL"]).optional().describe("Response type"),
+      description: "Create a new order on Binance for a specific trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
+        type: z
+          .enum([
+            "LIMIT",
+            "MARKET",
+            "STOP_LOSS",
+            "STOP_LOSS_LIMIT",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_LIMIT",
+            "LIMIT_MAKER",
+          ])
+          .describe("Order type"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
+        quantity: z.number().describe("Order quantity"),
+        quoteOrderQty: z.number().optional().describe("Quote order quantity"),
+        price: z.number().optional().describe("Order price"),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("Client order ID: only a-zA-Z0-9-_ allowed, max 36 chars"),
+        stopPrice: z.number().optional().describe("Stop price"),
+        icebergQty: z.number().optional().describe("Iceberg quantity"),
+        newOrderRespType: z.enum(["ACK", "RESULT", "FULL"]).optional().describe("Response type"),
+      },
     },
     async ({
       symbol,

@@ -12,13 +12,16 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedSetAutoSubscribe",
-    "Enable or disable auto-subscribe for a locked position. When enabled, funds automatically re-subscribe when the lock period ends.",
     {
-      positionId: z.string().describe("Position ID to update"),
-      autoSubscribe: z.boolean().describe("Enable (true) or disable (false) auto-subscribe"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Enable or disable auto-subscribe for a locked position. When enabled, funds automatically re-subscribe when the lock period ends.",
+      inputSchema: {
+        positionId: z.string().describe("Position ID to update"),
+        autoSubscribe: z.boolean().describe("Enable (true) or disable (false) auto-subscribe"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,15 +6,17 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsBatchOrders",
-    "Place multiple options orders in batch.",
     {
-      orders: z
-        .string()
-        .describe(
-          "JSON array of orders, each containing symbol, side, type, quantity, and optionally price, timeInForce, reduceOnly, postOnly, clientOrderId",
-        ),
+      description: "Place multiple options orders in batch.",
+      inputSchema: {
+        orders: z
+          .string()
+          .describe(
+            "JSON array of orders, each containing symbol, side, type, quantity, and optionally price, timeInForce, reduceOnly, postOnly, clientOrderId",
+          ),
+      },
     },
     async ({ orders }) => {
       try {

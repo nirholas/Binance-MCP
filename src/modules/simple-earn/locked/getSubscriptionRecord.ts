@@ -12,17 +12,20 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedSubscriptionRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedSubscriptionRecord",
-    "Get your locked product subscription history. Shows all past subscriptions with amounts, dates, and status.",
     {
-      purchaseId: z.string().optional().describe("Filter by purchase ID"),
-      asset: z.string().optional().describe("Filter by asset"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your locked product subscription history. Shows all past subscriptions with amounts, dates, and status.",
+      inputSchema: {
+        purchaseId: z.string().optional().describe("Filter by purchase ID"),
+        asset: z.string().optional().describe("Filter by asset"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

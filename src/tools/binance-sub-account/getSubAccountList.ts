@@ -6,15 +6,17 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetList",
-    "Query the list of sub-accounts under the master account.",
     {
-      email: z.string().optional().describe("Sub-account email to filter"),
-      isFreeze: z.string().optional().describe("Filter by freeze status: 'true' or 'false'"),
-      page: z.number().optional().describe("Page number, default 1"),
-      limit: z.number().optional().describe("Results per page, default 1, max 200"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query the list of sub-accounts under the master account.",
+      inputSchema: {
+        email: z.string().optional().describe("Sub-account email to filter"),
+        isFreeze: z.string().optional().describe("Filter by freeze status: 'true' or 'false'"),
+        page: z.number().optional().describe("Page number, default 1"),
+        limit: z.number().optional().describe("Results per page, default 1, max 200"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, isFreeze, page, limit, recvWindow }) => {
       try {

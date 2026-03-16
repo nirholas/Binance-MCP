@@ -6,12 +6,15 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeSolStaking(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubscribeSolStaking",
-    "Subscribe SOL Staking API allows users to stake SOL and receive BNSOL in return. This endpoint requires specifying the amount of SOL to stake, and the response includes the equivalent BNSOL amount and exchange rate for SOL to BNSOL.",
     {
-      amount: z.number().min(0).describe("Amount in SOL (mandatory)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Subscribe SOL Staking API allows users to stake SOL and receive BNSOL in return. This endpoint requires specifying the amount of SOL to stake, and the response includes the equivalent BNSOL amount and exchange rate for SOL to BNSOL.",
+      inputSchema: {
+        amount: z.number().min(0).describe("Amount in SOL (mandatory)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

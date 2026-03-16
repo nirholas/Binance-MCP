@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceClaimBoostRewards(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceClaimBoostRewards",
-    "Claim Boost Rewards API allows users to claim their Boost APR airdrop rewards for staking.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Claim Boost Rewards API allows users to claim their Boost APR airdrop rewards for staking.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,18 +6,21 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginRepay",
-    "Repay loan for Cross Margin account. Repay the borrowed asset with the specified amount.",
     {
-      asset: z.string().describe("Asset to repay (e.g., BTC, USDT)"),
-      amount: z.string().describe("Amount to repay"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin or not, default FALSE"),
-      symbol: z.string().optional().describe("Isolated symbol, required when isIsolated=TRUE"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Repay loan for Cross Margin account. Repay the borrowed asset with the specified amount.",
+      inputSchema: {
+        asset: z.string().describe("Asset to repay (e.g., BTC, USDT)"),
+        amount: z.string().describe("Amount to repay"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin or not, default FALSE"),
+        symbol: z.string().optional().describe("Isolated symbol, required when isIsolated=TRUE"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

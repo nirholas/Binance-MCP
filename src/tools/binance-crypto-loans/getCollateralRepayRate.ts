@@ -6,13 +6,15 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanGetCollateralRepayRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanGetCollateralRepayRate",
-    "Check collateral repay rate for crypto loans.",
     {
-      loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
-      repayAmount: z.number().describe("Repay amount"),
+      description: "Check collateral repay rate for crypto loans.",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
+        repayAmount: z.number().describe("Repay amount"),
+      },
     },
     async ({ loanCoin, collateralCoin, repayAmount }) => {
       try {

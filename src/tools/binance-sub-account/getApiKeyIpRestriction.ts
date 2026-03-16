@@ -6,13 +6,15 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetApiKeyIpRestriction(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetApiKeyIpRestriction",
-    "Get IP restriction for a sub-account API key.",
     {
-      subAccountId: z.string().describe("Sub-account ID"),
-      subAccountApiKey: z.string().describe("Sub-account API key"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get IP restriction for a sub-account API key.",
+      inputSchema: {
+        subAccountId: z.string().describe("Sub-account ID"),
+        subAccountApiKey: z.string().describe("Sub-account API key"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ subAccountId, subAccountApiKey, recvWindow }) => {
       try {

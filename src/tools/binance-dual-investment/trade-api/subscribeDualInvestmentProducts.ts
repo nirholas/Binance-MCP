@@ -6,22 +6,25 @@ import { z } from "zod";
 import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeDualInvestmentProducts(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubscribeDualInvestmentProducts",
-    "Subscribe to Dual Investment products by providing product ID, order ID, deposit amount, and auto compound plan to initiate investment with specified terms.",
     {
-      id: z.string().describe("Product ID from /sapi/v1/dci/product/list"),
-      orderId: z.string().describe("Order ID from /sapi/v1/dci/product/list"),
-      depositAmount: z.number().positive().describe("The amount for subscribing"),
-      autoCompoundPlan: z
-        .enum(["NONE", "STANDARD", "ADVANCED"])
-        .describe("Auto-compound plan: NONE (off), STANDARD, or ADVANCED"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("Optional time window for request validity"),
+      description:
+        "Subscribe to Dual Investment products by providing product ID, order ID, deposit amount, and auto compound plan to initiate investment with specified terms.",
+      inputSchema: {
+        id: z.string().describe("Product ID from /sapi/v1/dci/product/list"),
+        orderId: z.string().describe("Order ID from /sapi/v1/dci/product/list"),
+        depositAmount: z.number().positive().describe("The amount for subscribing"),
+        autoCompoundPlan: z
+          .enum(["NONE", "STANDARD", "ADVANCED"])
+          .describe("Auto-compound plan: NONE (off), STANDARD, or ADVANCED"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

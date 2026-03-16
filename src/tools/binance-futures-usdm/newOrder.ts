@@ -6,51 +6,56 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMNewOrder",
-    "Create a new order for USD-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      type: z
-        .enum([
-          "LIMIT",
-          "MARKET",
-          "STOP",
-          "STOP_MARKET",
-          "TAKE_PROFIT",
-          "TAKE_PROFIT_MARKET",
-          "TRAILING_STOP_MARKET",
-        ])
-        .describe("Order type"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side. Default BOTH for One-way Mode; LONG or SHORT for Hedge Mode"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
-      quantity: z.number().optional().describe("Order quantity"),
-      reduceOnly: z
-        .boolean()
-        .optional()
-        .describe("Cannot be sent in Hedge Mode; cannot be sent with closePosition=true"),
-      price: z.number().optional().describe("Order price"),
-      newClientOrderId: z.string().optional().describe("Client order ID"),
-      stopPrice: z
-        .number()
-        .optional()
-        .describe("Stop price for STOP/STOP_MARKET/TAKE_PROFIT/TAKE_PROFIT_MARKET"),
-      closePosition: z
-        .boolean()
-        .optional()
-        .describe("Close all position. Used with STOP_MARKET or TAKE_PROFIT_MARKET"),
-      activationPrice: z.number().optional().describe("Activation price for TRAILING_STOP_MARKET"),
-      callbackRate: z.number().optional().describe("Callback rate for TRAILING_STOP_MARKET"),
-      workingType: z
-        .enum(["MARK_PRICE", "CONTRACT_PRICE"])
-        .optional()
-        .describe("StopPrice triggered by MARK_PRICE or CONTRACT_PRICE"),
-      priceProtect: z.boolean().optional().describe("Price protect"),
-      newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
+      description: "Create a new order for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        type: z
+          .enum([
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET",
+          ])
+          .describe("Order type"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side. Default BOTH for One-way Mode; LONG or SHORT for Hedge Mode"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
+        quantity: z.number().optional().describe("Order quantity"),
+        reduceOnly: z
+          .boolean()
+          .optional()
+          .describe("Cannot be sent in Hedge Mode; cannot be sent with closePosition=true"),
+        price: z.number().optional().describe("Order price"),
+        newClientOrderId: z.string().optional().describe("Client order ID"),
+        stopPrice: z
+          .number()
+          .optional()
+          .describe("Stop price for STOP/STOP_MARKET/TAKE_PROFIT/TAKE_PROFIT_MARKET"),
+        closePosition: z
+          .boolean()
+          .optional()
+          .describe("Close all position. Used with STOP_MARKET or TAKE_PROFIT_MARKET"),
+        activationPrice: z
+          .number()
+          .optional()
+          .describe("Activation price for TRAILING_STOP_MARKET"),
+        callbackRate: z.number().optional().describe("Callback rate for TRAILING_STOP_MARKET"),
+        workingType: z
+          .enum(["MARK_PRICE", "CONTRACT_PRICE"])
+          .optional()
+          .describe("StopPrice triggered by MARK_PRICE or CONTRACT_PRICE"),
+        priceProtect: z.boolean().optional().describe("Price protect"),
+        newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
+      },
     },
     async (params) => {
       try {

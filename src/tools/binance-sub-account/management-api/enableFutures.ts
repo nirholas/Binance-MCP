@@ -12,12 +12,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountEnableFutures(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountEnableFutures",
-    "Enable futures trading for a sub-account. ⚠️ WARNING: Futures trading involves leverage and carries significant risk of total loss. Only enable if you understand the risks.",
     {
-      email: z.string().email().describe("Sub-account email to enable futures for"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Enable futures trading for a sub-account. ⚠️ WARNING: Futures trading involves leverage and carries significant risk of total loss. Only enable if you understand the risks.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email to enable futures for"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

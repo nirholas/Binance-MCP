@@ -12,12 +12,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryCancelAllOrders",
-    "Cancel all open COIN-M Futures orders for a symbol. ⚠️ Use with caution!",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Cancel all open COIN-M Futures orders for a symbol. ⚠️ Use with caution!",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

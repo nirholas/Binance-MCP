@@ -12,14 +12,17 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsDeleteListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsDeleteListenKey",
-    "Close/delete an options listen key. This will terminate the user data stream connection.",
     {
-      listenKey: z
-        .string()
-        .optional()
-        .describe("Listen key to delete. If not provided, deletes the current active key"),
+      description:
+        "Close/delete an options listen key. This will terminate the user data stream connection.",
+      inputSchema: {
+        listenKey: z
+          .string()
+          .optional()
+          .describe("Listen key to delete. If not provided, deletes the current active key"),
+      },
     },
     async (params) => {
       try {

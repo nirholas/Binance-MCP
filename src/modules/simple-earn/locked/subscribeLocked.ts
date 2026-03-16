@@ -12,18 +12,21 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSubscribeLocked(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedSubscribe",
-    "Subscribe to a Simple Earn Locked product. ⚠️ Funds will be locked for the specified duration. Higher APR than flexible products!",
     {
-      projectId: z.string().describe("Locked product project ID"),
-      amount: z.number().positive().describe("Amount to subscribe"),
-      autoSubscribe: z.boolean().optional().describe("Auto-resubscribe when position matures"),
-      sourceAccount: z
-        .enum(["SPOT", "FUND", "ALL"])
-        .optional()
-        .describe("Source account for funds (default: SPOT)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Subscribe to a Simple Earn Locked product. ⚠️ Funds will be locked for the specified duration. Higher APR than flexible products!",
+      inputSchema: {
+        projectId: z.string().describe("Locked product project ID"),
+        amount: z.number().positive().describe("Amount to subscribe"),
+        autoSubscribe: z.boolean().optional().describe("Auto-resubscribe when position matures"),
+        sourceAccount: z
+          .enum(["SPOT", "FUND", "ALL"])
+          .optional()
+          .describe("Source account for funds (default: SPOT)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -12,18 +12,21 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnFlexibleSubscriptionRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleSubscriptionRecord",
-    "Get your flexible product subscription history. Shows all past subscriptions with amounts, dates, and status.",
     {
-      productId: z.string().optional().describe("Filter by product ID"),
-      purchaseId: z.string().optional().describe("Filter by purchase ID"),
-      asset: z.string().optional().describe("Filter by asset"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your flexible product subscription history. Shows all past subscriptions with amounts, dates, and status.",
+      inputSchema: {
+        productId: z.string().optional().describe("Filter by product ID"),
+        purchaseId: z.string().optional().describe("Filter by purchase ID"),
+        asset: z.string().optional().describe("Filter by asset"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,13 +6,15 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginMaxTransferable",
-    "Query maximum transferable amount for an asset in Cross Margin.",
     {
-      asset: z.string().describe("Asset (e.g., BTC, USDT)"),
-      isolatedSymbol: z.string().optional().describe("Isolated symbol"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query maximum transferable amount for an asset in Cross Margin.",
+      inputSchema: {
+        asset: z.string().describe("Asset (e.g., BTC, USDT)"),
+        isolatedSymbol: z.string().optional().describe("Isolated symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

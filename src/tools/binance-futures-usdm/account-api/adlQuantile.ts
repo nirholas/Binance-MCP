@@ -12,12 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesADLQuantile(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesADLQuantile",
-    "Get Position ADL (Auto-Deleveraging) Quantile estimation for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Futures symbol"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get Position ADL (Auto-Deleveraging) Quantile estimation for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

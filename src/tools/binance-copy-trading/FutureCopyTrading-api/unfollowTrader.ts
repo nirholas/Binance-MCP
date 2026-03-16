@@ -6,12 +6,15 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingUnfollow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingUnfollow",
-    "Stop following a lead trader. This will stop copying their trades but won't close existing positions.",
     {
-      portfolioId: z.string().describe("Lead trader's portfolio ID to unfollow"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Stop following a lead trader. This will stop copying their trades but won't close existing positions.",
+      inputSchema: {
+        portfolioId: z.string().describe("Lead trader's portfolio ID to unfollow"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

@@ -12,12 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCommissionRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCommissionRate",
-    "Get user commission rate for a USD-M Futures symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get user commission rate for a USD-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,16 +6,19 @@ import { z } from "zod";
 import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCheckDualInvestmentAccounts(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCheckDualInvestmentAccounts",
-    "Retrieve Dual Investment account balances, including total value in BTC and USDT equivalents.",
     {
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Optional time window for request validity (max 60000)"),
+      description:
+        "Retrieve Dual Investment account balances, including total value in BTC and USDT equivalents.",
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Optional time window for request validity (max 60000)"),
+      },
     },
     async (params) => {
       try {

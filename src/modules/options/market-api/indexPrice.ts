@@ -12,11 +12,14 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsIndex",
-    "Get the current index price for the underlying asset. The index price is used as a reference for options pricing.",
     {
-      underlying: z.string().describe("Underlying asset (e.g., 'BTCUSDT', 'ETHUSDT')"),
+      description:
+        "Get the current index price for the underlying asset. The index price is used as a reference for options pricing.",
+      inputSchema: {
+        underlying: z.string().describe("Underlying asset (e.g., 'BTCUSDT', 'ETHUSDT')"),
+      },
     },
     async (params) => {
       try {

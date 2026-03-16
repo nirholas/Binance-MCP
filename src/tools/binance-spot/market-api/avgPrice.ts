@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAvgPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAvgPrice",
-    "Get current average price for a trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Get current average price for a trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

@@ -10,10 +10,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPing(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryPing",
-    "Test connectivity to the COIN-M Futures API. Returns empty object if successful.",
-    {},
+    {
+      description:
+        "Test connectivity to the COIN-M Futures API. Returns empty object if successful.",
+    },
     async () => {
       try {
         const response = await deliveryClient.restAPI.ping();

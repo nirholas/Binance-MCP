@@ -12,16 +12,19 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsTicker",
-    "Get 24hr ticker price change statistics for options contracts. Returns price change, volume, and other trading stats.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Option symbol (e.g., 'BTC-240126-40000-C'). If not provided, returns all tickers",
-        ),
+      description:
+        "Get 24hr ticker price change statistics for options contracts. Returns price change, volume, and other trading stats.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Option symbol (e.g., 'BTC-240126-40000-C'). If not provided, returns all tickers",
+          ),
+      },
     },
     async (params) => {
       try {

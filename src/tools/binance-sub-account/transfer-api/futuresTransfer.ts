@@ -12,16 +12,19 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountFuturesTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountFuturesTransfer",
-    "Internal transfer between sub-account futures accounts. Move assets between different sub-account futures wallets.",
     {
-      fromEmail: z.string().email().describe("Sender sub-account email"),
-      toEmail: z.string().email().describe("Recipient sub-account email"),
-      futuresType: z.enum(["1", "2"]).describe("Futures type: 1 for USD-M, 2 for COIN-M"),
-      asset: z.string().describe("Asset to transfer (e.g., 'USDT', 'BTC')"),
-      amount: z.number().positive().describe("Amount to transfer"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Internal transfer between sub-account futures accounts. Move assets between different sub-account futures wallets.",
+      inputSchema: {
+        fromEmail: z.string().email().describe("Sender sub-account email"),
+        toEmail: z.string().email().describe("Recipient sub-account email"),
+        futuresType: z.enum(["1", "2"]).describe("Futures type: 1 for USD-M, 2 for COIN-M"),
+        asset: z.string().describe("Asset to transfer (e.g., 'USDT', 'BTC')"),
+        amount: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

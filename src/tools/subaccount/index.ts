@@ -21,15 +21,17 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_list
   // GET /sapi/v3/sub-account/list
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_list",
-    "Get a list of all sub-accounts. Filter by email or status (enabled/disabled).",
     {
-      email: z.string().optional().describe("Filter by sub-account email"),
-      status: z.string().optional().describe("Filter by status: 'enabled' or 'disabled'"),
-      page: z.number().optional().describe("Page number. Default: 1"),
-      limit: z.number().optional().describe("Results per page. Default: 500"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get a list of all sub-accounts. Filter by email or status (enabled/disabled).",
+      inputSchema: {
+        email: z.string().optional().describe("Filter by sub-account email"),
+        status: z.string().optional().describe("Filter by status: 'enabled' or 'disabled'"),
+        page: z.number().optional().describe("Page number. Default: 1"),
+        limit: z.number().optional().describe("Results per page. Default: 500"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, status, page, limit, recvWindow }) => {
       try {
@@ -65,16 +67,18 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_transfer_history
   // GET /sapi/v3/sub-account/transfer/history
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_transfer_history",
-    "Get transfer history between master and sub-accounts.",
     {
-      email: z.string().optional().describe("Sub-account email to filter by"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number. Each page contains up to 500 records"),
-      limit: z.number().optional().describe("Results per page. Default: 500"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get transfer history between master and sub-accounts.",
+      inputSchema: {
+        email: z.string().optional().describe("Sub-account email to filter by"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number. Each page contains up to 500 records"),
+        limit: z.number().optional().describe("Results per page. Default: 500"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, startTime, endTime, page, limit, recvWindow }) => {
       try {
@@ -115,15 +119,18 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_transfer
   // POST /sapi/v3/sub-account/transfer
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_transfer",
-    "Execute an asset transfer between master account and a sub-account. ⚠️ This moves funds between accounts!",
     {
-      fromEmail: z.string().email().describe("Sender email address"),
-      toEmail: z.string().email().describe("Recipient email address"),
-      asset: z.string().describe("Asset symbol to transfer, e.g., BTC, ETH"),
-      amount: z.number().describe("Amount to transfer"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Execute an asset transfer between master account and a sub-account. ⚠️ This moves funds between accounts!",
+      inputSchema: {
+        fromEmail: z.string().email().describe("Sender email address"),
+        toEmail: z.string().email().describe("Recipient email address"),
+        asset: z.string().describe("Asset symbol to transfer, e.g., BTC, ETH"),
+        amount: z.number().describe("Amount to transfer"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ fromEmail, toEmail, asset, amount, recvWindow }) => {
       try {
@@ -160,12 +167,14 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_assets
   // GET /sapi/v3/sub-account/assets
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_assets",
-    "Get asset balances for a specific sub-account.",
     {
-      email: z.string().email().describe("Sub-account email address"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get asset balances for a specific sub-account.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email address"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, recvWindow }) => {
       try {
@@ -204,14 +213,16 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_summary
   // GET /sapi/v1/sub-account/spotSummary
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_summary",
-    "Get the total USD value of assets in the master account and all sub-accounts.",
     {
-      email: z.string().optional().describe("Filter by specific sub-account email"),
-      page: z.number().optional().describe("Page number"),
-      size: z.number().optional().describe("Results per page"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get the total USD value of assets in the master account and all sub-accounts.",
+      inputSchema: {
+        email: z.string().optional().describe("Filter by specific sub-account email"),
+        page: z.number().optional().describe("Page number"),
+        size: z.number().optional().describe("Results per page"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, page, size, recvWindow }) => {
       try {
@@ -246,12 +257,15 @@ export function registerSubaccountTools(server: McpServer) {
   // binance_us_subaccount_status
   // GET /sapi/v1/sub-account/status
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_subaccount_status",
-    "Get status list of sub-accounts including activation status and enabled features.",
     {
-      email: z.string().optional().describe("Sub-account email to check status for"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get status list of sub-accounts including activation status and enabled features.",
+      inputSchema: {
+        email: z.string().optional().describe("Sub-account email to check status for"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, recvWindow }) => {
       try {

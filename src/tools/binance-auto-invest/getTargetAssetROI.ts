@@ -6,14 +6,16 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetTargetAssetROI(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetTargetAssetROI",
-    "Get target asset ROI data for auto-invest.",
     {
-      targetAsset: z.string().describe("Target asset (e.g., BTC)"),
-      hisRoiType: z
-        .enum(["FIVE_YEAR", "THREE_YEAR", "ONE_YEAR", "SIX_MONTH", "THREE_MONTH", "ONE_MONTH"])
-        .describe("Historical ROI type"),
+      description: "Get target asset ROI data for auto-invest.",
+      inputSchema: {
+        targetAsset: z.string().describe("Target asset (e.g., BTC)"),
+        hisRoiType: z
+          .enum(["FIVE_YEAR", "THREE_YEAR", "ONE_YEAR", "SIX_MONTH", "THREE_MONTH", "ONE_MONTH"])
+          .describe("Historical ROI type"),
+      },
     },
     async ({ targetAsset, hisRoiType }) => {
       try {

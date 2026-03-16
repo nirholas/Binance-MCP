@@ -12,15 +12,18 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFlexibleOngoing(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFlexibleOngoing",
-    "Get all ongoing flexible loan orders. Shows current loans with principal, interest, collateral, and LTV information.",
     {
-      loanCoin: z.string().optional().describe("Filter by loan coin"),
-      collateralCoin: z.string().optional().describe("Filter by collateral coin"),
-      current: z.number().int().min(1).optional().describe("Current page (default 1)"),
-      limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get all ongoing flexible loan orders. Shows current loans with principal, interest, collateral, and LTV information.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Filter by loan coin"),
+        collateralCoin: z.string().optional().describe("Filter by collateral coin"),
+        current: z.number().int().min(1).optional().describe("Current page (default 1)"),
+        limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

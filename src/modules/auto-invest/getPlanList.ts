@@ -12,15 +12,17 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetPlanList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetPlanList",
-    "Get list of user's auto-invest plans. Shows all recurring investment plans.",
     {
-      planType: z
-        .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
-        .optional()
-        .describe("Plan type filter"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get list of user's auto-invest plans. Shows all recurring investment plans.",
+      inputSchema: {
+        planType: z
+          .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
+          .optional()
+          .describe("Plan type filter"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

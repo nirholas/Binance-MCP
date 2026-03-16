@@ -12,12 +12,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginMarginGetOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginMarginGetOpenOrders",
-    "Get all open cross margin orders in Portfolio Margin mode.",
     {
-      symbol: z.string().optional().describe("Trading pair symbol to filter by"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get all open cross margin orders in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Trading pair symbol to filter by"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

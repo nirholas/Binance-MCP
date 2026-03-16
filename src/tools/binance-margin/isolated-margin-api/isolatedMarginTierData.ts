@@ -6,13 +6,16 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginTierData(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginTierData",
-    "Query isolated margin tier data showing leverage tiers and maintenance margin ratios for a symbol.",
     {
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      tier: z.number().int().optional().describe("Specific tier to query"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query isolated margin tier data showing leverage tiers and maintenance margin ratios for a symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        tier: z.number().int().optional().describe("Specific tier to query"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

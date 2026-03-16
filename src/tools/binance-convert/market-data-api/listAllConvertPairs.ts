@@ -6,12 +6,15 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertGetListAllConvertPairs(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertGetListAllConvertPairs",
-    "Query available conversion pairs (like BTC to USDT), and shows the minimum and maximum allowed amounts for both the source and destination tokens.",
     {
-      fromAsset: z.string().optional().describe("User spends coin"),
-      toAsset: z.string().optional().describe("User receives coin"),
+      description:
+        "Query available conversion pairs (like BTC to USDT), and shows the minimum and maximum allowed amounts for both the source and destination tokens.",
+      inputSchema: {
+        fromAsset: z.string().optional().describe("User spends coin"),
+        toAsset: z.string().optional().describe("User receives coin"),
+      },
     },
     async (params) => {
       try {

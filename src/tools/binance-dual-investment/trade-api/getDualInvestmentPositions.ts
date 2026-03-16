@@ -6,38 +6,41 @@ import { z } from "zod";
 import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetDualInvestmentPositions(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetDualInvestmentPositions",
-    "Fetch Dual Investment positions in batch, including status, subscription details, APR, and settlement info. Filter by status or paginate results.",
     {
-      status: z
-        .enum([
-          "PENDING",
-          "PURCHASE_SUCCESS",
-          "SETTLED",
-          "PURCHASE_FAIL",
-          "REFUNDING",
-          "REFUND_SUCCESS",
-          "SETTLING",
-        ])
-        .optional()
-        .describe(
-          "Position status: PENDING (awaiting results), PURCHASE_SUCCESS, SETTLED, PURCHASE_FAIL, REFUNDING, REFUND_SUCCESS, or SETTLING. If not provided, returns all.",
-        ),
-      pageSize: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Number of items per page, default 10, max 100"),
-      pageIndex: z.number().int().min(1).optional().describe("Page index, default 1"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Optional time window for request validity (max 60000)"),
+      description:
+        "Fetch Dual Investment positions in batch, including status, subscription details, APR, and settlement info. Filter by status or paginate results.",
+      inputSchema: {
+        status: z
+          .enum([
+            "PENDING",
+            "PURCHASE_SUCCESS",
+            "SETTLED",
+            "PURCHASE_FAIL",
+            "REFUNDING",
+            "REFUND_SUCCESS",
+            "SETTLING",
+          ])
+          .optional()
+          .describe(
+            "Position status: PENDING (awaiting results), PURCHASE_SUCCESS, SETTLED, PURCHASE_FAIL, REFUNDING, REFUND_SUCCESS, or SETTLING. If not provided, returns all.",
+          ),
+        pageSize: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Number of items per page, default 10, max 100"),
+        pageIndex: z.number().int().min(1).optional().describe("Page index, default 1"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Optional time window for request validity (max 60000)"),
+      },
     },
     async (params) => {
       try {

@@ -6,11 +6,13 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMPositionMode",
-    "Change position mode for COIN-M Futures (One-way or Hedge Mode).",
     {
-      dualSidePosition: z.boolean().describe("true: Hedge Mode, false: One-way Mode"),
+      description: "Change position mode for COIN-M Futures (One-way or Hedge Mode).",
+      inputSchema: {
+        dualSidePosition: z.boolean().describe("true: Hedge Mode, false: One-way Mode"),
+      },
     },
     async ({ dualSidePosition }) => {
       try {

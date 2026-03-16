@@ -6,12 +6,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginFundCollection(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginFundCollection",
-    "Trigger fund collection by asset for portfolio margin account.",
     {
-      asset: z.string().describe("Asset symbol to collect (e.g., BTC, USDT)"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Trigger fund collection by asset for portfolio margin account.",
+      inputSchema: {
+        asset: z.string().describe("Asset symbol to collect (e.g., BTC, USDT)"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, recvWindow }) => {
       try {

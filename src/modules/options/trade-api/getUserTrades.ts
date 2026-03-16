@@ -12,23 +12,29 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetUserTrades",
-    "Get user's options trade history. Returns executed trades with prices and quantities.",
     {
-      symbol: z.string().optional().describe("Option symbol to filter by"),
-      underlying: z.string().optional().describe("Underlying asset to filter by (e.g., 'BTCUSDT')"),
-      fromId: z.number().int().optional().describe("Trade ID to fetch from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of trades to return (default 100, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get user's options trade history. Returns executed trades with prices and quantities.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option symbol to filter by"),
+        underlying: z
+          .string()
+          .optional()
+          .describe("Underlying asset to filter by (e.g., 'BTCUSDT')"),
+        fromId: z.number().int().optional().describe("Trade ID to fetch from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of trades to return (default 100, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

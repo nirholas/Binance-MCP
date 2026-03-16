@@ -12,26 +12,32 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestOneTimeTransaction(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestOneTimeTransaction",
-    "Execute a one-time auto-invest purchase. Instantly buy crypto using auto-invest infrastructure.",
     {
-      sourceType: z.enum(["MAIN_SITE", "TR"]).describe("Source type"),
-      subscriptionAmount: z.string().describe("Amount to invest"),
-      sourceAsset: z.string().describe("Source asset (e.g., 'USDT')"),
-      flexibleAllowedToUse: z.boolean().optional().describe("Allow using flexible savings balance"),
-      planId: z.number().int().optional().describe("Plan ID for plan-based one-time purchase"),
-      indexId: z.number().int().optional().describe("Index ID for index-based purchase"),
-      details: z
-        .array(
-          z.object({
-            targetAsset: z.string().describe("Target asset to purchase"),
-            percentage: z.number().describe("Percentage allocation (0-100)"),
-          }),
-        )
-        .optional()
-        .describe("Target assets and allocation (for non-plan purchases)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Execute a one-time auto-invest purchase. Instantly buy crypto using auto-invest infrastructure.",
+      inputSchema: {
+        sourceType: z.enum(["MAIN_SITE", "TR"]).describe("Source type"),
+        subscriptionAmount: z.string().describe("Amount to invest"),
+        sourceAsset: z.string().describe("Source asset (e.g., 'USDT')"),
+        flexibleAllowedToUse: z
+          .boolean()
+          .optional()
+          .describe("Allow using flexible savings balance"),
+        planId: z.number().int().optional().describe("Plan ID for plan-based one-time purchase"),
+        indexId: z.number().int().optional().describe("Index ID for index-based purchase"),
+        details: z
+          .array(
+            z.object({
+              targetAsset: z.string().describe("Target asset to purchase"),
+              percentage: z.number().describe("Percentage allocation (0-100)"),
+            }),
+          )
+          .optional()
+          .describe("Target assets and allocation (for non-plan purchases)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

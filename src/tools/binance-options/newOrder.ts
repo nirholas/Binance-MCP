@@ -6,20 +6,22 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsNewOrder",
-    "Create a new options order.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
-      type: z.enum(["LIMIT", "MARKET"]).describe("Order type"),
-      quantity: z.number().describe("Order quantity"),
-      price: z.number().optional().describe("Order price (required for LIMIT orders)"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
-      reduceOnly: z.boolean().optional().describe("Reduce only flag"),
-      postOnly: z.boolean().optional().describe("Post only flag"),
-      newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
-      clientOrderId: z.string().optional().describe("Client order ID"),
+      description: "Create a new options order.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
+        type: z.enum(["LIMIT", "MARKET"]).describe("Order type"),
+        quantity: z.number().describe("Order quantity"),
+        price: z.number().optional().describe("Order price (required for LIMIT orders)"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
+        reduceOnly: z.boolean().optional().describe("Reduce only flag"),
+        postOnly: z.boolean().optional().describe("Post only flag"),
+        newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
+        clientOrderId: z.string().optional().describe("Client order ID"),
+      },
     },
     async ({
       symbol,

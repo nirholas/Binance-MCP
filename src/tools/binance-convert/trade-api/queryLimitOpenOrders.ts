@@ -6,16 +6,19 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertQueryLimitOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertQueryLimitOpenOrders",
-    "Retrieves all your open limit orders for token conversions, showing details like assets, amounts, exchange rate, order status, and expiration time.",
     {
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow must not be greater than 60000")
-        .optional()
-        .describe("This value must not exceed 60000"),
+      description:
+        "Retrieves all your open limit orders for token conversions, showing details like assets, amounts, exchange rate, order status, and expiration time.",
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow must not be greater than 60000")
+          .optional()
+          .describe("This value must not exceed 60000"),
+      },
     },
     async (params) => {
       try {

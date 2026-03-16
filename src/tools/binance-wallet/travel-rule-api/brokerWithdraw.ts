@@ -6,22 +6,24 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletBrokerWithdraw(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletBrokerWithdraw",
-    "Initiate broker withdrawal with travel rule compliance.",
     {
-      subAccountId: z.string().describe("Sub-account ID"),
-      address: z.string().describe("Withdrawal address"),
-      coin: z.string().describe("Coin symbol"),
-      amount: z.number().describe("Withdrawal amount"),
-      withdrawOrderId: z.string().describe("Client order id"),
-      questionnaire: z.string().describe("Travel rule questionnaire"),
-      originatorPii: z.string().describe("Originator PII information"),
-      signature: z.string().describe("Signature"),
-      network: z.string().optional().describe("Network"),
-      addressTag: z.string().optional().describe("Secondary address identifier"),
-      name: z.string().optional().describe("Address name"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Initiate broker withdrawal with travel rule compliance.",
+      inputSchema: {
+        subAccountId: z.string().describe("Sub-account ID"),
+        address: z.string().describe("Withdrawal address"),
+        coin: z.string().describe("Coin symbol"),
+        amount: z.number().describe("Withdrawal amount"),
+        withdrawOrderId: z.string().describe("Client order id"),
+        questionnaire: z.string().describe("Travel rule questionnaire"),
+        originatorPii: z.string().describe("Originator PII information"),
+        signature: z.string().describe("Signature"),
+        network: z.string().optional().describe("Network"),
+        addressTag: z.string().optional().describe("Secondary address identifier"),
+        name: z.string().optional().describe("Address name"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({
       subAccountId,

@@ -12,17 +12,19 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryAllOrders",
-    "Get all COIN-M Futures account orders (active, canceled, or filled).",
     {
-      symbol: z.string().optional().describe("Contract symbol filter"),
-      pair: z.string().optional().describe("Filter by underlying pair"),
-      orderId: z.number().int().optional().describe("Return orders >= this orderId"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get all COIN-M Futures account orders (active, canceled, or filled).",
+      inputSchema: {
+        symbol: z.string().optional().describe("Contract symbol filter"),
+        pair: z.string().optional().describe("Filter by underlying pair"),
+        orderId: z.number().int().optional().describe("Return orders >= this orderId"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

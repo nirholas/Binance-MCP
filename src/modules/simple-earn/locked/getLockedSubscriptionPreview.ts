@@ -12,14 +12,17 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedSubscriptionPreview(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedSubscriptionPreview",
-    "Preview a locked product subscription before committing. Shows expected rewards, lock duration, and maturity date.",
     {
-      projectId: z.string().describe("Project ID to preview"),
-      amount: z.number().positive().describe("Amount to preview subscription for"),
-      autoSubscribe: z.boolean().optional().describe("Include auto-subscribe in preview"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Preview a locked product subscription before committing. Shows expected rewards, lock duration, and maturity date.",
+      inputSchema: {
+        projectId: z.string().describe("Project ID to preview"),
+        amount: z.number().positive().describe("Amount to preview subscription for"),
+        autoSubscribe: z.boolean().optional().describe("Include auto-subscribe in preview"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

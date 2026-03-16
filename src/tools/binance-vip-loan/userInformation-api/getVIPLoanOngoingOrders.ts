@@ -6,29 +6,36 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetVIPLoanOngoingOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetVIPLoanOngoingOrders",
-    "Allows VIP users to retrieve a list of their current active loan orders. Users can filter results by loan coin, collateral coin, order ID, or collateral account ID.",
     {
-      orderId: z.number().int().optional().describe("Optional order ID"),
-      collateralAccountId: z.number().int().optional().describe("Optional collateral account ID"),
-      loanCoin: z.string().optional().describe("Optional loan coin"),
-      collateralCoin: z.string().optional().describe("Optional collateral coin"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Current page, start from 1, max 1000"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Results per page, default 10, max 100"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Allows VIP users to retrieve a list of their current active loan orders. Users can filter results by loan coin, collateral coin, order ID, or collateral account ID.",
+      inputSchema: {
+        orderId: z.number().int().optional().describe("Optional order ID"),
+        collateralAccountId: z.number().int().optional().describe("Optional collateral account ID"),
+        loanCoin: z.string().optional().describe("Optional loan coin"),
+        collateralCoin: z.string().optional().describe("Optional collateral coin"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Current page, start from 1, max 1000"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Results per page, default 10, max 100"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,12 +6,14 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetOneTimePlans(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetOneTimePlans",
-    "Query holding details of the plan.",
     {
-      planId: z.number().describe("Plan ID"),
-      requestId: z.string().optional().describe("Request ID"),
+      description: "Query holding details of the plan.",
+      inputSchema: {
+        planId: z.number().describe("Plan ID"),
+        requestId: z.string().optional().describe("Request ID"),
+      },
     },
     async ({ planId, requestId }) => {
       try {

@@ -6,17 +6,19 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMUserTrades",
-    "Get account trade list for COIN-M Futures.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
-      orderId: z.number().optional().describe("Filter by order ID"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      fromId: z.number().optional().describe("Trade ID to start from"),
-      limit: z.number().optional().describe("Default 500; max 1000"),
+      description: "Get account trade list for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
+        orderId: z.number().optional().describe("Filter by order ID"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        fromId: z.number().optional().describe("Trade ID to start from"),
+        limit: z.number().optional().describe("Default 500; max 1000"),
+      },
     },
     async ({ symbol, pair, orderId, startTime, endTime, fromId, limit }) => {
       try {

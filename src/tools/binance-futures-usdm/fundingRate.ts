@@ -6,14 +6,16 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMFundingRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMFundingRate",
-    "Get funding rate history for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 100; max 1000"),
+      description: "Get funding rate history for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 100; max 1000"),
+      },
     },
     async ({ symbol, startTime, endTime, limit }) => {
       try {

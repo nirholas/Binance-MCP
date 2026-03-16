@@ -12,15 +12,17 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDelivery24hrTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDelivery24hrTicker",
-    "Get 24hr rolling window price change statistics for COIN-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
-      pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+      description: "Get 24hr rolling window price change statistics for COIN-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
+        pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+      },
     },
     async (params) => {
       try {

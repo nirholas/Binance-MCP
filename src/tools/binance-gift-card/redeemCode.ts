@@ -6,13 +6,18 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRedeemCode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardRedeemCode",
-    "Redeem a Binance Gift Card code. The tokens will be credited to your account.",
     {
-      code: z.string().describe("The gift card code to redeem"),
-      externalUid: z.string().optional().describe("External unique identifier for the redemption"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Redeem a Binance Gift Card code. The tokens will be credited to your account.",
+      inputSchema: {
+        code: z.string().describe("The gift card code to redeem"),
+        externalUid: z
+          .string()
+          .optional()
+          .describe("External unique identifier for the redemption"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ code, externalUid, recvWindow }) => {
       try {

@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceEthStakingAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceEthStakingAccount",
-    "ETH Staking Account API allows users to retrieve their current ETH staking holdings and 30-day profit details, including amounts from WBETH and BETH",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "ETH Staking Account API allows users to retrieve their current ETH staking holdings and 30-day profit details, including amounts from WBETH and BETH",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

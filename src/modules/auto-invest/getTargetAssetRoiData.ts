@@ -12,15 +12,18 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetTargetAssetRoiData(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetTargetAssetRoiData",
-    "Get ROI (Return on Investment) data for auto-invest target assets. Shows historical performance data.",
     {
-      targetAsset: z.string().describe("Target asset (e.g., 'BTC')"),
-      hisRoiType: z
-        .enum(["FIVE_YEAR", "THREE_YEAR", "ONE_YEAR", "SIX_MONTH", "THREE_MONTH", "SEVEN_DAY"])
-        .describe("Historical ROI time period"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get ROI (Return on Investment) data for auto-invest target assets. Shows historical performance data.",
+      inputSchema: {
+        targetAsset: z.string().describe("Target asset (e.g., 'BTC')"),
+        hisRoiType: z
+          .enum(["FIVE_YEAR", "THREE_YEAR", "ONE_YEAR", "SIX_MONTH", "THREE_MONTH", "SEVEN_DAY"])
+          .describe("Historical ROI time period"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

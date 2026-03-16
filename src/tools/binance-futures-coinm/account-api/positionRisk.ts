@@ -12,13 +12,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPositionRisk(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryPositionRisk",
-    "Get current COIN-M Futures position information including unrealized PnL and liquidation price.",
     {
-      marginAsset: z.string().optional().describe("Filter by margin asset (e.g., BTC)"),
-      pair: z.string().optional().describe("Filter by trading pair (e.g., BTCUSD)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get current COIN-M Futures position information including unrealized PnL and liquidation price.",
+      inputSchema: {
+        marginAsset: z.string().optional().describe("Filter by margin asset (e.g., BTC)"),
+        pair: z.string().optional().describe("Filter by trading pair (e.g., BTCUSD)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

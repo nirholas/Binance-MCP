@@ -6,12 +6,14 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetAssets",
-    "Query sub-account assets (balances).",
     {
-      email: z.string().describe("Sub-account email"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query sub-account assets (balances).",
+      inputSchema: {
+        email: z.string().describe("Sub-account email"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, recvWindow }) => {
       try {

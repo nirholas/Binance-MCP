@@ -12,15 +12,23 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestRebalanceHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestRebalanceHistory",
-    "Get rebalance history for portfolio/index plans. Shows when and how allocations were rebalanced.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      size: z.number().int().max(100).optional().describe("Number of results. Default 10, max 100"),
-      current: z.number().int().optional().describe("Current page. Default 1"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get rebalance history for portfolio/index plans. Shows when and how allocations were rebalanced.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        size: z
+          .number()
+          .int()
+          .max(100)
+          .optional()
+          .describe("Number of results. Default 10, max 100"),
+        current: z.number().int().optional().describe("Current page. Default 1"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

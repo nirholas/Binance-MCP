@@ -12,13 +12,19 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCountdownCancelAll(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryCountdownCancelAll",
-    "Set countdown timer to cancel all COIN-M orders. Dead man's switch. Set to 0 to cancel.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      countdownTime: z.number().int().describe("Countdown in milliseconds. 0 to cancel. Min 10000"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Set countdown timer to cancel all COIN-M orders. Dead man's switch. Set to 0 to cancel.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        countdownTime: z
+          .number()
+          .int()
+          .describe("Countdown in milliseconds. 0 to cancel. Min 10000"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

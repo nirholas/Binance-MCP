@@ -6,11 +6,13 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsIndexPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsIndexPrice",
-    "Get the underlying index price for options.",
     {
-      underlying: z.string().describe("Underlying asset (e.g., BTCUSDT)"),
+      description: "Get the underlying index price for options.",
+      inputSchema: {
+        underlying: z.string().describe("Underlying asset (e.g., BTCUSDT)"),
+      },
     },
     async ({ underlying }) => {
       try {

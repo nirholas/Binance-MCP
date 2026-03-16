@@ -28,8 +28,9 @@ export function registerUserDataStreamTools(server: McpServer) {
   // =====================================================================
   // POST /api/v3/userDataStream - Create Listen Key
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_create_listen_key",
+    {},
     `Create a new listen key for User Data Stream WebSocket connection.
 
 The listen key is used to subscribe to real-time account updates via WebSocket.
@@ -87,8 +88,9 @@ Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   // PUT /api/v3/userDataStream - Keep-alive Listen Key
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_keepalive_listen_key",
+    {},
     `Extend the validity of a listen key by 60 minutes.
 
 ⚠️ IMPORTANT:
@@ -131,8 +133,9 @@ Remember to call this again in 30 minutes to maintain the connection.`,
   // =====================================================================
   // DELETE /api/v3/userDataStream - Close Listen Key
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_close_listen_key",
+    {},
     `Close a User Data Stream by invalidating the listen key.
 
 Use this when you're done receiving real-time updates.
@@ -173,8 +176,9 @@ To receive real-time updates again, create a new listen key.`,
   // =====================================================================
   // Informational tool about WebSocket streams
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_websocket_info",
+    {},
     `Get information about available WebSocket streams on Binance.US.
 
 Returns details about:

@@ -6,17 +6,19 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetUniversalTransferHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetUniversalTransferHistory",
-    "Query universal transfer history for sub-accounts.",
     {
-      fromEmail: z.string().optional().describe("Sender email"),
-      toEmail: z.string().optional().describe("Recipient email"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number, default 1"),
-      limit: z.number().optional().describe("Results per page, default 500, max 500"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query universal transfer history for sub-accounts.",
+      inputSchema: {
+        fromEmail: z.string().optional().describe("Sender email"),
+        toEmail: z.string().optional().describe("Recipient email"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number, default 1"),
+        limit: z.number().optional().describe("Results per page, default 500, max 500"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ fromEmail, toEmail, startTime, endTime, page, limit, recvWindow }) => {
       try {

@@ -12,11 +12,14 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetCopyPositions(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetCopyPositions",
-    "Get your current positions from copy trading. Shows all open positions created by following lead traders.",
     {
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your current positions from copy trading. Shows all open positions created by following lead traders.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

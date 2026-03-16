@@ -6,11 +6,13 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAccountStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletAccountStatus",
-    "Get Binance Wallet account status.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get Binance Wallet account status.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

@@ -12,39 +12,41 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesIncome(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesIncome",
-    "Get income history for USD-M Futures account.",
     {
-      symbol: z.string().optional().describe("Futures symbol"),
-      incomeType: z
-        .enum([
-          "TRANSFER",
-          "WELCOME_BONUS",
-          "REALIZED_PNL",
-          "FUNDING_FEE",
-          "COMMISSION",
-          "INSURANCE_CLEAR",
-          "REFERRAL_KICKBACK",
-          "COMMISSION_REBATE",
-          "API_REBATE",
-          "CONTEST_REWARD",
-          "CROSS_COLLATERAL_TRANSFER",
-          "OPTIONS_PREMIUM_FEE",
-          "OPTIONS_SETTLE_PROFIT",
-          "INTERNAL_TRANSFER",
-          "AUTO_EXCHANGE",
-          "DELIVERED_SETTELMENT",
-          "COIN_SWAP_DEPOSIT",
-          "COIN_SWAP_WITHDRAW",
-          "POSITION_LIMIT_INCREASE_FEE",
-        ])
-        .optional()
-        .describe("Type of income"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().optional().describe("Number of results. Default 100, max 1000"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get income history for USD-M Futures account.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol"),
+        incomeType: z
+          .enum([
+            "TRANSFER",
+            "WELCOME_BONUS",
+            "REALIZED_PNL",
+            "FUNDING_FEE",
+            "COMMISSION",
+            "INSURANCE_CLEAR",
+            "REFERRAL_KICKBACK",
+            "COMMISSION_REBATE",
+            "API_REBATE",
+            "CONTEST_REWARD",
+            "CROSS_COLLATERAL_TRANSFER",
+            "OPTIONS_PREMIUM_FEE",
+            "OPTIONS_SETTLE_PROFIT",
+            "INTERNAL_TRANSFER",
+            "AUTO_EXCHANGE",
+            "DELIVERED_SETTELMENT",
+            "COIN_SWAP_DEPOSIT",
+            "COIN_SWAP_WITHDRAW",
+            "POSITION_LIMIT_INCREASE_FEE",
+          ])
+          .optional()
+          .describe("Type of income"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z.number().int().optional().describe("Number of results. Default 100, max 1000"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

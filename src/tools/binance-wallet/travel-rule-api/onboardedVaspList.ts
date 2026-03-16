@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletOnboardedVaspList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletOnboardedVaspList",
-    "Get list of onboarded VASPs (Virtual Asset Service Providers).",
-    {},
+    { description: "Get list of onboarded VASPs (Virtual Asset Service Providers)." },
     async () => {
       try {
         const response = await walletClient.restAPI.onboardedVaspList();

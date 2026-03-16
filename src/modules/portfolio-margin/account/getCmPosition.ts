@@ -12,13 +12,15 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetCmPosition(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetCmPosition",
-    "Get COIN-M Futures position risk information within Portfolio Margin mode.",
     {
-      marginAsset: z.string().optional().describe("Margin asset (e.g., 'BTC')"),
-      pair: z.string().optional().describe("Trading pair (e.g., 'BTCUSD')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get COIN-M Futures position risk information within Portfolio Margin mode.",
+      inputSchema: {
+        marginAsset: z.string().optional().describe("Margin asset (e.g., 'BTC')"),
+        pair: z.string().optional().describe("Trading pair (e.g., 'BTCUSD')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

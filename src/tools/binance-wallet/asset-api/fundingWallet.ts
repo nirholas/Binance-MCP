@@ -6,13 +6,15 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletFundingWallet(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletFundingWallet",
-    "Get funding wallet balance.",
     {
-      asset: z.string().optional().describe("Asset symbol"),
-      needBtcValuation: z.boolean().optional().describe("Whether to include BTC valuation"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get funding wallet balance.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol"),
+        needBtcValuation: z.boolean().optional().describe("Whether to include BTC valuation"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, needBtcValuation, recvWindow }) => {
       try {

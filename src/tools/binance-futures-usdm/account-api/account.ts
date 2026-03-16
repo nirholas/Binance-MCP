@@ -12,11 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesAccount",
-    "Get current USD-M Futures account information including positions, balances, and unrealized PnL.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get current USD-M Futures account information including positions, balances, and unrealized PnL.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

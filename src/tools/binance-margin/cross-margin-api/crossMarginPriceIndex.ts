@@ -6,11 +6,14 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginPriceIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginPriceIndex",
-    "Query margin price index for a specific trading pair. Returns the current price index used for margin calculations.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
+      description:
+        "Query margin price index for a specific trading pair. Returns the current price index used for margin calculations.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
+      },
     },
     async (params) => {
       try {

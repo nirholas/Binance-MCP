@@ -12,21 +12,23 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedRepay",
-    "Repay a fixed-term crypto loan. Repaying unlocks your collateral.",
     {
-      orderId: z.number().int().describe("Loan order ID to repay"),
-      amount: z.string().describe("Amount to repay"),
-      type: z
-        .enum(["1", "2"])
-        .optional()
-        .describe("Repay type: 1 = repay with borrowed coin, 2 = repay with collateral"),
-      collateralReturn: z
-        .boolean()
-        .optional()
-        .describe("Whether to return collateral after full repayment"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description: "Repay a fixed-term crypto loan. Repaying unlocks your collateral.",
+      inputSchema: {
+        orderId: z.number().int().describe("Loan order ID to repay"),
+        amount: z.string().describe("Amount to repay"),
+        type: z
+          .enum(["1", "2"])
+          .optional()
+          .describe("Repay type: 1 = repay with borrowed coin, 2 = repay with collateral"),
+        collateralReturn: z
+          .boolean()
+          .optional()
+          .describe("Whether to return collateral after full repayment"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

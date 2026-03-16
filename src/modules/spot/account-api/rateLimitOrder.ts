@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceRateLimitOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceRateLimitOrder",
-    "Get current order count usage for each rate limit.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get current order count usage for each rate limit.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

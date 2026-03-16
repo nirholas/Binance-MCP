@@ -6,16 +6,18 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMCancelBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMCancelBatchOrders",
-    "Cancel multiple orders for COIN-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      orderIdList: z.string().optional().describe("Comma-separated list of order IDs (max 10)"),
-      origClientOrderIdList: z
-        .string()
-        .optional()
-        .describe("Comma-separated list of client order IDs (max 10)"),
+      description: "Cancel multiple orders for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        orderIdList: z.string().optional().describe("Comma-separated list of order IDs (max 10)"),
+        origClientOrderIdList: z
+          .string()
+          .optional()
+          .describe("Comma-separated list of client order IDs (max 10)"),
+      },
     },
     async ({ symbol, orderIdList, origClientOrderIdList }) => {
       try {

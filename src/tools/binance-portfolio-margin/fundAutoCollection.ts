@@ -6,11 +6,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginFundAutoCollection(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginFundAutoCollection",
-    "Enable or configure fund auto-collection for portfolio margin account.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Enable or configure fund auto-collection for portfolio margin account.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

@@ -6,16 +6,18 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMAllOrders",
-    "Get all orders (active, canceled, or filled) for COIN-M Futures.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
-      orderId: z.number().optional().describe("Order ID to start from"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 500; max 1000"),
+      description: "Get all orders (active, canceled, or filled) for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
+        orderId: z.number().optional().describe("Order ID to start from"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 500; max 1000"),
+      },
     },
     async ({ symbol, pair, orderId, startTime, endTime, limit }) => {
       try {

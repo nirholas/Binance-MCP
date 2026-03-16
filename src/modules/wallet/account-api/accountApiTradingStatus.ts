@@ -6,11 +6,13 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAccountApiTradingStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletAccountApiTradingStatus",
-    "Get account API trading status.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get account API trading status.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

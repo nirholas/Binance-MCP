@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesIndexInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesIndexInfo",
-    "Get composite index symbol information for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Composite index symbol (e.g., DEFIUSDT)"),
+      description: "Get composite index symbol information for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Composite index symbol (e.g., DEFIUSDT)"),
+      },
     },
     async (params) => {
       try {

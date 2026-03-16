@@ -12,17 +12,19 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUserTrades",
-    "Get trades for a specific USD-M Futures account and symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("Order ID to filter trades"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      fromId: z.number().int().optional().describe("Trade ID to start from"),
-      limit: z.number().int().optional().describe("Number of results. Default 500, max 1000"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get trades for a specific USD-M Futures account and symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("Order ID to filter trades"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        fromId: z.number().int().optional().describe("Trade ID to start from"),
+        limit: z.number().int().optional().describe("Number of results. Default 500, max 1000"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

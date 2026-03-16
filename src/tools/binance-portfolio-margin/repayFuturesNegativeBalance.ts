@@ -6,11 +6,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginRepayFuturesNegativeBalance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginRepayFuturesNegativeBalance",
-    "Repay futures negative balance for portfolio margin account.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Repay futures negative balance for portfolio margin account.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

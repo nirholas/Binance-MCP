@@ -12,16 +12,19 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPositionMarginHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesPositionMarginHistory",
-    "Get the history of isolated position margin changes (additions and reductions).",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      type: z.enum(["1", "2"]).optional().describe("1 = Add margin, 2 = Reduce margin (filter)"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 500, max 500)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get the history of isolated position margin changes (additions and reductions).",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        type: z.enum(["1", "2"]).optional().describe("1 = Add margin, 2 = Reduce margin (filter)"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 500, max 500)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

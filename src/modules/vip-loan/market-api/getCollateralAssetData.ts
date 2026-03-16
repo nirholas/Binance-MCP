@@ -6,12 +6,19 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetCollateralAssetData(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetCollateralAssetData",
-    "Retrieves information about collateral assets, including collateral ratios and range values for different tiers of collateral. The ratios are used to determine the collateral requirement for various levels of borrowing.",
     {
-      collateralCoin: z.string().optional().describe("Optional: Coin used as collateral"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieves information about collateral assets, including collateral ratios and range values for different tiers of collateral. The ratios are used to determine the collateral requirement for various levels of borrowing.",
+      inputSchema: {
+        collateralCoin: z.string().optional().describe("Optional: Coin used as collateral"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

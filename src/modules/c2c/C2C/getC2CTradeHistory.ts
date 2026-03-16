@@ -6,14 +6,17 @@ import { z } from "zod";
 import { c2cClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetC2CTradeHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetC2CTradeHistory",
-    "Allows the user to retrieve their own past C2C trades, including details such as asset type, trade direction (BUY/SELL), fiat currency used, trade status, and more.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      page: z.number().int().optional().describe("Page number, default is 1"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Allows the user to retrieve their own past C2C trades, including details such as asset type, trade direction (BUY/SELL), fiat currency used, trade status, and more.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        page: z.number().int().optional().describe("Page number, default is 1"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

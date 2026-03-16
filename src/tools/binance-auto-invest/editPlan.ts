@@ -6,26 +6,28 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestEditPlan(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestEditPlan",
-    "Edit an existing investment plan for auto-invest.",
     {
-      planId: z.number().describe("Plan ID to edit"),
-      subscriptionAmount: z.number().optional().describe("Subscription amount"),
-      subscriptionCycle: z
-        .enum(["H1", "H4", "H8", "H12", "WEEKLY", "DAILY", "MONTHLY", "BI_WEEKLY"])
-        .optional()
-        .describe("Subscription cycle"),
-      subscriptionStartTime: z.string().optional().describe("Subscription start time"),
-      sourceAsset: z.string().optional().describe("Source asset (e.g., USDT)"),
-      flexibleAllowedToUse: z
-        .boolean()
-        .optional()
-        .describe("Whether flexible products are allowed to use"),
-      details: z
-        .string()
-        .optional()
-        .describe("JSON array of plan details including targetAsset and percentage"),
+      description: "Edit an existing investment plan for auto-invest.",
+      inputSchema: {
+        planId: z.number().describe("Plan ID to edit"),
+        subscriptionAmount: z.number().optional().describe("Subscription amount"),
+        subscriptionCycle: z
+          .enum(["H1", "H4", "H8", "H12", "WEEKLY", "DAILY", "MONTHLY", "BI_WEEKLY"])
+          .optional()
+          .describe("Subscription cycle"),
+        subscriptionStartTime: z.string().optional().describe("Subscription start time"),
+        sourceAsset: z.string().optional().describe("Source asset (e.g., USDT)"),
+        flexibleAllowedToUse: z
+          .boolean()
+          .optional()
+          .describe("Whether flexible products are allowed to use"),
+        details: z
+          .string()
+          .optional()
+          .describe("JSON array of plan details including targetAsset and percentage"),
+      },
     },
     async ({
       planId,

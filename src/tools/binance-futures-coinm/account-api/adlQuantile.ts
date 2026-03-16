@@ -12,12 +12,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryAdlQuantile(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryAdlQuantile",
-    "Get ADL (Auto-Deleveraging) quantile estimation for COIN-M Futures positions. Higher values indicate higher priority for deleveraging.",
     {
-      symbol: z.string().optional().describe("Contract symbol filter"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get ADL (Auto-Deleveraging) quantile estimation for COIN-M Futures positions. Higher values indicate higher priority for deleveraging.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Contract symbol filter"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

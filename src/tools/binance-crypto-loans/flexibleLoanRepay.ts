@@ -6,15 +6,17 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleLoanRepay",
-    "Flexible loan repay.",
     {
-      loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
-      repayAmount: z.number().describe("Repay amount"),
-      collateralReturn: z.boolean().optional().describe("Whether to return collateral"),
-      fullRepayment: z.boolean().optional().describe("Whether to do full repayment"),
+      description: "Flexible loan repay.",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
+        repayAmount: z.number().describe("Repay amount"),
+        collateralReturn: z.boolean().optional().describe("Whether to return collateral"),
+        fullRepayment: z.boolean().optional().describe("Whether to do full repayment"),
+      },
     },
     async ({ loanCoin, collateralCoin, repayAmount, collateralReturn, fullRepayment }) => {
       try {

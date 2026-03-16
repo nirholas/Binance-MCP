@@ -6,13 +6,15 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsGetOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetOrder",
-    "Query an options order by order ID or client order ID.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      orderId: z.number().optional().describe("Order ID"),
-      clientOrderId: z.string().optional().describe("Client order ID"),
+      description: "Query an options order by order ID or client order ID.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        orderId: z.number().optional().describe("Order ID"),
+        clientOrderId: z.string().optional().describe("Client order ID"),
+      },
     },
     async ({ symbol, orderId, clientOrderId }) => {
       try {

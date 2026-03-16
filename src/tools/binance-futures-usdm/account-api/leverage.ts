@@ -12,18 +12,21 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesChangeLeverage",
-    "Change initial leverage for a USD-M Futures symbol. ⚠️ Leverage changes affect your liquidation price and margin requirements.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      leverage: z
-        .number()
-        .int()
-        .min(1)
-        .max(125)
-        .describe("Target leverage (1-125, varies by symbol)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Change initial leverage for a USD-M Futures symbol. ⚠️ Leverage changes affect your liquidation price and margin requirements.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        leverage: z
+          .number()
+          .int()
+          .min(1)
+          .max(125)
+          .describe("Target leverage (1-125, varies by symbol)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

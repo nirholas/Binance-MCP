@@ -6,15 +6,17 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDailyAccountSnapshot(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDailyAccountSnapshot",
-    "Get daily account snapshot.",
     {
-      type: z.string().describe("The account type (e.g., SPOT, MARGIN, FUTURES)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 7, max 30"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get daily account snapshot.",
+      inputSchema: {
+        type: z.string().describe("The account type (e.g., SPOT, MARGIN, FUTURES)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 7, max 30"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ type, startTime, endTime, limit, recvWindow }) => {
       try {

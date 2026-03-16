@@ -12,13 +12,16 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnFlexibleSubscriptionPreview(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleSubscriptionPreview",
-    "Preview a flexible product subscription before committing. Shows expected rewards and next interest date.",
     {
-      productId: z.string().describe("Product ID to preview"),
-      amount: z.number().positive().describe("Amount to preview subscription for"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Preview a flexible product subscription before committing. Shows expected rewards and next interest date.",
+      inputSchema: {
+        productId: z.string().describe("Product ID to preview"),
+        amount: z.number().positive().describe("Amount to preview subscription for"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

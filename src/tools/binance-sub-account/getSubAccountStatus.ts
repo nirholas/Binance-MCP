@@ -6,12 +6,14 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetStatus",
-    "Get sub-account status including enable/disable status for margin and futures.",
     {
-      email: z.string().optional().describe("Sub-account email (optional)"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get sub-account status including enable/disable status for margin and futures.",
+      inputSchema: {
+        email: z.string().optional().describe("Sub-account email (optional)"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, recvWindow }) => {
       try {

@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetCurrentEthStakingQuota(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetCurrentEthStakingQuota",
-    "Get Current ETH Staking Quota API allows users to retrieve their available ETH staking and redemption quotas, reflecting personal and daily limits.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get Current ETH Staking Quota API allows users to retrieve their available ETH staking and redemption quotas, reflecting personal and daily limits.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

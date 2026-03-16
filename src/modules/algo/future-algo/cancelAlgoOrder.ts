@@ -6,12 +6,15 @@ import { z } from "zod";
 import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFutureCancelAlgoOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFutureCancelAlgoOrder",
-    "The Cancel Algo Order API allows users to cancel an active algorithmic order on USDⓈ-M Contracts in Binance Futures.",
     {
-      algoId: z.number().int().describe("Algo order ID (e.g., 14511)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "The Cancel Algo Order API allows users to cancel an active algorithmic order on USDⓈ-M Contracts in Binance Futures.",
+      inputSchema: {
+        algoId: z.number().int().describe("Algo order ID (e.g., 14511)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

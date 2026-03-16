@@ -6,12 +6,15 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreateVirtual(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountCreateVirtual",
-    "Create a virtual sub-account under the master account. Requires master account API key.",
     {
-      subAccountString: z.string().describe("The email address for the virtual sub-account"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Create a virtual sub-account under the master account. Requires master account API key.",
+      inputSchema: {
+        subAccountString: z.string().describe("The email address for the virtual sub-account"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ subAccountString, recvWindow }) => {
       try {

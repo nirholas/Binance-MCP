@@ -6,20 +6,27 @@ import { z } from "zod";
 import { nftClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetNFTDepositHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetNFTDepositHistory",
-    "Retrieves NFT deposit history, including network, contract address, token ID, transaction ID (if available), and timestamps.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(50, "Limit cannot be greater than 50")
-        .optional()
-        .describe("Number of records to return, default 50, max 50"),
-      page: z.number().int().optional().describe("Page number, default is 1"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieves NFT deposit history, including network, contract address, token ID, transaction ID (if available), and timestamps.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(50, "Limit cannot be greater than 50")
+          .optional()
+          .describe("Number of records to return, default 50, max 50"),
+        page: z.number().int().optional().describe("Page number, default is 1"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

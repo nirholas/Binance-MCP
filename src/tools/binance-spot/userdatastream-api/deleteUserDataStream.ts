@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeleteUserDataStream(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeleteUserDataStream",
-    "Close a user data stream by invalidating the listen key.",
     {
-      listenKey: z.string().describe("Listen key to close"),
+      description: "Close a user data stream by invalidating the listen key.",
+      inputSchema: {
+        listenKey: z.string().describe("Listen key to close"),
+      },
     },
     async ({ listenKey }) => {
       try {

@@ -6,11 +6,13 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAllCoinsInformation(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletAllCoinsInformation",
-    "Get information for all coins.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get information for all coins.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

@@ -6,11 +6,13 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletQueryUserWalletBalance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletQueryUserWalletBalance",
-    "Query user wallet balance.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query user wallet balance.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

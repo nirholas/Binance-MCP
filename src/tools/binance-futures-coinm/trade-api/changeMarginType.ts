@@ -12,13 +12,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryChangeMarginType(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryChangeMarginType",
-    "Change margin type between ISOLATED and CROSSED for COIN-M Futures.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Change margin type between ISOLATED and CROSSED for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

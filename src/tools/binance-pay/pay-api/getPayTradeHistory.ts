@@ -6,19 +6,26 @@ import { z } from "zod";
 import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetPayTradeHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetPayTradeHistory",
-    "Retrieve Binance Pay trade history using GET to fetch transaction records such as C2C transfers, merchant payments, crypto box activity, refunds, payouts, and remittance details.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(100, "Limit cannot be greater than 100")
-        .default(100)
-        .describe("Number of records to return, default 100, max 100"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieve Binance Pay trade history using GET to fetch transaction records such as C2C transfers, merchant payments, crypto box activity, refunds, payouts, and remittance details.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(100, "Limit cannot be greater than 100")
+          .default(100)
+          .describe("Number of records to return, default 100, max 100"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

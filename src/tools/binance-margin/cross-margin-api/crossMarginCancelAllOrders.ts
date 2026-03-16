@@ -6,12 +6,15 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginCancelAllOrders",
-    "Cancel all open margin orders for a specific trading pair. This will cancel all open orders on the symbol.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Cancel all open margin orders for a specific trading pair. This will cancel all open orders on the symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

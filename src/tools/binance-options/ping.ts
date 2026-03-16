@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsPing(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsPing",
-    "Test connectivity to the Binance Options API.",
-    {},
+    { description: "Test connectivity to the Binance Options API." },
     async () => {
       try {
         const data = await optionsClient.ping();

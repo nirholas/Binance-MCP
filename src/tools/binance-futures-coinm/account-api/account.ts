@@ -12,11 +12,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryAccount",
-    "Get current COIN-M Futures account information including assets, positions, and risk metrics.",
     {
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get current COIN-M Futures account information including assets, positions, and risk metrics.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

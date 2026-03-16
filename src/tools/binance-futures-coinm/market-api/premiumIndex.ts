@@ -12,14 +12,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPremiumIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryPremiumIndex",
-    "Get mark price and funding rate for COIN-M Futures contracts.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
+      description: "Get mark price and funding rate for COIN-M Futures contracts.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Contract symbol (e.g., BTCUSD_PERP). If not provided, returns all symbols"),
+      },
     },
     async (params) => {
       try {

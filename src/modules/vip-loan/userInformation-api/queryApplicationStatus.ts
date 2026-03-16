@@ -6,19 +6,26 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceQueryApplicationStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceQueryApplicationStatus",
-    "Allows VIP users to check the status of their loan applications. It returns a list of loan requests with details such as loan coin, amount, term, collateral details, and current application status",
     {
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Currently querying page. Start from 1, default 1, max 1000"),
-      limit: z.number().int().min(1).max(100).optional().describe("Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Allows VIP users to check the status of their loan applications. It returns a list of loan requests with details such as loan coin, amount, term, collateral details, and current application status",
+      inputSchema: {
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Currently querying page. Start from 1, default 1, max 1000"),
+        limit: z.number().int().min(1).max(100).optional().describe("Default: 10, Max: 100"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

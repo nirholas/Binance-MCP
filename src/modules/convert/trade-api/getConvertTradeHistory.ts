@@ -6,19 +6,22 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetConvertTradeHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetConvertTradeHistory",
-    "The API retrieves your token conversion trade history within a specified time range, with support for pagination using the limit parameter (up to 1000 records).",
     {
-      startTime: z.number().int().describe("Start time in milliseconds"),
-      endTime: z.number().int().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(1000, "Limit cannot be greater than 1000")
-        .optional()
-        .describe("Default 100, Max 1000"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "The API retrieves your token conversion trade history within a specified time range, with support for pagination using the limit parameter (up to 1000 records).",
+      inputSchema: {
+        startTime: z.number().int().describe("Start time in milliseconds"),
+        endTime: z.number().int().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(1000, "Limit cannot be greater than 1000")
+          .optional()
+          .describe("Default 100, Max 1000"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

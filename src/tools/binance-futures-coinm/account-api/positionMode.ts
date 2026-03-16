@@ -12,11 +12,13 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryPositionMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryPositionMode",
-    "Get current COIN-M Futures position mode (Hedge Mode or One-way Mode).",
     {
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get current COIN-M Futures position mode (Hedge Mode or One-way Mode).",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

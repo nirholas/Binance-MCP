@@ -6,12 +6,14 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestChangePlanStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestChangePlanStatus",
-    "Change plan status (pause/resume) for auto-invest.",
     {
-      planId: z.number().describe("Plan ID"),
-      status: z.enum(["ONGOING", "PAUSED", "REMOVED"]).describe("New plan status"),
+      description: "Change plan status (pause/resume) for auto-invest.",
+      inputSchema: {
+        planId: z.number().describe("Plan ID"),
+        status: z.enum(["ONGOING", "PAUSED", "REMOVED"]).describe("New plan status"),
+      },
     },
     async ({ planId, status }) => {
       try {

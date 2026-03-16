@@ -12,20 +12,23 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCancelBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCancelBatchOrders",
-    "Cancel multiple options orders in a single request. Maximum 5 orders per request.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      orderIds: z
-        .array(z.number().int())
-        .optional()
-        .describe("Array of order IDs to cancel (max 5)"),
-      clientOrderIds: z
-        .array(z.string())
-        .optional()
-        .describe("Array of client order IDs to cancel (max 5)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Cancel multiple options orders in a single request. Maximum 5 orders per request.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        orderIds: z
+          .array(z.number().int())
+          .optional()
+          .describe("Array of order IDs to cancel (max 5)"),
+        clientOrderIds: z
+          .array(z.string())
+          .optional()
+          .describe("Array of client order IDs to cancel (max 5)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

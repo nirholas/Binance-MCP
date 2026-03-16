@@ -12,20 +12,23 @@ import { z } from "zod";
 import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePayGetHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePayGetHistory",
-    "Get your Binance Pay transaction history. Shows all Pay transactions including C2C transfers, merchant payments, and refunds.",
     {
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      limit: z
-        .number()
-        .int()
-        .max(100)
-        .default(100)
-        .optional()
-        .describe("Number of records (max 100)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your Binance Pay transaction history. Shows all Pay transactions including C2C transfers, merchant payments, and refunds.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        limit: z
+          .number()
+          .int()
+          .max(100)
+          .default(100)
+          .optional()
+          .describe("Number of records (max 100)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

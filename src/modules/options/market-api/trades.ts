@@ -12,18 +12,21 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsTrades",
-    "Get recent trades for an options contract. Shows the most recent executed trades.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(500)
-        .optional()
-        .describe("Number of trades to return (default 100, max 500)"),
+      description:
+        "Get recent trades for an options contract. Shows the most recent executed trades.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(500)
+          .optional()
+          .describe("Number of trades to return (default 100, max 500)"),
+      },
     },
     async (params) => {
       try {

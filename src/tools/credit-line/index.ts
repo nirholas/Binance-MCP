@@ -28,8 +28,9 @@ export function registerCreditLineTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v2/cl/account - Get Credit Line Account Information
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_account",
+    {},
     `Get current credit line account information including LTV ratios, balances, and loan details.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
@@ -108,8 +109,9 @@ Available to Withdraw: ${response.availableAmountToTransferOut}`;
   // =====================================================================
   // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Calls/Liquidations)
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_alert_history",
+    {},
     `Get margin call and liquidation alert history for your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
@@ -182,8 +184,9 @@ when margin calls or liquidation warnings have occurred.`,
   // =====================================================================
   // GET /sapi/v1/cl/transferHistory - Get Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_transfer_history",
+    {},
     `Get transfer history for your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
@@ -261,8 +264,9 @@ Use this to track deposits and withdrawals from your credit line account.`,
   // =====================================================================
   // POST /sapi/v1/cl/transfer - Execute Transfer
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cl_transfer",
+    {},
     `Transfer assets in or out of your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.

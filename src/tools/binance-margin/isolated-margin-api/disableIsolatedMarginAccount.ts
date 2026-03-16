@@ -12,12 +12,15 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDisableIsolatedMarginAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDisableIsolatedMarginAccount",
-    "Disable isolated margin account for a specific symbol. All assets must be transferred out first.",
     {
-      symbol: z.string().describe("Symbol to disable isolated margin for (e.g., BTCUSDT)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Disable isolated margin account for a specific symbol. All assets must be transferred out first.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol to disable isolated margin for (e.g., BTCUSDT)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

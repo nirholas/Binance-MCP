@@ -12,18 +12,21 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsDepth",
-    "Get the order book depth for an options contract. Shows current bids and asks at various price levels.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Limit the number of price levels returned (default 100, max 1000)"),
+      description:
+        "Get the order book depth for an options contract. Shows current bids and asks at various price levels.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Limit the number of price levels returned (default 100, max 1000)"),
+      },
     },
     async (params) => {
       try {

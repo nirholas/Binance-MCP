@@ -6,19 +6,21 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginRepayRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginRepayRecord",
-    "Query repay record for Cross Margin account.",
     {
-      asset: z.string().describe("Asset (e.g., BTC, USDT)"),
-      isolatedSymbol: z.string().optional().describe("Isolated symbol"),
-      txId: z.number().int().optional().describe("Transaction ID"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      current: z.number().int().optional().describe("Current page, default 1"),
-      size: z.number().int().optional().describe("Page size, default 10, max 100"),
-      archived: z.boolean().optional().describe("Query archived data, default false"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query repay record for Cross Margin account.",
+      inputSchema: {
+        asset: z.string().describe("Asset (e.g., BTC, USDT)"),
+        isolatedSymbol: z.string().optional().describe("Isolated symbol"),
+        txId: z.number().int().optional().describe("Transaction ID"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        current: z.number().int().optional().describe("Current page, default 1"),
+        size: z.number().int().optional().describe("Page size, default 10, max 100"),
+        archived: z.boolean().optional().describe("Query archived data, default false"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

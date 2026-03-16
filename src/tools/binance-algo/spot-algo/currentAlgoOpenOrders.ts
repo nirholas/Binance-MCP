@@ -6,11 +6,14 @@ import { z } from "zod";
 import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSpotCurrentAlgoOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSpotCurrentAlgoOpenOrders",
-    "This API retrieves all open SPOT TWAP (Time-Weighted Average Price) orders on Binance.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "This API retrieves all open SPOT TWAP (Time-Weighted Average Price) orders on Binance.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -12,15 +12,17 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesAggTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesAggTrades",
-    "Get compressed aggregate trades for a USD-M Futures symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      fromId: z.number().int().optional().describe("Trade ID to start from"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().optional().describe("Number of trades. Default 500, max 1000"),
+      description: "Get compressed aggregate trades for a USD-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        fromId: z.number().int().optional().describe("Trade ID to start from"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z.number().int().optional().describe("Number of trades. Default 500, max 1000"),
+      },
     },
     async (params) => {
       try {

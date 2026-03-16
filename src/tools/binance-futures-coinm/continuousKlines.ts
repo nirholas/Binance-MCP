@@ -6,36 +6,38 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMContinuousKlines(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMContinuousKlines",
-    "Get continuous contract Kline/candlestick data for COIN-M Futures.",
     {
-      pair: z.string().describe("Trading pair (e.g., BTCUSD)"),
-      contractType: z
-        .enum(["PERPETUAL", "CURRENT_QUARTER", "NEXT_QUARTER"])
-        .describe("Contract type"),
-      interval: z
-        .enum([
-          "1m",
-          "3m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "4h",
-          "6h",
-          "8h",
-          "12h",
-          "1d",
-          "3d",
-          "1w",
-          "1M",
-        ])
-        .describe("Kline interval"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 500; max 1500"),
+      description: "Get continuous contract Kline/candlestick data for COIN-M Futures.",
+      inputSchema: {
+        pair: z.string().describe("Trading pair (e.g., BTCUSD)"),
+        contractType: z
+          .enum(["PERPETUAL", "CURRENT_QUARTER", "NEXT_QUARTER"])
+          .describe("Contract type"),
+        interval: z
+          .enum([
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+          ])
+          .describe("Kline interval"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 500; max 1500"),
+      },
     },
     async ({ pair, contractType, interval, startTime, endTime, limit }) => {
       try {

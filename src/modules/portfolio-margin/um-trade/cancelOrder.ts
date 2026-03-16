@@ -12,14 +12,16 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmCancelOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginUmCancelOrder",
-    "Cancel an active USDT-M Futures order in Portfolio Margin mode.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      orderId: z.number().int().optional().describe("Order ID to cancel"),
-      origClientOrderId: z.string().optional().describe("Original client order ID to cancel"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Cancel an active USDT-M Futures order in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        orderId: z.number().int().optional().describe("Order ID to cancel"),
+        origClientOrderId: z.string().optional().describe("Original client order ID to cancel"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

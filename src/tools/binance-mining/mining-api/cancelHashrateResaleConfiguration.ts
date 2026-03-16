@@ -6,13 +6,16 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCancelHashRateResaleConfiguration(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCancelHashRateResaleConfiguration",
-    "Cancel an existing hashrate resale configuration using the mining ID and account details.",
     {
-      configId: z.number().int().describe("Mining ID").min(1),
-      userName: z.string().min(1).describe("Mining Account"),
-      recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      description:
+        "Cancel an existing hashrate resale configuration using the mining ID and account details.",
+      inputSchema: {
+        configId: z.number().int().describe("Mining ID").min(1),
+        userName: z.string().min(1).describe("Mining Account"),
+        recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

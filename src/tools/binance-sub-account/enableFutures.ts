@@ -6,12 +6,14 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountEnableFutures(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountEnableFutures",
-    "Enable futures trading for a sub-account.",
     {
-      email: z.string().describe("Sub-account email"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Enable futures trading for a sub-account.",
+      inputSchema: {
+        email: z.string().describe("Sub-account email"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, recvWindow }) => {
       try {

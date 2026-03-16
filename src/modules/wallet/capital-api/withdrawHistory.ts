@@ -6,18 +6,20 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletWithdrawHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletWithdrawHistory",
-    "Get withdraw history.",
     {
-      coin: z.string().optional().describe("Coin symbol"),
-      withdrawOrderId: z.string().optional().describe("Withdraw order ID"),
-      status: z.number().optional().describe("Withdraw status"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      offset: z.number().optional().describe("Pagination offset"),
-      limit: z.number().optional().describe("Number of records to return"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get withdraw history.",
+      inputSchema: {
+        coin: z.string().optional().describe("Coin symbol"),
+        withdrawOrderId: z.string().optional().describe("Withdraw order ID"),
+        status: z.number().optional().describe("Withdraw status"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        offset: z.number().optional().describe("Pagination offset"),
+        limit: z.number().optional().describe("Number of records to return"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ coin, withdrawOrderId, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {

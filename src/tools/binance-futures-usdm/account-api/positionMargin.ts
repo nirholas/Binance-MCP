@@ -13,18 +13,20 @@ import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPositionMargin(server: McpServer) {
   // Modify Isolated Position Margin
-  server.tool(
+  server.registerTool(
     "BinanceFuturesModifyPositionMargin",
-    "Add or reduce margin for an isolated position in USD-M Futures.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      amount: z.string().describe("Amount of margin to add (positive) or remove (negative)"),
-      type: z.enum(["1", "2"]).describe("1: Add margin, 2: Reduce margin"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side for Hedge Mode"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Add or reduce margin for an isolated position in USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        amount: z.string().describe("Amount of margin to add (positive) or remove (negative)"),
+        type: z.enum(["1", "2"]).describe("1: Add margin, 2: Reduce margin"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side for Hedge Mode"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {
@@ -57,16 +59,18 @@ export function registerBinanceFuturesPositionMargin(server: McpServer) {
   );
 
   // Get Position Margin Change History
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetPositionMarginHistory",
-    "Get position margin change history for a USD-M Futures symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      type: z.enum(["1", "2"]).optional().describe("1: Add margin, 2: Reduce margin"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z.number().int().max(500).optional().describe("Number of records. Default 500"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get position margin change history for a USD-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        type: z.enum(["1", "2"]).optional().describe("1: Add margin, 2: Reduce margin"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z.number().int().max(500).optional().describe("Number of records. Default 500"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

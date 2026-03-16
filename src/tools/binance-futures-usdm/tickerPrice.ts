@@ -6,16 +6,18 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTickerPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMTickerPrice",
-    "Get latest price for a symbol or symbols for USD-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
-        ),
+      description: "Get latest price for a symbol or symbols for USD-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
+          ),
+      },
     },
     async ({ symbol }) => {
       try {

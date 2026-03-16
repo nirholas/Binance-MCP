@@ -6,18 +6,20 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMForceOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMForceOrders",
-    "Get user force orders (liquidation orders) for COIN-M Futures.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      autoCloseType: z
-        .enum(["LIQUIDATION", "ADL"])
-        .optional()
-        .describe("Auto close type: LIQUIDATION or ADL"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 50; max 100"),
+      description: "Get user force orders (liquidation orders) for COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        autoCloseType: z
+          .enum(["LIQUIDATION", "ADL"])
+          .optional()
+          .describe("Auto close type: LIQUIDATION or ADL"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 50; max 100"),
+      },
     },
     async ({ symbol, autoCloseType, startTime, endTime, limit }) => {
       try {

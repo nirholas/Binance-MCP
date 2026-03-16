@@ -6,17 +6,20 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceRedeemEth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceRedeemEth",
-    "Redeem ETH API allows users to redeem WBETH or BETH for ETH, providing the amount, conversion ratio, and arrival time details.",
     {
-      amount: z.number().min(0).describe("Amount in BETH, limit 8 decimals (mandatory)"),
-      asset: z
-        .string()
-        .optional()
-        .default("BETH")
-        .describe("Asset type, either WBETH or BETH. Default: BETH"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Redeem ETH API allows users to redeem WBETH or BETH for ETH, providing the amount, conversion ratio, and arrival time details.",
+      inputSchema: {
+        amount: z.number().min(0).describe("Amount in BETH, limit 8 decimals (mandatory)"),
+        asset: z
+          .string()
+          .optional()
+          .default("BETH")
+          .describe("Asset type, either WBETH or BETH. Default: BETH"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

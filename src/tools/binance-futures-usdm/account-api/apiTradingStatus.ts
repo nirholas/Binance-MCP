@@ -12,12 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesApiTradingStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesApiTradingStatus",
-    "Get API trading quantitative rules indicators for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Futures symbol"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get API trading quantitative rules indicators for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

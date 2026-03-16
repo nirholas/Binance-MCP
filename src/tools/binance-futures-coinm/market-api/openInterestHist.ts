@@ -12,20 +12,23 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryOpenInterestHist(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryOpenInterestHist",
-    "Get historical open interest for a COIN-M Futures pair. Requires VIP 2+ or higher.",
     {
-      pair: z.string().describe("Underlying pair (e.g., BTCUSD)"),
-      contractType: z
-        .enum(["ALL", "PERPETUAL", "CURRENT_QUARTER", "NEXT_QUARTER"])
-        .describe("Contract type"),
-      period: z
-        .enum(["5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d"])
-        .describe("Time period"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 30, max 500)"),
+      description:
+        "Get historical open interest for a COIN-M Futures pair. Requires VIP 2+ or higher.",
+      inputSchema: {
+        pair: z.string().describe("Underlying pair (e.g., BTCUSD)"),
+        contractType: z
+          .enum(["ALL", "PERPETUAL", "CURRENT_QUARTER", "NEXT_QUARTER"])
+          .describe("Contract type"),
+        period: z
+          .enum(["5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d"])
+          .describe("Time period"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 30, max 500)"),
+      },
     },
     async (params) => {
       try {

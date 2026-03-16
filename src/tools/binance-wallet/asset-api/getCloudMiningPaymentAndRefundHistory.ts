@@ -6,15 +6,17 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletGetCloudMiningPaymentAndRefundHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletGetCloudMiningPaymentAndRefundHistory",
-    "Get cloud mining payment and refund history.",
     {
-      startTime: z.number().describe("Start time in milliseconds"),
-      endTime: z.number().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number"),
-      pageSize: z.number().optional().describe("Page size"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get cloud mining payment and refund history.",
+      inputSchema: {
+        startTime: z.number().describe("Start time in milliseconds"),
+        endTime: z.number().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number"),
+        pageSize: z.number().optional().describe("Page size"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ startTime, endTime, page, pageSize, recvWindow }) => {
       try {

@@ -12,15 +12,18 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnFlexiblePosition(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexiblePosition",
-    "Get your current Simple Earn Flexible positions. Shows subscribed amount, cumulative rewards, and APR for each product.",
     {
-      asset: z.string().optional().describe("Filter by asset symbol"),
-      productId: z.string().optional().describe("Filter by product ID"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your current Simple Earn Flexible positions. Shows subscribed amount, cumulative rewards, and APR for each product.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by asset symbol"),
+        productId: z.string().optional().describe("Filter by product ID"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

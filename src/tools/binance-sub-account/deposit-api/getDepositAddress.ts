@@ -12,14 +12,17 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountDepositAddress(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountDepositAddress",
-    "Get deposit address for a sub-account. Returns the address and tag/memo if required for the specified asset and network.",
     {
-      email: z.string().email().describe("Sub-account email to get deposit address for"),
-      coin: z.string().describe("Coin/asset to get deposit address for (e.g., 'BTC', 'ETH')"),
-      network: z.string().optional().describe("Network (e.g., 'BTC', 'ETH', 'TRX', 'BSC')"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get deposit address for a sub-account. Returns the address and tag/memo if required for the specified asset and network.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email to get deposit address for"),
+        coin: z.string().describe("Coin/asset to get deposit address for (e.g., 'BTC', 'ETH')"),
+        network: z.string().optional().describe("Network (e.g., 'BTC', 'ETH', 'TRX', 'BSC')"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

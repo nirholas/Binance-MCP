@@ -6,16 +6,19 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginForceLiquidationRec(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginForceLiquidationRec",
-    "Get force liquidation record for margin account. Shows historical liquidation events.",
     {
-      isolatedSymbol: z.string().optional().describe("Isolated symbol for isolated margin"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      current: z.number().int().optional().describe("Current page (default 1)"),
-      size: z.number().int().optional().describe("Page size (default 10, max 100)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get force liquidation record for margin account. Shows historical liquidation events.",
+      inputSchema: {
+        isolatedSymbol: z.string().optional().describe("Isolated symbol for isolated margin"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        current: z.number().int().optional().describe("Current page (default 1)"),
+        size: z.number().int().optional().describe("Page size (default 10, max 100)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

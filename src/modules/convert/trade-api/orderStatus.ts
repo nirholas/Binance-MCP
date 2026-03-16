@@ -6,12 +6,15 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertOrderStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertOrderStatus",
-    "The API checks the status of a token conversion order using either the orderId or quoteId, and returns details like conversion status, assets involved, amounts, exchange rate, and order creation time.",
     {
-      orderId: z.string().optional().describe("Order ID (either this or quoteId is required)"),
-      quoteId: z.string().optional().describe("Quote ID (either this or orderId is required)"),
+      description:
+        "The API checks the status of a token conversion order using either the orderId or quoteId, and returns details like conversion status, assets involved, amounts, exchange rate, and order creation time.",
+      inputSchema: {
+        orderId: z.string().optional().describe("Order ID (either this or quoteId is required)"),
+        quoteId: z.string().optional().describe("Quote ID (either this or orderId is required)"),
+      },
     },
     async (params) => {
       try {

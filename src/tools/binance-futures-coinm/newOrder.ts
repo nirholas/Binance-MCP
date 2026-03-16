@@ -6,34 +6,36 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMNewOrder",
-    "Send a new COIN-M futures order.",
     {
-      symbol: z.string().describe("Trading symbol (e.g., BTCUSD_PERP)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      type: z
-        .enum([
-          "LIMIT",
-          "MARKET",
-          "STOP",
-          "STOP_MARKET",
-          "TAKE_PROFIT",
-          "TAKE_PROFIT_MARKET",
-          "TRAILING_STOP_MARKET",
-        ])
-        .describe("Order type"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side for hedge mode"),
-      quantity: z.number().optional().describe("Order quantity"),
-      price: z.number().optional().describe("Order price (required for LIMIT orders)"),
-      stopPrice: z.number().optional().describe("Stop price for stop orders"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
-      reduceOnly: z.boolean().optional().describe("Reduce only order"),
-      newClientOrderId: z.string().optional().describe("Client order ID"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Send a new COIN-M futures order.",
+      inputSchema: {
+        symbol: z.string().describe("Trading symbol (e.g., BTCUSD_PERP)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        type: z
+          .enum([
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET",
+          ])
+          .describe("Order type"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side for hedge mode"),
+        quantity: z.number().optional().describe("Order quantity"),
+        price: z.number().optional().describe("Order price (required for LIMIT orders)"),
+        stopPrice: z.number().optional().describe("Stop price for stop orders"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
+        reduceOnly: z.boolean().optional().describe("Reduce only order"),
+        newClientOrderId: z.string().optional().describe("Client order ID"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

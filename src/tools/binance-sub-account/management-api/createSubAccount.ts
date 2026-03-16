@@ -12,16 +12,19 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountCreate",
-    "Create a new virtual sub-account under your master account. Sub-accounts are useful for separating trading strategies or managing funds for different purposes. ⚠️ Requires master account permissions.",
     {
-      subAccountString: z
-        .string()
-        .min(1)
-        .max(20)
-        .describe("Sub-account name/label (1-20 characters, alphanumeric)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Create a new virtual sub-account under your master account. Sub-accounts are useful for separating trading strategies or managing funds for different purposes. ⚠️ Requires master account permissions.",
+      inputSchema: {
+        subAccountString: z
+          .string()
+          .min(1)
+          .max(20)
+          .describe("Sub-account name/label (1-20 characters, alphanumeric)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

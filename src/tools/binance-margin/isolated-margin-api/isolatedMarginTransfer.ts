@@ -6,16 +6,19 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginTransfer",
-    "Transfer assets between spot wallet and isolated margin account for a specific symbol.",
     {
-      asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      amount: z.string().describe("Amount to transfer"),
-      transFrom: z.enum(["SPOT", "ISOLATED_MARGIN"]).describe("Transfer from account type"),
-      transTo: z.enum(["SPOT", "ISOLATED_MARGIN"]).describe("Transfer to account type"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Transfer assets between spot wallet and isolated margin account for a specific symbol.",
+      inputSchema: {
+        asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        amount: z.string().describe("Amount to transfer"),
+        transFrom: z.enum(["SPOT", "ISOLATED_MARGIN"]).describe("Transfer from account type"),
+        transTo: z.enum(["SPOT", "ISOLATED_MARGIN"]).describe("Transfer to account type"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

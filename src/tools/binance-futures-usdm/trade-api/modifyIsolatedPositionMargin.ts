@@ -12,18 +12,21 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesModifyIsolatedPositionMargin(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesModifyIsolatedPositionMargin",
-    "Add or reduce margin to/from an isolated margin position. Only works when margin type is ISOLATED.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      amount: z.string().describe("Amount of margin to add or reduce"),
-      type: z.enum(["1", "2"]).describe("1 = Add margin, 2 = Reduce margin"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side for Hedge Mode (default BOTH)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Add or reduce margin to/from an isolated margin position. Only works when margin type is ISOLATED.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        amount: z.string().describe("Amount of margin to add or reduce"),
+        type: z.enum(["1", "2"]).describe("1 = Add margin, 2 = Reduce margin"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side for Hedge Mode (default BOTH)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -12,21 +12,28 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetHistoryList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetHistoryList",
-    "Get auto-invest transaction history. View all past purchases and investments.",
     {
-      planId: z.number().int().optional().describe("Filter by plan ID"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      targetAsset: z.string().optional().describe("Filter by target asset"),
-      planType: z
-        .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
-        .optional()
-        .describe("Filter by plan type"),
-      size: z.number().int().max(100).optional().describe("Number of results. Default 10, max 100"),
-      current: z.number().int().optional().describe("Current page. Default 1"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get auto-invest transaction history. View all past purchases and investments.",
+      inputSchema: {
+        planId: z.number().int().optional().describe("Filter by plan ID"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        targetAsset: z.string().optional().describe("Filter by target asset"),
+        planType: z
+          .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
+          .optional()
+          .describe("Filter by plan type"),
+        size: z
+          .number()
+          .int()
+          .max(100)
+          .optional()
+          .describe("Number of results. Default 10, max 100"),
+        current: z.number().int().optional().describe("Current page. Default 1"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

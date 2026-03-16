@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetOpenOrders",
-    "Get all open orders on Binance for a specific symbol or all symbols.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Get all open orders on Binance for a specific symbol or all symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

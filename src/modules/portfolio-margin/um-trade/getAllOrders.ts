@@ -12,22 +12,25 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginUmGetAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginUmGetAllOrders",
-    "Get all USDT-M Futures orders (active, cancelled, filled) in Portfolio Margin mode.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      orderId: z.number().int().optional().describe("Order ID to start from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of orders to return (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get all USDT-M Futures orders (active, cancelled, filled) in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        orderId: z.number().int().optional().describe("Order ID to start from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of orders to return (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSolStakingAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "registerBinanceSolStakingAccount",
-    "SOL Staking Account API allows users to view their SOL staking account details, including their current BNSOL holdings, equivalent SOL balance, and the profit in SOL over the past 30 days.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "SOL Staking Account API allows users to view their SOL staking account details, including their current BNSOL holdings, equivalent SOL balance, and the profit in SOL over the past 30 days.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

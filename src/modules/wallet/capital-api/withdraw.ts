@@ -6,20 +6,22 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletWithdraw(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletWithdraw",
-    "Submit a withdraw request.",
     {
-      coin: z.string().describe("Coin symbol"),
-      address: z.string().describe("Withdrawal address"),
-      amount: z.number().describe("Withdrawal amount"),
-      withdrawOrderId: z.string().optional().describe("Client order id"),
-      network: z.string().optional().describe("Network"),
-      addressTag: z.string().optional().describe("Secondary address identifier (tag/memo)"),
-      name: z.string().optional().describe("Address name"),
-      walletType: z.number().optional().describe("Wallet type"),
-      transactionFeeFlag: z.boolean().optional().describe("Pay fee with BNB"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Submit a withdraw request.",
+      inputSchema: {
+        coin: z.string().describe("Coin symbol"),
+        address: z.string().describe("Withdrawal address"),
+        amount: z.number().describe("Withdrawal amount"),
+        withdrawOrderId: z.string().optional().describe("Client order id"),
+        network: z.string().optional().describe("Network"),
+        addressTag: z.string().optional().describe("Secondary address identifier (tag/memo)"),
+        name: z.string().optional().describe("Address name"),
+        walletType: z.number().optional().describe("Wallet type"),
+        transactionFeeFlag: z.boolean().optional().describe("Pay fee with BNB"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({
       coin,

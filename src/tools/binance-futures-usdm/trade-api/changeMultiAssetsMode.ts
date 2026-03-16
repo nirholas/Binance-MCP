@@ -12,12 +12,15 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesChangeMultiAssetsMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesChangeMultiAssetsMode",
-    "Change Multi-Assets Mode setting. When enabled, margin from multiple assets (USDT, BUSD) can be used to avoid liquidation.",
     {
-      multiAssetsMargin: z.boolean().describe("true = Enable Multi-Assets Mode, false = Disable"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Change Multi-Assets Mode setting. When enabled, margin from multiple assets (USDT, BUSD) can be used to avoid liquidation.",
+      inputSchema: {
+        multiAssetsMargin: z.boolean().describe("true = Enable Multi-Assets Mode, false = Disable"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

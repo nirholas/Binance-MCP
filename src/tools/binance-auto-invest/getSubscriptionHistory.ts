@@ -6,17 +6,19 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetSubscriptionHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetSubscriptionHistory",
-    "Query subscription transaction history for auto-invest.",
     {
-      planId: z.number().optional().describe("Plan ID"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
-      planType: z.enum(["SINGLE", "PORTFOLIO", "INDEX"]).optional().describe("Plan type"),
-      current: z.number().optional().describe("Current page"),
-      size: z.number().optional().describe("Page size"),
+      description: "Query subscription transaction history for auto-invest.",
+      inputSchema: {
+        planId: z.number().optional().describe("Plan ID"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
+        planType: z.enum(["SINGLE", "PORTFOLIO", "INDEX"]).optional().describe("Plan type"),
+        current: z.number().optional().describe("Current page"),
+        size: z.number().optional().describe("Page size"),
+      },
     },
     async ({ planId, startTime, endTime, targetAsset, planType, current, size }) => {
       try {

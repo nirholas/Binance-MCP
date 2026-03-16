@@ -6,13 +6,15 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletSubmitDepositQuestionnaireTravelRule(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletSubmitDepositQuestionnaireTravelRule",
-    "Submit deposit questionnaire for travel rule.",
     {
-      tranId: z.number().describe("Transaction ID"),
-      questionnaire: z.string().describe("Travel rule questionnaire"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Submit deposit questionnaire for travel rule.",
+      inputSchema: {
+        tranId: z.number().describe("Transaction ID"),
+        questionnaire: z.string().describe("Travel rule questionnaire"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ tranId, questionnaire, recvWindow }) => {
       try {

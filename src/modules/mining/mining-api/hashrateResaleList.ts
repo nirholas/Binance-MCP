@@ -6,24 +6,31 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceHashRateResaleList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceHashRateResaleList",
-    "Returns the list of hashRate resale configurations including transfer details such as algorithm, hashrate amount, sender and receiver pool usernames, start and end dates, and status of the transfer.",
     {
-      pageIndex: z
-        .number()
-        .int()
-        .min(1)
-        .optional()
-        .describe("Page number, default is the first page starting from 1"),
-      pageSize: z
-        .number()
-        .int()
-        .min(10)
-        .max(200)
-        .optional()
-        .describe("Number of records per page, min 10, max 200"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Returns the list of hashRate resale configurations including transfer details such as algorithm, hashrate amount, sender and receiver pool usernames, start and end dates, and status of the transfer.",
+      inputSchema: {
+        pageIndex: z
+          .number()
+          .int()
+          .min(1)
+          .optional()
+          .describe("Page number, default is the first page starting from 1"),
+        pageSize: z
+          .number()
+          .int()
+          .min(10)
+          .max(200)
+          .optional()
+          .describe("Number of records per page, min 10, max 200"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

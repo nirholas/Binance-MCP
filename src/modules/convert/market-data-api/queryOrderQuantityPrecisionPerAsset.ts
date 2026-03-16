@@ -6,16 +6,19 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertQueryOrderQuantityPrecisionPerAsset(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertQueryOrderQuantityPrecisionPerAsset",
-    "Retrieve decimal precision (fraction) information for each supported asset in the Convert feature.",
     {
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("The value cannot be greater than 60000"),
+      description:
+        "Retrieve decimal precision (fraction) information for each supported asset in the Convert feature.",
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

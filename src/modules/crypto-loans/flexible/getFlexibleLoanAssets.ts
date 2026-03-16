@@ -12,12 +12,15 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerFlexibleLoanAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleAssets",
-    "Get available assets for flexible crypto loans. Shows which assets you can borrow and their rates.",
     {
-      loanCoin: z.string().optional().describe("Filter by loan coin (e.g., 'USDT', 'BUSD')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get available assets for flexible crypto loans. Shows which assets you can borrow and their rates.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Filter by loan coin (e.g., 'USDT', 'BUSD')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

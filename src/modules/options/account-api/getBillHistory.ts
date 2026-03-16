@@ -12,22 +12,25 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetBillHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetBillHistory",
-    "Get options account funding flow (bill history). Shows transfers, fees, PnL, and other account activities.",
     {
-      currency: z.string().describe("Currency (e.g., 'USDT')"),
-      recordId: z.number().int().optional().describe("Record ID to start from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of records to return (default 100, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get options account funding flow (bill history). Shows transfers, fees, PnL, and other account activities.",
+      inputSchema: {
+        currency: z.string().describe("Currency (e.g., 'USDT')"),
+        recordId: z.number().int().optional().describe("Record ID to start from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of records to return (default 100, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

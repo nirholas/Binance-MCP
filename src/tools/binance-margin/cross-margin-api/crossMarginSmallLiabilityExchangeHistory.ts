@@ -6,15 +6,17 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginSmallLiabilityExchangeHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginSmallLiabilityExchangeHistory",
-    "Get cross margin small liability exchange history.",
     {
-      current: z.number().int().optional().describe("Current page (default 1)"),
-      size: z.number().int().optional().describe("Page size (default 10, max 100)"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get cross margin small liability exchange history.",
+      inputSchema: {
+        current: z.number().int().optional().describe("Current page (default 1)"),
+        size: z.number().int().optional().describe("Page size (default 10, max 100)"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

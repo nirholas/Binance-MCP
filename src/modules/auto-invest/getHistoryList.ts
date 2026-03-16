@@ -12,27 +12,29 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetHistoryList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetHistoryList",
-    "Get auto-invest transaction history. Shows all past recurring purchases.",
     {
-      planId: z.number().int().optional().describe("Filter by plan ID"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      targetAsset: z.string().optional().describe("Filter by target asset"),
-      planType: z
-        .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
-        .optional()
-        .describe("Plan type filter"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Number of results (default 10, max 100)"),
-      current: z.number().int().min(1).optional().describe("Page number (default 1)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get auto-invest transaction history. Shows all past recurring purchases.",
+      inputSchema: {
+        planId: z.number().int().optional().describe("Filter by plan ID"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        targetAsset: z.string().optional().describe("Filter by target asset"),
+        planType: z
+          .enum(["SINGLE", "PORTFOLIO", "INDEX", "ALL"])
+          .optional()
+          .describe("Plan type filter"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Number of results (default 10, max 100)"),
+        current: z.number().int().min(1).optional().describe("Page number (default 1)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

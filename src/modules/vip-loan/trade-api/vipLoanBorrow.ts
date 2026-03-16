@@ -6,25 +6,34 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceVipLoanBorrow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceVipLoanBorrow",
-    "Allow  users (master account only) to apply for a loan by pledging collateral. Users specify the coin they want to borrow, the amount, and the collateral details.",
     {
-      loanAccountId: z.number().int().describe("Loan account ID"),
-      loanCoin: z.string().min(1).describe("Loan coin (e.g., BTC, ETH)"),
-      loanAmount: z.number().describe("Loan amount as decimal"),
-      collateralAccountId: z
-        .string()
-        .min(1)
-        .describe("Collateral account IDs, separated by commas"),
-      collateralCoin: z.string().min(1).describe("Collateral coins, separated by commas"),
-      isFlexibleRate: z.boolean().describe("TRUE: flexible rate, FALSE: fixed rate. Default: TRUE"),
-      loanTerm: z
-        .number()
-        .int()
-        .optional()
-        .describe("Loan term (only required if fixed rate, e.g., 30/60 days)"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Allow  users (master account only) to apply for a loan by pledging collateral. Users specify the coin they want to borrow, the amount, and the collateral details.",
+      inputSchema: {
+        loanAccountId: z.number().int().describe("Loan account ID"),
+        loanCoin: z.string().min(1).describe("Loan coin (e.g., BTC, ETH)"),
+        loanAmount: z.number().describe("Loan amount as decimal"),
+        collateralAccountId: z
+          .string()
+          .min(1)
+          .describe("Collateral account IDs, separated by commas"),
+        collateralCoin: z.string().min(1).describe("Collateral coins, separated by commas"),
+        isFlexibleRate: z
+          .boolean()
+          .describe("TRUE: flexible rate, FALSE: fixed rate. Default: TRUE"),
+        loanTerm: z
+          .number()
+          .int()
+          .optional()
+          .describe("Loan term (only required if fixed rate, e.g., 30/60 days)"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

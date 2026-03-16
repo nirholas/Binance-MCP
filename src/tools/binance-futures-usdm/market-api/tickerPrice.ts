@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesTickerPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesTickerPrice",
-    "Get latest price for a USD-M Futures symbol or all symbols.",
     {
-      symbol: z.string().optional().describe("Futures symbol. If omitted, returns all symbols"),
+      description: "Get latest price for a USD-M Futures symbol or all symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol. If omitted, returns all symbols"),
+      },
     },
     async (params) => {
       try {

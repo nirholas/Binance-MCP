@@ -12,22 +12,25 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedBorrow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedBorrow",
-    "Borrow crypto using a fixed-term loan. ⚠️ WARNING: Fixed loans have a specific term. Your collateral is locked until repayment. Failure to repay may result in liquidation.",
     {
-      loanCoin: z.string().describe("Coin to borrow (e.g., 'USDT')"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC')"),
-      loanTerm: z.number().int().describe("Loan term in days (7, 14, 30, 90, 180)"),
-      loanAmount: z
-        .string()
-        .optional()
-        .describe("Amount to borrow (provide either loanAmount or collateralAmount)"),
-      collateralAmount: z
-        .string()
-        .optional()
-        .describe("Collateral amount (provide either loanAmount or collateralAmount)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Borrow crypto using a fixed-term loan. ⚠️ WARNING: Fixed loans have a specific term. Your collateral is locked until repayment. Failure to repay may result in liquidation.",
+      inputSchema: {
+        loanCoin: z.string().describe("Coin to borrow (e.g., 'USDT')"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC')"),
+        loanTerm: z.number().int().describe("Loan term in days (7, 14, 30, 90, 180)"),
+        loanAmount: z
+          .string()
+          .optional()
+          .describe("Amount to borrow (provide either loanAmount or collateralAmount)"),
+        collateralAmount: z
+          .string()
+          .optional()
+          .describe("Collateral amount (provide either loanAmount or collateralAmount)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

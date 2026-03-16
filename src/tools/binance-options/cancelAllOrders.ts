@@ -6,11 +6,13 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCancelAllOrders",
-    "Cancel all open options orders for a symbol.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      description: "Cancel all open options orders for a symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      },
     },
     async ({ symbol }) => {
       try {

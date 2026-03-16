@@ -12,21 +12,24 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginGetOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMarginGetOco",
-    "Query a specific OCO (One-Cancels-the-Other) order in Margin account by orderListId or listClientOrderId.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Symbol of the trading pair (mandatory for isolated margin)"),
-      orderListId: z.number().int().optional().describe("Order list ID"),
-      origClientOrderId: z.string().optional().describe("Original client order list ID"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin, default FALSE"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query a specific OCO (One-Cancels-the-Other) order in Margin account by orderListId or listClientOrderId.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Symbol of the trading pair (mandatory for isolated margin)"),
+        orderListId: z.number().int().optional().describe("Order list ID"),
+        origClientOrderId: z.string().optional().describe("Original client order list ID"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin, default FALSE"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

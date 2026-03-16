@@ -6,12 +6,14 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsOpenInterest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsOpenInterest",
-    "Get open interest for an option symbol.",
     {
-      underlyingAsset: z.string().describe("Underlying asset (e.g., BTC)"),
-      expiration: z.string().describe("Expiration date (e.g., 240126)"),
+      description: "Get open interest for an option symbol.",
+      inputSchema: {
+        underlyingAsset: z.string().describe("Underlying asset (e.g., BTC)"),
+        expiration: z.string().describe("Expiration date (e.g., 240126)"),
+      },
     },
     async ({ underlyingAsset, expiration }) => {
       try {

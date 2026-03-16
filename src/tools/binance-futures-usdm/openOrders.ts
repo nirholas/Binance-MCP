@@ -6,16 +6,18 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMOpenOrders",
-    "Get all current open orders for USD-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all open orders",
-        ),
+      description: "Get all current open orders for USD-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all open orders",
+          ),
+      },
     },
     async ({ symbol }) => {
       try {

@@ -6,16 +6,19 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginAllOrders",
-    "Query all orders (open and filled/cancelled) in isolated margin account for a specific symbol.",
     {
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("Order ID to start from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 500, max 500)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query all orders (open and filled/cancelled) in isolated margin account for a specific symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("Order ID to start from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 500, max 500)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

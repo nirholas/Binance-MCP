@@ -12,16 +12,19 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnFlexibleRateHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleRateHistory",
-    "Get historical APR rates for a flexible product. Useful for analyzing rate trends and making informed investment decisions.",
     {
-      productId: z.string().describe("Product ID to get rate history for"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get historical APR rates for a flexible product. Useful for analyzing rate trends and making informed investment decisions.",
+      inputSchema: {
+        productId: z.string().describe("Product ID to get rate history for"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

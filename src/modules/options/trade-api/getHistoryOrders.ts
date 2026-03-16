@@ -12,22 +12,24 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetHistoryOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetHistoryOrders",
-    "Get historical options orders. Returns filled, cancelled, and expired orders.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      orderId: z.number().int().optional().describe("Order ID to start from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of orders to return (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get historical options orders. Returns filled, cancelled, and expired orders.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        orderId: z.number().int().optional().describe("Order ID to start from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of orders to return (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

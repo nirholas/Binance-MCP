@@ -12,11 +12,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginRenewListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginRenewListenKey",
-    "Extend the validity of a Portfolio Margin listen key by 60 minutes.",
     {
-      listenKey: z.string().optional().describe("Listen key to renew"),
+      description: "Extend the validity of a Portfolio Margin listen key by 60 minutes.",
+      inputSchema: {
+        listenKey: z.string().optional().describe("Listen key to renew"),
+      },
     },
     async (params) => {
       try {

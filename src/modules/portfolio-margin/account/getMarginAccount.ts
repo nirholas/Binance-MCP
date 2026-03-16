@@ -12,11 +12,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetMarginAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetMarginAccount",
-    "Get cross margin account information within Portfolio Margin mode.",
     {
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get cross margin account information within Portfolio Margin mode.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

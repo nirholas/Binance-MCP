@@ -10,10 +10,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesFundingInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesFundingInfo",
-    "Get funding rate info for all perpetual symbols on USD-M Futures.",
-    {},
+    { description: "Get funding rate info for all perpetual symbols on USD-M Futures." },
     async () => {
       try {
         const response = await futuresClient.restAPI.fundingInfo();

@@ -6,13 +6,15 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsHistoricalTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsHistoricalTrades",
-    "Get historical trades for an option symbol.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      fromId: z.number().optional().describe("Trade ID to fetch from"),
-      limit: z.number().optional().describe("Number of trades to return. Default 100; max 500."),
+      description: "Get historical trades for an option symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        fromId: z.number().optional().describe("Trade ID to fetch from"),
+        limit: z.number().optional().describe("Number of trades to return. Default 100; max 500."),
+      },
     },
     async ({ symbol, fromId, limit }) => {
       try {

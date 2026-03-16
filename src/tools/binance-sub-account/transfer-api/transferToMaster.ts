@@ -12,13 +12,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountTransferToMaster",
-    "Transfer assets from a sub-account back to the master account.",
     {
-      asset: z.string().describe("Asset to transfer (e.g., 'BTC', 'USDT')"),
-      amount: z.number().positive().describe("Amount to transfer"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description: "Transfer assets from a sub-account back to the master account.",
+      inputSchema: {
+        asset: z.string().describe("Asset to transfer (e.g., 'BTC', 'USDT')"),
+        amount: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

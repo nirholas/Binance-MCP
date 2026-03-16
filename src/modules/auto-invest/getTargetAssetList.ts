@@ -12,20 +12,26 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetTargetAssetList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetTargetAssetList",
-    "Get the list of available target assets for auto-invest plans. Shows assets available for dollar-cost averaging.",
     {
-      targetAsset: z.string().optional().describe("Filter by specific target asset (e.g., 'BTC')"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Number of results (default 10, max 100)"),
-      current: z.number().int().min(1).optional().describe("Page number (default 1)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get the list of available target assets for auto-invest plans. Shows assets available for dollar-cost averaging.",
+      inputSchema: {
+        targetAsset: z
+          .string()
+          .optional()
+          .describe("Filter by specific target asset (e.g., 'BTC')"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Number of results (default 10, max 100)"),
+        current: z.number().int().min(1).optional().describe("Page number (default 1)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

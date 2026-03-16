@@ -6,10 +6,9 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCreateListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCreateListenKey",
-    "Create a new listen key for options user data stream.",
-    {},
+    { description: "Create a new listen key for options user data stream." },
     async () => {
       try {
         const data = await optionsClient.createListenKey();
@@ -35,11 +34,13 @@ export function registerBinanceOptionsCreateListenKey(server: McpServer) {
 }
 
 export function registerBinanceOptionsKeepAliveListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsKeepAliveListenKey",
-    "Keep alive an existing listen key for options user data stream.",
     {
-      listenKey: z.string().describe("The listen key to keep alive"),
+      description: "Keep alive an existing listen key for options user data stream.",
+      inputSchema: {
+        listenKey: z.string().describe("The listen key to keep alive"),
+      },
     },
     async ({ listenKey: _listenKey }) => {
       try {
@@ -66,11 +67,13 @@ export function registerBinanceOptionsKeepAliveListenKey(server: McpServer) {
 }
 
 export function registerBinanceOptionsDeleteListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsDeleteListenKey",
-    "Delete an existing listen key for options user data stream.",
     {
-      listenKey: z.string().describe("The listen key to delete"),
+      description: "Delete an existing listen key for options user data stream.",
+      inputSchema: {
+        listenKey: z.string().describe("The listen key to delete"),
+      },
     },
     async ({ listenKey: _listenKey }) => {
       try {

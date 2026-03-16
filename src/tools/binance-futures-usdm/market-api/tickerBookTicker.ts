@@ -12,14 +12,16 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesTickerBookTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesTickerBookTicker",
-    "Get best price/qty on the order book for USD-M Futures symbol(s).",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Futures symbol (e.g., BTCUSDT). If not provided, returns all symbols"),
+      description: "Get best price/qty on the order book for USD-M Futures symbol(s).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Futures symbol (e.g., BTCUSDT). If not provided, returns all symbols"),
+      },
     },
     async (params) => {
       try {

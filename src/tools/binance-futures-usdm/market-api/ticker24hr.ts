@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesTicker24hr(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesTicker24hr",
-    "Get 24 hour rolling window price change statistics for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Futures symbol. If omitted, returns all symbols"),
+      description: "Get 24 hour rolling window price change statistics for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol. If omitted, returns all symbols"),
+      },
     },
     async (params) => {
       try {

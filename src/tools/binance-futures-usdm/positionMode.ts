@@ -6,11 +6,13 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMPositionMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMPositionMode",
-    "Change position mode for USD-M Futures (One-way or Hedge Mode).",
     {
-      dualSidePosition: z.boolean().describe("true: Hedge Mode, false: One-way Mode"),
+      description: "Change position mode for USD-M Futures (One-way or Hedge Mode).",
+      inputSchema: {
+        dualSidePosition: z.boolean().describe("true: Hedge Mode, false: One-way Mode"),
+      },
     },
     async ({ dualSidePosition }) => {
       try {

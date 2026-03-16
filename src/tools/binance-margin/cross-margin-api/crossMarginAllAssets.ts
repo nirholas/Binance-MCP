@@ -12,17 +12,20 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginAllAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginAllAssets",
-    "Get all assets available for cross margin trading, including borrowable status, daily interest rates, and limits.",
     {
-      asset: z
-        .string()
-        .optional()
-        .describe(
-          "Specific asset to query (e.g., BTC, USDT). If not provided, returns all assets.",
-        ),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get all assets available for cross margin trading, including borrowable status, daily interest rates, and limits.",
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe(
+            "Specific asset to query (e.g., BTC, USDT). If not provided, returns all assets.",
+          ),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

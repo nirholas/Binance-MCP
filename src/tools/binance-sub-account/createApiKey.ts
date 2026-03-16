@@ -6,15 +6,17 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountCreateApiKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountCreateApiKey",
-    "Create API key for a sub-account.",
     {
-      subAccountId: z.string().describe("Sub-account ID"),
-      canTrade: z.boolean().describe("Enable spot and margin trading"),
-      marginTrade: z.boolean().optional().describe("Enable margin loan, repay and transfer"),
-      futuresTrade: z.boolean().optional().describe("Enable futures trading"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Create API key for a sub-account.",
+      inputSchema: {
+        subAccountId: z.string().describe("Sub-account ID"),
+        canTrade: z.boolean().describe("Enable spot and margin trading"),
+        marginTrade: z.boolean().optional().describe("Enable margin loan, repay and transfer"),
+        futuresTrade: z.boolean().optional().describe("Enable futures trading"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ subAccountId, canTrade, marginTrade, futuresTrade, recvWindow }) => {
       try {

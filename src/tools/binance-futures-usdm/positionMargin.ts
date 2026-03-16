@@ -6,17 +6,19 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMPositionMargin(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMPositionMargin",
-    "Modify isolated position margin for USD-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side. Default BOTH for One-way Mode"),
-      amount: z.number().describe("Amount to add or remove"),
-      type: z.number().describe("1: Add margin, 2: Remove margin"),
+      description: "Modify isolated position margin for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side. Default BOTH for One-way Mode"),
+        amount: z.number().describe("Amount to add or remove"),
+        type: z.number().describe("1: Add margin, 2: Remove margin"),
+      },
     },
     async ({ symbol, positionSide, amount, type }) => {
       try {

@@ -6,16 +6,18 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMyPreventedMatches(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMyPreventedMatches",
-    "Get prevented matches for Self-Trade Prevention.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      preventedMatchId: z.number().optional().describe("Prevented match ID"),
-      orderId: z.number().optional().describe("Order ID"),
-      fromPreventedMatchId: z.number().optional().describe("Prevented match ID to fetch from"),
-      limit: z.number().optional().describe("Default 500; max 1000"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get prevented matches for Self-Trade Prevention.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        preventedMatchId: z.number().optional().describe("Prevented match ID"),
+        orderId: z.number().optional().describe("Order ID"),
+        fromPreventedMatchId: z.number().optional().describe("Prevented match ID to fetch from"),
+        limit: z.number().optional().describe("Default 500; max 1000"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, preventedMatchId, orderId, fromPreventedMatchId, limit, recvWindow }) => {
       try {

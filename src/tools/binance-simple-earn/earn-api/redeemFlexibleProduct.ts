@@ -6,22 +6,25 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceRedeemFlexibleProduct(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceRedeemFlexibleProduct",
-    "Allows users to redeem their funds from a Flexible Earn investment product using a programmatic HTTP POST request.",
     {
-      productId: z.string().describe("Product ID"),
-      redeemAll: z.boolean().optional().describe("true or false, default to false"),
-      amount: z
-        .number()
-        .positive()
-        .optional()
-        .describe("If redeemAll is false, amount is mandatory"),
-      destAccount: z
-        .enum(["SPOT", "FUND"])
-        .optional()
-        .describe("Destination account: SPOT or FUND; default is SPOT"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Allows users to redeem their funds from a Flexible Earn investment product using a programmatic HTTP POST request.",
+      inputSchema: {
+        productId: z.string().describe("Product ID"),
+        redeemAll: z.boolean().optional().describe("true or false, default to false"),
+        amount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("If redeemAll is false, amount is mandatory"),
+        destAccount: z
+          .enum(["SPOT", "FUND"])
+          .optional()
+          .describe("Destination account: SPOT or FUND; default is SPOT"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

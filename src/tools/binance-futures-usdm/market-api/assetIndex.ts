@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesAssetIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesAssetIndex",
-    "Get asset index for Multi-Asset margin mode.",
     {
-      symbol: z.string().optional().describe("Symbol (e.g., BTCUSD)"),
+      description: "Get asset index for Multi-Asset margin mode.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol (e.g., BTCUSD)"),
+      },
     },
     async (params) => {
       try {

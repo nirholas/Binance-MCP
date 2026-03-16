@@ -12,17 +12,19 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryUserTrades",
-    "Get COIN-M Futures account trade history for a symbol.",
     {
-      symbol: z.string().optional().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      fromId: z.number().int().optional().describe("Trade ID to fetch from"),
-      limit: z.number().int().optional().describe("Number of results (default 50, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get COIN-M Futures account trade history for a symbol.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        fromId: z.number().int().optional().describe("Trade ID to fetch from"),
+        limit: z.number().int().optional().describe("Number of results (default 50, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

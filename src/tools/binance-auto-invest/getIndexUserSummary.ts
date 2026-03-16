@@ -12,12 +12,15 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetIndexUserSummary(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetIndexUserSummary",
-    "Get user's index-linked plan summary including total invested and current value.",
     {
-      indexId: z.number().int().describe("Index ID to query"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get user's index-linked plan summary including total invested and current value.",
+      inputSchema: {
+        indexId: z.number().int().describe("Index ID to query"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -12,11 +12,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginDeleteListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginDeleteListenKey",
-    "Close/delete a Portfolio Margin listen key. This will terminate the user data stream connection.",
     {
-      listenKey: z.string().optional().describe("Listen key to delete"),
+      description:
+        "Close/delete a Portfolio Margin listen key. This will terminate the user data stream connection.",
+      inputSchema: {
+        listenKey: z.string().optional().describe("Listen key to delete"),
+      },
     },
     async (params) => {
       try {

@@ -10,10 +10,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginCreateListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginCreateListenKey",
-    "Create a listen key for Portfolio Margin user data stream. The listen key is used to subscribe to account updates via WebSocket.",
-    {},
+    {
+      description:
+        "Create a listen key for Portfolio Margin user data stream. The listen key is used to subscribe to account updates via WebSocket.",
+    },
     async () => {
       try {
         const response = await portfolioMarginClient.restAPI.createListenKey();

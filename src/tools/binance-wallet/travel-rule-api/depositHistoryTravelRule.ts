@@ -6,17 +6,19 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDepositHistoryTravelRule(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDepositHistoryTravelRule",
-    "Get deposit history for travel rule.",
     {
-      coin: z.string().optional().describe("Coin symbol"),
-      status: z.number().optional().describe("Deposit status"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      offset: z.number().optional().describe("Default 0"),
-      limit: z.number().optional().describe("Default 1000, max 1000"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get deposit history for travel rule.",
+      inputSchema: {
+        coin: z.string().optional().describe("Coin symbol"),
+        status: z.number().optional().describe("Deposit status"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        offset: z.number().optional().describe("Default 0"),
+        limit: z.number().optional().describe("Default 1000, max 1000"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ coin, status, startTime, endTime, offset, limit, recvWindow }) => {
       try {

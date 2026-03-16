@@ -6,12 +6,14 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanGetCollateralAssetsDataV2(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanGetCollateralAssetsDataV2",
-    "Get collateral assets data V2 for flexible crypto loans.",
     {
-      collateralCoin: z.string().optional().describe("Collateral coin (e.g., BTC)"),
-      vipLevel: z.number().optional().describe("VIP level"),
+      description: "Get collateral assets data V2 for flexible crypto loans.",
+      inputSchema: {
+        collateralCoin: z.string().optional().describe("Collateral coin (e.g., BTC)"),
+        vipLevel: z.number().optional().describe("VIP level"),
+      },
     },
     async ({ collateralCoin, vipLevel }) => {
       try {

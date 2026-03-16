@@ -12,18 +12,21 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedRedemptionRecord",
-    "Get your locked product redemption history. Shows all redemptions including early redemptions and matured positions.",
     {
-      positionId: z.string().optional().describe("Filter by position ID"),
-      redeemId: z.string().optional().describe("Filter by redemption ID"),
-      asset: z.string().optional().describe("Filter by asset"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your locked product redemption history. Shows all redemptions including early redemptions and matured positions.",
+      inputSchema: {
+        positionId: z.string().optional().describe("Filter by position ID"),
+        redeemId: z.string().optional().describe("Filter by redemption ID"),
+        asset: z.string().optional().describe("Filter by asset"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

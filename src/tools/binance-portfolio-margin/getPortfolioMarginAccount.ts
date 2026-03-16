@@ -6,11 +6,14 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetAccount",
-    "Get portfolio margin account information including account status, balances, and positions.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get portfolio margin account information including account status, balances, and positions.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

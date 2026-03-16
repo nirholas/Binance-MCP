@@ -12,16 +12,19 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCountdownCancelAll(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCountdownCancelAll",
-    "Set auto-cancel all open orders after countdown. Use as dead man's switch for protection. ⚠️ System will cancel orders automatically if no heartbeat received.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      countdownTime: z
-        .number()
-        .int()
-        .describe("Countdown time in milliseconds. 0 to cancel the countdown."),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Set auto-cancel all open orders after countdown. Use as dead man's switch for protection. ⚠️ System will cancel orders automatically if no heartbeat received.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        countdownTime: z
+          .number()
+          .int()
+          .describe("Countdown time in milliseconds. 0 to cancel the countdown."),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -12,13 +12,15 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesDownloadIdForFuturesTransactionHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesDownloadId",
-    "Get download ID for USD-M Futures transaction history.",
     {
-      startTime: z.number().int().describe("Start timestamp in ms"),
-      endTime: z.number().int().describe("End timestamp in ms"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get download ID for USD-M Futures transaction history.",
+      inputSchema: {
+        startTime: z.number().int().describe("Start timestamp in ms"),
+        endTime: z.number().int().describe("End timestamp in ms"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

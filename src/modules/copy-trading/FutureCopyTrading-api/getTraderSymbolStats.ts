@@ -12,13 +12,16 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetTraderSymbolStats(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetTraderSymbolStats",
-    "Get a lead trader's trading statistics per symbol. Shows which symbols they trade most and their success rate.",
     {
-      leadPortfolioId: z.string().describe("Lead trader's portfolio ID"),
-      tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get a lead trader's trading statistics per symbol. Shows which symbols they trade most and their success rate.",
+      inputSchema: {
+        leadPortfolioId: z.string().describe("Lead trader's portfolio ID"),
+        tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,11 +6,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetCollateralRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetCollateralRate",
-    "Query portfolio margin collateral rate for assets.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query portfolio margin collateral rate for assets.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

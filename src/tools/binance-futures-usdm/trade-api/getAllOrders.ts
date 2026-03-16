@@ -12,21 +12,23 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesGetAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetAllOrders",
-    "Get all USD-M Futures orders (active, canceled, or filled) for a symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("If set, get orders >= this orderId"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(1000)
-        .optional()
-        .describe("Number of orders. Default 500, max 1000"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get all USD-M Futures orders (active, canceled, or filled) for a symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("If set, get orders >= this orderId"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(1000)
+          .optional()
+          .describe("Number of orders. Default 500, max 1000"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -12,14 +12,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCancelBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryCancelBatchOrders",
-    "Cancel multiple COIN-M Futures orders in batch (max 10).",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      orderIdList: z.string().optional().describe("JSON array of order IDs to cancel"),
-      origClientOrderIdList: z.string().optional().describe("JSON array of client order IDs"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Cancel multiple COIN-M Futures orders in batch (max 10).",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        orderIdList: z.string().optional().describe("JSON array of order IDs to cancel"),
+        origClientOrderIdList: z.string().optional().describe("JSON array of client order IDs"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetSolStakingQuotaDetails(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "getSolStakingQuotaDetails",
-    "Get SOL Staking Quota API allows users to retrieve their current SOL staking quota, including information such as the remaining staking and redemption limits, minimum staking and redeem amounts, commission fees, and the status of staking and redemption availability.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get SOL Staking Quota API allows users to retrieve their current SOL staking quota, including information such as the remaining staking and redemption limits, minimum staking and redeem amounts, commission fees, and the status of staking and redemption availability.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

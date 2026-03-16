@@ -12,14 +12,17 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesOpenOrders",
-    "Get all current open orders. If symbol is provided, returns orders for that symbol only. Otherwise returns all open orders (use with caution due to rate limits).",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Trading pair symbol (e.g., BTCUSDT). If omitted, returns all open orders."),
+      description:
+        "Get all current open orders. If symbol is provided, returns orders for that symbol only. Otherwise returns all open orders (use with caution due to rate limits).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Trading pair symbol (e.g., BTCUSDT). If omitted, returns all open orders."),
+      },
     },
     async (params) => {
       try {

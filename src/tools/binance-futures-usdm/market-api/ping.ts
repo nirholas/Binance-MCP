@@ -10,10 +10,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPing(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesPing",
-    "Test connectivity to the USD-M Futures REST API.",
-    {},
+    { description: "Test connectivity to the USD-M Futures REST API." },
     async () => {
       try {
         const response = await futuresClient.restAPI.ping();

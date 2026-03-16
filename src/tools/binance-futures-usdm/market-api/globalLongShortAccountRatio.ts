@@ -12,22 +12,24 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesGlobalLongShortAccountRatio(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGlobalLongShortAccountRatio",
-    "Get global long/short account ratio for USD-M Futures.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      period: z
-        .enum(["5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d"])
-        .describe("Data period"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(500)
-        .optional()
-        .describe("Number of records. Default 30, max 500"),
+      description: "Get global long/short account ratio for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        period: z
+          .enum(["5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d"])
+          .describe("Data period"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(500)
+          .optional()
+          .describe("Number of records. Default 30, max 500"),
+      },
     },
     async (params) => {
       try {

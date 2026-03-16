@@ -12,13 +12,16 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedMarginCall(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedMarginCall",
-    "Customize margin call threshold for a loan. Set when you want to be notified about LTV changes.",
     {
-      orderId: z.number().int().describe("Loan order ID"),
-      marginCall: z.number().describe("Margin call LTV threshold (e.g., 0.8 for 80%)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Customize margin call threshold for a loan. Set when you want to be notified about LTV changes.",
+      inputSchema: {
+        orderId: z.number().int().describe("Loan order ID"),
+        marginCall: z.number().describe("Margin call LTV threshold (e.g., 0.8 for 80%)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

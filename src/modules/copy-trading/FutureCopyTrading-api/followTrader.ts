@@ -12,25 +12,31 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingFollowTrader(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingFollowTrader",
-    "Start following a lead trader to automatically copy their trades. ⚠️ RISK: Your funds will be used to copy trades. Only follow traders you trust.",
     {
-      leadPortfolioId: z.string().describe("Lead trader's portfolio ID to follow"),
-      copyRatio: z.number().min(0.1).max(10).describe("Copy ratio (0.1-10x of their trades)"),
-      fixedAmount: z.string().optional().describe("Fixed amount per trade (alternative to ratio)"),
-      stopLossRatio: z
-        .number()
-        .min(0.01)
-        .max(1)
-        .optional()
-        .describe("Stop loss ratio (e.g., 0.1 = stop if 10% loss)"),
-      takeProfitRatio: z
-        .number()
-        .min(0.01)
-        .optional()
-        .describe("Take profit ratio (e.g., 0.5 = take profit at 50% gain)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Start following a lead trader to automatically copy their trades. ⚠️ RISK: Your funds will be used to copy trades. Only follow traders you trust.",
+      inputSchema: {
+        leadPortfolioId: z.string().describe("Lead trader's portfolio ID to follow"),
+        copyRatio: z.number().min(0.1).max(10).describe("Copy ratio (0.1-10x of their trades)"),
+        fixedAmount: z
+          .string()
+          .optional()
+          .describe("Fixed amount per trade (alternative to ratio)"),
+        stopLossRatio: z
+          .number()
+          .min(0.01)
+          .max(1)
+          .optional()
+          .describe("Stop loss ratio (e.g., 0.1 = stop if 10% loss)"),
+        takeProfitRatio: z
+          .number()
+          .min(0.01)
+          .optional()
+          .describe("Take profit ratio (e.g., 0.5 = take profit at 50% gain)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -12,12 +12,15 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardTokenLimit(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardTokenLimit",
-    "Get token limit information for Binance Gift Card creation. Shows minimum and maximum amounts.",
     {
-      baseToken: z.string().describe("Base token for buying gift cards (e.g., 'USDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get token limit information for Binance Gift Card creation. Shows minimum and maximum amounts.",
+      inputSchema: {
+        baseToken: z.string().describe("Base token for buying gift cards (e.g., 'USDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

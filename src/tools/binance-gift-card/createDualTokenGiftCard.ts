@@ -12,15 +12,18 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardCreateDualToken(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardCreateDualToken",
-    "Create a dual-token Binance Gift Card. Allows creating a gift card using one token that the recipient will receive as another token.",
     {
-      baseToken: z.string().describe("Token used to pay for the gift card (e.g., 'USDT')"),
-      faceToken: z.string().describe("Token that the recipient will receive (e.g., 'BNB')"),
-      baseTokenAmount: z.string().describe("Amount of base token to spend"),
-      discount: z.number().optional().describe("Discount rate (0-100)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Create a dual-token Binance Gift Card. Allows creating a gift card using one token that the recipient will receive as another token.",
+      inputSchema: {
+        baseToken: z.string().describe("Token used to pay for the gift card (e.g., 'USDT')"),
+        faceToken: z.string().describe("Token that the recipient will receive (e.g., 'BNB')"),
+        baseTokenAmount: z.string().describe("Amount of base token to spend"),
+        discount: z.number().optional().describe("Discount rate (0-100)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

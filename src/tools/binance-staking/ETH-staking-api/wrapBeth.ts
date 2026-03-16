@@ -6,12 +6,15 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWrapBeth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWrapBeth",
-    "Wrap BETH API allows users to convert BETH into WBETH, providing the wrapped WBETH amount and the exchange rate from BETH to WBETH.",
     {
-      amount: z.number().min(0).describe("Amount in BETH, limit 4 decimals (mandatory)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Wrap BETH API allows users to convert BETH into WBETH, providing the wrapped WBETH amount and the exchange rate from BETH to WBETH.",
+      inputSchema: {
+        amount: z.number().min(0).describe("Amount in BETH, limit 4 decimals (mandatory)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

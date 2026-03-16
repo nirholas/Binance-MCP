@@ -6,17 +6,19 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMyTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMyTrades",
-    "Get trades for a specific account and symbol.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      orderId: z.number().optional().describe("Order ID"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      fromId: z.number().optional().describe("Trade ID to fetch from"),
-      limit: z.number().optional().describe("Default 500; max 1000"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get trades for a specific account and symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        orderId: z.number().optional().describe("Order ID"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        fromId: z.number().optional().describe("Trade ID to fetch from"),
+        limit: z.number().optional().describe("Default 500; max 1000"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, orderId, startTime, endTime, fromId, limit, recvWindow }) => {
       try {

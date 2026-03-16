@@ -12,34 +12,37 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginMarginNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginMarginNewOrder",
-    "Place a new cross margin order in Portfolio Margin mode. ⚠️ Margin trading involves borrowing and interest.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      type: z
-        .enum([
-          "LIMIT",
-          "MARKET",
-          "STOP_LOSS",
-          "STOP_LOSS_LIMIT",
-          "TAKE_PROFIT",
-          "TAKE_PROFIT_LIMIT",
-          "LIMIT_MAKER",
-        ])
-        .describe("Order type"),
-      quantity: z.string().optional().describe("Order quantity"),
-      quoteOrderQty: z.string().optional().describe("Quote quantity (for MARKET orders)"),
-      price: z.string().optional().describe("Limit price"),
-      stopPrice: z.string().optional().describe("Stop price"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
-      newClientOrderId: z.string().optional().describe("Custom client order ID"),
-      sideEffectType: z
-        .enum(["NO_SIDE_EFFECT", "MARGIN_BUY", "AUTO_REPAY", "AUTO_BORROW_REPAY"])
-        .optional()
-        .describe("Side effect type for margin orders"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Place a new cross margin order in Portfolio Margin mode. ⚠️ Margin trading involves borrowing and interest.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        type: z
+          .enum([
+            "LIMIT",
+            "MARKET",
+            "STOP_LOSS",
+            "STOP_LOSS_LIMIT",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_LIMIT",
+            "LIMIT_MAKER",
+          ])
+          .describe("Order type"),
+        quantity: z.string().optional().describe("Order quantity"),
+        quoteOrderQty: z.string().optional().describe("Quote quantity (for MARKET orders)"),
+        price: z.string().optional().describe("Limit price"),
+        stopPrice: z.string().optional().describe("Stop price"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional().describe("Time in force"),
+        newClientOrderId: z.string().optional().describe("Custom client order ID"),
+        sideEffectType: z
+          .enum(["NO_SIDE_EFFECT", "MARGIN_BUY", "AUTO_REPAY", "AUTO_BORROW_REPAY"])
+          .optional()
+          .describe("Side effect type for margin orders"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

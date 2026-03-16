@@ -6,13 +6,15 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMGetOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMGetOrder",
-    "Query an existing order for USD-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      orderId: z.number().optional().describe("Order ID"),
-      origClientOrderId: z.string().optional().describe("Original client order ID"),
+      description: "Query an existing order for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        orderId: z.number().optional().describe("Order ID"),
+        origClientOrderId: z.string().optional().describe("Original client order ID"),
+      },
     },
     async ({ symbol, orderId, origClientOrderId }) => {
       try {

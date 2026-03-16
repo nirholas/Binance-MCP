@@ -12,17 +12,20 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesChangeMarginType(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesChangeMarginType",
-    "Change margin type between ISOLATED and CROSSED for a USD-M Futures symbol. ISOLATED: Position uses its own margin. CROSSED: All positions share account margin.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      marginType: z
-        .enum(["ISOLATED", "CROSSED"])
-        .describe(
-          "ISOLATED: Separate margin per position. CROSSED: Shared margin across positions",
-        ),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Change margin type between ISOLATED and CROSSED for a USD-M Futures symbol. ISOLATED: Position uses its own margin. CROSSED: All positions share account margin.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        marginType: z
+          .enum(["ISOLATED", "CROSSED"])
+          .describe(
+            "ISOLATED: Separate margin per position. CROSSED: Shared margin across positions",
+          ),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -6,14 +6,17 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginTransfer",
-    "Execute a cross margin account transfer. Transfer between spot and cross margin accounts.",
     {
-      asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
-      amount: z.string().describe("Amount to transfer"),
-      type: z.enum(["1", "2"]).describe("1: Spot to Margin, 2: Margin to Spot"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Execute a cross margin account transfer. Transfer between spot and cross margin accounts.",
+      inputSchema: {
+        asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
+        amount: z.string().describe("Amount to transfer"),
+        type: z.enum(["1", "2"]).describe("1: Spot to Margin, 2: Margin to Spot"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -12,17 +12,19 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerFlexibleLoanRepayHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleRepayHistory",
-    "Get your flexible loan repayment history.",
     {
-      loanCoin: z.string().optional().describe("Filter by loan coin"),
-      collateralCoin: z.string().optional().describe("Filter by collateral coin"),
-      startTime: z.number().int().optional().describe("Start time in ms"),
-      endTime: z.number().int().optional().describe("End time in ms"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      limit: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get your flexible loan repayment history.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Filter by loan coin"),
+        collateralCoin: z.string().optional().describe("Filter by collateral coin"),
+        startTime: z.number().int().optional().describe("Start time in ms"),
+        endTime: z.number().int().optional().describe("End time in ms"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        limit: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

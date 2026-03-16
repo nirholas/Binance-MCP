@@ -12,12 +12,15 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetIndexInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetIndexInfo",
-    "Get information about auto-invest index portfolios. Index portfolios are pre-built diversified portfolios.",
     {
-      indexId: z.number().int().optional().describe("Specific index ID to query"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get information about auto-invest index portfolios. Index portfolios are pre-built diversified portfolios.",
+      inputSchema: {
+        indexId: z.number().int().optional().describe("Specific index ID to query"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

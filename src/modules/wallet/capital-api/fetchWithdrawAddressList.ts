@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletFetchWithdrawAddressList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletFetchWithdrawAddressList",
-    "Fetch withdraw address list.",
-    {},
+    { description: "Fetch withdraw address list." },
     async () => {
       try {
         const response = await walletClient.restAPI.fetchWithdrawAddressList();

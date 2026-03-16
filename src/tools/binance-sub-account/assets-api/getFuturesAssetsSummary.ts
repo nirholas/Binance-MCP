@@ -12,15 +12,18 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountFuturesSummary(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountFuturesSummary",
-    "Get futures account summary for all sub-accounts. Returns total initial margin, maintenance margin, and unrealized PnL.",
     {
-      futuresType: z
-        .enum(["1", "2"])
-        .optional()
-        .describe("Futures type: 1 for USD-M, 2 for COIN-M"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get futures account summary for all sub-accounts. Returns total initial margin, maintenance margin, and unrealized PnL.",
+      inputSchema: {
+        futuresType: z
+          .enum(["1", "2"])
+          .optional()
+          .describe("Futures type: 1 for USD-M, 2 for COIN-M"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

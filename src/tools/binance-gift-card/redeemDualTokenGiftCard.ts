@@ -12,13 +12,15 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRedeemDualToken(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardRedeemDualToken",
-    "Redeem a dual-token Binance Gift Card.",
     {
-      code: z.string().describe("Gift card redemption code"),
-      externalUid: z.string().optional().describe("External user ID for partner integration"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Redeem a dual-token Binance Gift Card.",
+      inputSchema: {
+        code: z.string().describe("Gift card redemption code"),
+        externalUid: z.string().optional().describe("External user ID for partner integration"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

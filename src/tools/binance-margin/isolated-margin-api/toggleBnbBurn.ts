@@ -6,19 +6,22 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceToggleBnbBurn(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceToggleBnbBurn",
-    "Toggle BNB burn on spot trade and margin interest. When enabled, uses BNB to pay for trading fees and margin interest at a discount.",
     {
-      spotBNBBurn: z
-        .enum(["true", "false"])
-        .optional()
-        .describe("Enable/disable BNB burn for spot trading fees"),
-      interestBNBBurn: z
-        .enum(["true", "false"])
-        .optional()
-        .describe("Enable/disable BNB burn for margin interest"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Toggle BNB burn on spot trade and margin interest. When enabled, uses BNB to pay for trading fees and margin interest at a discount.",
+      inputSchema: {
+        spotBNBBurn: z
+          .enum(["true", "false"])
+          .optional()
+          .describe("Enable/disable BNB burn for spot trading fees"),
+        interestBNBBurn: z
+          .enum(["true", "false"])
+          .optional()
+          .describe("Enable/disable BNB burn for margin interest"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,13 +6,15 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountDeleteApiKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountDeleteApiKey",
-    "Delete API key for a sub-account.",
     {
-      subAccountId: z.string().describe("Sub-account ID"),
-      subAccountApiKey: z.string().describe("API key to delete"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Delete API key for a sub-account.",
+      inputSchema: {
+        subAccountId: z.string().describe("Sub-account ID"),
+        subAccountApiKey: z.string().describe("API key to delete"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ subAccountId, subAccountApiKey, recvWindow }) => {
       try {

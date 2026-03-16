@@ -12,19 +12,21 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginGetOpenOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMarginGetOpenOco",
-    "Query all open OCO (One-Cancels-the-Other) orders in Margin account.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Symbol of the trading pair (mandatory for isolated margin)"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin, default FALSE"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query all open OCO (One-Cancels-the-Other) orders in Margin account.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Symbol of the trading pair (mandatory for isolated margin)"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin, default FALSE"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,13 +6,15 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestRedeemIndexLinkedPlan(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestRedeemIndexLinkedPlan",
-    "Redeem index linked plan for auto-invest.",
     {
-      indexId: z.number().describe("Index ID"),
-      redemptionPercentage: z.number().describe("Redemption percentage (0-100)"),
-      requestId: z.string().optional().describe("Request ID for idempotency"),
+      description: "Redeem index linked plan for auto-invest.",
+      inputSchema: {
+        indexId: z.number().describe("Index ID"),
+        redemptionPercentage: z.number().describe("Redemption percentage (0-100)"),
+        requestId: z.string().optional().describe("Request ID for idempotency"),
+      },
     },
     async ({ indexId, redemptionPercentage, requestId }) => {
       try {

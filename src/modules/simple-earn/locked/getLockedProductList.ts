@@ -12,20 +12,23 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedProductList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedProductList",
-    "Get available Simple Earn Locked products. Locked products offer higher APR in exchange for locking funds for a fixed duration.",
     {
-      asset: z.string().optional().describe("Filter by asset symbol (e.g., 'BTC', 'ETH')"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Page number, starting from 1"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size (1-100)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get available Simple Earn Locked products. Locked products offer higher APR in exchange for locking funds for a fixed duration.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by asset symbol (e.g., 'BTC', 'ETH')"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Page number, starting from 1"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size (1-100)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

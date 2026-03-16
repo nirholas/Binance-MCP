@@ -6,24 +6,27 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceHashRateResaleRequest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceHashRateResaleRequest",
-    "Retrieve a request for setting up a hashrate resale, specifying the mining account, algorithm, start and end times, target mining account for resale, and the amount of hashrate to transfer",
     {
-      userName: z.string().min(1).describe("Mining Account"),
-      algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
-      endDate: z.number().int().describe("Resale End Time (Millisecond timestamp)"),
-      startDate: z.number().int().describe("Resale Start Time (Millisecond timestamp)"),
-      toPoolUser: z.string().min(1).describe("Mining Account of the recipient pool user"),
-      hashRate: z
-        .number()
-        .int()
-        .describe("Resale hashrate h/s must be transferred (BTC > 500000000000, ETH > 500000)"),
-      recvWindow: z
-        .number()
-        .int()
-        .optional()
-        .describe("Optional: Time window for request validity"),
+      description:
+        "Retrieve a request for setting up a hashrate resale, specifying the mining account, algorithm, start and end times, target mining account for resale, and the amount of hashrate to transfer",
+      inputSchema: {
+        userName: z.string().min(1).describe("Mining Account"),
+        algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
+        endDate: z.number().int().describe("Resale End Time (Millisecond timestamp)"),
+        startDate: z.number().int().describe("Resale Start Time (Millisecond timestamp)"),
+        toPoolUser: z.string().min(1).describe("Mining Account of the recipient pool user"),
+        hashRate: z
+          .number()
+          .int()
+          .describe("Resale hashrate h/s must be transferred (BTC > 500000000000, ETH > 500000)"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional: Time window for request validity"),
+      },
     },
     async (params) => {
       try {

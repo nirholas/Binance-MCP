@@ -12,15 +12,17 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestChangePlanStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestChangePlanStatus",
-    "Change the status of an auto-invest plan (pause or resume).",
     {
-      planId: z.number().int().describe("Plan ID to modify"),
-      status: z
-        .enum(["ONGOING", "PAUSED"])
-        .describe("New status (ONGOING to resume, PAUSED to pause)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Change the status of an auto-invest plan (pause or resume).",
+      inputSchema: {
+        planId: z.number().int().describe("Plan ID to modify"),
+        status: z
+          .enum(["ONGOING", "PAUSED"])
+          .describe("New status (ONGOING to resume, PAUSED to pause)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

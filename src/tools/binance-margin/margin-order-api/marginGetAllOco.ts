@@ -12,23 +12,26 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginGetAllOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMarginGetAllOco",
-    "Query all OCO (One-Cancels-the-Other) orders in Margin account, both open and closed.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Symbol of the trading pair (mandatory for isolated margin)"),
-      fromId: z.number().int().optional().describe("Order list ID to start from"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().optional().describe("Number of results, default 500, max 1000"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin, default FALSE"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query all OCO (One-Cancels-the-Other) orders in Margin account, both open and closed.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Symbol of the trading pair (mandatory for isolated margin)"),
+        fromId: z.number().int().optional().describe("Order list ID to start from"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z.number().int().optional().describe("Number of results, default 500, max 1000"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin, default FALSE"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

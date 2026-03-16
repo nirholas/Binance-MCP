@@ -12,11 +12,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCreateListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryCreateListenKey",
-    "Create a new COIN-M Futures user data stream listen key. The listen key is valid for 60 minutes and can be used to receive account updates via WebSocket.",
     {
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Create a new COIN-M Futures user data stream listen key. The listen key is valid for 60 minutes and can be used to receive account updates via WebSocket.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

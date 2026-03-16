@@ -6,13 +6,20 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCheckVIPLoanCollateralAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCheckVIPLoanCollateralAccount",
-    "Allow users to check their collateral accounts and the coins held as collateral. If the logged-in account is a loan account, it will return all associated collateral accounts. If it's a collateral account, it returns details of the current account only.",
     {
-      orderId: z.number().int().optional().describe("Optional order ID"),
-      collateralAccountId: z.number().int().optional().describe("Optional collateral account ID"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Allow users to check their collateral accounts and the coins held as collateral. If the logged-in account is a loan account, it will return all associated collateral accounts. If it's a collateral account, it returns details of the current account only.",
+      inputSchema: {
+        orderId: z.number().int().optional().describe("Optional order ID"),
+        collateralAccountId: z.number().int().optional().describe("Optional collateral account ID"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

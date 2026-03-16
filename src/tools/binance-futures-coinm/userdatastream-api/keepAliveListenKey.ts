@@ -12,12 +12,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryKeepAliveListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryKeepAliveListenKey",
-    "Keep alive a COIN-M Futures user data stream listen key. Extends validity by 60 minutes. Should be called at least every 60 minutes to prevent timeout.",
     {
-      listenKey: z.string().optional().describe("Listen key to keep alive"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Keep alive a COIN-M Futures user data stream listen key. Extends validity by 60 minutes. Should be called at least every 60 minutes to prevent timeout.",
+      inputSchema: {
+        listenKey: z.string().optional().describe("Listen key to keep alive"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

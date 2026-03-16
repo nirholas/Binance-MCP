@@ -6,15 +6,17 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsUserTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsUserTrades",
-    "Get options account trade list.",
     {
-      symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      fromId: z.number().optional().describe("Trade ID to fetch from"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of trades to return. Default 100; max 1000."),
+      description: "Get options account trade list.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        fromId: z.number().optional().describe("Trade ID to fetch from"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Number of trades to return. Default 100; max 1000."),
+      },
     },
     async ({ symbol, fromId, startTime, endTime, limit }) => {
       try {

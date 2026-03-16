@@ -6,32 +6,35 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetBnsolRewardsHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetBnsolRewardsHistory",
-    "Get Boost Rewards History API allows users to retrieve their historical boost rewards data for staking, including the amount of rewards, token type (e.g., SOL), and status of the rewards (e.g., CLAIM, DISTRIBUTE).",
     {
-      type: z
-        .enum(["CLAIM", "DISTRIBUTE"])
-        .default("CLAIM")
-        .describe('Type of action. Must be "CLAIM" or "DISTRIBUTE". Default: "CLAIM"'),
-      startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
-      endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying page. Start from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Number of results per page. Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get Boost Rewards History API allows users to retrieve their historical boost rewards data for staking, including the amount of rewards, token type (e.g., SOL), and status of the rewards (e.g., CLAIM, DISTRIBUTE).",
+      inputSchema: {
+        type: z
+          .enum(["CLAIM", "DISTRIBUTE"])
+          .default("CLAIM")
+          .describe('Type of action. Must be "CLAIM" or "DISTRIBUTE". Default: "CLAIM"'),
+        startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
+        endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying page. Start from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Number of results per page. Default: 10, Max: 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

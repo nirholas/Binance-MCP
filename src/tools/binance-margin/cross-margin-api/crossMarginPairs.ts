@@ -6,11 +6,14 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginPairs(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginPairs",
-    "Get all cross margin trading pairs. Returns information about all available cross margin pairs including base/quote assets and margin ratio.",
     {
-      symbol: z.string().optional().describe("Filter by specific trading pair symbol"),
+      description:
+        "Get all cross margin trading pairs. Returns information about all available cross margin pairs including base/quote assets and margin ratio.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Filter by specific trading pair symbol"),
+      },
     },
     async (params) => {
       try {

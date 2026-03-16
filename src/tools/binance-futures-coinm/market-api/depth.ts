@@ -12,16 +12,18 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryDepth",
-    "Get COIN-M Futures order book depth for a symbol.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP, BTCUSD_230630)"),
-      limit: z
-        .number()
-        .int()
-        .optional()
-        .describe("Depth limit: 5, 10, 20, 50, 100, 500, 1000 (default 500)"),
+      description: "Get COIN-M Futures order book depth for a symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP, BTCUSD_230630)"),
+        limit: z
+          .number()
+          .int()
+          .optional()
+          .describe("Depth limit: 5, 10, 20, 50, 100, 500, 1000 (default 500)"),
+      },
     },
     async (params) => {
       try {

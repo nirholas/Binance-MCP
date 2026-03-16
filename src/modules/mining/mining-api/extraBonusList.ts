@@ -6,27 +6,33 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceExtraBonusList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceExtraBonusList",
-    "Retrieves extra bonuses related to mining activities, including merged mining, activity bonuses, rebates, smart pool bonuses, income transfers, and pool savings.",
     {
-      algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
-      userName: z.string().min(1).describe("Mining account username"),
-      coin: z.string().optional().describe("Coin name (optional)"),
-      startDate: z
-        .number()
-        .optional()
-        .describe("Search start date (milliseconds timestamp, optional)"),
-      endDate: z.number().optional().describe("Search end date (milliseconds timestamp, optional)"),
-      pageIndex: z.number().int().min(1).optional().describe("Page number, default is 1"),
-      pageSize: z
-        .number()
-        .int()
-        .min(10)
-        .max(200)
-        .optional()
-        .describe("Number of pages, minimum 10, maximum 200"),
-      recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      description:
+        "Retrieves extra bonuses related to mining activities, including merged mining, activity bonuses, rebates, smart pool bonuses, income transfers, and pool savings.",
+      inputSchema: {
+        algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
+        userName: z.string().min(1).describe("Mining account username"),
+        coin: z.string().optional().describe("Coin name (optional)"),
+        startDate: z
+          .number()
+          .optional()
+          .describe("Search start date (milliseconds timestamp, optional)"),
+        endDate: z
+          .number()
+          .optional()
+          .describe("Search end date (milliseconds timestamp, optional)"),
+        pageIndex: z.number().int().min(1).optional().describe("Page number, default is 1"),
+        pageSize: z
+          .number()
+          .int()
+          .min(10)
+          .max(200)
+          .optional()
+          .describe("Number of pages, minimum 10, maximum 200"),
+        recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

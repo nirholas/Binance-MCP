@@ -12,21 +12,24 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleSubscribe",
-    "Subscribe to a Simple Earn Flexible product to earn daily rewards. Funds can be redeemed anytime. 💰 Start earning passive income on your crypto!",
     {
-      productId: z.string().describe("Product ID from flexible product list"),
-      amount: z.number().positive().describe("Amount to subscribe"),
-      autoSubscribe: z
-        .boolean()
-        .optional()
-        .describe("Auto-subscribe on redemption (default: true)"),
-      sourceAccount: z
-        .enum(["SPOT", "FUND", "ALL"])
-        .optional()
-        .describe("Source account for funds (default: SPOT)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Subscribe to a Simple Earn Flexible product to earn daily rewards. Funds can be redeemed anytime. 💰 Start earning passive income on your crypto!",
+      inputSchema: {
+        productId: z.string().describe("Product ID from flexible product list"),
+        amount: z.number().positive().describe("Amount to subscribe"),
+        autoSubscribe: z
+          .boolean()
+          .optional()
+          .describe("Auto-subscribe on redemption (default: true)"),
+        sourceAccount: z
+          .enum(["SPOT", "FUND", "ALL"])
+          .optional()
+          .describe("Source account for funds (default: SPOT)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

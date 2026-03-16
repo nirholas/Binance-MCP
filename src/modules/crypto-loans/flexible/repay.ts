@@ -12,16 +12,19 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerFlexibleLoanRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleRepay",
-    "Repay a flexible crypto loan. Your collateral will be released proportionally. 💸",
     {
-      loanCoin: z.string().describe("Loan coin to repay"),
-      collateralCoin: z.string().describe("Collateral coin"),
-      repayAmount: z.string().describe("Amount to repay"),
-      collateralReturn: z.boolean().optional().describe("Return collateral after full repayment"),
-      fullRepayment: z.boolean().optional().describe("Repay full outstanding amount"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Repay a flexible crypto loan. Your collateral will be released proportionally. 💸",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin to repay"),
+        collateralCoin: z.string().describe("Collateral coin"),
+        repayAmount: z.string().describe("Amount to repay"),
+        collateralReturn: z.boolean().optional().describe("Return collateral after full repayment"),
+        fullRepayment: z.boolean().optional().describe("Repay full outstanding amount"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

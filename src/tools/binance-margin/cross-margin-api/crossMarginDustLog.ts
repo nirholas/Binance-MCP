@@ -6,13 +6,16 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginDustLog(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginDustLog",
-    "Query margin dust conversion log. Shows history of small balance conversions to BNB.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query margin dust conversion log. Shows history of small balance conversions to BNB.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

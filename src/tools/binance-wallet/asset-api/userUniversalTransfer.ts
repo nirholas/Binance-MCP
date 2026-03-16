@@ -6,16 +6,18 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletUserUniversalTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletUserUniversalTransfer",
-    "Make universal transfer between different accounts.",
     {
-      type: z.string().describe("Transfer type"),
-      asset: z.string().describe("Asset symbol"),
-      amount: z.number().describe("Transfer amount"),
-      fromSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
-      toSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Make universal transfer between different accounts.",
+      inputSchema: {
+        type: z.string().describe("Transfer type"),
+        asset: z.string().describe("Asset symbol"),
+        amount: z.number().describe("Transfer amount"),
+        fromSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
+        toSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ type, asset, amount, fromSymbol, toSymbol, recvWindow }) => {
       try {

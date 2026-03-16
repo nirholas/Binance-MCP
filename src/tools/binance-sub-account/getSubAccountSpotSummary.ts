@@ -6,17 +6,19 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetSpotSummary(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetSpotSummary",
-    "Query sub-account spot assets summary for master account.",
     {
-      email: z
-        .string()
-        .optional()
-        .describe("Sub-account email (optional, returns all if not provided)"),
-      page: z.number().optional().describe("Page number, default 1"),
-      size: z.number().optional().describe("Results per page, default 10, max 20"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query sub-account spot assets summary for master account.",
+      inputSchema: {
+        email: z
+          .string()
+          .optional()
+          .describe("Sub-account email (optional, returns all if not provided)"),
+        page: z.number().optional().describe("Page number, default 1"),
+        size: z.number().optional().describe("Results per page, default 10, max 20"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, page, size, recvWindow }) => {
       try {

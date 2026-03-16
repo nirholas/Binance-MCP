@@ -6,13 +6,20 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceVipLoanRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceVipLoanRepay",
-    "Allow VIP users to repay a specified amount of their active loan, partially or fully. It updates the remaining principal and interest, and provides the repayment status.",
     {
-      orderId: z.number().int().describe("Order ID of the loan request"),
-      amount: z.number().describe("Amount to be processed (decimal allowed)"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Allow VIP users to repay a specified amount of their active loan, partially or fully. It updates the remaining principal and interest, and provides the repayment status.",
+      inputSchema: {
+        orderId: z.number().int().describe("Order ID of the loan request"),
+        amount: z.number().describe("Amount to be processed (decimal allowed)"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

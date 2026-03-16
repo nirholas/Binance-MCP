@@ -6,11 +6,13 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginAllPairs(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginAllPairs",
-    "Get all isolated margin trading pairs with their information.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get all isolated margin trading pairs with their information.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

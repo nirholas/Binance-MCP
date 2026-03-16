@@ -12,17 +12,20 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerFlexibleLoanAdjustLTV(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleAdjustLTV",
-    "Adjust LTV (Loan-to-Value) ratio by adding or removing collateral. Lower LTV = safer position.",
     {
-      loanCoin: z.string().describe("Loan coin"),
-      collateralCoin: z.string().describe("Collateral coin"),
-      adjustmentAmount: z.string().describe("Amount to add (positive) or remove (negative)"),
-      direction: z
-        .enum(["ADDITIONAL", "REDUCED"])
-        .describe("ADDITIONAL to add collateral, REDUCED to remove"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Adjust LTV (Loan-to-Value) ratio by adding or removing collateral. Lower LTV = safer position.",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin"),
+        collateralCoin: z.string().describe("Collateral coin"),
+        adjustmentAmount: z.string().describe("Amount to add (positive) or remove (negative)"),
+        direction: z
+          .enum(["ADDITIONAL", "REDUCED"])
+          .describe("ADDITIONAL to add collateral, REDUCED to remove"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

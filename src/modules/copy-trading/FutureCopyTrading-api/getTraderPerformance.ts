@@ -12,13 +12,16 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetTraderPerformance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetTraderPerformance",
-    "Get detailed performance statistics for a lead trader. Includes ROI, PNL, win rate, and other metrics.",
     {
-      leadPortfolioId: z.string().describe("Lead trader's portfolio ID"),
-      tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get detailed performance statistics for a lead trader. Includes ROI, PNL, win rate, and other metrics.",
+      inputSchema: {
+        leadPortfolioId: z.string().describe("Lead trader's portfolio ID"),
+        tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

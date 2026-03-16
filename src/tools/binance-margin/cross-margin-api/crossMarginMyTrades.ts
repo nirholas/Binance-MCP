@@ -6,18 +6,20 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginMyTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginMyTrades",
-    "Query margin account trade history for a specific symbol.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
-      isIsolated: z.enum(["TRUE", "FALSE"]).optional().describe("For isolated margin or not"),
-      orderId: z.number().int().optional().describe("Filter by order ID"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      fromId: z.number().int().optional().describe("Trade ID to start from"),
-      limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query margin account trade history for a specific symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
+        isIsolated: z.enum(["TRUE", "FALSE"]).optional().describe("For isolated margin or not"),
+        orderId: z.number().int().optional().describe("Filter by order ID"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        fromId: z.number().int().optional().describe("Trade ID to start from"),
+        limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

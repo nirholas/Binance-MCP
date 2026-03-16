@@ -12,22 +12,25 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnRedeemFlexible(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleRedeem",
-    "Redeem from a Simple Earn Flexible product. Funds are returned to your spot wallet. 💸 Instant redemption available!",
     {
-      productId: z.string().describe("Product ID to redeem from"),
-      redeemAll: z.boolean().optional().describe("Redeem all position (true/false)"),
-      amount: z
-        .number()
-        .positive()
-        .optional()
-        .describe("Amount to redeem (required if redeemAll is false)"),
-      destAccount: z
-        .enum(["SPOT", "FUND"])
-        .optional()
-        .describe("Destination account (default: SPOT)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Redeem from a Simple Earn Flexible product. Funds are returned to your spot wallet. 💸 Instant redemption available!",
+      inputSchema: {
+        productId: z.string().describe("Product ID to redeem from"),
+        redeemAll: z.boolean().optional().describe("Redeem all position (true/false)"),
+        amount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("Amount to redeem (required if redeemAll is false)"),
+        destAccount: z
+          .enum(["SPOT", "FUND"])
+          .optional()
+          .describe("Destination account (default: SPOT)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

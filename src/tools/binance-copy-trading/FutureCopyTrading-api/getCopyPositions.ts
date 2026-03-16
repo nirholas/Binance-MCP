@@ -6,13 +6,16 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetPositions(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetPositions",
-    "Get current copy trading positions. Shows open positions from following lead traders.",
     {
-      portfolioId: z.string().optional().describe("Filter by specific lead trader portfolio ID"),
-      symbol: z.string().optional().describe("Filter by trading symbol"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get current copy trading positions. Shows open positions from following lead traders.",
+      inputSchema: {
+        portfolioId: z.string().optional().describe("Filter by specific lead trader portfolio ID"),
+        symbol: z.string().optional().describe("Filter by trading symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

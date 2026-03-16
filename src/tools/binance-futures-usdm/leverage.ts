@@ -6,12 +6,14 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMLeverage",
-    "Change initial leverage for a symbol in USD-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      leverage: z.number().describe("Target leverage (1-125)"),
+      description: "Change initial leverage for a symbol in USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        leverage: z.number().describe("Target leverage (1-125)"),
+      },
     },
     async ({ symbol, leverage }) => {
       try {

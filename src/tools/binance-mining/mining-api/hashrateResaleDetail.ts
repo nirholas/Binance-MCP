@@ -6,26 +6,29 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceHashRateResaleDetail(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceHashRateResaleDetail",
-    "Retrieves details of hashrate resale transactions, including the transferring and receiving subaccounts, algorithm, hash rate, transfer date, and associated income.",
     {
-      configId: z.number().int().min(1).describe("Mining ID"),
-      userName: z.string().min(1).describe("Mining Account"),
-      pageIndex: z
-        .number()
-        .int()
-        .min(1)
-        .optional()
-        .describe("Page number, default is the first page starting from 1"),
-      pageSize: z
-        .number()
-        .int()
-        .min(10)
-        .max(200)
-        .optional()
-        .describe("Number of pages, minimum 10, maximum 200"),
-      recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      description:
+        "Retrieves details of hashrate resale transactions, including the transferring and receiving subaccounts, algorithm, hash rate, transfer date, and associated income.",
+      inputSchema: {
+        configId: z.number().int().min(1).describe("Mining ID"),
+        userName: z.string().min(1).describe("Mining Account"),
+        pageIndex: z
+          .number()
+          .int()
+          .min(1)
+          .optional()
+          .describe("Page number, default is the first page starting from 1"),
+        pageSize: z
+          .number()
+          .int()
+          .min(10)
+          .max(200)
+          .optional()
+          .describe("Number of pages, minimum 10, maximum 200"),
+        recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

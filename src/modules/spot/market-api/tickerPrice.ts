@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTickerPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceTickerPrice",
-    "Get latest price for a symbol or all symbols.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Get latest price for a symbol or all symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

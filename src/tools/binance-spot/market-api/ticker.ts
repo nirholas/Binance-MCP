@@ -6,15 +6,18 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceTicker",
-    "Get 24-hour rolling window price change statistics for a symbol or all symbols.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      windowSize: z
-        .string()
-        .optional()
-        .describe("Defaults to 1d. Valid values: 1d, 2d, 3d, 4d, 5d, 6d, 7d"),
+      description:
+        "Get 24-hour rolling window price change statistics for a symbol or all symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        windowSize: z
+          .string()
+          .optional()
+          .describe("Defaults to 1d. Valid values: 1d, 2d, 3d, 4d, 5d, 6d, 7d"),
+      },
     },
     async ({ symbol, windowSize }) => {
       try {

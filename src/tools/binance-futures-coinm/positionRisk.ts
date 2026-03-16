@@ -6,13 +6,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMPositionRisk(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMPositionRisk",
-    "Get COIN-M futures position information.",
     {
-      marginAsset: z.string().optional().describe("Margin asset"),
-      pair: z.string().optional().describe("Trading pair"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get COIN-M futures position information.",
+      inputSchema: {
+        marginAsset: z.string().optional().describe("Margin asset"),
+        pair: z.string().optional().describe("Trading pair"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,14 +6,17 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginSmallLiabilityExchange(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginSmallLiabilityExchange",
-    "Cross margin small liability exchange. Converts small liabilities to a single asset.",
     {
-      assetNames: z
-        .array(z.string())
-        .describe("Array of asset names to exchange (e.g., ['BTC', 'ETH'])"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Cross margin small liability exchange. Converts small liabilities to a single asset.",
+      inputSchema: {
+        assetNames: z
+          .array(z.string())
+          .describe("Array of asset names to exchange (e.g., ['BTC', 'ETH'])"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

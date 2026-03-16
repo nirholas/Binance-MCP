@@ -12,43 +12,46 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginNewOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMarginNewOco",
-    "Place a new OCO (One-Cancels-the-Other) order in Margin account. Creates both a stop-loss and take-profit order simultaneously. ⚠️ WARNING: OCO orders involve leverage and carry liquidation risk.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      quantity: z.number().describe("Order quantity"),
-      price: z.number().describe("Limit order price"),
-      stopPrice: z.number().describe("Stop loss trigger price"),
-      stopLimitPrice: z
-        .number()
-        .optional()
-        .describe("Stop limit order price (if stop limit order)"),
-      stopLimitTimeInForce: z
-        .enum(["GTC", "FOK", "IOC"])
-        .optional()
-        .describe("Time in force for stop limit leg"),
-      listClientOrderId: z.string().optional().describe("Unique ID for the order list"),
-      limitClientOrderId: z.string().optional().describe("Unique ID for the limit order"),
-      stopClientOrderId: z.string().optional().describe("Unique ID for the stop order"),
-      limitIcebergQty: z.number().optional().describe("Iceberg quantity for limit leg"),
-      stopIcebergQty: z.number().optional().describe("Iceberg quantity for stop leg"),
-      newOrderRespType: z.enum(["ACK", "RESULT", "FULL"]).optional().describe("Response type"),
-      sideEffectType: z
-        .enum(["NO_SIDE_EFFECT", "MARGIN_BUY", "AUTO_REPAY", "AUTO_BORROW_REPAY"])
-        .optional()
-        .describe("Side effect type for margin orders"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin, default FALSE"),
-      selfTradePreventionMode: z
-        .enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"])
-        .optional()
-        .describe("Self-trade prevention mode"),
-      autoRepayAtCancel: z.boolean().optional().describe("Auto repay when order is canceled"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Place a new OCO (One-Cancels-the-Other) order in Margin account. Creates both a stop-loss and take-profit order simultaneously. ⚠️ WARNING: OCO orders involve leverage and carry liquidation risk.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        quantity: z.number().describe("Order quantity"),
+        price: z.number().describe("Limit order price"),
+        stopPrice: z.number().describe("Stop loss trigger price"),
+        stopLimitPrice: z
+          .number()
+          .optional()
+          .describe("Stop limit order price (if stop limit order)"),
+        stopLimitTimeInForce: z
+          .enum(["GTC", "FOK", "IOC"])
+          .optional()
+          .describe("Time in force for stop limit leg"),
+        listClientOrderId: z.string().optional().describe("Unique ID for the order list"),
+        limitClientOrderId: z.string().optional().describe("Unique ID for the limit order"),
+        stopClientOrderId: z.string().optional().describe("Unique ID for the stop order"),
+        limitIcebergQty: z.number().optional().describe("Iceberg quantity for limit leg"),
+        stopIcebergQty: z.number().optional().describe("Iceberg quantity for stop leg"),
+        newOrderRespType: z.enum(["ACK", "RESULT", "FULL"]).optional().describe("Response type"),
+        sideEffectType: z
+          .enum(["NO_SIDE_EFFECT", "MARGIN_BUY", "AUTO_REPAY", "AUTO_BORROW_REPAY"])
+          .optional()
+          .describe("Side effect type for margin orders"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin, default FALSE"),
+        selfTradePreventionMode: z
+          .enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_BOTH", "NONE"])
+          .optional()
+          .describe("Self-trade prevention mode"),
+        autoRepayAtCancel: z.boolean().optional().describe("Auto repay when order is canceled"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

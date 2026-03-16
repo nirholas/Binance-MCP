@@ -10,10 +10,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketExchangeInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsExchangeInfo",
-    "Get current exchange trading rules and symbol information for options. Returns available option contracts, trading pairs, and their specifications.",
-    {},
+    {
+      description:
+        "Get current exchange trading rules and symbol information for options. Returns available option contracts, trading pairs, and their specifications.",
+    },
     async () => {
       try {
         const response = await optionsClient.restAPI.exchangeInfo();

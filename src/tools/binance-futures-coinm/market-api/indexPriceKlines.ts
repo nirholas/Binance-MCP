@@ -12,33 +12,35 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryIndexPriceKlines(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryIndexPriceKlines",
-    "Get index price kline/candlestick data for a COIN-M Futures pair.",
     {
-      pair: z.string().describe("Underlying pair (e.g., BTCUSD)"),
-      interval: z
-        .enum([
-          "1m",
-          "3m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "4h",
-          "6h",
-          "8h",
-          "12h",
-          "1d",
-          "3d",
-          "1w",
-          "1M",
-        ])
-        .describe("Kline interval"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of klines (default 500, max 1500)"),
+      description: "Get index price kline/candlestick data for a COIN-M Futures pair.",
+      inputSchema: {
+        pair: z.string().describe("Underlying pair (e.g., BTCUSD)"),
+        interval: z
+          .enum([
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+          ])
+          .describe("Kline interval"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of klines (default 500, max 1500)"),
+      },
     },
     async (params) => {
       try {

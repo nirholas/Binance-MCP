@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceNewUserDataStream(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceNewUserDataStream",
-    "Create a new user data stream to receive account updates via WebSocket.",
-    {},
+    { description: "Create a new user data stream to receive account updates via WebSocket." },
     async () => {
       try {
         const response = await spotClient.restAPI.newUserDataStream();

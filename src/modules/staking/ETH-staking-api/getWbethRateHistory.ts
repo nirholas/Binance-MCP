@@ -6,33 +6,36 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetWbethRateHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetWbethRateHistory",
-    "Get WBETH Rate History API allows users to retrieve historical WBETH exchange rates and BETH annual percentage rates (APR) within a specified time range.",
     {
-      startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
-      endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying page. Starts from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Number of results per page. Default: 10, Max: 100"),
+      description:
+        "Get WBETH Rate History API allows users to retrieve historical WBETH exchange rates and BETH annual percentage rates (APR) within a specified time range.",
+      inputSchema: {
+        startTime: z.number().int().optional().describe("Start time in milliseconds (optional)"),
+        endTime: z.number().int().optional().describe("End time in milliseconds (optional)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying page. Starts from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Number of results per page. Default: 10, Max: 100"),
 
-      recvWindow: z
-        .number()
-        .int()
-        .optional()
-        .describe("Time window for request validity (in milliseconds)"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Time window for request validity (in milliseconds)"),
+      },
     },
     async (params) => {
       try {

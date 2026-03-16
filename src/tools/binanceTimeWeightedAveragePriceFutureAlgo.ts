@@ -5,8 +5,9 @@ import { z } from "zod";
 import { algoClient } from "../config/client.js";
 
 export function registerBinanceTimeWeightedAveragePriceFutureAlgo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binanceTimeWeightedAveragePriceFutureAlgo",
+    {},
     `Place a new spot TWAP order with Algo service. Trading for large orders can generate significant selling pressure on the market`,
     {
       symbol: z.string().describe("symbol: exemple: BTCUSDT"),

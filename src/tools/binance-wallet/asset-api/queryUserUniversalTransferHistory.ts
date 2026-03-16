@@ -6,18 +6,20 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletQueryUserUniversalTransferHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletQueryUserUniversalTransferHistory",
-    "Query universal transfer history.",
     {
-      type: z.string().describe("Transfer type"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      current: z.number().optional().describe("Current page"),
-      size: z.number().optional().describe("Page size"),
-      fromSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
-      toSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query universal transfer history.",
+      inputSchema: {
+        type: z.string().describe("Transfer type"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        current: z.number().optional().describe("Current page"),
+        size: z.number().optional().describe("Page size"),
+        fromSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
+        toSymbol: z.string().optional().describe("Symbol for spot/margin trade pair"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ type, startTime, endTime, current, size, fromSymbol, toSymbol, recvWindow }) => {
       try {

@@ -6,12 +6,14 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDustTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDustTransfer",
-    "Convert dust assets to BNB.",
     {
-      asset: z.array(z.string()).describe("Array of asset symbols to convert"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Convert dust assets to BNB.",
+      inputSchema: {
+        asset: z.array(z.string()).describe("Array of asset symbols to convert"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, recvWindow }) => {
       try {

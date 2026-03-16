@@ -6,16 +6,18 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsCancelBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCancelBatchOrders",
-    "Cancel multiple options orders in batch.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      orderIds: z.string().optional().describe("Comma-separated list of order IDs to cancel"),
-      clientOrderIds: z
-        .string()
-        .optional()
-        .describe("Comma-separated list of client order IDs to cancel"),
+      description: "Cancel multiple options orders in batch.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        orderIds: z.string().optional().describe("Comma-separated list of order IDs to cancel"),
+        clientOrderIds: z
+          .string()
+          .optional()
+          .describe("Comma-separated list of client order IDs to cancel"),
+      },
     },
     async ({ symbol, orderIds, clientOrderIds }) => {
       try {

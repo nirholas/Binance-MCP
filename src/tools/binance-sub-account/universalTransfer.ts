@@ -6,27 +6,29 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountUniversalTransfer",
-    "Universal transfer between sub-accounts or between master and sub-accounts.",
     {
-      fromEmail: z.string().optional().describe("Sender email (leave empty for master account)"),
-      toEmail: z.string().optional().describe("Recipient email (leave empty for master account)"),
-      fromAccountType: z
-        .string()
-        .describe("Sender account type: SPOT, USDT_FUTURE, COIN_FUTURE, MARGIN, ISOLATED_MARGIN"),
-      toAccountType: z
-        .string()
-        .describe(
-          "Recipient account type: SPOT, USDT_FUTURE, COIN_FUTURE, MARGIN, ISOLATED_MARGIN",
-        ),
-      asset: z.string().describe("Asset to transfer"),
-      amount: z.number().describe("Amount to transfer"),
-      symbol: z
-        .string()
-        .optional()
-        .describe("Required when fromAccountType or toAccountType is ISOLATED_MARGIN"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Universal transfer between sub-accounts or between master and sub-accounts.",
+      inputSchema: {
+        fromEmail: z.string().optional().describe("Sender email (leave empty for master account)"),
+        toEmail: z.string().optional().describe("Recipient email (leave empty for master account)"),
+        fromAccountType: z
+          .string()
+          .describe("Sender account type: SPOT, USDT_FUTURE, COIN_FUTURE, MARGIN, ISOLATED_MARGIN"),
+        toAccountType: z
+          .string()
+          .describe(
+            "Recipient account type: SPOT, USDT_FUTURE, COIN_FUTURE, MARGIN, ISOLATED_MARGIN",
+          ),
+        asset: z.string().describe("Asset to transfer"),
+        amount: z.number().describe("Amount to transfer"),
+        symbol: z
+          .string()
+          .optional()
+          .describe("Required when fromAccountType or toAccountType is ISOLATED_MARGIN"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({
       fromEmail,

@@ -6,12 +6,15 @@ import { z } from "zod";
 import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSpotCancelOpenTWAPOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSpotCancelOpenTWAPOrder",
-    "The Cancel Algo Order API allows users to cancel an open TWAP algorithmic order for spot trading on Binance.",
     {
-      algoId: z.number().int().describe("Algo order ID (e.g., 14511)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "The Cancel Algo Order API allows users to cancel an open TWAP algorithmic order for spot trading on Binance.",
+      inputSchema: {
+        algoId: z.number().int().describe("Algo order ID (e.g., 14511)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

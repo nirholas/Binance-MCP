@@ -12,13 +12,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryChangeLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryChangeLeverage",
-    "Change initial leverage for a COIN-M Futures symbol. ⚠️ Higher leverage = higher risk.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Change initial leverage for a COIN-M Futures symbol. ⚠️ Higher leverage = higher risk.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

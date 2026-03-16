@@ -12,12 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesLeverageBracket(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesLeverageBracket",
-    "Get notional and leverage brackets for USD-M Futures symbols.",
     {
-      symbol: z.string().optional().describe("Futures symbol. If omitted, returns all"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get notional and leverage brackets for USD-M Futures symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol. If omitted, returns all"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

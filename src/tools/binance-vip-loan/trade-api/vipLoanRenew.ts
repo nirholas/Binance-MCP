@@ -6,19 +6,22 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceVipLoanRenew(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceVipLoanRenew",
-    "Allow VIP users to renew an existing VIP loan for a specified term, either 30 or 60 days.",
     {
-      orderId: z.number().int().describe("The order ID for the loan request"),
-      loanTerm: z
-        .union([z.literal(30), z.literal(60)])
-        .describe("Loan term in days, either 30 or 60"),
-      recvWindow: z
-        .number()
-        .int()
-        .optional()
-        .describe("Optional: Time window for request validity"),
+      description:
+        "Allow VIP users to renew an existing VIP loan for a specified term, either 30 or 60 days.",
+      inputSchema: {
+        orderId: z.number().int().describe("The order ID for the loan request"),
+        loanTerm: z
+          .union([z.literal(30), z.literal(60)])
+          .describe("Loan term in days, either 30 or 60"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional: Time window for request validity"),
+      },
     },
     async (params) => {
       try {

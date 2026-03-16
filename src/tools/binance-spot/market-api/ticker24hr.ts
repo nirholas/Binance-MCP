@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceTicker24hr(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceTicker24hr",
-    "Get 24-hour price change statistics for a symbol or all symbols.",
     {
-      symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Get 24-hour price change statistics for a symbol or all symbols.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

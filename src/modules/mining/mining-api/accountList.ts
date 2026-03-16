@@ -6,13 +6,20 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAccountList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAccountList",
-    "Retrieve hashrate statistics for a mining account. It returns both hourly (H_hashrate) and daily (D_hashrate) data, including timestamps, hashrate values, and rejection rates.",
     {
-      algo: z.string().min(1).describe("Algorithm (e.g., sha256)"),
-      userName: z.string().min(1).describe("Mining account"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieve hashrate statistics for a mining account. It returns both hourly (H_hashrate) and daily (D_hashrate) data, including timestamps, hashrate values, and rejection rates.",
+      inputSchema: {
+        algo: z.string().min(1).describe("Algorithm (e.g., sha256)"),
+        userName: z.string().min(1).describe("Mining account"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

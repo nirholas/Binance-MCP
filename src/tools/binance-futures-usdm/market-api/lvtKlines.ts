@@ -12,38 +12,40 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesLvtKlines(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesLvtKlines",
-    "Get historical BLVT NAV Kline/candlestick data.",
     {
-      symbol: z.string().describe("BLVT symbol (e.g., BTCDOWN, BTCUP)"),
-      interval: z
-        .enum([
-          "1m",
-          "3m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "4h",
-          "6h",
-          "8h",
-          "12h",
-          "1d",
-          "3d",
-          "1w",
-          "1M",
-        ])
-        .describe("Kline interval"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .max(1000)
-        .optional()
-        .describe("Number of klines. Default 500, max 1000"),
+      description: "Get historical BLVT NAV Kline/candlestick data.",
+      inputSchema: {
+        symbol: z.string().describe("BLVT symbol (e.g., BTCDOWN, BTCUP)"),
+        interval: z
+          .enum([
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+          ])
+          .describe("Kline interval"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .max(1000)
+          .optional()
+          .describe("Number of klines. Default 500, max 1000"),
+      },
     },
     async (params) => {
       try {

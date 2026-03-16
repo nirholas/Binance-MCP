@@ -6,11 +6,13 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetIndexLinkedPlanPositionList",
-    "Query index linked plan position details for auto-invest.",
     {
-      indexId: z.number().describe("Index ID"),
+      description: "Query index linked plan position details for auto-invest.",
+      inputSchema: {
+        indexId: z.number().describe("Index ID"),
+      },
     },
     async ({ indexId }) => {
       try {

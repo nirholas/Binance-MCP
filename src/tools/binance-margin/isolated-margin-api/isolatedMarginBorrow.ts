@@ -12,14 +12,16 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginBorrow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginBorrow",
-    "Borrow assets in isolated margin account for a specific symbol.",
     {
-      asset: z.string().describe("Asset to borrow (e.g., BTC, USDT)"),
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      amount: z.string().describe("Amount to borrow"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Borrow assets in isolated margin account for a specific symbol.",
+      inputSchema: {
+        asset: z.string().describe("Asset to borrow (e.g., BTC, USDT)"),
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        amount: z.string().describe("Amount to borrow"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

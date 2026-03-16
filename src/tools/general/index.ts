@@ -7,10 +7,9 @@ import { binanceUsRequest } from "../../config/binanceUsClient.js";
 
 export function registerGeneralTools(server: McpServer) {
   // binance_us_ping - Test connectivity to Binance.US
-  server.tool(
+  server.registerTool(
     "binance_us_ping",
-    "Test connectivity to the Binance.US API. Returns empty object if successful.",
-    {},
+    { description: "Test connectivity to the Binance.US API. Returns empty object if successful." },
     async () => {
       try {
         const result = await binanceUsRequest("GET", "/api/v3/ping", {}, false);
@@ -35,10 +34,9 @@ export function registerGeneralTools(server: McpServer) {
   );
 
   // binance_us_server_time - Get server time
-  server.tool(
+  server.registerTool(
     "binance_us_server_time",
-    "Get the current server time from Binance.US exchange.",
-    {},
+    { description: "Get the current server time from Binance.US exchange." },
     async () => {
       try {
         const result = await binanceUsRequest("GET", "/api/v3/time", {}, false);
@@ -64,10 +62,12 @@ export function registerGeneralTools(server: McpServer) {
   );
 
   // binance_us_system_status - Get system maintenance status (SIGNED)
-  server.tool(
+  server.registerTool(
     "binance_us_system_status",
-    "Check if Binance.US system is under maintenance. Status 0 = normal, 1 = system maintenance. Requires API key authentication.",
-    {},
+    {
+      description:
+        "Check if Binance.US system is under maintenance. Status 0 = normal, 1 = system maintenance. Requires API key authentication.",
+    },
     async () => {
       try {
         const result = await binanceUsRequest("GET", "/sapi/v1/system/status", {}, true);
@@ -93,26 +93,29 @@ export function registerGeneralTools(server: McpServer) {
   );
 
   // binance_us_exchange_info - Get exchange information
-  server.tool(
+  server.registerTool(
     "binance_us_exchange_info",
-    "Get current exchange trading rules and trading pair information from Binance.US. Can filter by specific symbol(s) or permissions.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Single trading pair symbol to filter (e.g., BTCUSD). Cannot be used with 'symbols' parameter.",
-        ),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe(
-          "Array of trading pair symbols to filter (e.g., ['BTCUSD', 'ETHUSD']). Cannot be used with 'symbol' parameter.",
-        ),
-      permissions: z
-        .array(z.string())
-        .optional()
-        .describe("Filter by trading permissions. Default is ['SPOT']."),
+      description:
+        "Get current exchange trading rules and trading pair information from Binance.US. Can filter by specific symbol(s) or permissions.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Single trading pair symbol to filter (e.g., BTCUSD). Cannot be used with 'symbols' parameter.",
+          ),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe(
+            "Array of trading pair symbols to filter (e.g., ['BTCUSD', 'ETHUSD']). Cannot be used with 'symbol' parameter.",
+          ),
+        permissions: z
+          .array(z.string())
+          .optional()
+          .describe("Filter by trading permissions. Default is ['SPOT']."),
+      },
     },
     async ({ symbol, symbols, permissions }) => {
       try {

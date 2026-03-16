@@ -12,15 +12,18 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetLeadTraders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetLeadTraders",
-    "Browse available lead traders for copy trading. View their performance stats and follower count to find traders to copy.",
     {
-      isShared: z.boolean().optional().describe("Filter by shared portfolio traders"),
-      tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type filter"),
-      pageNumber: z.number().int().min(1).default(1).optional().describe("Page number"),
-      pageSize: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Browse available lead traders for copy trading. View their performance stats and follower count to find traders to copy.",
+      inputSchema: {
+        isShared: z.boolean().optional().describe("Filter by shared portfolio traders"),
+        tradeType: z.enum(["PERPETUAL"]).optional().describe("Trade type filter"),
+        pageNumber: z.number().int().min(1).default(1).optional().describe("Page number"),
+        pageSize: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

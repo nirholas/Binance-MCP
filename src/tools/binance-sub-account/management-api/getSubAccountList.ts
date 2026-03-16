@@ -12,21 +12,24 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountList",
-    "Get a list of all sub-accounts under your master account. Returns email, status, and creation time for each sub-account.",
     {
-      email: z.string().email().optional().describe("Filter by specific sub-account email"),
-      isFreeze: z.enum(["true", "false"]).optional().describe("Filter by freeze status"),
-      page: z.number().int().min(1).optional().describe("Page number (starts from 1)"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(200)
-        .optional()
-        .describe("Number of results per page (max 200)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get a list of all sub-accounts under your master account. Returns email, status, and creation time for each sub-account.",
+      inputSchema: {
+        email: z.string().email().optional().describe("Filter by specific sub-account email"),
+        isFreeze: z.enum(["true", "false"]).optional().describe("Filter by freeze status"),
+        page: z.number().int().min(1).optional().describe("Page number (starts from 1)"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(200)
+          .optional()
+          .describe("Number of results per page (max 200)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

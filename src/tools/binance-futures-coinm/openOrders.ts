@@ -6,13 +6,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMOpenOrders",
-    "Get current COIN-M futures open orders.",
     {
-      symbol: z.string().optional().describe("Trading symbol (optional)"),
-      pair: z.string().optional().describe("Trading pair"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get current COIN-M futures open orders.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Trading symbol (optional)"),
+        pair: z.string().optional().describe("Trading pair"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsTime(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsTime",
-    "Get the current server time from Binance Options API.",
-    {},
+    { description: "Get the current server time from Binance Options API." },
     async () => {
       try {
         const data = await optionsClient.time();

@@ -6,11 +6,14 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginAccount",
-    "Query Cross Margin account details including balances, margin level, and collateral info.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query Cross Margin account details including balances, margin level, and collateral info.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,17 +6,20 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertCancelLimitOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertCancelLimitOrder",
-    "Cancels a previously placed limit order using the orderId and returns the cancellation status along with the orderId.",
     {
-      orderId: z.number().int().describe("The orderId from placeOrder API"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("Time window for request validity"),
+      description:
+        "Cancels a previously placed limit order using the orderId and returns the cancellation status along with the orderId.",
+      inputSchema: {
+        orderId: z.number().int().describe("The orderId from placeOrder API"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

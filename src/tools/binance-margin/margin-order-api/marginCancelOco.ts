@@ -12,22 +12,25 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceMarginCancelOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceMarginCancelOco",
-    "Cancel an entire OCO (One-Cancels-the-Other) order in Margin account. Both legs will be cancelled.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      orderListId: z.number().int().optional().describe("Order list ID"),
-      listClientOrderId: z.string().optional().describe("Client order list ID"),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("New client order ID for this cancel request"),
-      isIsolated: z
-        .enum(["TRUE", "FALSE"])
-        .optional()
-        .describe("For isolated margin, default FALSE"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Cancel an entire OCO (One-Cancels-the-Other) order in Margin account. Both legs will be cancelled.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        orderListId: z.number().int().optional().describe("Order list ID"),
+        listClientOrderId: z.string().optional().describe("Client order list ID"),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("New client order ID for this cancel request"),
+        isIsolated: z
+          .enum(["TRUE", "FALSE"])
+          .optional()
+          .describe("For isolated margin, default FALSE"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

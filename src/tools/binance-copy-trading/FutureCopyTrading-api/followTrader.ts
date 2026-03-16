@@ -6,30 +6,33 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingFollow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingFollow",
-    "Start following a lead trader in copy trading. ⚠️ WARNING: This will automatically copy their trades. You are trusting another trader with your capital. Past performance does not guarantee future results.",
     {
-      portfolioId: z.string().describe("Lead trader's portfolio ID to follow"),
-      copyRatio: z
-        .number()
-        .min(0.1)
-        .max(10)
-        .optional()
-        .describe("Copy ratio multiplier (0.1-10x, default 1x)"),
-      stopLossRatio: z
-        .number()
-        .min(0.01)
-        .max(1)
-        .optional()
-        .describe("Stop loss ratio (e.g., 0.1 = 10% loss triggers stop)"),
-      takeProfitRatio: z
-        .number()
-        .min(0.01)
-        .optional()
-        .describe("Take profit ratio (e.g., 0.5 = 50% profit triggers exit)"),
-      fixedAmount: z.string().optional().describe("Fixed amount per trade instead of ratio"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Start following a lead trader in copy trading. ⚠️ WARNING: This will automatically copy their trades. You are trusting another trader with your capital. Past performance does not guarantee future results.",
+      inputSchema: {
+        portfolioId: z.string().describe("Lead trader's portfolio ID to follow"),
+        copyRatio: z
+          .number()
+          .min(0.1)
+          .max(10)
+          .optional()
+          .describe("Copy ratio multiplier (0.1-10x, default 1x)"),
+        stopLossRatio: z
+          .number()
+          .min(0.01)
+          .max(1)
+          .optional()
+          .describe("Stop loss ratio (e.g., 0.1 = 10% loss triggers stop)"),
+        takeProfitRatio: z
+          .number()
+          .min(0.01)
+          .optional()
+          .describe("Take profit ratio (e.g., 0.5 = 50% profit triggers exit)"),
+        fixedAmount: z.string().optional().describe("Fixed amount per trade instead of ratio"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

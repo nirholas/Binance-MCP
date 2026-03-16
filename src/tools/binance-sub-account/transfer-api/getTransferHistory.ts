@@ -12,19 +12,22 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountTransferHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountTransferHistory",
-    "Get transfer history for sub-accounts. Shows all internal transfers between master and sub-accounts.",
     {
-      asset: z.string().optional().describe("Filter by specific asset"),
-      type: z
-        .enum(["1", "2"])
-        .optional()
-        .describe("Transfer type: 1 = transfer in, 2 = transfer out"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().min(1).max(500).optional().describe("Number of results (max 500)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get transfer history for sub-accounts. Shows all internal transfers between master and sub-accounts.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by specific asset"),
+        type: z
+          .enum(["1", "2"])
+          .optional()
+          .describe("Transfer type: 1 = transfer in, 2 = transfer out"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z.number().int().min(1).max(500).optional().describe("Number of results (max 500)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

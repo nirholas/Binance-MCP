@@ -6,13 +6,16 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountTransferToMaster",
-    "Transfer assets from sub-account to master account (SPOT). Must be called from sub-account API key.",
     {
-      asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
-      amount: z.number().describe("Amount to transfer"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Transfer assets from sub-account to master account (SPOT). Must be called from sub-account API key.",
+      inputSchema: {
+        asset: z.string().describe("Asset to transfer (e.g., BTC, USDT)"),
+        amount: z.number().describe("Amount to transfer"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, amount, recvWindow }) => {
       try {

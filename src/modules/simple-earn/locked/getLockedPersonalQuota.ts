@@ -12,12 +12,15 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedPersonalQuota(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedPersonalQuota",
-    "Get your personal subscription quota for a locked product. Shows remaining quota available to subscribe.",
     {
-      projectId: z.string().describe("Project ID to check quota for"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your personal subscription quota for a locked product. Shows remaining quota available to subscribe.",
+      inputSchema: {
+        projectId: z.string().describe("Project ID to check quota for"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

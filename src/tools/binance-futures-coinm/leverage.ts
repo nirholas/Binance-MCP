@@ -6,13 +6,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMLeverage",
-    "Change initial leverage for COIN-M futures symbol.",
     {
-      symbol: z.string().describe("Trading symbol"),
-      leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Change initial leverage for COIN-M futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Trading symbol"),
+        leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

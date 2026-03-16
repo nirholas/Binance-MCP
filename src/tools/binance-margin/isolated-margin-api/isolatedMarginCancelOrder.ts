@@ -6,18 +6,21 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginCancelOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginCancelOrder",
-    "Cancel an active isolated margin order. Either orderId or origClientOrderId must be provided.",
     {
-      symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("Order ID to cancel"),
-      origClientOrderId: z.string().optional().describe("Original client order ID to cancel"),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("New client order ID for the cancel request"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Cancel an active isolated margin order. Either orderId or origClientOrderId must be provided.",
+      inputSchema: {
+        symbol: z.string().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("Order ID to cancel"),
+        origClientOrderId: z.string().optional().describe("Original client order ID to cancel"),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("New client order ID for the cancel request"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

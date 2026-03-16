@@ -12,13 +12,15 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesHistoricalTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesHistoricalTrades",
-    "Get older trades for a USD-M Futures symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      limit: z.number().int().optional().describe("Number of trades. Default 500, max 1000"),
-      fromId: z.number().int().optional().describe("Trade ID to start from"),
+      description: "Get older trades for a USD-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        limit: z.number().int().optional().describe("Number of trades. Default 500, max 1000"),
+        fromId: z.number().int().optional().describe("Trade ID to start from"),
+      },
     },
     async (params) => {
       try {

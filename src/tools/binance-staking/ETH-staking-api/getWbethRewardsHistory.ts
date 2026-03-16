@@ -6,36 +6,39 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetWbethRewardsHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetWbethRewardsHistory",
-    "Get WBETH Rewards History API allows users to retrieve historical reward data earned from WBETH holdings, including estimated rewards in ETH, holding amounts, and APR details.",
     {
-      startTime: z
-        .number()
-        .int()
-        .optional()
-        .describe("Start time in milliseconds (e.g., 1641522717552)"),
-      endTime: z
-        .number()
-        .int()
-        .optional()
-        .describe("End time in milliseconds (e.g., 1641522720000)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying page. Start from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Number of results per page. Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get WBETH Rewards History API allows users to retrieve historical reward data earned from WBETH holdings, including estimated rewards in ETH, holding amounts, and APR details.",
+      inputSchema: {
+        startTime: z
+          .number()
+          .int()
+          .optional()
+          .describe("Start time in milliseconds (e.g., 1641522717552)"),
+        endTime: z
+          .number()
+          .int()
+          .optional()
+          .describe("End time in milliseconds (e.g., 1641522720000)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying page. Start from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Number of results per page. Default: 10, Max: 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

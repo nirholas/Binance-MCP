@@ -10,10 +10,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketTime(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsTime",
-    "Get the current server time from the Options API.",
-    {},
+    { description: "Get the current server time from the Options API." },
     async () => {
       try {
         const response = await optionsClient.restAPI.time();

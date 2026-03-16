@@ -4,10 +4,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMListenKeyCreate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMListenKeyCreate",
-    "Start a new user data stream for USD-M Futures. Returns a listenKey for WebSocket connection.",
-    {},
+    {
+      description:
+        "Start a new user data stream for USD-M Futures. Returns a listenKey for WebSocket connection.",
+    },
     async () => {
       try {
         const data = await futuresClient.createListenKey();
@@ -35,10 +37,9 @@ export function registerBinanceFuturesUSDMListenKeyCreate(server: McpServer) {
 }
 
 export function registerBinanceFuturesUSDMListenKeyRenew(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMListenKeyRenew",
-    "Keepalive a user data stream to prevent timeout for USD-M Futures.",
-    {},
+    { description: "Keepalive a user data stream to prevent timeout for USD-M Futures." },
     async () => {
       try {
         const data = await futuresClient.keepAliveListenKey();
@@ -66,10 +67,9 @@ export function registerBinanceFuturesUSDMListenKeyRenew(server: McpServer) {
 }
 
 export function registerBinanceFuturesUSDMListenKeyClose(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMListenKeyClose",
-    "Close a user data stream for USD-M Futures.",
-    {},
+    { description: "Close a user data stream for USD-M Futures." },
     async () => {
       try {
         const data = await futuresClient.closeListenKey();

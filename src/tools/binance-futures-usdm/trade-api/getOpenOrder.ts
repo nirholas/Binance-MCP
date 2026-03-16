@@ -12,14 +12,16 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesGetOpenOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetOpenOrder",
-    "Query a specific open USD-M Futures order by orderId or origClientOrderId.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("Order ID"),
-      origClientOrderId: z.string().optional().describe("Original client order ID"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Query a specific open USD-M Futures order by orderId or origClientOrderId.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("Order ID"),
+        origClientOrderId: z.string().optional().describe("Original client order ID"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

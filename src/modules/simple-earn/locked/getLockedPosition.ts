@@ -12,16 +12,19 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnLockedPosition(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedPosition",
-    "Get your current Simple Earn Locked positions. Shows locked amount, rewards, maturity date, and APR.",
     {
-      asset: z.string().optional().describe("Filter by asset symbol"),
-      positionId: z.string().optional().describe("Filter by position ID"),
-      projectId: z.string().optional().describe("Filter by project ID"),
-      current: z.number().int().min(1).default(1).optional().describe("Page number"),
-      size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get your current Simple Earn Locked positions. Shows locked amount, rewards, maturity date, and APR.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by asset symbol"),
+        positionId: z.string().optional().describe("Filter by position ID"),
+        projectId: z.string().optional().describe("Filter by project ID"),
+        current: z.number().int().min(1).default(1).optional().describe("Page number"),
+        size: z.number().int().min(1).max(100).default(10).optional().describe("Page size"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

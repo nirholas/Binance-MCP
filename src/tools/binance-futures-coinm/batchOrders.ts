@@ -6,15 +6,17 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMBatchOrders",
-    "Place multiple orders for COIN-M Futures (max 5 orders).",
     {
-      batchOrders: z
-        .string()
-        .describe(
-          "JSON string of order list. Max 5 orders. Each order has: symbol, side, type, and optional parameters",
-        ),
+      description: "Place multiple orders for COIN-M Futures (max 5 orders).",
+      inputSchema: {
+        batchOrders: z
+          .string()
+          .describe(
+            "JSON string of order list. Max 5 orders. Each order has: symbol, side, type, and optional parameters",
+          ),
+      },
     },
     async ({ batchOrders }) => {
       try {

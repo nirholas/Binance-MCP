@@ -12,12 +12,15 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryLeverageBracket(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryLeverageBracket",
-    "Get notional and leverage bracket information for COIN-M Futures. Shows max leverage at different position sizes.",
     {
-      pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Get notional and leverage bracket information for COIN-M Futures. Shows max leverage at different position sizes.",
+      inputSchema: {
+        pair: z.string().optional().describe("Filter by underlying pair (e.g., BTCUSD)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

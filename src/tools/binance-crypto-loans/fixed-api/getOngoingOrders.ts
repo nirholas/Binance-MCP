@@ -12,16 +12,19 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedOngoing(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedOngoing",
-    "Get ongoing fixed-term loan orders. Shows current loans with term, principal, interest, and LTV.",
     {
-      orderId: z.number().int().optional().describe("Filter by specific order ID"),
-      loanCoin: z.string().optional().describe("Filter by loan coin"),
-      collateralCoin: z.string().optional().describe("Filter by collateral coin"),
-      current: z.number().int().min(1).optional().describe("Current page"),
-      limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get ongoing fixed-term loan orders. Shows current loans with term, principal, interest, and LTV.",
+      inputSchema: {
+        orderId: z.number().int().optional().describe("Filter by specific order ID"),
+        loanCoin: z.string().optional().describe("Filter by loan coin"),
+        collateralCoin: z.string().optional().describe("Filter by collateral coin"),
+        current: z.number().int().min(1).optional().describe("Current page"),
+        limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

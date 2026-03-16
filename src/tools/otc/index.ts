@@ -18,8 +18,9 @@ export function registerOtcTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v1/otc/coinPairs - Get Supported OTC Coin Pairs
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_otc_coin_pairs",
+    {},
     `Get a list of supported OTC (Over-The-Counter) trading pairs on Binance.US.
 
 OTC trading allows large block trades to be executed outside the regular order book, 
@@ -65,8 +66,9 @@ Example: Convert large amounts of BTC to USDT without affecting market price.`,
   // =====================================================================
   // POST /sapi/v1/otc/quotes - Request Quote for OTC Trade
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_otc_quote",
+    {},
     `Request a quote for an OTC (Over-The-Counter) trade on Binance.US.
 
 This endpoint requests a price quote for converting one coin to another via OTC.
@@ -125,8 +127,9 @@ Response includes:
   // =====================================================================
   // POST /sapi/v1/otc/orders - Place OTC Trade Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_otc_place_order",
+    {},
     `Place an OTC (Over-The-Counter) trade order using a previously acquired quote.
 
 ⚠️ IMPORTANT: You must first call binance_us_otc_quote to get a quoteId before placing an order.
@@ -177,8 +180,9 @@ Response includes:
   // =====================================================================
   // GET /sapi/v1/otc/orders/{orderId} - Get OTC Order Details
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_otc_get_order",
+    {},
     `Get detailed information about a specific OTC (Over-The-Counter) trade order.
 
 Use this to check the status and details of a previously placed OTC order.
@@ -220,8 +224,9 @@ Response includes:
   // =====================================================================
   // GET /sapi/v1/otc/orders - Get All OTC Trade Orders
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_otc_all_orders",
+    {},
     `Query all OTC (Over-The-Counter) trade orders with optional filters.
 
 Use this to retrieve your OTC trading history with various filtering options.
@@ -281,8 +286,9 @@ toCoin, toAmount, ratio, inverseRatio, createTime`,
   // =====================================================================
   // GET /sapi/v1/ocbs/orders - Get All OCBS (Fiat) Orders
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_ocbs_orders",
+    {},
     `Query all OCBS (One-Click-Buy-Sell) fiat orders on Binance.US.
 
 OCBS allows direct fiat-to-crypto conversions. This endpoint retrieves your 

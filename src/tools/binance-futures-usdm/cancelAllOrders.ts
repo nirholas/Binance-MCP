@@ -6,11 +6,13 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMCancelAllOrders",
-    "Cancel all open orders for a symbol in USD-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Cancel all open orders for a symbol in USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

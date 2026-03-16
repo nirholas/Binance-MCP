@@ -6,12 +6,14 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletTradeFee(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletTradeFee",
-    "Get trade fee.",
     {
-      symbol: z.string().optional().describe("Trading pair symbol"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get trade fee.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Trading pair symbol"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, recvWindow }) => {
       try {

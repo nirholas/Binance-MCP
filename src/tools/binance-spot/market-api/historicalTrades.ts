@@ -6,13 +6,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceHistoricalTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceHistoricalTrades",
-    "Get older historical trades for a specific trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      limit: z.number().optional().describe("Default 500; max 1000"),
-      fromId: z.number().optional().describe("Trade ID to fetch from"),
+      description: "Get older historical trades for a specific trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        limit: z.number().optional().describe("Default 500; max 1000"),
+        fromId: z.number().optional().describe("Trade ID to fetch from"),
+      },
     },
     async ({ symbol, limit, fromId }) => {
       try {

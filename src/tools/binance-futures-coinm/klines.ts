@@ -6,33 +6,35 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMKlines(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMKlines",
-    "Get Kline/candlestick bars for a specific COIN-M Futures trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      interval: z
-        .enum([
-          "1m",
-          "3m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "4h",
-          "6h",
-          "8h",
-          "12h",
-          "1d",
-          "3d",
-          "1w",
-          "1M",
-        ])
-        .describe("Kline interval"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 500; max 1500"),
+      description: "Get Kline/candlestick bars for a specific COIN-M Futures trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        interval: z
+          .enum([
+            "1m",
+            "3m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "4h",
+            "6h",
+            "8h",
+            "12h",
+            "1d",
+            "3d",
+            "1w",
+            "1M",
+          ])
+          .describe("Kline interval"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 500; max 1500"),
+      },
     },
     async ({ symbol, interval, startTime, endTime, limit }) => {
       try {

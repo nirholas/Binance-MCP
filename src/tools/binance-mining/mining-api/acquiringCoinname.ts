@@ -4,10 +4,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAcquiringCoinName(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAcquiringCoinName",
-    "Fetch supported mining coins with details like coin name, ID, algorithm name, and associated algorithm ID.",
-    {},
+    {
+      description:
+        "Fetch supported mining coins with details like coin name, ID, algorithm name, and associated algorithm ID.",
+    },
     async () => {
       try {
         const response = await miningClient.restAPI.acquiringCoinname();

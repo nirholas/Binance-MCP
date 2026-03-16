@@ -6,32 +6,38 @@ import { z } from "zod";
 import { miningClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceEarningsList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceEarningsList",
-    "Retrieves list of earnings related to mining activities, including transferred hashrate, daily hashrate, profit amount, and the status of the payment (unpaid, paying, or paid).",
     {
-      algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
-      userName: z.string().min(1).describe("Mining account username"),
-      coin: z.string().optional().describe("Coin name (optional)"),
-      startDate: z
-        .number()
-        .optional()
-        .describe("Search start date (milliseconds timestamp, optional)"),
-      endDate: z.number().optional().describe("Search end date (milliseconds timestamp, optional)"),
-      pageIndex: z
-        .number()
-        .int()
-        .min(1)
-        .optional()
-        .describe("Page number, default is the first page starting from 1"),
-      pageSize: z
-        .number()
-        .int()
-        .min(10)
-        .max(200)
-        .optional()
-        .describe("Number of pages, minimum 10, maximum 200"),
-      recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      description:
+        "Retrieves list of earnings related to mining activities, including transferred hashrate, daily hashrate, profit amount, and the status of the payment (unpaid, paying, or paid).",
+      inputSchema: {
+        algo: z.string().min(1).describe("Transfer algorithm (e.g., sha256)"),
+        userName: z.string().min(1).describe("Mining account username"),
+        coin: z.string().optional().describe("Coin name (optional)"),
+        startDate: z
+          .number()
+          .optional()
+          .describe("Search start date (milliseconds timestamp, optional)"),
+        endDate: z
+          .number()
+          .optional()
+          .describe("Search end date (milliseconds timestamp, optional)"),
+        pageIndex: z
+          .number()
+          .int()
+          .min(1)
+          .optional()
+          .describe("Page number, default is the first page starting from 1"),
+        pageSize: z
+          .number()
+          .int()
+          .min(10)
+          .max(200)
+          .optional()
+          .describe("Number of pages, minimum 10, maximum 200"),
+        recvWindow: z.number().int().optional().describe("Optional: cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

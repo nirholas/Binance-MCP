@@ -12,12 +12,15 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetPlanDetails",
-    "Get detailed information about a specific auto-invest plan including position details.",
     {
-      planId: z.number().int().describe("Plan ID to query"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get detailed information about a specific auto-invest plan including position details.",
+      inputSchema: {
+        planId: z.number().int().describe("Plan ID to query"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

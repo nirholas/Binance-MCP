@@ -12,14 +12,16 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCancelOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCancelOrder",
-    "Cancel an active options order by order ID or client order ID.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      orderId: z.number().int().optional().describe("Order ID to cancel"),
-      clientOrderId: z.string().optional().describe("Client order ID to cancel"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Cancel an active options order by order ID or client order ID.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        orderId: z.number().int().optional().describe("Order ID to cancel"),
+        clientOrderId: z.string().optional().describe("Client order ID to cancel"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

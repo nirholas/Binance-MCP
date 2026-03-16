@@ -18,8 +18,9 @@ export function registerStakingTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v1/staking/asset - Get Staking Asset Information
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_asset_info",
+    {},
     `Get staking information for supported assets on Binance.US.
 
 Returns details about staking options including APR, APY, and staking limits.
@@ -69,8 +70,9 @@ If no asset is specified, returns information for all staking assets.`,
   // =====================================================================
   // POST /sapi/v1/staking/stake - Stake Asset
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_stake",
+    {},
     `Stake a supported asset on Binance.US to earn staking rewards.
 
 ⚠️ IMPORTANT:
@@ -126,8 +128,9 @@ Response includes:
   // =====================================================================
   // POST /sapi/v1/staking/unstake - Unstake Asset
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_unstake",
+    {},
     `Unstake a previously staked asset on Binance.US.
 
 ⚠️ IMPORTANT:
@@ -174,8 +177,9 @@ Response includes:
   // =====================================================================
   // GET /sapi/v1/staking/stakingBalance - Get Staking Balance
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_balance",
+    {},
     `Get current staking balance for assets on Binance.US.
 
 Returns your current staking positions and their details.
@@ -223,8 +227,9 @@ If no asset is specified, returns balances for all staked assets.`,
   // =====================================================================
   // GET /sapi/v1/staking/history - Get Staking History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_history",
+    {},
     `Get staking transaction history for assets on Binance.US.
 
 Returns a history of staking and unstaking transactions.
@@ -286,8 +291,9 @@ If no asset is specified, returns history for all assets.`,
   // =====================================================================
   // GET /sapi/v1/staking/stakingRewardsHistory - Get Staking Rewards History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_staking_rewards",
+    {},
     `Get staking rewards history for assets on Binance.US.
 
 Returns a history of staking rewards earned over time.

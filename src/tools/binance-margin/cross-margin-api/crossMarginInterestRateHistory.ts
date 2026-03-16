@@ -6,19 +6,21 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginInterestRateHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginInterestRateHistory",
-    "Query margin interest rate history for a specific asset.",
     {
-      asset: z.string().describe("Asset symbol (e.g., BTC, USDT)"),
-      vipLevel: z
-        .number()
-        .int()
-        .optional()
-        .describe("VIP level (default uses current account VIP level)"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query margin interest rate history for a specific asset.",
+      inputSchema: {
+        asset: z.string().describe("Asset symbol (e.g., BTC, USDT)"),
+        vipLevel: z
+          .number()
+          .int()
+          .optional()
+          .describe("VIP level (default uses current account VIP level)"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -12,12 +12,15 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetIncomeAsynId(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetIncomeAsynId",
-    "Get the download URL for options income history using a download ID from BinanceOptionsGetIncomeAsyn.",
     {
-      downloadId: z.string().describe("Download ID from BinanceOptionsGetIncomeAsyn"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get the download URL for options income history using a download ID from BinanceOptionsGetIncomeAsyn.",
+      inputSchema: {
+        downloadId: z.string().describe("Download ID from BinanceOptionsGetIncomeAsyn"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

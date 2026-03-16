@@ -12,14 +12,16 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPremiumIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesPremiumIndex",
-    "Get mark price and funding rate for USD-M Futures symbols.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Futures symbol (e.g., BTCUSDT). If omitted, returns all symbols"),
+      description: "Get mark price and funding rate for USD-M Futures symbols.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Futures symbol (e.g., BTCUSDT). If omitted, returns all symbols"),
+      },
     },
     async (params) => {
       try {

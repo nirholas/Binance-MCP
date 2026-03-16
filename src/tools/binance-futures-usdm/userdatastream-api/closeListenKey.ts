@@ -12,15 +12,18 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCloseListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCloseListenKey",
-    "Close a USD-M Futures user data stream listen key. This invalidates the listen key and closes the associated WebSocket stream.",
     {
-      listenKey: z
-        .string()
-        .optional()
-        .describe("Listen key to close. If not provided, closes the default listen key."),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Close a USD-M Futures user data stream listen key. This invalidates the listen key and closes the associated WebSocket stream.",
+      inputSchema: {
+        listenKey: z
+          .string()
+          .optional()
+          .describe("Listen key to close. If not provided, closes the default listen key."),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

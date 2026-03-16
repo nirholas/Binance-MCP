@@ -12,12 +12,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryCloseListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryCloseListenKey",
-    "Close a COIN-M Futures user data stream listen key.",
     {
-      listenKey: z.string().optional().describe("Listen key to close"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Close a COIN-M Futures user data stream listen key.",
+      inputSchema: {
+        listenKey: z.string().optional().describe("Listen key to close"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

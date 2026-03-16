@@ -6,17 +6,24 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetLoanableAssetsData(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetLoanableAssetsData",
-    "Retrieves interest rates and borrowing limits for loanable assets. The borrow limit is expressed in USD. You can request information for specific assets or leave it empty to query all available assets.",
     {
-      loanCoin: z.string().optional().describe("Optional: Coin for the loan"),
-      vipLevel: z
-        .number()
-        .int()
-        .optional()
-        .describe("Optional: User's VIP level (default is user's vip level)"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieves interest rates and borrowing limits for loanable assets. The borrow limit is expressed in USD. You can request information for specific assets or leave it empty to query all available assets.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Optional: Coin for the loan"),
+        vipLevel: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional: User's VIP level (default is user's vip level)"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

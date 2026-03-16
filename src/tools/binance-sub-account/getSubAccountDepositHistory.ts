@@ -6,21 +6,23 @@ import { z } from "zod";
 import { subAccountApiClient } from "../../config/binanceClient.js";
 
 export function registerBinanceSubAccountGetDepositHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountGetDepositHistory",
-    "Query sub-account deposit history.",
     {
-      email: z.string().describe("Sub-account email"),
-      coin: z.string().optional().describe("Coin to filter by"),
-      status: z
-        .number()
-        .optional()
-        .describe("0: pending, 6: credited but cannot withdraw, 1: success"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 500, max 500"),
-      offset: z.number().optional().describe("Default 0"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query sub-account deposit history.",
+      inputSchema: {
+        email: z.string().describe("Sub-account email"),
+        coin: z.string().optional().describe("Coin to filter by"),
+        status: z
+          .number()
+          .optional()
+          .describe("0: pending, 6: credited but cannot withdraw, 1: success"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 500, max 500"),
+        offset: z.number().optional().describe("Default 0"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, coin, status, startTime, endTime, limit, offset, recvWindow }) => {
       try {

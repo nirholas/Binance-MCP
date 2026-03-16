@@ -44,8 +44,9 @@ export function registerCustodialTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v1/custodian/balance - Get Custodial Account Balance
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_balance",
+    {},
     `Get balance information for Binance.US exchange wallet and custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY - Standard API keys will not work.
@@ -93,8 +94,9 @@ Each balance entry contains:
   // =====================================================================
   // GET /sapi/v1/custodian/supportedAssetList - Get Supported Assets
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_supported_assets",
+    {},
     `Get list of assets supported for custodial solution transfers and settlements.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -138,8 +140,9 @@ Each asset entry contains:
   // =====================================================================
   // POST /sapi/v1/custodian/walletTransfer - Transfer from Exchange Wallet
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_wallet_transfer",
+    {},
     `Transfer assets from Binance.US exchange wallet to custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -194,8 +197,9 @@ Response includes:
   // =====================================================================
   // POST /sapi/v1/custodian/custodianTransfer - Transfer from Custodian
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_transfer",
+    {},
     `Transfer assets from custodial partner account to Binance.US custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -252,8 +256,9 @@ Response includes:
   // =====================================================================
   // POST /sapi/v1/custodian/undoTransfer - Undo Transfer
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_undo_transfer",
+    {},
     `Undo a previous transfer from your custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -297,8 +302,9 @@ Response includes:
   // =====================================================================
   // GET /sapi/v1/custodian/walletTransferHistory - Wallet Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_wallet_transfer_history",
+    {},
     `Get history of transfers from Binance.US exchange wallet to custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -367,8 +373,9 @@ status, createTime, updateTime`,
   // =====================================================================
   // GET /sapi/v1/custodian/custodianTransferHistory - Custodian Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_transfer_history",
+    {},
     `Get history of transfers from custodial partner to Binance.US custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -447,8 +454,9 @@ expressTrade flag, createTime, updateTime`,
   // =====================================================================
   // GET /sapi/v1/custodian/availableBalance - Get Available Balance
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_available_balance",
+    {},
     `Get available balance in the custodial sub-account for trading.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -487,8 +495,9 @@ Returns the balance available for placing new orders.`,
   // =====================================================================
   // POST /sapi/v1/custodian/order - Place Custodial Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_new_order",
+    {},
     `Place a new trade order through the custodial solution.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -573,8 +582,9 @@ executedQty, and expressTradeFlag`,
   // =====================================================================
   // POST /sapi/v1/custodian/ocoOrder - Place Custodial OCO Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_oco_order",
+    {},
     `Place a new OCO (One-Cancels-the-Other) order through the custodial solution.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -650,8 +660,9 @@ Response includes orderListId, orders array, and orderReports with details.`,
   // =====================================================================
   // GET /sapi/v1/custodian/openOrders - Get Open Orders
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_open_orders",
+    {},
     `Get all open custodial trade orders.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -697,8 +708,9 @@ expressTradeFlag`,
   // =====================================================================
   // GET /sapi/v1/custodian/order - Get Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_get_order",
+    {},
     `Get details of a specific custodial trade order.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -741,8 +753,9 @@ icebergQty, time, updateTime, isWorking, expressTradeFlag`,
   // =====================================================================
   // GET /sapi/v1/custodian/orderHistory - Get Order History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_order_history",
+    {},
     `Get historical custodial trade orders.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -802,8 +815,9 @@ executedQty, and expressTradeFlag.`,
   // =====================================================================
   // GET /sapi/v1/custodian/tradeHistory - Get Trade History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_trade_history",
+    {},
     `Get historical custodial trades (filled orders).
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -862,8 +876,9 @@ isBuyer, isMaker, isBestMatch, orderId, commission, commissionAsset`,
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOrder - Cancel Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_cancel_order",
+    {},
     `Cancel an active custodial trade order.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -917,8 +932,9 @@ Response includes the canceled order details with status: CANCELED`,
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOrdersBySymbol - Cancel All Orders for Symbol
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_cancel_orders_symbol",
+    {},
     `Cancel all active custodial orders for a specific trading pair.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -963,8 +979,9 @@ Response is an array of all canceled orders.`,
   // =====================================================================
   // DELETE /sapi/v1/custodian/cancelOcoOrder - Cancel OCO Order
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_cancel_oco",
+    {},
     `Cancel an entire OCO (One-Cancels-the-Other) order list.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -1012,8 +1029,9 @@ canceled order details.`,
   // =====================================================================
   // GET /sapi/v1/custodian/settlementSetting - Get Settlement Settings
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_settlement_settings",
+    {},
     `Get current settlement settings for custodial solution.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -1055,8 +1073,9 @@ Response includes:
   // =====================================================================
   // GET /sapi/v1/custodian/settlementHistory - Get Settlement History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_cust_settlement_history",
+    {},
     `Get historical settlement records for custodial solution.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY

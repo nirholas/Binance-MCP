@@ -10,10 +10,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsCreateListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsCreateListenKey",
-    "Create a listen key for options user data stream. The listen key is used to subscribe to account updates via WebSocket.",
-    {},
+    {
+      description:
+        "Create a listen key for options user data stream. The listen key is used to subscribe to account updates via WebSocket.",
+    },
     async () => {
       try {
         const response = await optionsClient.restAPI.createListenKey();

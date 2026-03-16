@@ -12,15 +12,18 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFlexibleCollateral(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFlexibleCollateral",
-    "Get list of assets that can be used as collateral for flexible loans. Shows LTV ratios and collateral limits.",
     {
-      collateralCoin: z
-        .string()
-        .optional()
-        .describe("Filter by specific collateral coin (e.g., 'BTC', 'ETH')"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get list of assets that can be used as collateral for flexible loans. Shows LTV ratios and collateral limits.",
+      inputSchema: {
+        collateralCoin: z
+          .string()
+          .optional()
+          .describe("Filter by specific collateral coin (e.g., 'BTC', 'ETH')"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

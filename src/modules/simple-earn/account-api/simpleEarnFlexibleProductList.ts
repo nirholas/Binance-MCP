@@ -6,27 +6,30 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSimpleEarnFlexibleProductList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnFlexibleProductList",
-    "Retrieve a list of available Simple Earn Flexible Products, including details like APR, purchase status, and subscription limits.",
     {
-      asset: z.string().optional().describe("Asset symbol (optional)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying page. Starts from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Page size. Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Retrieve a list of available Simple Earn Flexible Products, including details like APR, purchase status, and subscription limits.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol (optional)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying page. Starts from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Page size. Default: 10, Max: 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

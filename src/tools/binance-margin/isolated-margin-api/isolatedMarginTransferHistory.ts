@@ -12,20 +12,22 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginTransferHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginTransferHistory",
-    "Query isolated margin transfer history.",
     {
-      symbol: z.string().optional().describe("Isolated margin symbol"),
-      asset: z.string().optional().describe("Asset"),
-      transFrom: z.enum(["SPOT", "ISOLATED_MARGIN"]).optional().describe("Transfer from"),
-      transTo: z.enum(["SPOT", "ISOLATED_MARGIN"]).optional().describe("Transfer to"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      current: z.number().int().optional().describe("Current page, default 1"),
-      size: z.number().int().optional().describe("Page size, default 10, max 100"),
-      archived: z.boolean().optional().describe("Query archived data"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query isolated margin transfer history.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Isolated margin symbol"),
+        asset: z.string().optional().describe("Asset"),
+        transFrom: z.enum(["SPOT", "ISOLATED_MARGIN"]).optional().describe("Transfer from"),
+        transTo: z.enum(["SPOT", "ISOLATED_MARGIN"]).optional().describe("Transfer to"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        current: z.number().int().optional().describe("Current page, default 1"),
+        size: z.number().int().optional().describe("Page size, default 10, max 100"),
+        archived: z.boolean().optional().describe("Query archived data"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

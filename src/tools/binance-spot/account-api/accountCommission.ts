@@ -6,12 +6,14 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAccountCommission(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAccountCommission",
-    "Get account commission rates for a specific symbol.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get account commission rates for a specific symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, recvWindow }) => {
       try {

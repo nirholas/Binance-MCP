@@ -12,13 +12,22 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetLeaders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetLeaders",
-    "Get a list of lead traders available for copy trading. Shows their performance metrics and follower count.",
     {
-      pageNumber: z.number().int().min(1).optional().describe("Page number for pagination"),
-      pageSize: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get a list of lead traders available for copy trading. Shows their performance metrics and follower count.",
+      inputSchema: {
+        pageNumber: z.number().int().min(1).optional().describe("Page number for pagination"),
+        pageSize: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Results per page (max 100)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

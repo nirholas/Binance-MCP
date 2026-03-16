@@ -6,18 +6,20 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAllOrders",
-    "Get all account orders for a specific symbol; active, canceled, or filled.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      orderId: z.number().optional().describe("Order ID to start from"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .optional()
-        .describe("Maximum number of orders to return (default 500, max 1000)"),
+      description: "Get all account orders for a specific symbol; active, canceled, or filled.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        orderId: z.number().optional().describe("Order ID to start from"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .optional()
+          .describe("Maximum number of orders to return (default 500, max 1000)"),
+      },
     },
     async ({ symbol, orderId, startTime, endTime, limit }) => {
       try {

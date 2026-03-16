@@ -12,12 +12,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountStatus",
-    "Get the status of a sub-account including enabled features (margin, futures, etc.) and trading permissions.",
     {
-      email: z.string().email().optional().describe("Sub-account email to query"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get the status of a sub-account including enabled features (margin, futures, etc.) and trading permissions.",
+      inputSchema: {
+        email: z.string().email().optional().describe("Sub-account email to query"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

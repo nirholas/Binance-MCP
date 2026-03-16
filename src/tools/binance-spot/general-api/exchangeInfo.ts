@@ -6,23 +6,25 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceExchangeInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceExchangeInfo",
-    "Get exchange information including rate limits, symbol configs, etc.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Single trading pair in UPPERCASE, no separators (e.g. BTCUSDT, SOLUSDT). Use this for one pair; do not use both symbol and symbols.",
-        ),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe(
-          'Multiple pairs as array; each symbol UPPERCASE (e.g. ["BTCUSDT","ETHUSDT"]). Do not use with symbol.',
-        ),
-      permissions: z.array(z.string()).optional().describe("Array of permissions to filter by"),
+      description: "Get exchange information including rate limits, symbol configs, etc.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Single trading pair in UPPERCASE, no separators (e.g. BTCUSDT, SOLUSDT). Use this for one pair; do not use both symbol and symbols.",
+          ),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe(
+            'Multiple pairs as array; each symbol UPPERCASE (e.g. ["BTCUSDT","ETHUSDT"]). Do not use with symbol.',
+          ),
+        permissions: z.array(z.string()).optional().describe("Array of permissions to filter by"),
+      },
     },
     async ({ symbol, symbols, permissions }) => {
       try {

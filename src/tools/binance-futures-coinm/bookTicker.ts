@@ -6,17 +6,20 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMBookTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMBookTicker",
-    "Get best price/qty on the order book for a symbol or symbols for COIN-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSD_PERP). If not provided, returns all symbols",
-        ),
-      pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
+      description:
+        "Get best price/qty on the order book for a symbol or symbols for COIN-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSD_PERP). If not provided, returns all symbols",
+          ),
+        pair: z.string().optional().describe("Trading pair (e.g., BTCUSD)"),
+      },
     },
     async ({ symbol, pair }) => {
       try {

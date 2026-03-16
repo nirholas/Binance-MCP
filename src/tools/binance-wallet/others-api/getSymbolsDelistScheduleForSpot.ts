@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletGetSymbolsDelistScheduleForSpot(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletGetSymbolsDelistScheduleForSpot",
-    "Get delist schedule for spot symbols.",
-    {},
+    { description: "Get delist schedule for spot symbols." },
     async () => {
       try {
         const response = await walletClient.restAPI.getSymbolsDelistScheduleForSpot();

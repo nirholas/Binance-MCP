@@ -6,13 +6,16 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginOpenOrders",
-    "Query all open margin orders. If symbol is provided, only orders for that symbol are returned.",
     {
-      symbol: z.string().optional().describe("Trading pair symbol (e.g., BTCUSDT)"),
-      isIsolated: z.enum(["TRUE", "FALSE"]).optional().describe("For isolated margin or not"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query all open margin orders. If symbol is provided, only orders for that symbol are returned.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Trading pair symbol (e.g., BTCUSDT)"),
+        isIsolated: z.enum(["TRUE", "FALSE"]).optional().describe("For isolated margin or not"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -12,16 +12,18 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesDepth",
-    "Get order book depth data for a USD-M Futures symbol.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      limit: z
-        .number()
-        .int()
-        .optional()
-        .describe("Depth limit: 5, 10, 20, 50, 100, 500, 1000. Default 500"),
+      description: "Get order book depth data for a USD-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        limit: z
+          .number()
+          .int()
+          .optional()
+          .describe("Depth limit: 5, 10, 20, 50, 100, 500, 1000. Default 500"),
+      },
     },
     async (params) => {
       try {

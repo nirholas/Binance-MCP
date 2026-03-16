@@ -6,14 +6,16 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanBorrow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleLoanBorrow",
-    "Flexible loan borrow.",
     {
-      loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
-      loanAmount: z.number().optional().describe("Loan amount"),
-      collateralAmount: z.number().optional().describe("Collateral amount"),
+      description: "Flexible loan borrow.",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin (e.g., USDT)"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., BTC)"),
+        loanAmount: z.number().optional().describe("Loan amount"),
+        collateralAmount: z.number().optional().describe("Collateral amount"),
+      },
     },
     async ({ loanCoin, collateralCoin, loanAmount, collateralAmount }) => {
       try {

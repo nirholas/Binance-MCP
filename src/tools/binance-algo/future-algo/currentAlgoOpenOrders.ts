@@ -6,11 +6,14 @@ import { z } from "zod";
 import { algoClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFutureCurrentAlgoOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFutureCurrentAlgoOpenOrders",
-    "The Query Current Algo Open Orders API retrieves a list of currently active algorithmic orders for USDⓈ-M Contracts in Binance Futures.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "The Query Current Algo Open Orders API retrieves a list of currently active algorithmic orders for USDⓈ-M Contracts in Binance Futures.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

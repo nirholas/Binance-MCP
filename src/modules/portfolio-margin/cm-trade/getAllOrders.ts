@@ -12,23 +12,26 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginCmGetAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginCmGetAllOrders",
-    "Get all COIN-M Futures orders (active, cancelled, filled) in Portfolio Margin mode.",
     {
-      symbol: z.string().optional().describe("Trading pair symbol (e.g., 'BTCUSD_PERP')"),
-      pair: z.string().optional().describe("Trading pair (e.g., 'BTCUSD')"),
-      orderId: z.number().int().optional().describe("Order ID to start from"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .describe("Number of orders to return (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Get all COIN-M Futures orders (active, cancelled, filled) in Portfolio Margin mode.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Trading pair symbol (e.g., 'BTCUSD_PERP')"),
+        pair: z.string().optional().describe("Trading pair (e.g., 'BTCUSD')"),
+        orderId: z.number().int().optional().describe("Order ID to start from"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .describe("Number of orders to return (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

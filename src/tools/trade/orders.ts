@@ -136,55 +136,58 @@ const CancelRestrictions = z.enum(["ONLY_NEW", "ONLY_PARTIALLY_FILLED"]);
  * Register new order tool
  */
 export function registerBinanceUsNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_new_order",
-    "Place a new trade order on Binance.US. Supports LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, and LIMIT_MAKER order types.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
-      side: OrderSide.describe("Order side: BUY or SELL"),
-      type: OrderType.describe(
-        "Order type: LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, LIMIT_MAKER",
-      ),
-      timeInForce: TimeInForce.optional().describe(
-        "Time in force: GTC (Good Till Cancel), IOC (Immediate Or Cancel), FOK (Fill Or Kill). Required for LIMIT orders.",
-      ),
-      quantity: z
-        .number()
-        .optional()
-        .describe("Order quantity in base asset. Required for most order types."),
-      quoteOrderQty: z
-        .number()
-        .optional()
-        .describe(
-          "Order quantity in quote asset. Can be used for MARKET orders instead of quantity.",
+      description:
+        "Place a new trade order on Binance.US. Supports LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, and LIMIT_MAKER order types.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
+        side: OrderSide.describe("Order side: BUY or SELL"),
+        type: OrderType.describe(
+          "Order type: LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, LIMIT_MAKER",
         ),
-      price: z
-        .number()
-        .optional()
-        .describe("Order price. Required for LIMIT and LIMIT_MAKER orders."),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("Unique client order ID. Auto-generated if not provided."),
-      stopPrice: z
-        .number()
-        .optional()
-        .describe("Stop price. Required for STOP_LOSS_LIMIT and TAKE_PROFIT_LIMIT orders."),
-      trailingDelta: z
-        .number()
-        .optional()
-        .describe("Trailing delta for trailing stop orders in BIPS (1 BIP = 0.01%)."),
-      icebergQty: z
-        .number()
-        .optional()
-        .describe("Iceberg quantity for iceberg orders. timeInForce must be GTC."),
-      newOrderRespType: OrderRespType.optional().describe(
-        "Response type: ACK, RESULT, or FULL. MARKET/LIMIT default to FULL, others to ACK.",
-      ),
-      selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
-        "Self-trade prevention mode: EXPIRE_TAKER, EXPIRE_MAKER, EXPIRE_BOTH, NONE.",
-      ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)."),
+        timeInForce: TimeInForce.optional().describe(
+          "Time in force: GTC (Good Till Cancel), IOC (Immediate Or Cancel), FOK (Fill Or Kill). Required for LIMIT orders.",
+        ),
+        quantity: z
+          .number()
+          .optional()
+          .describe("Order quantity in base asset. Required for most order types."),
+        quoteOrderQty: z
+          .number()
+          .optional()
+          .describe(
+            "Order quantity in quote asset. Can be used for MARKET orders instead of quantity.",
+          ),
+        price: z
+          .number()
+          .optional()
+          .describe("Order price. Required for LIMIT and LIMIT_MAKER orders."),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("Unique client order ID. Auto-generated if not provided."),
+        stopPrice: z
+          .number()
+          .optional()
+          .describe("Stop price. Required for STOP_LOSS_LIMIT and TAKE_PROFIT_LIMIT orders."),
+        trailingDelta: z
+          .number()
+          .optional()
+          .describe("Trailing delta for trailing stop orders in BIPS (1 BIP = 0.01%)."),
+        icebergQty: z
+          .number()
+          .optional()
+          .describe("Iceberg quantity for iceberg orders. timeInForce must be GTC."),
+        newOrderRespType: OrderRespType.optional().describe(
+          "Response type: ACK, RESULT, or FULL. MARKET/LIMIT default to FULL, others to ACK.",
+        ),
+        selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
+          "Self-trade prevention mode: EXPIRE_TAKER, EXPIRE_MAKER, EXPIRE_BOTH, NONE.",
+        ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)."),
+      },
     },
     async (params) => {
       try {
@@ -254,31 +257,34 @@ export function registerBinanceUsNewOrder(server: McpServer) {
  * Register test order tool
  */
 export function registerBinanceUsTestOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_test_order",
-    "Test a new order on Binance.US without actually placing it. Validates order parameters and signature without executing the trade.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
-      side: OrderSide.describe("Order side: BUY or SELL"),
-      type: OrderType.describe(
-        "Order type: LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, LIMIT_MAKER",
-      ),
-      timeInForce: TimeInForce.optional().describe("Time in force: GTC, IOC, or FOK"),
-      quantity: z.number().optional().describe("Order quantity in base asset"),
-      quoteOrderQty: z
-        .number()
-        .optional()
-        .describe("Order quantity in quote asset (for MARKET orders)"),
-      price: z.number().optional().describe("Order price"),
-      newClientOrderId: z.string().optional().describe("Unique client order ID"),
-      stopPrice: z.number().optional().describe("Stop price for stop orders"),
-      trailingDelta: z.number().optional().describe("Trailing delta in BIPS"),
-      icebergQty: z.number().optional().describe("Iceberg quantity"),
-      newOrderRespType: OrderRespType.optional().describe("Response type"),
-      selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
-        "Self-trade prevention mode",
-      ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Test a new order on Binance.US without actually placing it. Validates order parameters and signature without executing the trade.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
+        side: OrderSide.describe("Order side: BUY or SELL"),
+        type: OrderType.describe(
+          "Order type: LIMIT, MARKET, STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, TAKE_PROFIT_LIMIT, LIMIT_MAKER",
+        ),
+        timeInForce: TimeInForce.optional().describe("Time in force: GTC, IOC, or FOK"),
+        quantity: z.number().optional().describe("Order quantity in base asset"),
+        quoteOrderQty: z
+          .number()
+          .optional()
+          .describe("Order quantity in quote asset (for MARKET orders)"),
+        price: z.number().optional().describe("Order price"),
+        newClientOrderId: z.string().optional().describe("Unique client order ID"),
+        stopPrice: z.number().optional().describe("Stop price for stop orders"),
+        trailingDelta: z.number().optional().describe("Trailing delta in BIPS"),
+        icebergQty: z.number().optional().describe("Iceberg quantity"),
+        newOrderRespType: OrderRespType.optional().describe("Response type"),
+        selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
+          "Self-trade prevention mode",
+        ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -344,14 +350,17 @@ export function registerBinanceUsTestOrder(server: McpServer) {
  * Register get order tool
  */
 export function registerBinanceUsGetOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_get_order",
-    "Query the status of a specific order on Binance.US. Either orderId or origClientOrderId must be provided.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
-      orderId: z.number().optional().describe("The order ID to query"),
-      origClientOrderId: z.string().optional().describe("The original client order ID to query"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Query the status of a specific order on Binance.US. Either orderId or origClientOrderId must be provided.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
+        orderId: z.number().optional().describe("The order ID to query"),
+        origClientOrderId: z.string().optional().describe("The original client order ID to query"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -422,21 +431,24 @@ export function registerBinanceUsGetOrder(server: McpServer) {
  * Register cancel order tool
  */
 export function registerBinanceUsCancelOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_cancel_order",
-    "Cancel an active order on Binance.US. Either orderId or origClientOrderId must be provided.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
-      orderId: z.number().optional().describe("The order ID to cancel"),
-      origClientOrderId: z.string().optional().describe("The original client order ID to cancel"),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("New client order ID for this cancel request"),
-      cancelRestrictions: CancelRestrictions.optional().describe(
-        "Cancel restrictions: ONLY_NEW or ONLY_PARTIALLY_FILLED",
-      ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Cancel an active order on Binance.US. Either orderId or origClientOrderId must be provided.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
+        orderId: z.number().optional().describe("The order ID to cancel"),
+        origClientOrderId: z.string().optional().describe("The original client order ID to cancel"),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("New client order ID for this cancel request"),
+        cancelRestrictions: CancelRestrictions.optional().describe(
+          "Cancel restrictions: ONLY_NEW or ONLY_PARTIALLY_FILLED",
+        ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -503,39 +515,42 @@ export function registerBinanceUsCancelOrder(server: McpServer) {
  * Register cancel and replace order tool
  */
 export function registerBinanceUsCancelReplace(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_cancel_replace",
-    "Cancel an existing order and place a new order on the same symbol atomically. This is useful for modifying order parameters.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
-      side: OrderSide.describe("Order side: BUY or SELL"),
-      type: OrderType.describe("Order type for the new order"),
-      cancelReplaceMode: CancelReplaceMode.describe(
-        "STOP_ON_FAILURE: Don't place new order if cancel fails. ALLOW_FAILURE: Place new order even if cancel fails.",
-      ),
-      cancelOrderId: z
-        .number()
-        .optional()
-        .describe("Order ID to cancel. Either this or cancelOrigClientOrderId required."),
-      cancelOrigClientOrderId: z
-        .string()
-        .optional()
-        .describe("Client order ID to cancel. Either this or cancelOrderId required."),
-      timeInForce: TimeInForce.optional().describe("Time in force for new order"),
-      quantity: z.number().optional().describe("Quantity for new order"),
-      quoteOrderQty: z.number().optional().describe("Quote order quantity for new order"),
-      price: z.number().optional().describe("Price for new order"),
-      cancelNewClientOrderId: z.string().optional().describe("Client order ID for the cancel"),
-      newClientOrderId: z.string().optional().describe("Client order ID for the new order"),
-      stopPrice: z.number().optional().describe("Stop price for new order"),
-      trailingDelta: z.number().optional().describe("Trailing delta for new order"),
-      icebergQty: z.number().optional().describe("Iceberg quantity for new order"),
-      newOrderRespType: OrderRespType.optional().describe("Response type for new order"),
-      selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
-        "Self-trade prevention mode",
-      ),
-      cancelRestrictions: CancelRestrictions.optional().describe("Cancel restrictions"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Cancel an existing order and place a new order on the same symbol atomically. This is useful for modifying order parameters.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
+        side: OrderSide.describe("Order side: BUY or SELL"),
+        type: OrderType.describe("Order type for the new order"),
+        cancelReplaceMode: CancelReplaceMode.describe(
+          "STOP_ON_FAILURE: Don't place new order if cancel fails. ALLOW_FAILURE: Place new order even if cancel fails.",
+        ),
+        cancelOrderId: z
+          .number()
+          .optional()
+          .describe("Order ID to cancel. Either this or cancelOrigClientOrderId required."),
+        cancelOrigClientOrderId: z
+          .string()
+          .optional()
+          .describe("Client order ID to cancel. Either this or cancelOrderId required."),
+        timeInForce: TimeInForce.optional().describe("Time in force for new order"),
+        quantity: z.number().optional().describe("Quantity for new order"),
+        quoteOrderQty: z.number().optional().describe("Quote order quantity for new order"),
+        price: z.number().optional().describe("Price for new order"),
+        cancelNewClientOrderId: z.string().optional().describe("Client order ID for the cancel"),
+        newClientOrderId: z.string().optional().describe("Client order ID for the new order"),
+        stopPrice: z.number().optional().describe("Stop price for new order"),
+        trailingDelta: z.number().optional().describe("Trailing delta for new order"),
+        icebergQty: z.number().optional().describe("Iceberg quantity for new order"),
+        newOrderRespType: OrderRespType.optional().describe("Response type for new order"),
+        selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
+          "Self-trade prevention mode",
+        ),
+        cancelRestrictions: CancelRestrictions.optional().describe("Cancel restrictions"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -614,17 +629,20 @@ export function registerBinanceUsCancelReplace(server: McpServer) {
  * Register open orders tool
  */
 export function registerBinanceUsOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_open_orders",
-    "Get all open orders on Binance.US. Can be filtered by symbol. Warning: Querying without symbol is heavier on rate limits (weight 40 vs 3).",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Trading pair symbol to filter by (e.g., BTCUSD). If omitted, returns all open orders.",
-        ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Get all open orders on Binance.US. Can be filtered by symbol. Warning: Querying without symbol is heavier on rate limits (weight 40 vs 3).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Trading pair symbol to filter by (e.g., BTCUSD). If omitted, returns all open orders.",
+          ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -703,19 +721,22 @@ export function registerBinanceUsOpenOrders(server: McpServer) {
  * Register all orders history tool
  */
 export function registerBinanceUsAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_all_orders",
-    "Get all orders (active, canceled, or filled) for a symbol on Binance.US. Returns order history.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
-      orderId: z
-        .number()
-        .optional()
-        .describe("Order ID to start from. Gets orders >= this orderId."),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of orders to return (default 500, max 1000)"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Get all orders (active, canceled, or filled) for a symbol on Binance.US. Returns order history.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
+        orderId: z
+          .number()
+          .optional()
+          .describe("Order ID to start from. Gets orders >= this orderId."),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Number of orders to return (default 500, max 1000)"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -867,16 +888,19 @@ function validateOrderParams(params: any): string | null {
  * Register cancel all open orders for symbol tool
  */
 export function registerBinanceUsCancelAllOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_cancel_all_open_orders",
-    "Cancel all active orders on a symbol on Binance.US. This includes OCO orders. Use with caution - this will cancel ALL open orders for the specified symbol.",
     {
-      symbol: z
-        .string()
-        .describe(
-          "Trading pair symbol (e.g., BTCUSD). Required - all open orders for this symbol will be cancelled.",
-        ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Cancel all active orders on a symbol on Binance.US. This includes OCO orders. Use with caution - this will cancel ALL open orders for the specified symbol.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .describe(
+            "Trading pair symbol (e.g., BTCUSD). Required - all open orders for this symbol will be cancelled.",
+          ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {

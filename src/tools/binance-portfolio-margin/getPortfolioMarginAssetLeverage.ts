@@ -6,11 +6,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAssetLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetAssetLeverage",
-    "Query portfolio margin asset leverage information.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query portfolio margin asset leverage information.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

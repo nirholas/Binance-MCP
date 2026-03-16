@@ -6,27 +6,30 @@ import { z } from "zod";
 import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetDualInvestmentProductList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetDualInvestmentProductList",
-    "Retrieve available Dual Investment products (CALL or PUT options), specifying invest and exercised coins, to view details like APR, strike price, duration, and purchase availability.",
     {
-      optionType: z.enum(["CALL", "PUT"]).describe("Input CALL or PUT"),
-      exercisedCoin: z.string().describe("Target exercised asset, e.g., USDT or BNB"),
-      investCoin: z.string().describe("Asset used for subscribing, e.g., BNB or USDT"),
-      pageSize: z
-        .number()
-        .int()
-        .max(100, "Maximum pageSize is 100")
-        .default(10)
-        .optional()
-        .describe("Number of records per page, default 10, max 100"),
-      pageIndex: z.number().int().default(1).optional().describe("Page index, default is 1"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("Optional time window for request validity"),
+      description:
+        "Retrieve available Dual Investment products (CALL or PUT options), specifying invest and exercised coins, to view details like APR, strike price, duration, and purchase availability.",
+      inputSchema: {
+        optionType: z.enum(["CALL", "PUT"]).describe("Input CALL or PUT"),
+        exercisedCoin: z.string().describe("Target exercised asset, e.g., USDT or BNB"),
+        investCoin: z.string().describe("Asset used for subscribing, e.g., BNB or USDT"),
+        pageSize: z
+          .number()
+          .int()
+          .max(100, "Maximum pageSize is 100")
+          .default(10)
+          .optional()
+          .describe("Number of records per page, default 10, max 100"),
+        pageIndex: z.number().int().default(1).optional().describe("Page index, default is 1"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

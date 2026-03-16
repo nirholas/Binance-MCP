@@ -12,17 +12,19 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestRedemption(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestRedemption",
-    "Redeem (sell) holdings from an auto-invest index-linked plan.",
     {
-      indexId: z.number().int().describe("Index ID to redeem from"),
-      redemptionPercentage: z
-        .number()
-        .min(0)
-        .max(100)
-        .describe("Percentage of holdings to redeem (0-100)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Redeem (sell) holdings from an auto-invest index-linked plan.",
+      inputSchema: {
+        indexId: z.number().int().describe("Index ID to redeem from"),
+        redemptionPercentage: z
+          .number()
+          .min(0)
+          .max(100)
+          .describe("Percentage of holdings to redeem (0-100)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -12,23 +12,26 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketKlines(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsKlines",
-    "Get kline/candlestick data for an options contract. Returns OHLCV data for technical analysis.",
     {
-      symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
-      interval: z
-        .enum(["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d", "3d", "1w"])
-        .describe("Kline interval"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1500)
-        .optional()
-        .describe("Number of klines to return (default 500, max 1500)"),
+      description:
+        "Get kline/candlestick data for an options contract. Returns OHLCV data for technical analysis.",
+      inputSchema: {
+        symbol: z.string().describe("Option symbol (e.g., 'BTC-240126-40000-C')"),
+        interval: z
+          .enum(["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "12h", "1d", "3d", "1w"])
+          .describe("Kline interval"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1500)
+          .optional()
+          .describe("Number of klines to return (default 500, max 1500)"),
+      },
     },
     async (params) => {
       try {

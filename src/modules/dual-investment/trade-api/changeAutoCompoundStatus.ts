@@ -6,21 +6,24 @@ import { z } from "zod";
 import { dualInvestmentClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceChangeAutoCompoundStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "registerBinanceChangeAutoCompoundStatus",
-    "Change the Auto-Compound plan for a Dual Investment position to NONE, STANDARD, or ADVANCED using the position ID.",
     {
-      positionId: z.string().describe("Get positionId from /sapi/v1/dci/product/positions"),
-      autoCompoundPlan: z
-        .enum(["NONE", "STANDARD", "ADVANCED"])
-        .optional()
-        .describe("Auto compound plan: NONE, STANDARD, or ADVANCED"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Optional time window for request validity (max 60000)"),
+      description:
+        "Change the Auto-Compound plan for a Dual Investment position to NONE, STANDARD, or ADVANCED using the position ID.",
+      inputSchema: {
+        positionId: z.string().describe("Get positionId from /sapi/v1/dci/product/positions"),
+        autoCompoundPlan: z
+          .enum(["NONE", "STANDARD", "ADVANCED"])
+          .optional()
+          .describe("Auto compound plan: NONE, STANDARD, or ADVANCED"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Optional time window for request validity (max 60000)"),
+      },
     },
     async (params) => {
       try {

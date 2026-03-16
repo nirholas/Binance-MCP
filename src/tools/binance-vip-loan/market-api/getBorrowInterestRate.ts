@@ -6,12 +6,19 @@ import { z } from "zod";
 import { vipLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetBorrowInterestRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetBorrowInterestRate",
-    "Retrieves the interest rates for borrowing assets. It provides both daily and yearly interest rates for multiple assets (e.g., BUSD, BTC). You can specify the assets by using a comma-separated list.",
     {
-      loanCoin: z.string().min(1).describe("Max 10 assets, multiple split by ','"),
-      recvWindow: z.number().int().optional().describe("Optional time window for request validity"),
+      description:
+        "Retrieves the interest rates for borrowing assets. It provides both daily and yearly interest rates for multiple assets (e.g., BUSD, BTC). You can specify the assets by using a comma-separated list.",
+      inputSchema: {
+        loanCoin: z.string().min(1).describe("Max 10 assets, multiple split by ','"),
+        recvWindow: z
+          .number()
+          .int()
+          .optional()
+          .describe("Optional time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -12,11 +12,14 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountMarginSummary(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountMarginSummary",
-    "Get margin account summary for all sub-accounts. Returns margin level, total assets, and liability information.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get margin account summary for all sub-accounts. Returns margin level, total assets, and liability information.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

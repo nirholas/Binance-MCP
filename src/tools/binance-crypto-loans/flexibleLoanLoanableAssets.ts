@@ -6,12 +6,14 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoanFlexibleLoanableAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoanFlexibleLoanableAssets",
-    "Get flexible loan loanable assets data.",
     {
-      loanCoin: z.string().optional().describe("Loan coin"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get flexible loan loanable assets data.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Loan coin"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

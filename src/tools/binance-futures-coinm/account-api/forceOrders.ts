@@ -12,16 +12,18 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryForceOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryForceOrders",
-    "Get user's COIN-M Futures force (liquidation) order history.",
     {
-      symbol: z.string().optional().describe("Contract symbol filter"),
-      autoCloseType: z.enum(["LIQUIDATION", "ADL"]).optional().describe("LIQUIDATION or ADL"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 50, max 100)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get user's COIN-M Futures force (liquidation) order history.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Contract symbol filter"),
+        autoCloseType: z.enum(["LIQUIDATION", "ADL"]).optional().describe("LIQUIDATION or ADL"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 50, max 100)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

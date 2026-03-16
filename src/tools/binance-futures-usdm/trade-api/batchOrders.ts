@@ -35,17 +35,20 @@ const orderSchema = z.object({
 });
 
 export function registerBinanceFuturesBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesBatchOrders",
-    "Place multiple USD-M Futures orders in a batch (max 5 orders). ⚠️ RISK: Futures trading involves leverage and liquidation risk.",
     {
-      batchOrders: z
-        .array(orderSchema)
-        .max(5)
-        .describe(
-          "Array of orders (max 5). Each order has: symbol, side, type, quantity, price, etc.",
-        ),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Place multiple USD-M Futures orders in a batch (max 5 orders). ⚠️ RISK: Futures trading involves leverage and liquidation risk.",
+      inputSchema: {
+        batchOrders: z
+          .array(orderSchema)
+          .max(5)
+          .describe(
+            "Array of orders (max 5). Each order has: symbol, side, type, quantity, price, etc.",
+          ),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

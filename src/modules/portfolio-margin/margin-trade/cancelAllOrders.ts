@@ -12,12 +12,15 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginMarginCancelAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginMarginCancelAllOrders",
-    "Cancel all open cross margin orders for a symbol in Portfolio Margin mode. ⚠️ This will cancel ALL open orders.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Cancel all open cross margin orders for a symbol in Portfolio Margin mode. ⚠️ This will cancel ALL open orders.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

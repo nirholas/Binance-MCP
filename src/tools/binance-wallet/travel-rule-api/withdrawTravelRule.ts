@@ -6,19 +6,21 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletWithdrawTravelRule(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletWithdrawTravelRule",
-    "Withdraw with travel rule compliance.",
     {
-      coin: z.string().describe("Coin symbol"),
-      address: z.string().describe("Withdrawal address"),
-      amount: z.number().describe("Withdrawal amount"),
-      withdrawOrderId: z.string().optional().describe("Client order id"),
-      network: z.string().optional().describe("Network"),
-      addressTag: z.string().optional().describe("Secondary address identifier"),
-      name: z.string().optional().describe("Address name"),
-      questionnaire: z.string().describe("Travel rule questionnaire"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Withdraw with travel rule compliance.",
+      inputSchema: {
+        coin: z.string().describe("Coin symbol"),
+        address: z.string().describe("Withdrawal address"),
+        amount: z.number().describe("Withdrawal amount"),
+        withdrawOrderId: z.string().optional().describe("Client order id"),
+        network: z.string().optional().describe("Network"),
+        addressTag: z.string().optional().describe("Secondary address identifier"),
+        name: z.string().optional().describe("Address name"),
+        questionnaire: z.string().describe("Travel rule questionnaire"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({
       coin,

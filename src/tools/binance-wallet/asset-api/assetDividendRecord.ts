@@ -6,15 +6,17 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAssetDividendRecord(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletAssetDividendRecord",
-    "Get asset dividend record.",
     {
-      asset: z.string().optional().describe("Asset symbol"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Default 20, max 500"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get asset dividend record.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Default 20, max 500"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, startTime, endTime, limit, recvWindow }) => {
       try {

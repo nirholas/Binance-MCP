@@ -12,14 +12,16 @@ import { z } from "zod";
 import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePayQueryOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePayQueryOrder",
-    "Query the status of a Binance Pay order. Check if payment has been received.",
     {
-      merchantId: z.string().optional().describe("Merchant ID"),
-      prepayId: z.string().optional().describe("Prepay ID from order creation"),
-      merchantTradeNo: z.string().optional().describe("Your merchant trade number"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Query the status of a Binance Pay order. Check if payment has been received.",
+      inputSchema: {
+        merchantId: z.string().optional().describe("Merchant ID"),
+        prepayId: z.string().optional().describe("Prepay ID from order creation"),
+        merchantTradeNo: z.string().optional().describe("Your merchant trade number"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

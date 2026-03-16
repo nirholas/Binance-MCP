@@ -6,28 +6,31 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetFlexibleProductPosition(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetFlexibleProductPosition",
-    "Fetch your current holdings in Simple Earn Flexible Products, including total amount, reward rates, and redeem status.",
     {
-      asset: z.string().optional().describe("Asset symbol (optional)"),
-      productId: z.string().optional().describe("Product ID (optional)"),
-      current: z
-        .number()
-        .int()
-        .min(1)
-        .default(1)
-        .optional()
-        .describe("Currently querying the page. Starts from 1. Default: 1"),
-      size: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .optional()
-        .describe("Page size. Default: 10, Max: 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Fetch your current holdings in Simple Earn Flexible Products, including total amount, reward rates, and redeem status.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol (optional)"),
+        productId: z.string().optional().describe("Product ID (optional)"),
+        current: z
+          .number()
+          .int()
+          .min(1)
+          .default(1)
+          .optional()
+          .describe("Currently querying the page. Starts from 1. Default: 1"),
+        size: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .default(10)
+          .optional()
+          .describe("Page size. Default: 10, Max: 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

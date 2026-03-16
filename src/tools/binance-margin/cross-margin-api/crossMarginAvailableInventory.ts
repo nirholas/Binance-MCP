@@ -6,14 +6,16 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginAvailableInventory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginAvailableInventory",
-    "Query margin available inventory for borrowing.",
     {
-      type: z
-        .enum(["MARGIN", "ISOLATED"])
-        .describe("Type of margin (MARGIN for cross, ISOLATED for isolated)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query margin available inventory for borrowing.",
+      inputSchema: {
+        type: z
+          .enum(["MARGIN", "ISOLATED"])
+          .describe("Type of margin (MARGIN for cross, ISOLATED for isolated)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

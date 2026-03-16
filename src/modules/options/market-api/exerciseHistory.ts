@@ -12,20 +12,23 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketExerciseHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsExerciseHistory",
-    "Get the exercise history for options contracts. Shows historical exercise records and settlement prices.",
     {
-      underlying: z.string().optional().describe("Underlying asset (e.g., 'BTCUSDT')"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Number of records to return (default 100, max 100)"),
+      description:
+        "Get the exercise history for options contracts. Shows historical exercise records and settlement prices.",
+      inputSchema: {
+        underlying: z.string().optional().describe("Underlying asset (e.g., 'BTCUSDT')"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Number of records to return (default 100, max 100)"),
+      },
     },
     async (params) => {
       try {

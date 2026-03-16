@@ -12,16 +12,18 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesForceOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesForceOrders",
-    "Get user's force orders (liquidation orders) for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Futures symbol"),
-      autoCloseType: z.enum(["LIQUIDATION", "ADL"]).optional().describe("Type of force order"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      limit: z.number().int().optional().describe("Number of results. Default 50, max 100"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get user's force orders (liquidation orders) for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol"),
+        autoCloseType: z.enum(["LIQUIDATION", "ADL"]).optional().describe("Type of force order"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        limit: z.number().int().optional().describe("Number of results. Default 50, max 100"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

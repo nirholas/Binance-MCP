@@ -12,19 +12,22 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedAssets",
-    "Get list of assets available for fixed-term crypto loans. Shows borrowable assets with interest rates, terms, and limits.",
     {
-      loanCoin: z.string().optional().describe("Filter by specific loan coin"),
-      vipLevel: z
-        .number()
-        .int()
-        .min(0)
-        .max(9)
-        .optional()
-        .describe("VIP level for rate calculation"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get list of assets available for fixed-term crypto loans. Shows borrowable assets with interest rates, terms, and limits.",
+      inputSchema: {
+        loanCoin: z.string().optional().describe("Filter by specific loan coin"),
+        vipLevel: z
+          .number()
+          .int()
+          .min(0)
+          .max(9)
+          .optional()
+          .describe("VIP level for rate calculation"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

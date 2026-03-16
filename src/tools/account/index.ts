@@ -20,14 +20,17 @@ export function registerAccountTools(server: McpServer) {
   // binance_us_account_info
   // GET /api/v3/account
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_account_info",
-    "Get current account information including balances and permissions. Returns all asset balances (free and locked), account permissions, and trading status.",
     {
-      recvWindow: z
-        .number()
-        .optional()
-        .describe("The value cannot be greater than 60000. Default: 5000"),
+      description:
+        "Get current account information including balances and permissions. Returns all asset balances (free and locked), account permissions, and trading status.",
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .optional()
+          .describe("The value cannot be greater than 60000. Default: 5000"),
+      },
     },
     async ({ recvWindow }) => {
       try {
@@ -82,20 +85,26 @@ export function registerAccountTools(server: McpServer) {
   // binance_us_my_trades
   // GET /api/v3/myTrades
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_my_trades",
-    "Get trade history for a specific trading pair. Returns executed trades including price, quantity, commission, and timestamps.",
     {
-      symbol: z.string().describe("Trading pair symbol, e.g., BTCUSD, ETHUSD"),
-      orderId: z.number().optional().describe("Filter by order ID"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      fromId: z
-        .number()
-        .optional()
-        .describe("Trade ID to fetch from. Default gets most recent trades."),
-      limit: z.number().optional().describe("Number of trades to return. Default: 500, Max: 1000"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get trade history for a specific trading pair. Returns executed trades including price, quantity, commission, and timestamps.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol, e.g., BTCUSD, ETHUSD"),
+        orderId: z.number().optional().describe("Filter by order ID"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        fromId: z
+          .number()
+          .optional()
+          .describe("Trade ID to fetch from. Default gets most recent trades."),
+        limit: z
+          .number()
+          .optional()
+          .describe("Number of trades to return. Default: 500, Max: 1000"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, orderId, startTime, endTime, fromId, limit, recvWindow }) => {
       try {
@@ -132,11 +141,14 @@ export function registerAccountTools(server: McpServer) {
   // binance_us_rate_limits
   // GET /api/v3/rateLimit/order
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_rate_limits",
-    "Get current trade order count rate limits for all time intervals. Shows how many orders you can place within each interval.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get current trade order count rate limits for all time intervals. Shows how many orders you can place within each interval.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {
@@ -168,15 +180,18 @@ export function registerAccountTools(server: McpServer) {
   // binance_us_trade_fee
   // GET /sapi/v1/asset/query/trading-fee
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_trade_fee",
-    "Get your current maker & taker fee rates for spot trading based on your VIP level. BNB fee discount (25% off) is not factored in.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Trading pair symbol. If not specified, returns fees for all symbols."),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get your current maker & taker fee rates for spot trading based on your VIP level. BNB fee discount (25% off) is not factored in.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Trading pair symbol. If not specified, returns fees for all symbols."),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ symbol, recvWindow }) => {
       try {
@@ -209,11 +224,14 @@ export function registerAccountTools(server: McpServer) {
   // binance_us_trade_volume
   // GET /sapi/v1/asset/query/trading-volume
   // =====================================================
-  server.tool(
+  server.registerTool(
     "binance_us_trade_volume",
-    "Get total trade volume for the past 30 days. Volume is calculated on a rolling basis every day at 0:00 AM (UTC).",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Get total trade volume for the past 30 days. Volume is calculated on a rolling basis every day at 0:00 AM (UTC).",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

@@ -12,14 +12,17 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesChangePositionMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesChangePositionMode",
-    "Change position mode between Hedge Mode and One-way Mode. HEDGE: Can hold both LONG and SHORT positions simultaneously. ONE-WAY: Only one direction at a time (positionSide=BOTH).",
     {
-      dualSidePosition: z
-        .boolean()
-        .describe("true = Hedge Mode (Long/Short), false = One-way Mode (BOTH)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Change position mode between Hedge Mode and One-way Mode. HEDGE: Can hold both LONG and SHORT positions simultaneously. ONE-WAY: Only one direction at a time (positionSide=BOTH).",
+      inputSchema: {
+        dualSidePosition: z
+          .boolean()
+          .describe("true = Hedge Mode (Long/Short), false = One-way Mode (BOTH)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

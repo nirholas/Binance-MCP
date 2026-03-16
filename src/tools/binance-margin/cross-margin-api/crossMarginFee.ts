@@ -6,17 +6,20 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginFee(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginFee",
-    "Query cross margin fee data including interest rates and collateral ratios for margin pairs.",
     {
-      vipLevel: z
-        .number()
-        .int()
-        .optional()
-        .describe("VIP level (default uses current account VIP level)"),
-      coin: z.string().optional().describe("Filter by specific coin"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query cross margin fee data including interest rates and collateral ratios for margin pairs.",
+      inputSchema: {
+        vipLevel: z
+          .number()
+          .int()
+          .optional()
+          .describe("VIP level (default uses current account VIP level)"),
+        coin: z.string().optional().describe("Filter by specific coin"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

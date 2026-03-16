@@ -6,11 +6,13 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsTicker(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsTicker",
-    "Get 24hr ticker price change statistics for an option symbol.",
     {
-      symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      description: "Get 24hr ticker price change statistics for an option symbol.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      },
     },
     async ({ symbol }) => {
       try {

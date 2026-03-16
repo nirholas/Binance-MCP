@@ -12,13 +12,15 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginMarginRepay(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginMarginRepay",
-    "Repay borrowed funds in Portfolio Margin mode.",
     {
-      asset: z.string().describe("Asset to repay (e.g., 'USDT')"),
-      amount: z.string().describe("Amount to repay"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Repay borrowed funds in Portfolio Margin mode.",
+      inputSchema: {
+        asset: z.string().describe("Asset to repay (e.g., 'USDT')"),
+        amount: z.string().describe("Amount to repay"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

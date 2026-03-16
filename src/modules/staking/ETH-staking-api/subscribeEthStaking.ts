@@ -6,12 +6,15 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeEthStaking(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubscribeEthStaking",
-    "Subscribe ETH Staking API allows users to stake ETH and receive WBETH, providing the staked amount and the conversion ratio for ETH to WBETH.",
     {
-      amount: z.number().min(0).describe("Amount in BETH, limit 4 decimals (mandatory)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Subscribe ETH Staking API allows users to stake ETH and receive WBETH, providing the staked amount and the conversion ratio for ETH to WBETH.",
+      inputSchema: {
+        amount: z.number().min(0).describe("Amount in BETH, limit 4 decimals (mandatory)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

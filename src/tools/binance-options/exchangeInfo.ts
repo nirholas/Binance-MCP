@@ -6,11 +6,13 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsExchangeInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsExchangeInfo",
-    "Get current exchange trading rules and symbol information for options.",
     {
-      symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      description: "Get current exchange trading rules and symbol information for options.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+      },
     },
     async ({ symbol }) => {
       try {

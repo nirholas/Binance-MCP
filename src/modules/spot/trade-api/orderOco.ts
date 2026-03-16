@@ -6,24 +6,26 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceOrderOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOrderOco",
-    "Send a new OCO (One-Cancels-the-Other) order on Binance.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
-      quantity: z.number().describe("Order quantity"),
-      price: z.number().describe("Order price"),
-      stopPrice: z.number().describe("Stop price"),
-      stopLimitPrice: z.number().optional().describe("Stop limit price"),
-      stopLimitTimeInForce: z
-        .enum(["GTC", "IOC", "FOK"])
-        .optional()
-        .describe("Stop limit time in force"),
-      newClientOrderId: z.string().optional().describe("Client order ID for the limit order"),
-      stopClientOrderId: z.string().optional().describe("Client order ID for the stop order"),
-      limitIcebergQty: z.number().optional().describe("Limit iceberg quantity"),
-      stopIcebergQty: z.number().optional().describe("Stop iceberg quantity"),
+      description: "Send a new OCO (One-Cancels-the-Other) order on Binance.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side: BUY or SELL"),
+        quantity: z.number().describe("Order quantity"),
+        price: z.number().describe("Order price"),
+        stopPrice: z.number().describe("Stop price"),
+        stopLimitPrice: z.number().optional().describe("Stop limit price"),
+        stopLimitTimeInForce: z
+          .enum(["GTC", "IOC", "FOK"])
+          .optional()
+          .describe("Stop limit time in force"),
+        newClientOrderId: z.string().optional().describe("Client order ID for the limit order"),
+        stopClientOrderId: z.string().optional().describe("Client order ID for the stop order"),
+        limitIcebergQty: z.number().optional().describe("Limit iceberg quantity"),
+        stopIcebergQty: z.number().optional().describe("Stop iceberg quantity"),
+      },
     },
     async ({
       symbol,

@@ -6,15 +6,17 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAccountBalance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetAccountBalance",
-    "Query portfolio margin account balance.",
     {
-      asset: z
-        .string()
-        .optional()
-        .describe("Asset symbol (e.g., BTC, USDT). If not provided, returns all assets"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query portfolio margin account balance.",
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Asset symbol (e.g., BTC, USDT). If not provided, returns all assets"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, recvWindow }) => {
       try {

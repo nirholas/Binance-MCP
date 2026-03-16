@@ -6,18 +6,20 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginInterestHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginInterestHistory",
-    "Query interest history for Cross Margin account.",
     {
-      asset: z.string().optional().describe("Asset (e.g., BTC, USDT)"),
-      isolatedSymbol: z.string().optional().describe("Isolated symbol"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      current: z.number().int().optional().describe("Current page, default 1"),
-      size: z.number().int().optional().describe("Page size, default 10, max 100"),
-      archived: z.boolean().optional().describe("Query archived data, default false"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query interest history for Cross Margin account.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset (e.g., BTC, USDT)"),
+        isolatedSymbol: z.string().optional().describe("Isolated symbol"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        current: z.number().int().optional().describe("Current page, default 1"),
+        size: z.number().int().optional().describe("Page size, default 10, max 100"),
+        archived: z.boolean().optional().describe("Query archived data, default false"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

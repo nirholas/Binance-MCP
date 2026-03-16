@@ -12,15 +12,18 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesKeepAliveListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesKeepAliveListenKey",
-    "Keepalive a USD-M Futures user data stream listen key. Extends the validity by 60 minutes. Should be called every 30-50 minutes to maintain the connection.",
     {
-      listenKey: z
-        .string()
-        .optional()
-        .describe("Listen key to keep alive. If not provided, uses the default listen key."),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Keepalive a USD-M Futures user data stream listen key. Extends the validity by 60 minutes. Should be called every 30-50 minutes to maintain the connection.",
+      inputSchema: {
+        listenKey: z
+          .string()
+          .optional()
+          .describe("Listen key to keep alive. If not provided, uses the default listen key."),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

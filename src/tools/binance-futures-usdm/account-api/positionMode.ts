@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPositionMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetPositionMode",
-    "Get current position mode (Hedge Mode or One-way Mode) for USD-M Futures.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get current position mode (Hedge Mode or One-way Mode) for USD-M Futures.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

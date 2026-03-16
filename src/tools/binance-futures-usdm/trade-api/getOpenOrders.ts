@@ -12,15 +12,17 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesGetOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetOpenOrders",
-    "Get all open USD-M Futures orders for a symbol or all symbols.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe("Futures symbol (e.g., BTCUSDT). If not provided, returns all open orders"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Get all open USD-M Futures orders for a symbol or all symbols.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe("Futures symbol (e.g., BTCUSDT). If not provided, returns all open orders"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -27,8 +27,9 @@ export function registerCustodialSolutionTools(server: McpServer) {
   // =====================================================================
   // GET /sapi/v1/custodian/balance - Get Account Balance
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_balance",
+    {},
     `Get balance information for Binance.US exchange wallet and custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY - Regular API keys will not work.
@@ -74,8 +75,9 @@ Each balance includes:
   // =====================================================================
   // GET /sapi/v1/custodian/supportedAssetList - Get Supported Assets
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_supported_assets",
+    {},
     `Get list of assets supported for custodial transfers and settlements.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -119,8 +121,9 @@ Each asset includes:
   // =====================================================================
   // POST /sapi/v1/custodian/walletTransfer - Transfer From Exchange Wallet
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_wallet_transfer",
+    {},
     `Transfer assets from your Binance.US exchange wallet to your custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -174,8 +177,9 @@ which can then be traded or settled to your custodial partner.`,
   // =====================================================================
   // POST /sapi/v1/custodian/custodianTransfer - Transfer From Custodian
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_custodian_transfer",
+    {},
     `Request asset transfer from a custodial partner account to Binance.US custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -231,8 +235,9 @@ The actual transfer is executed by the custody partner.`,
   // =====================================================================
   // POST /sapi/v1/custodian/undoTransfer - Undo Transfer
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_undo_transfer",
+    {},
     `Undo a previous transfer from your custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -272,8 +277,9 @@ This reverses a previous custodian transfer by its transfer ID.`,
   // =====================================================================
   // GET /sapi/v1/custodian/walletTransferHistory - Wallet Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_wallet_transfer_history",
+    {},
     `Get history of transfers from Binance.US exchange wallet to custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -333,8 +339,9 @@ Returns transfer history with status, amounts, and timestamps.`,
   // =====================================================================
   // GET /sapi/v1/custodian/custodianTransferHistory - Custodian Transfer History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_custodian_transfer_history",
+    {},
     `Get history of transfers from custodial partner, including ExpressTrade and Undo transfers.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -406,8 +413,9 @@ Returns transfer history with status, amounts, and timestamps.`,
   // =====================================================================
   // POST /sapi/v1/custodian/settlement - Request Settlement
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_settlement",
+    {},
     `Request settlement of assets from custodial sub-account to custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
@@ -457,8 +465,9 @@ to your custody partner's vault.`,
   // =====================================================================
   // GET /sapi/v1/custodian/settlementHistory - Settlement History
   // =====================================================================
-  server.tool(
+  server.registerTool(
     "binance_us_custodial_settlement_history",
+    {},
     `Get history of settlements from custodial sub-account to custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY

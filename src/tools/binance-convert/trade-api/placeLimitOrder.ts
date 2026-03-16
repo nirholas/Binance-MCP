@@ -6,40 +6,43 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertPlaceLimitOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertPlaceLimitOrder",
-    "Places a limit order to convert between two tokens at a specified price, using either base or quote amount, with options for wallet type and order expiry.",
     {
-      baseAsset: z.string().describe("Base asset (from `fromIsBase` in /exchangeInfo API)"),
-      quoteAsset: z.string().describe("Quote asset"),
-      limitPrice: z
-        .number()
-        .positive()
-        .describe("Symbol limit price (from baseAsset to quoteAsset)"),
-      baseAmount: z
-        .number()
-        .positive()
-        .optional()
-        .describe("Base asset amount (either this or quoteAmount is required)"),
-      quoteAmount: z
-        .number()
-        .positive()
-        .optional()
-        .describe("Quote asset amount (either this or baseAmount is required)"),
-      side: z.enum(["BUY", "SELL"]).describe("BUY or SELL"),
-      walletType: z
-        .enum(["SPOT", "FUNDING", "SPOT_FUNDING"])
-        .optional()
-        .describe("Type of assets used: SPOT, FUNDING, or SPOT_FUNDING. Default is SPOT"),
-      expiredType: z
-        .enum(["1_D", "3_D", "7_D", "30_D"])
-        .describe("Expiration type: 1_D, 3_D, 7_D, or 30_D (D = days)"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("Time window for request validity"),
+      description:
+        "Places a limit order to convert between two tokens at a specified price, using either base or quote amount, with options for wallet type and order expiry.",
+      inputSchema: {
+        baseAsset: z.string().describe("Base asset (from `fromIsBase` in /exchangeInfo API)"),
+        quoteAsset: z.string().describe("Quote asset"),
+        limitPrice: z
+          .number()
+          .positive()
+          .describe("Symbol limit price (from baseAsset to quoteAsset)"),
+        baseAmount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("Base asset amount (either this or quoteAmount is required)"),
+        quoteAmount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("Quote asset amount (either this or baseAmount is required)"),
+        side: z.enum(["BUY", "SELL"]).describe("BUY or SELL"),
+        walletType: z
+          .enum(["SPOT", "FUNDING", "SPOT_FUNDING"])
+          .optional()
+          .describe("Type of assets used: SPOT, FUNDING, or SPOT_FUNDING. Default is SPOT"),
+        expiredType: z
+          .enum(["1_D", "3_D", "7_D", "30_D"])
+          .describe("Expiration type: 1_D, 3_D, 7_D, or 30_D (D = days)"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

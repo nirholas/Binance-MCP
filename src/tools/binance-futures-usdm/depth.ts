@@ -6,17 +6,19 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMDepth",
-    "Get order book depth data for a specific USD-M Futures trading pair.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-      limit: z
-        .number()
-        .optional()
-        .describe(
-          "Depth of the order book. Default 500; max 1000. Valid limits: [5, 10, 20, 50, 100, 500, 1000]",
-        ),
+      description: "Get order book depth data for a specific USD-M Futures trading pair.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+        limit: z
+          .number()
+          .optional()
+          .describe(
+            "Depth of the order book. Default 500; max 1000. Valid limits: [5, 10, 20, 50, 100, 500, 1000]",
+          ),
+      },
     },
     async ({ symbol, limit }) => {
       try {

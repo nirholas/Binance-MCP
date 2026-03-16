@@ -12,15 +12,17 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetBalance(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetBalance",
-    "Get Portfolio Margin account balance information for all assets.",
     {
-      asset: z
-        .string()
-        .optional()
-        .describe("Asset to query (e.g., 'USDT'). If not provided, returns all assets"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get Portfolio Margin account balance information for all assets.",
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Asset to query (e.g., 'USDT'). If not provided, returns all assets"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

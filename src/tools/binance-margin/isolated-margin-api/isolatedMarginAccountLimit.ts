@@ -6,11 +6,14 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginAccountLimit(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginAccountLimit",
-    "Query the maximum number of isolated margin accounts allowed and currently enabled.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Query the maximum number of isolated margin accounts allowed and currently enabled.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

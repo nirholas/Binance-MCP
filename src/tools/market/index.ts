@@ -72,20 +72,23 @@ function formatError(error: unknown): { content: { type: "text"; text: string }[
  */
 export function registerMarketTools(server: McpServer) {
   // binance_us_order_book - Get order book depth
-  server.tool(
+  server.registerTool(
     "binance_us_order_book",
-    "Get order book depth (bids and asks) for a trading pair on Binance.US. Returns price levels with quantities. Weight varies based on limit (1-100: weight 1, 101-500: weight 5, 501-1000: weight 10, 1001-5000: weight 50).",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(5000)
-        .optional()
-        .describe(
-          `Number of price levels. Valid values: ${ORDER_BOOK_VALID_LIMITS.join(", ")}. Default 100, max 5000.`,
-        ),
+      description:
+        "Get order book depth (bids and asks) for a trading pair on Binance.US. Returns price levels with quantities. Weight varies based on limit (1-100: weight 1, 101-500: weight 5, 501-1000: weight 10, 1001-5000: weight 50).",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(5000)
+          .optional()
+          .describe(
+            `Number of price levels. Valid values: ${ORDER_BOOK_VALID_LIMITS.join(", ")}. Default 100, max 5000.`,
+          ),
+      },
     },
     async ({ symbol, limit }) => {
       try {
@@ -124,18 +127,21 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_recent_trades - Get recent trades
-  server.tool(
+  server.registerTool(
     "binance_us_recent_trades",
-    "Get recent trades for a trading pair on Binance.US. Returns trade ID, price, quantity, time, and maker/taker info.",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(MAX_TRADES_LIMIT)
-        .optional()
-        .describe(`Number of trades to return. Default 500, max ${MAX_TRADES_LIMIT}.`),
+      description:
+        "Get recent trades for a trading pair on Binance.US. Returns trade ID, price, quantity, time, and maker/taker info.",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(MAX_TRADES_LIMIT)
+          .optional()
+          .describe(`Number of trades to return. Default 500, max ${MAX_TRADES_LIMIT}.`),
+      },
     },
     async ({ symbol, limit }) => {
       try {
@@ -168,24 +174,27 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_historical_trades - Get older trades (MARKET_DATA)
-  server.tool(
+  server.registerTool(
     "binance_us_historical_trades",
-    "Get older historical trades for a trading pair. Requires API key with MARKET_DATA permission.",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(MAX_TRADES_LIMIT)
-        .optional()
-        .describe(`Number of trades. Default 500, max ${MAX_TRADES_LIMIT}.`),
-      fromId: z
-        .number()
-        .int()
-        .positive()
-        .optional()
-        .describe("Trade ID to fetch from (inclusive)."),
+      description:
+        "Get older historical trades for a trading pair. Requires API key with MARKET_DATA permission.",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(MAX_TRADES_LIMIT)
+          .optional()
+          .describe(`Number of trades. Default 500, max ${MAX_TRADES_LIMIT}.`),
+        fromId: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("Trade ID to fetch from (inclusive)."),
+      },
     },
     async ({ symbol, limit, fromId }) => {
       try {
@@ -225,21 +234,24 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_agg_trades - Get aggregate trades
-  server.tool(
+  server.registerTool(
     "binance_us_agg_trades",
-    "Get compressed aggregate trades. Trades with same time, order, and price are aggregated.",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
-      fromId: z.number().int().positive().optional().describe("Agg trade ID to start from."),
-      startTime: z.number().int().positive().optional().describe("Start time in ms."),
-      endTime: z.number().int().positive().optional().describe("End time in ms."),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(MAX_TRADES_LIMIT)
-        .optional()
-        .describe(`Number of trades. Default 500, max ${MAX_TRADES_LIMIT}.`),
+      description:
+        "Get compressed aggregate trades. Trades with same time, order, and price are aggregated.",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+        fromId: z.number().int().positive().optional().describe("Agg trade ID to start from."),
+        startTime: z.number().int().positive().optional().describe("Start time in ms."),
+        endTime: z.number().int().positive().optional().describe("End time in ms."),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(MAX_TRADES_LIMIT)
+          .optional()
+          .describe(`Number of trades. Default 500, max ${MAX_TRADES_LIMIT}.`),
+      },
     },
     async ({ symbol, fromId, startTime, endTime, limit }) => {
       try {
@@ -294,21 +306,23 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_klines - Get candlestick data
-  server.tool(
+  server.registerTool(
     "binance_us_klines",
-    "Get Kline/candlestick data for a trading pair. Returns OHLCV data.",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
-      interval: z.enum(KLINE_INTERVALS).describe(`Kline interval: ${KLINE_INTERVALS.join(", ")}`),
-      startTime: z.number().int().positive().optional().describe("Start time in ms"),
-      endTime: z.number().int().positive().optional().describe("End time in ms"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(MAX_KLINES_LIMIT)
-        .optional()
-        .describe(`Number of klines. Default 500, max ${MAX_KLINES_LIMIT}.`),
+      description: "Get Kline/candlestick data for a trading pair. Returns OHLCV data.",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+        interval: z.enum(KLINE_INTERVALS).describe(`Kline interval: ${KLINE_INTERVALS.join(", ")}`),
+        startTime: z.number().int().positive().optional().describe("Start time in ms"),
+        endTime: z.number().int().positive().optional().describe("End time in ms"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(MAX_KLINES_LIMIT)
+          .optional()
+          .describe(`Number of klines. Default 500, max ${MAX_KLINES_LIMIT}.`),
+      },
     },
     async ({ symbol, interval, startTime, endTime, limit }) => {
       try {
@@ -358,11 +372,13 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_avg_price - Get average price
-  server.tool(
+  server.registerTool(
     "binance_us_avg_price",
-    "Get current 5-minute rolling weighted average price.",
     {
-      symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+      description: "Get current 5-minute rolling weighted average price.",
+      inputSchema: {
+        symbol: z.string().toUpperCase().describe("Trading pair symbol, e.g., BTCUSD"),
+      },
     },
     async ({ symbol }) => {
       try {
@@ -388,20 +404,25 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_ticker_24hr - Get 24hr statistics
-  server.tool(
+  server.registerTool(
     "binance_us_ticker_24hr",
-    "Get 24-hour rolling window price change statistics.",
     {
-      symbol: z
-        .string()
-        .toUpperCase()
-        .optional()
-        .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe("Array of symbols. Cannot use with 'symbol'."),
-      type: z.enum(["FULL", "MINI"]).optional().describe("FULL (default) or MINI (fewer fields)."),
+      description: "Get 24-hour rolling window price change statistics.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .toUpperCase()
+          .optional()
+          .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe("Array of symbols. Cannot use with 'symbol'."),
+        type: z
+          .enum(["FULL", "MINI"])
+          .optional()
+          .describe("FULL (default) or MINI (fewer fields)."),
+      },
     },
     async ({ symbol, symbols, type }) => {
       try {
@@ -457,19 +478,21 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_ticker_price - Get latest price
-  server.tool(
+  server.registerTool(
     "binance_us_ticker_price",
-    "Get latest price for symbol(s).",
     {
-      symbol: z
-        .string()
-        .toUpperCase()
-        .optional()
-        .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe("Array of symbols. Cannot use with 'symbol'."),
+      description: "Get latest price for symbol(s).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .toUpperCase()
+          .optional()
+          .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe("Array of symbols. Cannot use with 'symbol'."),
+      },
     },
     async ({ symbol, symbols }) => {
       try {
@@ -510,19 +533,21 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_ticker_book - Get book ticker
-  server.tool(
+  server.registerTool(
     "binance_us_ticker_book",
-    "Get best bid/ask prices and quantities (top of book).",
     {
-      symbol: z
-        .string()
-        .toUpperCase()
-        .optional()
-        .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe("Array of symbols. Cannot use with 'symbol'."),
+      description: "Get best bid/ask prices and quantities (top of book).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .toUpperCase()
+          .optional()
+          .describe("Symbol (e.g., BTCUSD). Cannot use with 'symbols'."),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe("Array of symbols. Cannot use with 'symbol'."),
+      },
     },
     async ({ symbol, symbols }) => {
       try {
@@ -576,24 +601,27 @@ export function registerMarketTools(server: McpServer) {
   );
 
   // binance_us_rolling_window - Get rolling window stats
-  server.tool(
+  server.registerTool(
     "binance_us_rolling_window",
-    "Get rolling window price change statistics with custom window sizes (1m to 7d).",
     {
-      symbol: z
-        .string()
-        .toUpperCase()
-        .optional()
-        .describe("Symbol (required if 'symbols' not provided)."),
-      symbols: z
-        .array(z.string())
-        .optional()
-        .describe("Array of symbols (required if 'symbol' not provided)."),
-      windowSize: z
-        .enum(ROLLING_WINDOW_SIZES)
-        .optional()
-        .describe(`Window size. Default 1d. Options: ${ROLLING_WINDOW_SIZES.join(", ")}`),
-      type: z.enum(["FULL", "MINI"]).optional().describe("FULL (default) or MINI."),
+      description:
+        "Get rolling window price change statistics with custom window sizes (1m to 7d).",
+      inputSchema: {
+        symbol: z
+          .string()
+          .toUpperCase()
+          .optional()
+          .describe("Symbol (required if 'symbols' not provided)."),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe("Array of symbols (required if 'symbol' not provided)."),
+        windowSize: z
+          .enum(ROLLING_WINDOW_SIZES)
+          .optional()
+          .describe(`Window size. Default 1d. Options: ${ROLLING_WINDOW_SIZES.join(", ")}`),
+        type: z.enum(["FULL", "MINI"]).optional().describe("FULL (default) or MINI."),
+      },
     },
     async ({ symbol, symbols, windowSize, type }) => {
       try {

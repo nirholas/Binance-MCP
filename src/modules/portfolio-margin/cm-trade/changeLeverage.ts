@@ -12,13 +12,16 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginCmChangeLeverage(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginCmChangeLeverage",
-    "Change leverage for a COIN-M Futures symbol in Portfolio Margin mode. ⚠️ Higher leverage increases risk.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSD_PERP')"),
-      leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Change leverage for a COIN-M Futures symbol in Portfolio Margin mode. ⚠️ Higher leverage increases risk.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., 'BTCUSD_PERP')"),
+        leverage: z.number().int().min(1).max(125).describe("Target leverage (1-125)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

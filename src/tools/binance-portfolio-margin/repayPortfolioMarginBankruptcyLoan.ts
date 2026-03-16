@@ -6,11 +6,13 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginRepayBankruptcyLoan(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginRepayBankruptcyLoan",
-    "Repay portfolio margin bankruptcy loan.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Repay portfolio margin bankruptcy loan.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

@@ -6,13 +6,15 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMMultiAssetsMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMMultiAssetsMode",
-    "Change multi-assets mode for USD-M Futures.",
     {
-      multiAssetsMargin: z
-        .boolean()
-        .describe("true: Enable multi-assets mode, false: Disable multi-assets mode"),
+      description: "Change multi-assets mode for USD-M Futures.",
+      inputSchema: {
+        multiAssetsMargin: z
+          .boolean()
+          .describe("true: Enable multi-assets mode, false: Disable multi-assets mode"),
+      },
     },
     async ({ multiAssetsMargin }) => {
       try {

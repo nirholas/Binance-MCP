@@ -4,10 +4,9 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTime(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMTime",
-    "Get the current server time from the USD-M Futures API.",
-    {},
+    { description: "Get the current server time from the USD-M Futures API." },
     async () => {
       try {
         const data = await futuresClient.time();

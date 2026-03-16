@@ -6,15 +6,17 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginGetAssetIndexPrice(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetAssetIndexPrice",
-    "Query portfolio margin asset index price.",
     {
-      asset: z
-        .string()
-        .optional()
-        .describe("Asset symbol (e.g., BTC, ETH). If not provided, returns all assets"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query portfolio margin asset index price.",
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Asset symbol (e.g., BTC, ETH). If not provided, returns all assets"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, recvWindow }) => {
       try {

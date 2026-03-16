@@ -6,11 +6,13 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRsaPublicKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardRsaPublicKey",
-    "Fetch the RSA public key for encrypting gift card codes.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Fetch the RSA public key for encrypting gift card codes.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

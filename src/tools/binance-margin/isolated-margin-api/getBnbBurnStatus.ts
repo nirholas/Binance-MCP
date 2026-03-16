@@ -6,11 +6,13 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetBnbBurnStatus(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetBnbBurnStatus",
-    "Get current BNB burn status for spot trading fees and margin interest.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get current BNB burn status for spot trading fees and margin interest.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

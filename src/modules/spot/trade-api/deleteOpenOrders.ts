@@ -6,11 +6,13 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeleteOpenOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeleteOpenOrders",
-    "Cancel all open orders on Binance for a specific symbol.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      description: "Cancel all open orders on Binance for a specific symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
+      },
     },
     async ({ symbol }) => {
       try {

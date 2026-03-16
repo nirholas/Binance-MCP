@@ -6,12 +6,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMMarginType(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMMarginType",
-    "Change margin type for a symbol in COIN-M Futures.",
     {
-      symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
-      marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type: ISOLATED or CROSSED"),
+      description: "Change margin type for a symbol in COIN-M Futures.",
+      inputSchema: {
+        symbol: z.string().describe("Symbol of the trading pair (e.g., BTCUSD_PERP)"),
+        marginType: z.enum(["ISOLATED", "CROSSED"]).describe("Margin type: ISOLATED or CROSSED"),
+      },
     },
     async ({ symbol, marginType }) => {
       try {

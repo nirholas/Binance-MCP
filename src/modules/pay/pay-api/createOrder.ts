@@ -12,18 +12,21 @@ import { z } from "zod";
 import { payClient } from "../../../config/binanceClient.js";
 
 export function registerBinancePayCreateOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePayCreateOrder",
-    "Create a Binance Pay order for receiving crypto payments. Generate payment links for e-commerce or P2P transactions. 💳",
     {
-      merchantId: z.string().optional().describe("Merchant ID (for business accounts)"),
-      orderId: z.string().describe("Unique order ID for your reference"),
-      currency: z.string().describe("Payment currency (e.g., 'USDT', 'BTC')"),
-      totalAmount: z.string().describe("Total payment amount"),
-      description: z.string().optional().describe("Order description"),
-      goodsName: z.string().optional().describe("Name of goods/service"),
-      goodsDetail: z.string().optional().describe("Details of goods/service"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Create a Binance Pay order for receiving crypto payments. Generate payment links for e-commerce or P2P transactions. 💳",
+      inputSchema: {
+        merchantId: z.string().optional().describe("Merchant ID (for business accounts)"),
+        orderId: z.string().describe("Unique order ID for your reference"),
+        currency: z.string().describe("Payment currency (e.g., 'USDT', 'BTC')"),
+        totalAmount: z.string().describe("Total payment amount"),
+        description: z.string().optional().describe("Order description"),
+        goodsName: z.string().optional().describe("Name of goods/service"),
+        goodsDetail: z.string().optional().describe("Details of goods/service"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

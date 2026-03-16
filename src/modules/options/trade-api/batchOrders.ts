@@ -12,28 +12,31 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsBatchOrders",
-    "Place multiple options orders in a single request. Maximum 5 orders per request. ⚠️ HIGH RISK: Options can expire worthless.",
     {
-      orders: z
-        .array(
-          z.object({
-            symbol: z.string().describe("Option symbol"),
-            side: z.enum(["BUY", "SELL"]).describe("Order side"),
-            type: z.enum(["LIMIT"]).describe("Order type"),
-            quantity: z.string().describe("Number of contracts"),
-            price: z.string().describe("Limit price"),
-            timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional(),
-            reduceOnly: z.boolean().optional(),
-            postOnly: z.boolean().optional(),
-            newClientOrderId: z.string().optional(),
-          }),
-        )
-        .min(1)
-        .max(5)
-        .describe("Array of orders (max 5)"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Place multiple options orders in a single request. Maximum 5 orders per request. ⚠️ HIGH RISK: Options can expire worthless.",
+      inputSchema: {
+        orders: z
+          .array(
+            z.object({
+              symbol: z.string().describe("Option symbol"),
+              side: z.enum(["BUY", "SELL"]).describe("Order side"),
+              type: z.enum(["LIMIT"]).describe("Order type"),
+              quantity: z.string().describe("Number of contracts"),
+              price: z.string().describe("Limit price"),
+              timeInForce: z.enum(["GTC", "IOC", "FOK"]).optional(),
+              reduceOnly: z.boolean().optional(),
+              postOnly: z.boolean().optional(),
+              newClientOrderId: z.string().optional(),
+            }),
+          )
+          .min(1)
+          .max(5)
+          .describe("Array of orders (max 5)"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

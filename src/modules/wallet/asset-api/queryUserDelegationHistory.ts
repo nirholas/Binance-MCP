@@ -6,16 +6,18 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletQueryUserDelegationHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletQueryUserDelegationHistory",
-    "Query user delegation history.",
     {
-      email: z.string().describe("Email address"),
-      startTime: z.number().describe("Start time in milliseconds"),
-      endTime: z.number().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number"),
-      limit: z.number().optional().describe("Results per page"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Query user delegation history.",
+      inputSchema: {
+        email: z.string().describe("Email address"),
+        startTime: z.number().describe("Start time in milliseconds"),
+        endTime: z.number().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number"),
+        limit: z.number().optional().describe("Results per page"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ email, startTime, endTime, page, limit, recvWindow }) => {
       try {

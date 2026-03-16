@@ -6,17 +6,20 @@ import { z } from "zod";
 import { copyTradingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCopyTradingGetOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCopyTradingGetOrders",
-    "Get copy trading orders. Shows orders that were placed as a result of following lead traders.",
     {
-      portfolioId: z.string().optional().describe("Filter by specific lead trader portfolio ID"),
-      symbol: z.string().optional().describe("Filter by trading symbol"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      pageNumber: z.number().int().min(1).optional().describe("Page number"),
-      pageSize: z.number().int().min(1).max(100).optional().describe("Results per page"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get copy trading orders. Shows orders that were placed as a result of following lead traders.",
+      inputSchema: {
+        portfolioId: z.string().optional().describe("Filter by specific lead trader portfolio ID"),
+        symbol: z.string().optional().describe("Filter by trading symbol"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        pageNumber: z.number().int().min(1).optional().describe("Page number"),
+        pageSize: z.number().int().min(1).max(100).optional().describe("Results per page"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

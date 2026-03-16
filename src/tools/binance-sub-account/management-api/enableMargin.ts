@@ -12,12 +12,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountEnableMargin(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountEnableMargin",
-    "Enable margin trading for a sub-account. ⚠️ WARNING: Margin trading involves leverage and carries significant risk of loss. Only enable if you understand the risks.",
     {
-      email: z.string().email().describe("Sub-account email to enable margin for"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Enable margin trading for a sub-account. ⚠️ WARNING: Margin trading involves leverage and carries significant risk of loss. Only enable if you understand the risks.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email to enable margin for"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,33 +6,36 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCrossMarginCapitalFlow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCrossMarginCapitalFlow",
-    "Get cross margin capital flow history including transfers, borrows, repays, and interest.",
     {
-      asset: z.string().optional().describe("Filter by asset symbol"),
-      symbol: z.string().optional().describe("Filter by trading pair symbol"),
-      type: z
-        .enum([
-          "TRANSFER_IN",
-          "TRANSFER_OUT",
-          "BORROW",
-          "REPAY",
-          "BUY_INCOME",
-          "SELL_LOSS",
-          "TRADING_COMMISSION",
-          "LIQUIDATION",
-          "INTEREST",
-          "SMALL_LIABILITY_EXCHANGE",
-          "SMALL_ASSETS_EXCHANGE",
-        ])
-        .optional()
-        .describe("Type of capital flow"),
-      startTime: z.number().int().optional().describe("Start time in milliseconds"),
-      endTime: z.number().int().optional().describe("End time in milliseconds"),
-      fromId: z.number().int().optional().describe("Start from ID"),
-      limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get cross margin capital flow history including transfers, borrows, repays, and interest.",
+      inputSchema: {
+        asset: z.string().optional().describe("Filter by asset symbol"),
+        symbol: z.string().optional().describe("Filter by trading pair symbol"),
+        type: z
+          .enum([
+            "TRANSFER_IN",
+            "TRANSFER_OUT",
+            "BORROW",
+            "REPAY",
+            "BUY_INCOME",
+            "SELL_LOSS",
+            "TRADING_COMMISSION",
+            "LIQUIDATION",
+            "INTEREST",
+            "SMALL_LIABILITY_EXCHANGE",
+            "SMALL_ASSETS_EXCHANGE",
+          ])
+          .optional()
+          .describe("Type of capital flow"),
+        startTime: z.number().int().optional().describe("Start time in milliseconds"),
+        endTime: z.number().int().optional().describe("End time in milliseconds"),
+        fromId: z.number().int().optional().describe("Start from ID"),
+        limit: z.number().int().optional().describe("Number of results (default 500, max 1000)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

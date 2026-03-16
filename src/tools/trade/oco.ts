@@ -87,35 +87,41 @@ const SelfTradePreventionMode = z.enum(["EXPIRE_TAKER", "EXPIRE_MAKER", "EXPIRE_
  * Register new OCO order tool
  */
 export function registerBinanceUsNewOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_new_oco",
-    "Place a new OCO (One-Cancels-the-Other) order on Binance.US. OCO orders combine a limit order with a stop-loss order. When one triggers, the other is automatically cancelled. Note: For SELL OCOs, limit price > stop price. For BUY OCOs, limit price < stop price.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
-      side: OrderSide.describe("Order side: BUY or SELL"),
-      quantity: z.number().describe("Order quantity for both legs of the OCO"),
-      price: z.number().describe("Limit order price"),
-      stopPrice: z.number().describe("Stop price that triggers the stop-loss order"),
-      stopLimitPrice: z
-        .number()
-        .optional()
-        .describe(
-          "Limit price for the stop-loss leg. If provided, stopLimitTimeInForce is required.",
+      description:
+        "Place a new OCO (One-Cancels-the-Other) order on Binance.US. OCO orders combine a limit order with a stop-loss order. When one triggers, the other is automatically cancelled. Note: For SELL OCOs, limit price > stop price. For BUY OCOs, limit price < stop price.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD, ETHUSD)"),
+        side: OrderSide.describe("Order side: BUY or SELL"),
+        quantity: z.number().describe("Order quantity for both legs of the OCO"),
+        price: z.number().describe("Limit order price"),
+        stopPrice: z.number().describe("Stop price that triggers the stop-loss order"),
+        stopLimitPrice: z
+          .number()
+          .optional()
+          .describe(
+            "Limit price for the stop-loss leg. If provided, stopLimitTimeInForce is required.",
+          ),
+        stopLimitTimeInForce: TimeInForce.optional().describe(
+          "Time in force for stop-limit order: GTC, IOC, or FOK. Required if stopLimitPrice is provided.",
         ),
-      stopLimitTimeInForce: TimeInForce.optional().describe(
-        "Time in force for stop-limit order: GTC, IOC, or FOK. Required if stopLimitPrice is provided.",
-      ),
-      listClientOrderId: z.string().optional().describe("Unique ID for the entire OCO order list"),
-      limitClientOrderId: z.string().optional().describe("Unique ID for the limit order leg"),
-      stopClientOrderId: z.string().optional().describe("Unique ID for the stop-loss leg"),
-      limitIcebergQty: z.number().optional().describe("Iceberg quantity for the limit leg"),
-      stopIcebergQty: z.number().optional().describe("Iceberg quantity for the stop-loss leg"),
-      trailingDelta: z.number().optional().describe("Trailing delta in BIPS for the stop leg"),
-      newOrderRespType: OrderRespType.optional().describe("Response type: ACK, RESULT, or FULL"),
-      selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
-        "Self-trade prevention mode",
-      ),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+        listClientOrderId: z
+          .string()
+          .optional()
+          .describe("Unique ID for the entire OCO order list"),
+        limitClientOrderId: z.string().optional().describe("Unique ID for the limit order leg"),
+        stopClientOrderId: z.string().optional().describe("Unique ID for the stop-loss leg"),
+        limitIcebergQty: z.number().optional().describe("Iceberg quantity for the limit leg"),
+        stopIcebergQty: z.number().optional().describe("Iceberg quantity for the stop-loss leg"),
+        trailingDelta: z.number().optional().describe("Trailing delta in BIPS for the stop leg"),
+        newOrderRespType: OrderRespType.optional().describe("Response type: ACK, RESULT, or FULL"),
+        selfTradePreventionMode: SelfTradePreventionMode.optional().describe(
+          "Self-trade prevention mode",
+        ),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -201,13 +207,16 @@ export function registerBinanceUsNewOco(server: McpServer) {
  * Register get OCO order tool
  */
 export function registerBinanceUsGetOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_get_oco",
-    "Query a specific OCO order on Binance.US. Either orderListId or origClientOrderId must be provided.",
     {
-      orderListId: z.number().optional().describe("The order list ID to query"),
-      origClientOrderId: z.string().optional().describe("The original client order ID to query"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Query a specific OCO order on Binance.US. Either orderListId or origClientOrderId must be provided.",
+      inputSchema: {
+        orderListId: z.number().optional().describe("The order list ID to query"),
+        origClientOrderId: z.string().optional().describe("The original client order ID to query"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -281,18 +290,21 @@ export function registerBinanceUsGetOco(server: McpServer) {
  * Register cancel OCO order tool
  */
 export function registerBinanceUsCancelOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_cancel_oco",
-    "Cancel an entire OCO order on Binance.US. Cancelling any individual leg will cancel the entire OCO.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
-      orderListId: z.number().optional().describe("The order list ID to cancel"),
-      listClientOrderId: z.string().optional().describe("The list client order ID to cancel"),
-      newClientOrderId: z
-        .string()
-        .optional()
-        .describe("New client order ID for this cancel request"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description:
+        "Cancel an entire OCO order on Binance.US. Cancelling any individual leg will cancel the entire OCO.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSD)"),
+        orderListId: z.number().optional().describe("The order list ID to cancel"),
+        listClientOrderId: z.string().optional().describe("The list client order ID to cancel"),
+        newClientOrderId: z
+          .string()
+          .optional()
+          .describe("New client order ID for this cancel request"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -370,11 +382,13 @@ export function registerBinanceUsCancelOco(server: McpServer) {
  * Register open OCO orders tool
  */
 export function registerBinanceUsOpenOco(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_open_oco",
-    "Get all open OCO orders on Binance.US.",
     {
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description: "Get all open OCO orders on Binance.US.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -456,24 +470,26 @@ export function registerBinanceUsOpenOco(server: McpServer) {
  * Register all OCO orders history tool
  */
 export function registerBinanceUsAllOcoOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binance_us_all_oco_orders",
-    "Get all OCO orders (history) on Binance.US. Returns up to 1000 orders.",
     {
-      fromId: z
-        .number()
-        .optional()
-        .describe("Order list ID to start from. Cannot be used with startTime/endTime."),
-      startTime: z
-        .number()
-        .optional()
-        .describe("Start time in milliseconds. Cannot be used with fromId."),
-      endTime: z
-        .number()
-        .optional()
-        .describe("End time in milliseconds. Cannot be used with fromId."),
-      limit: z.number().optional().describe("Number of results (default 500, max 1000)"),
-      recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      description: "Get all OCO orders (history) on Binance.US. Returns up to 1000 orders.",
+      inputSchema: {
+        fromId: z
+          .number()
+          .optional()
+          .describe("Order list ID to start from. Cannot be used with startTime/endTime."),
+        startTime: z
+          .number()
+          .optional()
+          .describe("Start time in milliseconds. Cannot be used with fromId."),
+        endTime: z
+          .number()
+          .optional()
+          .describe("End time in milliseconds. Cannot be used with fromId."),
+        limit: z.number().optional().describe("Number of results (default 500, max 1000)"),
+        recvWindow: z.number().optional().describe("Receive window in milliseconds (max 60000)"),
+      },
     },
     async (params) => {
       try {

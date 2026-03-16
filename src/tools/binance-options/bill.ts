@@ -6,15 +6,20 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsBill(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsBill",
-    "Get options account funding flow (bill history).",
     {
-      currency: z.string().optional().describe("Currency (e.g., USDT)"),
-      recordId: z.number().optional().describe("Record ID to fetch from"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of records to return. Default 100; max 1000."),
+      description: "Get options account funding flow (bill history).",
+      inputSchema: {
+        currency: z.string().optional().describe("Currency (e.g., USDT)"),
+        recordId: z.number().optional().describe("Record ID to fetch from"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z
+          .number()
+          .optional()
+          .describe("Number of records to return. Default 100; max 1000."),
+      },
     },
     async ({ currency, recordId, startTime, endTime, limit }) => {
       try {

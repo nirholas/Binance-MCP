@@ -6,16 +6,18 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMPremiumIndex(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMPremiumIndex",
-    "Get mark price and funding rate for USD-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
-        ),
+      description: "Get mark price and funding rate for USD-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
+          ),
+      },
     },
     async ({ symbol }) => {
       try {

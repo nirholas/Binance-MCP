@@ -6,13 +6,15 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDustlog(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDustlog",
-    "Get dust log (history of dust transfers).",
     {
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get dust log (history of dust transfers).",
+      inputSchema: {
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ startTime, endTime, recvWindow }) => {
       try {

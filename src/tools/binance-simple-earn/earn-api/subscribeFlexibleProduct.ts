@@ -6,18 +6,21 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubscribeFlexibleProduct(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubscribeFlexibleProduct",
-    "Subscribe to a Simple Earn Flexible Product by specifying the product ID and amount. Optional parameters include auto-subscribe and source account. ",
     {
-      productId: z.string().describe("Product ID"),
-      amount: z.number().positive().describe("Amount to purchase"),
-      autoSubscribe: z.boolean().optional().describe("true or false, default is true"),
-      sourceAccount: z
-        .enum(["SPOT", "FUND", "ALL"])
-        .optional()
-        .describe("Source account: SPOT, FUND, or ALL; default is SPOT"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Subscribe to a Simple Earn Flexible Product by specifying the product ID and amount. Optional parameters include auto-subscribe and source account. ",
+      inputSchema: {
+        productId: z.string().describe("Product ID"),
+        amount: z.number().positive().describe("Amount to purchase"),
+        autoSubscribe: z.boolean().optional().describe("true or false, default is true"),
+        sourceAccount: z
+          .enum(["SPOT", "FUND", "ALL"])
+          .optional()
+          .describe("Source account: SPOT, FUND, or ALL; default is SPOT"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

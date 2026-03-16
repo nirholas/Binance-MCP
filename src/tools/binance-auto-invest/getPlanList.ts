@@ -6,11 +6,13 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetPlanList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetPlanList",
-    "Query auto-invest plan list.",
     {
-      planType: z.enum(["SINGLE", "PORTFOLIO", "INDEX"]).optional().describe("Plan type"),
+      description: "Query auto-invest plan list.",
+      inputSchema: {
+        planType: z.enum(["SINGLE", "PORTFOLIO", "INDEX"]).optional().describe("Plan type"),
+      },
     },
     async ({ planType }) => {
       try {

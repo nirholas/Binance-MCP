@@ -5,46 +5,52 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryNewOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryNewOrder",
-    "Place a new COIN-M Futures (Delivery) order. COIN-M futures are settled in the coin itself (e.g., BTC). ⚠️ RISK: Futures trading involves leverage and liquidation risk.",
     {
-      symbol: z.string().describe("Delivery futures symbol (e.g., BTCUSD_PERP, BTCUSD_240329)"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      positionSide: z
-        .enum(["BOTH", "LONG", "SHORT"])
-        .optional()
-        .describe("Position side for Hedge Mode. Use BOTH for One-Way Mode"),
-      type: z
-        .enum([
-          "LIMIT",
-          "MARKET",
-          "STOP",
-          "STOP_MARKET",
-          "TAKE_PROFIT",
-          "TAKE_PROFIT_MARKET",
-          "TRAILING_STOP_MARKET",
-        ])
-        .describe("Order type"),
-      quantity: z.string().optional().describe("Order quantity in contracts"),
-      price: z.string().optional().describe("Limit price (required for LIMIT orders)"),
-      stopPrice: z.string().optional().describe("Stop price (required for STOP orders)"),
-      timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
-      reduceOnly: z.boolean().optional().describe("Reduce position only"),
-      closePosition: z.boolean().optional().describe("Close entire position"),
-      activationPrice: z.string().optional().describe("Activation price for TRAILING_STOP_MARKET"),
-      callbackRate: z
-        .string()
-        .optional()
-        .describe("Callback rate for TRAILING_STOP_MARKET (0.1% - 5%)"),
-      workingType: z
-        .enum(["MARK_PRICE", "CONTRACT_PRICE"])
-        .optional()
-        .describe("Stop price trigger type"),
-      priceProtect: z.boolean().optional().describe("Price protection"),
-      newClientOrderId: z.string().optional().describe("Custom order ID"),
-      newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description:
+        "Place a new COIN-M Futures (Delivery) order. COIN-M futures are settled in the coin itself (e.g., BTC). ⚠️ RISK: Futures trading involves leverage and liquidation risk.",
+      inputSchema: {
+        symbol: z.string().describe("Delivery futures symbol (e.g., BTCUSD_PERP, BTCUSD_240329)"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        positionSide: z
+          .enum(["BOTH", "LONG", "SHORT"])
+          .optional()
+          .describe("Position side for Hedge Mode. Use BOTH for One-Way Mode"),
+        type: z
+          .enum([
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET",
+          ])
+          .describe("Order type"),
+        quantity: z.string().optional().describe("Order quantity in contracts"),
+        price: z.string().optional().describe("Limit price (required for LIMIT orders)"),
+        stopPrice: z.string().optional().describe("Stop price (required for STOP orders)"),
+        timeInForce: z.enum(["GTC", "IOC", "FOK", "GTX"]).optional().describe("Time in force"),
+        reduceOnly: z.boolean().optional().describe("Reduce position only"),
+        closePosition: z.boolean().optional().describe("Close entire position"),
+        activationPrice: z
+          .string()
+          .optional()
+          .describe("Activation price for TRAILING_STOP_MARKET"),
+        callbackRate: z
+          .string()
+          .optional()
+          .describe("Callback rate for TRAILING_STOP_MARKET (0.1% - 5%)"),
+        workingType: z
+          .enum(["MARK_PRICE", "CONTRACT_PRICE"])
+          .optional()
+          .describe("Stop price trigger type"),
+        priceProtect: z.boolean().optional().describe("Price protection"),
+        newClientOrderId: z.string().optional().describe("Custom order ID"),
+        newOrderRespType: z.enum(["ACK", "RESULT"]).optional().describe("Response type"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

@@ -6,17 +6,20 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertAcceptQuote(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertAcceptQuote",
-    "The API confirms and executes a token conversion using a previously received quote ID.",
     {
-      quoteId: z.string().describe("Quote ID"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("The value cannot be greater than 60000"),
+      description:
+        "The API confirms and executes a token conversion using a previously received quote ID.",
+      inputSchema: {
+        quoteId: z.string().describe("Quote ID"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

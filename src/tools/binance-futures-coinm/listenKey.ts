@@ -4,10 +4,12 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { deliveryClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesCOINMListenKeyCreate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMListenKeyCreate",
-    "Start a new user data stream for COIN-M Futures. Returns a listenKey for WebSocket connection.",
-    {},
+    {
+      description:
+        "Start a new user data stream for COIN-M Futures. Returns a listenKey for WebSocket connection.",
+    },
     async () => {
       try {
         const data = await deliveryClient.createListenKey();
@@ -35,10 +37,9 @@ export function registerBinanceFuturesCOINMListenKeyCreate(server: McpServer) {
 }
 
 export function registerBinanceFuturesCOINMListenKeyRenew(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMListenKeyRenew",
-    "Keepalive a user data stream to prevent timeout for COIN-M Futures.",
-    {},
+    { description: "Keepalive a user data stream to prevent timeout for COIN-M Futures." },
     async () => {
       try {
         const data = await deliveryClient.keepAliveListenKey();
@@ -66,10 +67,9 @@ export function registerBinanceFuturesCOINMListenKeyRenew(server: McpServer) {
 }
 
 export function registerBinanceFuturesCOINMListenKeyClose(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCOINMListenKeyClose",
-    "Close a user data stream for COIN-M Futures.",
-    {},
+    { description: "Close a user data stream for COIN-M Futures." },
     async () => {
       try {
         const data = await deliveryClient.closeListenKey();

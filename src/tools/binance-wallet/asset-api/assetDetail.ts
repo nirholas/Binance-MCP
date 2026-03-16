@@ -6,12 +6,14 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletAssetDetail(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletAssetDetail",
-    "Get asset details.",
     {
-      asset: z.string().optional().describe("Asset symbol"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get asset details.",
+      inputSchema: {
+        asset: z.string().optional().describe("Asset symbol"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ asset, recvWindow }) => {
       try {

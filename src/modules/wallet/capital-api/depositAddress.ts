@@ -6,13 +6,15 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDepositAddress(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDepositAddress",
-    "Get deposit address for a specific coin.",
     {
-      coin: z.string().describe("Coin symbol"),
-      network: z.string().optional().describe("Network"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Get deposit address for a specific coin.",
+      inputSchema: {
+        coin: z.string().describe("Coin symbol"),
+        network: z.string().optional().describe("Network"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ coin, network, recvWindow }) => {
       try {

@@ -12,12 +12,15 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardVerify(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardVerify",
-    "Verify a Binance Gift Card code. Check if the code is valid and see its details before redeeming.",
     {
-      referenceNo: z.string().describe("Gift card reference number"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Verify a Binance Gift Card code. Check if the code is valid and see its details before redeeming.",
+      inputSchema: {
+        referenceNo: z.string().describe("Gift card reference number"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

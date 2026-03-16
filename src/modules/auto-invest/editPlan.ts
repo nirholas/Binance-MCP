@@ -12,32 +12,38 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerAutoInvestEditPlan(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestEditPlan",
-    "Edit an existing auto-invest plan. Modify subscription amount, cycle, or target allocations.",
     {
-      planId: z.number().int().describe("Plan ID to edit"),
-      subscriptionAmount: z.string().describe("New amount per subscription"),
-      subscriptionCycle: z
-        .enum(["H1", "H4", "H8", "H12", "WEEKLY", "DAILY", "MONTHLY", "BI_WEEKLY"])
-        .describe("New subscription frequency"),
-      subscriptionStartDay: z
-        .number()
-        .int()
-        .optional()
-        .describe("New start day (1-31 for MONTHLY, 1-7 for WEEKLY)"),
-      subscriptionStartTime: z.number().int().min(0).max(23).describe("New start hour (0-23)"),
-      sourceAsset: z.string().describe("Source asset (e.g., 'USDT')"),
-      flexibleAllowedToUse: z.boolean().optional().describe("Allow using flexible savings balance"),
-      details: z
-        .array(
-          z.object({
-            targetAsset: z.string().describe("Target asset to purchase"),
-            percentage: z.number().describe("Percentage allocation (0-100)"),
-          }),
-        )
-        .describe("New target assets and allocation percentages"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Edit an existing auto-invest plan. Modify subscription amount, cycle, or target allocations.",
+      inputSchema: {
+        planId: z.number().int().describe("Plan ID to edit"),
+        subscriptionAmount: z.string().describe("New amount per subscription"),
+        subscriptionCycle: z
+          .enum(["H1", "H4", "H8", "H12", "WEEKLY", "DAILY", "MONTHLY", "BI_WEEKLY"])
+          .describe("New subscription frequency"),
+        subscriptionStartDay: z
+          .number()
+          .int()
+          .optional()
+          .describe("New start day (1-31 for MONTHLY, 1-7 for WEEKLY)"),
+        subscriptionStartTime: z.number().int().min(0).max(23).describe("New start hour (0-23)"),
+        sourceAsset: z.string().describe("Source asset (e.g., 'USDT')"),
+        flexibleAllowedToUse: z
+          .boolean()
+          .optional()
+          .describe("Allow using flexible savings balance"),
+        details: z
+          .array(
+            z.object({
+              targetAsset: z.string().describe("Target asset to purchase"),
+              percentage: z.number().describe("Percentage allocation (0-100)"),
+            }),
+          )
+          .describe("New target assets and allocation percentages"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

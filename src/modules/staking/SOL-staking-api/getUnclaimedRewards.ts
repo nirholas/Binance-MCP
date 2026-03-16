@@ -6,11 +6,14 @@ import { z } from "zod";
 import { stakingClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceGetUnclaimedRewards(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGetUnclaimedRewards",
-    "Get Unclaimed Rewards API allows users to retrieve information about unclaimed rewards from their SOL staking activities.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description:
+        "Get Unclaimed Rewards API allows users to retrieve information about unclaimed rewards from their SOL staking activities.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

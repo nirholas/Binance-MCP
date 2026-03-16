@@ -6,12 +6,14 @@ import { z } from "zod";
 import { optionsClient } from "../../config/binanceClient.js";
 
 export function registerBinanceOptionsDepth(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsDepth",
-    "Get order book depth for an option symbol.",
     {
-      symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
-      limit: z.number().optional().describe("Depth limit. Default 100; max 1000."),
+      description: "Get order book depth for an option symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Option trading symbol (e.g., BTC-240126-42000-C)"),
+        limit: z.number().optional().describe("Depth limit. Default 100; max 1000."),
+      },
     },
     async ({ symbol, limit }) => {
       try {

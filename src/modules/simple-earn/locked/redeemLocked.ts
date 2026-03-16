@@ -12,12 +12,15 @@ import { z } from "zod";
 import { simpleEarnClient } from "../../../config/binanceClient.js";
 
 export function registerSimpleEarnRedeemLocked(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSimpleEarnLockedRedeem",
-    "Redeem from a Simple Earn Locked product. ⚠️ Early redemption may forfeit rewards. Check product terms first.",
     {
-      positionId: z.string().describe("Position ID to redeem"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Redeem from a Simple Earn Locked product. ⚠️ Early redemption may forfeit rewards. Check product terms first.",
+      inputSchema: {
+        positionId: z.string().describe("Position ID to redeem"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

@@ -12,22 +12,24 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesCancelBatchOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesCancelBatchOrders",
-    "Cancel multiple USD-M Futures orders in batch (max 10 orders).",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      orderIdList: z
-        .array(z.number().int())
-        .max(10)
-        .optional()
-        .describe("List of order IDs to cancel (max 10)"),
-      origClientOrderIdList: z
-        .array(z.string())
-        .max(10)
-        .optional()
-        .describe("List of client order IDs to cancel (max 10)"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Cancel multiple USD-M Futures orders in batch (max 10 orders).",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        orderIdList: z
+          .array(z.number().int())
+          .max(10)
+          .optional()
+          .describe("List of order IDs to cancel (max 10)"),
+        origClientOrderIdList: z
+          .array(z.string())
+          .max(10)
+          .optional()
+          .describe("List of client order IDs to cancel (max 10)"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

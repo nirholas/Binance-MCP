@@ -12,14 +12,16 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryFundingRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryFundingRate",
-    "Get funding rate history for a COIN-M Futures perpetual contract.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
-      limit: z.number().int().optional().describe("Number of results (default 100, max 1000)"),
+      description: "Get funding rate history for a COIN-M Futures perpetual contract.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        startTime: z.number().int().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().int().optional().describe("End timestamp in milliseconds"),
+        limit: z.number().int().optional().describe("Number of results (default 100, max 1000)"),
+      },
     },
     async (params) => {
       try {

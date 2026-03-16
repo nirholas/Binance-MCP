@@ -5,11 +5,13 @@ import { z } from "zod";
 import { spotClient } from "../config/client.js";
 
 export function registerBinanceOrderBook(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binanceOrderBook",
-    "check binance order book",
     {
-      symbol: z.string().describe("symbol: exemple: BTCUSDT"),
+      description: "check binance order book",
+      inputSchema: {
+        symbol: z.string().describe("symbol: exemple: BTCUSDT"),
+      },
     },
     async ({ symbol }) => {
       try {

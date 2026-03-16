@@ -6,11 +6,13 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletDisableFastWithdrawSwitch(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletDisableFastWithdrawSwitch",
-    "Disable fast withdraw switch.",
     {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Disable fast withdraw switch.",
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ recvWindow }) => {
       try {

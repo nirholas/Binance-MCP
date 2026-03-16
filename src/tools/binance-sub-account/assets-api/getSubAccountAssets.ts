@@ -12,12 +12,15 @@ import { z } from "zod";
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceSubAccountAssets(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceSubAccountAssets",
-    "Get detailed asset balances for a specific sub-account. Shows all tokens and their free/locked amounts.",
     {
-      email: z.string().email().describe("Sub-account email to query assets for"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Get detailed asset balances for a specific sub-account. Shows all tokens and their free/locked amounts.",
+      inputSchema: {
+        email: z.string().email().describe("Sub-account email to query assets for"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

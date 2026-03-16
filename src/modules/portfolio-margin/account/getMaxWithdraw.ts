@@ -12,12 +12,15 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../../config/binanceClient.js";
 
 export function registerPortfolioMarginGetMaxWithdraw(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginGetMaxWithdraw",
-    "Query the maximum amount that can be withdrawn for a specific asset from Portfolio Margin account.",
     {
-      asset: z.string().describe("Asset to query (e.g., 'USDT')"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description:
+        "Query the maximum amount that can be withdrawn for a specific asset from Portfolio Margin account.",
+      inputSchema: {
+        asset: z.string().describe("Asset to query (e.g., 'USDT')"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

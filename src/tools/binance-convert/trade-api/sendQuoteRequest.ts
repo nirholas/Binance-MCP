@@ -6,32 +6,39 @@ import { z } from "zod";
 import { convertClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceConvertSendQuoteRequest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceConvertSendQuoteRequest",
-    "Get a real-time quote to convert one token to another, including rate and amount, if you have enough funds.",
     {
-      fromAsset: z.string().describe("Asset you will spend (required)"),
-      toAsset: z.string().describe("Asset you will receive (required)"),
-      fromAmount: z
-        .number()
-        .positive()
-        .optional()
-        .describe("Amount to be debited after conversion"),
-      toAmount: z.number().positive().optional().describe("Amount to be credited after conversion"),
-      walletType: z
-        .enum(["SPOT", "FUNDING"])
-        .optional()
-        .describe("SPOT or FUNDING. Default is SPOT"),
-      validTime: z
-        .enum(["10s", "30s", "1m"])
-        .optional()
-        .describe("Quote validity duration: 10s, 30s, 1m; default is 10s"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000, "recvWindow cannot be greater than 60000")
-        .optional()
-        .describe("The value cannot be greater than 60000"),
+      description:
+        "Get a real-time quote to convert one token to another, including rate and amount, if you have enough funds.",
+      inputSchema: {
+        fromAsset: z.string().describe("Asset you will spend (required)"),
+        toAsset: z.string().describe("Asset you will receive (required)"),
+        fromAmount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("Amount to be debited after conversion"),
+        toAmount: z
+          .number()
+          .positive()
+          .optional()
+          .describe("Amount to be credited after conversion"),
+        walletType: z
+          .enum(["SPOT", "FUNDING"])
+          .optional()
+          .describe("SPOT or FUNDING. Default is SPOT"),
+        validTime: z
+          .enum(["10s", "30s", "1m"])
+          .optional()
+          .describe("Quote validity duration: 10s, 30s, 1m; default is 10s"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000, "recvWindow cannot be greater than 60000")
+          .optional()
+          .describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

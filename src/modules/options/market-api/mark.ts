@@ -12,16 +12,19 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsMarketMark(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsMark",
-    "Get the mark price for options contracts. Mark price is used for liquidation and margin calculations.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Option symbol (e.g., 'BTC-240126-40000-C'). If not provided, returns all mark prices",
-        ),
+      description:
+        "Get the mark price for options contracts. Mark price is used for liquidation and margin calculations.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Option symbol (e.g., 'BTC-240126-40000-C'). If not provided, returns all mark prices",
+          ),
+      },
     },
     async (params) => {
       try {

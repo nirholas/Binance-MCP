@@ -12,14 +12,17 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsRenewListenKey(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsRenewListenKey",
-    "Extend the validity of an options listen key by 60 minutes. Should be called periodically to keep the user data stream active.",
     {
-      listenKey: z
-        .string()
-        .optional()
-        .describe("Listen key to renew. If not provided, renews the current active key"),
+      description:
+        "Extend the validity of an options listen key by 60 minutes. Should be called periodically to keep the user data stream active.",
+      inputSchema: {
+        listenKey: z
+          .string()
+          .optional()
+          .describe("Listen key to renew. If not provided, renews the current active key"),
+      },
     },
     async (params) => {
       try {

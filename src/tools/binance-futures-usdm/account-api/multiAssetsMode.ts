@@ -12,11 +12,13 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesMultiAssetsMode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesGetMultiAssetsMode",
-    "Get current Multi-Assets Mode for USD-M Futures.",
     {
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get current Multi-Assets Mode for USD-M Futures.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

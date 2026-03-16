@@ -12,11 +12,13 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryOpenInterest(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryOpenInterest",
-    "Get present open interest for a specific COIN-M Futures contract.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+      description: "Get present open interest for a specific COIN-M Futures contract.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+      },
     },
     async (params) => {
       try {

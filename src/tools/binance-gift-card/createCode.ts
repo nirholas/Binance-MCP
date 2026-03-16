@@ -6,13 +6,16 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardCreateCode(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardCreateCode",
-    "Create a Binance Gift Card code. This allows you to generate a gift card with a specified token and amount.",
     {
-      token: z.string().describe("The token to include in the gift card (e.g., BNB, USDT)"),
-      amount: z.number().describe("The amount of the token to include in the gift card"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description:
+        "Create a Binance Gift Card code. This allows you to generate a gift card with a specified token and amount.",
+      inputSchema: {
+        token: z.string().describe("The token to include in the gift card (e.g., BNB, USDT)"),
+        amount: z.number().describe("The amount of the token to include in the gift card"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ token, amount, recvWindow }) => {
       try {

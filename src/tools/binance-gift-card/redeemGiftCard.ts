@@ -12,13 +12,15 @@ import { z } from "zod";
 import { giftCardClient } from "../../config/binanceClient.js";
 
 export function registerBinanceGiftCardRedeem(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceGiftCardRedeem",
-    "Redeem a Binance Gift Card. The tokens will be credited to your spot wallet.",
     {
-      code: z.string().describe("Gift card redemption code"),
-      externalUid: z.string().optional().describe("External user ID for partner integration"),
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Redeem a Binance Gift Card. The tokens will be credited to your spot wallet.",
+      inputSchema: {
+        code: z.string().describe("Gift card redemption code"),
+        externalUid: z.string().optional().describe("External user ID for partner integration"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

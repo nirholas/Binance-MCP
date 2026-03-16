@@ -12,15 +12,18 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesAllOrders(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesAllOrders",
-    "Get all account orders (active, canceled, or filled) for a symbol. Returns orders from the last 7 days by default.",
     {
-      symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
-      orderId: z.number().optional().describe("If set, return orders >= this orderId"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of results (default 500, max 1000)"),
+      description:
+        "Get all account orders (active, canceled, or filled) for a symbol. Returns orders from the last 7 days by default.",
+      inputSchema: {
+        symbol: z.string().describe("Trading pair symbol (e.g., BTCUSDT)"),
+        orderId: z.number().optional().describe("If set, return orders >= this orderId"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Number of results (default 500, max 1000)"),
+      },
     },
     async (params) => {
       try {

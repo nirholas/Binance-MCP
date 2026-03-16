@@ -12,21 +12,24 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFlexibleBorrow",
-    "Borrow crypto using a flexible loan. ⚠️ WARNING: Your collateral will be locked. Interest accrues daily. If LTV ratio exceeds threshold, liquidation may occur.",
     {
-      loanCoin: z.string().describe("Coin to borrow (e.g., 'USDT', 'BUSD')"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC', 'ETH')"),
-      loanAmount: z
-        .string()
-        .optional()
-        .describe("Amount to borrow (provide either loanAmount or collateralAmount)"),
-      collateralAmount: z
-        .string()
-        .optional()
-        .describe("Collateral amount (provide either loanAmount or collateralAmount)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Borrow crypto using a flexible loan. ⚠️ WARNING: Your collateral will be locked. Interest accrues daily. If LTV ratio exceeds threshold, liquidation may occur.",
+      inputSchema: {
+        loanCoin: z.string().describe("Coin to borrow (e.g., 'USDT', 'BUSD')"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC', 'ETH')"),
+        loanAmount: z
+          .string()
+          .optional()
+          .describe("Amount to borrow (provide either loanAmount or collateralAmount)"),
+        collateralAmount: z
+          .string()
+          .optional()
+          .describe("Collateral amount (provide either loanAmount or collateralAmount)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

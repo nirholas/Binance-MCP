@@ -12,14 +12,17 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedCollateralRate(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedCollateralRate",
-    "Check the collateral repay rate for a specific loan and collateral pair. Useful for planning repayments.",
     {
-      loanCoin: z.string().describe("Loan coin (e.g., 'USDT')"),
-      collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC')"),
-      repayAmount: z.string().describe("Amount to repay"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description:
+        "Check the collateral repay rate for a specific loan and collateral pair. Useful for planning repayments.",
+      inputSchema: {
+        loanCoin: z.string().describe("Loan coin (e.g., 'USDT')"),
+        collateralCoin: z.string().describe("Collateral coin (e.g., 'BTC')"),
+        repayAmount: z.string().describe("Amount to repay"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

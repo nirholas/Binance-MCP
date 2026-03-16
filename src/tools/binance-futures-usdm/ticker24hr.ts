@@ -6,16 +6,18 @@ import { z } from "zod";
 import { futuresClient } from "../../config/binanceClient.js";
 
 export function registerBinanceFuturesUSDMTicker24hr(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesUSDMTicker24hr",
-    "Get 24-hour rolling window price change statistics for USD-M Futures.",
     {
-      symbol: z
-        .string()
-        .optional()
-        .describe(
-          "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
-        ),
+      description: "Get 24-hour rolling window price change statistics for USD-M Futures.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Symbol of the trading pair (e.g., BTCUSDT). If not provided, returns all symbols",
+          ),
+      },
     },
     async ({ symbol }) => {
       try {

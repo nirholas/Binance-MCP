@@ -12,12 +12,14 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesPositionRisk(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesPositionRisk",
-    "Get current position information for USD-M Futures.",
     {
-      symbol: z.string().optional().describe("Futures symbol. If omitted, returns all positions"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Get current position information for USD-M Futures.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Futures symbol. If omitted, returns all positions"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {

@@ -6,17 +6,19 @@ import { z } from "zod";
 import { autoInvestClient } from "../../config/binanceClient.js";
 
 export function registerBinanceAutoInvestGetSourceAssetList(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceAutoInvestGetSourceAssetList",
-    "Get source asset list for auto-invest.",
     {
-      usageType: z.string().optional().describe("Usage type"),
-      targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
-      indexId: z.number().optional().describe("Index ID"),
-      flexibleAllowedToUse: z
-        .boolean()
-        .optional()
-        .describe("Whether flexible products are allowed to use"),
+      description: "Get source asset list for auto-invest.",
+      inputSchema: {
+        usageType: z.string().optional().describe("Usage type"),
+        targetAsset: z.string().optional().describe("Target asset (e.g., BTC)"),
+        indexId: z.number().optional().describe("Index ID"),
+        flexibleAllowedToUse: z
+          .boolean()
+          .optional()
+          .describe("Whether flexible products are allowed to use"),
+      },
     },
     async ({ usageType, targetAsset, indexId, flexibleAllowedToUse }) => {
       try {

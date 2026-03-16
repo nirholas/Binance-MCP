@@ -6,15 +6,17 @@ import { z } from "zod";
 import { portfolioMarginClient } from "../../config/binanceClient.js";
 
 export function registerBinancePortfolioMarginBnbTransfer(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinancePortfolioMarginBnbTransfer",
-    "Transfer BNB in/out of portfolio margin account.",
     {
-      amount: z.number().describe("Amount of BNB to transfer"),
-      transferSide: z
-        .enum(["TO_UM", "FROM_UM"])
-        .describe("Transfer direction: TO_UM (to UM account) or FROM_UM (from UM account)"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Transfer BNB in/out of portfolio margin account.",
+      inputSchema: {
+        amount: z.number().describe("Amount of BNB to transfer"),
+        transferSide: z
+          .enum(["TO_UM", "FROM_UM"])
+          .describe("Transfer direction: TO_UM (to UM account) or FROM_UM (from UM account)"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ amount, transferSide, recvWindow }) => {
       try {

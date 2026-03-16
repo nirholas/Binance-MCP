@@ -12,30 +12,32 @@ import { z } from "zod";
 import { futuresClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceFuturesModifyOrder(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceFuturesModifyOrder",
-    "Modify an existing USD-M Futures order. Can modify price, quantity, or both.",
     {
-      symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
-      orderId: z.number().int().optional().describe("Order ID"),
-      origClientOrderId: z.string().optional().describe("Original client order ID"),
-      side: z.enum(["BUY", "SELL"]).describe("Order side"),
-      quantity: z.string().optional().describe("New quantity"),
-      price: z.string().optional().describe("New price"),
-      priceMatch: z
-        .enum([
-          "OPPONENT",
-          "OPPONENT_5",
-          "OPPONENT_10",
-          "OPPONENT_20",
-          "QUEUE",
-          "QUEUE_5",
-          "QUEUE_10",
-          "QUEUE_20",
-        ])
-        .optional()
-        .describe("Price match mode"),
-      recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      description: "Modify an existing USD-M Futures order. Can modify price, quantity, or both.",
+      inputSchema: {
+        symbol: z.string().describe("Futures symbol (e.g., BTCUSDT)"),
+        orderId: z.number().int().optional().describe("Order ID"),
+        origClientOrderId: z.string().optional().describe("Original client order ID"),
+        side: z.enum(["BUY", "SELL"]).describe("Order side"),
+        quantity: z.string().optional().describe("New quantity"),
+        price: z.string().optional().describe("New price"),
+        priceMatch: z
+          .enum([
+            "OPPONENT",
+            "OPPONENT_5",
+            "OPPONENT_10",
+            "OPPONENT_20",
+            "QUEUE",
+            "QUEUE_5",
+            "QUEUE_10",
+            "QUEUE_20",
+          ])
+          .optional()
+          .describe("Price match mode"),
+        recvWindow: z.number().int().optional().describe("Recv window in milliseconds"),
+      },
     },
     async (params) => {
       try {

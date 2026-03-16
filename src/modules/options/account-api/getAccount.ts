@@ -12,11 +12,13 @@ import { z } from "zod";
 import { optionsClient } from "../../../config/binanceClient.js";
 
 export function registerOptionsGetAccount(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceOptionsGetAccount",
-    "Get options account information including balances and Greeks.",
     {
-      recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      description: "Get options account information including balances and Greeks.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
     },
     async (params) => {
       try {

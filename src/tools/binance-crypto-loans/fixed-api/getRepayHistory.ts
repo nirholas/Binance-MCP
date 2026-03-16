@@ -12,18 +12,20 @@ import { z } from "zod";
 import { cryptoLoanClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceCryptoLoansFixedRepayHistory(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceCryptoLoansFixedRepayHistory",
-    "Get repayment history for fixed-term loans.",
     {
-      orderId: z.number().int().optional().describe("Filter by specific order ID"),
-      loanCoin: z.string().optional().describe("Filter by loan coin"),
-      collateralCoin: z.string().optional().describe("Filter by collateral coin"),
-      startTime: z.number().int().optional().describe("Start timestamp in ms"),
-      endTime: z.number().int().optional().describe("End timestamp in ms"),
-      current: z.number().int().min(1).optional().describe("Current page"),
-      limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      description: "Get repayment history for fixed-term loans.",
+      inputSchema: {
+        orderId: z.number().int().optional().describe("Filter by specific order ID"),
+        loanCoin: z.string().optional().describe("Filter by loan coin"),
+        collateralCoin: z.string().optional().describe("Filter by collateral coin"),
+        startTime: z.number().int().optional().describe("Start timestamp in ms"),
+        endTime: z.number().int().optional().describe("End timestamp in ms"),
+        current: z.number().int().min(1).optional().describe("Current page"),
+        limit: z.number().int().min(1).max(100).optional().describe("Results per page (max 100)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity in ms"),
+      },
     },
     async (params) => {
       try {

@@ -6,12 +6,14 @@ import { z } from "zod";
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletOneClickArrivalDepositApply(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceWalletOneClickArrivalDepositApply",
-    "Apply for one-click arrival deposit.",
     {
-      subAccountId: z.string().optional().describe("Sub-account ID"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      description: "Apply for one-click arrival deposit.",
+      inputSchema: {
+        subAccountId: z.string().optional().describe("Sub-account ID"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async ({ subAccountId, recvWindow }) => {
       try {

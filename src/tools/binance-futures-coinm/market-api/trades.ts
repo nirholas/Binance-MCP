@@ -12,12 +12,14 @@ import { z } from "zod";
 import { deliveryClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceDeliveryTrades(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceDeliveryTrades",
-    "Get recent trades for a COIN-M Futures symbol.",
     {
-      symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
-      limit: z.number().int().optional().describe("Number of trades (default 500, max 1000)"),
+      description: "Get recent trades for a COIN-M Futures symbol.",
+      inputSchema: {
+        symbol: z.string().describe("Contract symbol (e.g., BTCUSD_PERP)"),
+        limit: z.number().int().optional().describe("Number of trades (default 500, max 1000)"),
+      },
     },
     async (params) => {
       try {

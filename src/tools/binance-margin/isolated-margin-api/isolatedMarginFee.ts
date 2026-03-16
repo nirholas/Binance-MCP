@@ -6,17 +6,19 @@ import { z } from "zod";
 import { marginClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceIsolatedMarginFee(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "BinanceIsolatedMarginFee",
-    "Query isolated margin fee data including interest rates for borrowing.",
     {
-      symbol: z.string().optional().describe("Isolated margin symbol (e.g., BTCUSDT)"),
-      vipLevel: z
-        .number()
-        .int()
-        .optional()
-        .describe("VIP level (default uses current account VIP level)"),
-      recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      description: "Query isolated margin fee data including interest rates for borrowing.",
+      inputSchema: {
+        symbol: z.string().optional().describe("Isolated margin symbol (e.g., BTCUSDT)"),
+        vipLevel: z
+          .number()
+          .int()
+          .optional()
+          .describe("VIP level (default uses current account VIP level)"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
     },
     async (params) => {
       try {
