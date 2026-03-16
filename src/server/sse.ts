@@ -1,8 +1,12 @@
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import type { Server } from "http";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { randomUUID } from "node:crypto";
+
+import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import cors from "cors";
-import express from "express";
 
 import Logger from "../utils/logger.js";
 
@@ -13,18 +17,25 @@ import "dotenv/config";
 
 const PORT = process.env.PORT || 3002;
 
+/** Transport + Streamable HTTP handleRequest for routing and logging. */
+type StreamableTransportWithHandle = Transport & {
+  handleRequest(req: IncomingMessage, res: ServerResponse, parsedBody?: unknown): Promise<void>;
+};
+
 /**
- * How tool `content` flows when the SSE server runs a tool:
+ * How tool `content` flows when the Streamable HTTP server runs a tool:
  *
  * 1. Tool handler (e.g. getAccount.ts) returns { content: [{ type: "text", text: "..." }] }.
  * 2. McpServer (SDK) CallTool request handler runs the handler and returns that object.
  * 3. Server (SDK) validates it as CallToolResult and returns it from the tools/call handler.
  * 4. Protocol (SDK) puts it in response.result and calls transport.send({ jsonrpc, id, result }).
- * 5. SSEServerTransport.send() writes the JSON to the SSE stream (event: message, data: ...).
+ * 5. StreamableHTTPServerTransport.send() writes the JSON to the response/SSE stream.
  *
- * This wrapper logs every tools/call request and every tool result content when using SSE.
+ * This wrapper logs every tools/call request and every tool result content.
  */
-function wrapTransportWithToolLogging(transport: SSEServerTransport) {
+function wrapTransportWithToolLogging(
+  transport: StreamableHTTPServerTransport,
+): StreamableTransportWithHandle {
   const pendingToolCalls = new Map<string | number, string>();
 
   return {
@@ -55,90 +66,104 @@ function wrapTransportWithToolLogging(transport: SSEServerTransport) {
     async close() {
       return transport.close();
     },
-    async send(message: Parameters<SSEServerTransport["send"]>[0]) {
+    async send(
+      message: Parameters<Transport["send"]>[0],
+      options?: Parameters<Transport["send"]>[1],
+    ) {
       const msg = message as { id?: string | number; result?: { content?: unknown } };
       if (msg?.result && msg.result.content !== undefined) {
         const toolName = pendingToolCalls.get(msg.id as string | number);
 
         console.log(
-          "[MCP SSE] tool result content",
+          "[MCP Streamable HTTP] tool result content",
           toolName !== undefined ? `(tool: ${toolName})` : "",
           JSON.stringify(msg.result.content),
         );
         if (msg.id !== undefined) pendingToolCalls.delete(msg.id);
       }
 
-      return transport.send(message);
+      return transport.send(message, options);
     },
-    async handlePostMessage(req: express.Request, res: express.Response, parsedBody?: unknown) {
-      const body = parsedBody ?? (req as express.Request & { body?: unknown }).body;
+    async handleRequest(req: IncomingMessage, res: ServerResponse, parsedBody?: unknown) {
+      const body = parsedBody ?? (req as IncomingMessage & { body?: unknown }).body;
       const parsed = typeof body === "string" ? JSON.parse(body as string) : body;
 
       if (parsed?.method === "tools/call" && parsed.params) {
-        console.log("[MCP SSE] tools/call request", parsed.params.name, parsed.params.arguments);
+        console.log(
+          "[MCP Streamable HTTP] tools/call request",
+          parsed.params.name,
+          parsed.params.arguments,
+        );
         if (parsed.id !== undefined) pendingToolCalls.set(parsed.id, parsed.params.name);
       }
 
-      return transport.handlePostMessage(req, res, parsedBody ?? body);
+      return transport.handleRequest(req, res, parsedBody ?? body);
     },
   };
 }
 
-// Start the server in SSE mode
+interface SessionEntry {
+  transport: StreamableTransportWithHandle;
+  server: Awaited<ReturnType<typeof startServer>>;
+}
+
+// Start the server in Streamable HTTP mode (replaces deprecated SSE transport)
 export const startSSEServer = async (): Promise<Server | undefined> => {
   try {
-    const app = express();
+    const app = createMcpExpressApp();
     app.use(cors());
-    app.use(express.json());
 
-    // Store active transports and their associated server instances
-    const transports = new Map<string, ReturnType<typeof wrapTransportWithToolLogging>>();
+    const sessions = new Map<string, SessionEntry>();
 
-    // SSE endpoint — each connection gets its own McpServer instance
-    app.get("/sse", async (req, res) => {
+    const createNewSession = (): SessionEntry => {
       const server = startServer();
-      const rawTransport = new SSEServerTransport("/message", res);
+      const rawTransport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        onsessioninitialized: (sessionId) => {
+          sessions.set(sessionId, { transport, server });
+          Logger.info(`Streamable HTTP session initialized: ${sessionId}`);
+        },
+        onsessionclosed: (sessionId) => {
+          const entry = sessions.get(sessionId);
+          if (entry) {
+            sessions.delete(sessionId);
+            entry.server.close().catch(() => {});
+            Logger.info(`Streamable HTTP session closed: ${sessionId}`);
+          }
+        },
+      });
       const transport = wrapTransportWithToolLogging(rawTransport);
 
-      Logger.info(`New SSE connection: ${transport.sessionId}`);
-      transports.set(transport.sessionId, transport);
+      return { transport, server };
+    };
 
-      res.on("close", async () => {
-        Logger.info(`SSE connection closed: ${transport.sessionId}`);
-        transports.delete(transport.sessionId);
-        await server.close();
-      });
+    // Single endpoint for Streamable HTTP (GET for SSE, POST for JSON-RPC)
+    app.all("/mcp", async (req, res) => {
+      const sessionId =
+        req.get("mcp-session-id") ?? (req.headers["mcp-session-id"] as string | undefined);
+      let entry: SessionEntry | undefined = sessionId ? sessions.get(sessionId) : undefined;
 
-      await server.connect(transport);
-    });
-
-    // Message endpoint
-    app.post("/message", async (req, res) => {
-      const sessionId = req.query.sessionId as string;
-      const transport = transports.get(sessionId);
-
-      if (!transport) {
-        res.status(404).json({ error: "Session not found" });
-
-        return;
+      if (!entry) {
+        entry = createNewSession();
+        await entry.server.connect(entry.transport);
       }
 
-      await transport.handlePostMessage(req, res);
+      await entry.transport.handleRequest(req, res, req.body);
     });
 
     // Health check
     app.get("/health", (req, res) => {
-      res.json({ status: "ok", mode: "sse" });
+      res.json({ status: "ok", mode: "streamable-http" });
     });
 
     const httpServer = app.listen(PORT, () => {
-      Logger.info(`Binance MCP Server running on SSE mode at http://localhost:${PORT}`);
-      Logger.info(`SSE endpoint: http://localhost:${PORT}/sse`);
+      Logger.info(`Binance MCP Server running in Streamable HTTP mode at http://localhost:${PORT}`);
+      Logger.info(`MCP endpoint: http://localhost:${PORT}/mcp`);
     });
 
     return httpServer;
   } catch (error) {
-    Logger.error("Error starting Binance MCP SSE server:", error);
+    Logger.error("Error starting Binance MCP Streamable HTTP server:", error);
 
     return undefined;
   }
