@@ -28,7 +28,7 @@ export function registerBinanceAutoInvestGetSourceAssetList(server: McpServer) {
         if (indexId !== undefined) params.indexId = indexId;
         if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
 
-        const response = await autoInvestClient.restAPI.querySourceAssetList(params);
+        const response = await (autoInvestClient as any).restAPI.querySourceAssetList(params);
         const data = await response.data();
 
         return {

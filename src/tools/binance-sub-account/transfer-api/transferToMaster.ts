@@ -24,7 +24,7 @@ export function registerBinanceSubAccountTransferToMaster(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.subAccountTransferSubToMaster({
+        const response = await (spotClient as any).restAPI.subAccountTransferSubToMaster({
           asset: params.asset,
           amount: params.amount,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

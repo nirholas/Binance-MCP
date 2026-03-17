@@ -25,7 +25,7 @@ export function registerBinanceSubAccountApiPermission(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountApiIpRestriction({
+        const response = await (spotClient as any).restAPI.getSubAccountApiIpRestriction({
           email: params.email,
           subAccountApiKey: params.subAccountApiKey,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

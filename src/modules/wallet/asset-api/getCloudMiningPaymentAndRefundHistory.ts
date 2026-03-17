@@ -28,7 +28,9 @@ export function registerBinanceWalletGetCloudMiningPaymentAndRefundHistory(serve
         if (pageSize !== undefined) params.pageSize = pageSize;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.getCloudMiningPaymentAndRefundHistory(params);
+        const response = await (walletClient as any).restAPI.getCloudMiningPaymentAndRefundHistory(
+          params,
+        );
         const data = await response.data();
 
         return {

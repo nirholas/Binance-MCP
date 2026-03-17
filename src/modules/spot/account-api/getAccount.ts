@@ -19,7 +19,7 @@ export function registerBinanceGetAccount(server: McpServer) {
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.getAccount(params);
+        const response = await (spotClient as any).restAPI.getAccount(params);
 
         const data = await response.data();
 

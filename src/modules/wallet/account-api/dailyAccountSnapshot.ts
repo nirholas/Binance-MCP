@@ -26,7 +26,7 @@ export function registerBinanceWalletDailyAccountSnapshot(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.dailyAccountSnapshot(params);
+        const response = await (walletClient as any).restAPI.dailyAccountSnapshot(params);
         const data = await response.data();
 
         return {

@@ -25,7 +25,7 @@ export function registerSimpleEarnFlexibleSubscriptionPreview(server: McpServer)
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleSubscriptionPreview({
+        const response = await (simpleEarnClient as any).restAPI.getFlexibleSubscriptionPreview({
           productId: params.productId,
           amount: params.amount,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

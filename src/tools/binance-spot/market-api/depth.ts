@@ -20,7 +20,7 @@ export function registerBinanceDepth(server: McpServer) {
         const params: any = { symbol };
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.depth(params);
+        const response = await (spotClient as any).restAPI.depth(params);
 
         const data = await response.data();
 

@@ -17,7 +17,7 @@ export function registerBinanceCryptoLoanFlexibleLoanableAssets(server: McpServe
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanAssets({
+        const response = await (cryptoLoanClient as any).restAPI.getFlexibleLoanAssets({
           ...(params.loanCoin && { loanCoin: params.loanCoin }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

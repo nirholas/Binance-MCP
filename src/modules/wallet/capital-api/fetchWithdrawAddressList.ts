@@ -9,7 +9,7 @@ export function registerBinanceWalletFetchWithdrawAddressList(server: McpServer)
     { description: "Fetch withdraw address list." },
     async () => {
       try {
-        const response = await walletClient.restAPI.fetchWithdrawAddressList();
+        const response = await (walletClient as any).restAPI.fetchWithdrawAddressList();
         const data = await response.data();
 
         return {

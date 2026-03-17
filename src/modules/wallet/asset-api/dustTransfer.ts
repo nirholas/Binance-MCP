@@ -20,7 +20,7 @@ export function registerBinanceWalletDustTransfer(server: McpServer) {
         const params: any = { asset };
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.dustTransfer(params);
+        const response = await (walletClient as any).restAPI.dustTransfer(params);
         const data = await response.data();
 
         return {

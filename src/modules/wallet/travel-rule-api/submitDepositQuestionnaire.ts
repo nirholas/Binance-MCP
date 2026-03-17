@@ -30,7 +30,7 @@ export function registerBinanceWalletSubmitDepositQuestionnaire(server: McpServe
         };
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.submitDepositQuestionnaire(params);
+        const response = await (walletClient as any).restAPI.submitDepositQuestionnaire(params);
         const data = await response.data();
 
         return {

@@ -34,7 +34,7 @@ export function registerSimpleEarnRedeemFlexible(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.redeemFlexibleProduct({
+        const response = await (simpleEarnClient as any).restAPI.redeemFlexibleProduct({
           productId: params.productId,
           ...(params.redeemAll !== undefined && { redeemAll: params.redeemAll }),
           ...(params.amount && { amount: params.amount }),

@@ -24,7 +24,7 @@ export function registerSimpleEarnLockedPersonalQuota(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getLockedPersonalLeftQuota({
+        const response = await (simpleEarnClient as any).restAPI.getLockedPersonalLeftQuota({
           projectId: params.projectId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

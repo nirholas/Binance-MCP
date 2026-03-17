@@ -24,7 +24,9 @@ export function registerFlexibleCollateralAssets(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getFlexibleCollateralAssets({
+        const response = await (
+          cryptoLoanClient as any
+        ).restAPI.getFlexibleLoanCollateralAssetsData({
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

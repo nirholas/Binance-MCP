@@ -31,7 +31,7 @@ export function registerBinanceWalletDepositHistoryTravelRule(server: McpServer)
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.depositHistoryTravelRule(params);
+        const response = await (walletClient as any).restAPI.depositHistoryTravelRule(params);
         const data = await response.data();
 
         return {

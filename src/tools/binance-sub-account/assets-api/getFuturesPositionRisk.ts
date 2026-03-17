@@ -28,7 +28,7 @@ export function registerBinanceSubAccountFuturesPositionRisk(server: McpServer) 
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountFuturesPositionRiskV2({
+        const response = await (spotClient as any).restAPI.getSubAccountFuturesPositionRiskV2({
           email: params.email,
           ...(params.futuresType && { futuresType: params.futuresType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

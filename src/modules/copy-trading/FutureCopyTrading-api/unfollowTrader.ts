@@ -24,7 +24,7 @@ export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.unfollowTrader({
+        const response = await (copyTradingClient as any).restAPI.unfollowTrader({
           leadPortfolioId: params.leadPortfolioId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

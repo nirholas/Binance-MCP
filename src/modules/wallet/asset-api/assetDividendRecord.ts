@@ -27,7 +27,7 @@ export function registerBinanceWalletAssetDividendRecord(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.assetDividendRecord(params);
+        const response = await (walletClient as any).restAPI.assetDividendRecord(params);
         const data = await response.data();
 
         return {

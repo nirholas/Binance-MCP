@@ -16,7 +16,7 @@ export function registerBinancePutUserDataStream(server: McpServer) {
     },
     async ({ listenKey }) => {
       try {
-        const response = await spotClient.restAPI.putUserDataStream({
+        const response = await (spotClient as any).restAPI.putUserDataStream({
           listenKey: listenKey,
         });
 

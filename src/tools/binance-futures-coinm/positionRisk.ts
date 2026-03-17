@@ -18,7 +18,7 @@ export function registerBinanceFuturesCOINMPositionRisk(server: McpServer) {
     },
     async (params) => {
       try {
-        const data = await deliveryClient.getPositionRisk({
+        const data = await deliveryClient.positionRisk({
           ...(params.marginAsset && { marginAsset: params.marginAsset }),
           ...(params.pair && { pair: params.pair }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

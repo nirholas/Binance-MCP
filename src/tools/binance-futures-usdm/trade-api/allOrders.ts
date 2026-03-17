@@ -27,7 +27,8 @@ export function registerBinanceFuturesAllOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await futuresClient.restAPI.allOrders(params.symbol, {
+        const response = await futuresClient.restAPI.allOrders({
+          symbol: params.symbol,
           orderId: params.orderId,
           startTime: params.startTime,
           endTime: params.endTime,

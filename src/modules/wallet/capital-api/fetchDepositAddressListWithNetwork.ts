@@ -22,7 +22,9 @@ export function registerBinanceWalletFetchDepositAddressListWithNetwork(server: 
         if (network !== undefined) params.network = network;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.fetchDepositAddressListWithNetwork(params);
+        const response = await (walletClient as any).restAPI.fetchDepositAddressListWithNetwork(
+          params,
+        );
         const data = await response.data();
 
         return {

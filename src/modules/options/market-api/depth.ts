@@ -30,12 +30,10 @@ export function registerOptionsMarketDepth(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.depth({
+        const data = await optionsClient.depth({
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Order Book - ${params.symbol}\n\n`;
 

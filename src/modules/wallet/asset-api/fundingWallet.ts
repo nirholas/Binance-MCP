@@ -23,7 +23,7 @@ export function registerBinanceWalletFundingWallet(server: McpServer) {
         if (needBtcValuation !== undefined) params.needBtcValuation = needBtcValuation;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.fundingWallet(params);
+        const response = await (walletClient as any).restAPI.fundingWallet(params);
         const data = await response.data();
 
         return {

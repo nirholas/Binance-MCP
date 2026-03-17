@@ -32,7 +32,7 @@ export function registerBinanceSubAccountSpotSummary(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.querySubAccountSpotAssetsSummary({
+        const response = await (spotClient as any).restAPI.querySubAccountSpotAssetsSummary({
           ...(params.email && { email: params.email }),
           ...(params.page && { page: params.page }),
           ...(params.size && { size: params.size }),

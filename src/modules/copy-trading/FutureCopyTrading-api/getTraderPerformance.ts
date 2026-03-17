@@ -25,7 +25,7 @@ export function registerBinanceGetTraderPerformance(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getTraderPerformance({
+        const response = await (copyTradingClient as any).restAPI.getTraderPerformance({
           leadPortfolioId: params.leadPortfolioId,
           ...(params.tradeType && { tradeType: params.tradeType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

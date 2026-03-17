@@ -26,7 +26,7 @@ export function registerBinanceSubAccountTransferToSub(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.subAccountTransferSubToSub({
+        const response = await (spotClient as any).restAPI.subAccountTransferSubToSub({
           toEmail: params.toEmail,
           asset: params.asset,
           amount: params.amount,

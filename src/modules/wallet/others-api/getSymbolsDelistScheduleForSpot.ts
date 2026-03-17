@@ -9,7 +9,7 @@ export function registerBinanceWalletGetSymbolsDelistScheduleForSpot(server: Mcp
     { description: "Get delist schedule for spot symbols." },
     async () => {
       try {
-        const response = await walletClient.restAPI.getSymbolsDelistScheduleForSpot();
+        const response = await (walletClient as any).restAPI.getSymbolsDelistScheduleForSpot();
         const data = await response.data();
 
         return {

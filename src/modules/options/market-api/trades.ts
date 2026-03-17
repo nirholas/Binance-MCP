@@ -30,12 +30,10 @@ export function registerOptionsMarketTrades(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.trades({
+        const data = await optionsClient.trades({
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Recent Trades - ${params.symbol}\n\n`;
 

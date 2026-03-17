@@ -27,13 +27,11 @@ export function registerOptionsGetOpenOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.openOrders({
+        const data = await optionsClient.openOrders({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.underlying && { underlying: params.underlying }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Open Options Orders\n\n`;
 

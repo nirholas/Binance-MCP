@@ -15,8 +15,7 @@ export function registerOptionsMarketPing(server: McpServer) {
     { description: "Test connectivity to the Options API. Returns empty object if successful." },
     async () => {
       try {
-        const response = await optionsClient.restAPI.ping();
-        const data = await response.data();
+        const data = await optionsClient.ping();
 
         return {
           content: [

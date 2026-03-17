@@ -77,7 +77,7 @@ export function registerBinanceNewOrder(server: McpServer) {
         if (icebergQty !== undefined) params.icebergQty = icebergQty;
         if (newOrderRespType) params.newOrderRespType = newOrderRespType;
 
-        const response = await spotClient.restAPI.newOrder(params);
+        const response = await (spotClient as any).restAPI.newOrder(params);
 
         const data = await response.data();
 

@@ -30,8 +30,8 @@ export function registerUserDataStreamTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_create_listen_key",
-    {},
-    `Create a new listen key for User Data Stream WebSocket connection.
+    {
+      description: `Create a new listen key for User Data Stream WebSocket connection.
 
 The listen key is used to subscribe to real-time account updates via WebSocket.
 Connect to: ${BINANCE_US_CONFIG.WS_URL}/ws/<listenKey>
@@ -48,7 +48,7 @@ The stream sends updates for:
 - executionReport: Order/trade updates
 
 This endpoint requires API key but does NOT require signature.`,
-    {},
+    },
     async () => {
       try {
         // This endpoint only requires API key, not signature
@@ -90,8 +90,8 @@ Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   server.registerTool(
     "binance_us_keepalive_listen_key",
-    {},
-    `Extend the validity of a listen key by 60 minutes.
+    {
+      description: `Extend the validity of a listen key by 60 minutes.
 
 ⚠️ IMPORTANT:
 - Call this every 30 minutes to prevent the stream from closing
@@ -99,10 +99,12 @@ Response: ${JSON.stringify(response, null, 2)}`,
 - This resets the 60-minute expiration timer
 
 This endpoint requires API key but does NOT require signature.`,
-    {
-      listenKey: z.string().describe("The listen key to keep alive"),
+      inputSchema: {
+        listenKey: z.string().describe("The listen key to keep alive"),
+      },
     },
-    async ({ listenKey }) => {
+    async (params: { listenKey: string }) => {
+      const { listenKey } = params;
       try {
         await makeSignedRequest("PUT", "/api/v3/userDataStream", { listenKey });
 
@@ -135,17 +137,19 @@ Remember to call this again in 30 minutes to maintain the connection.`,
   // =====================================================================
   server.registerTool(
     "binance_us_close_listen_key",
-    {},
-    `Close a User Data Stream by invalidating the listen key.
+    {
+      description: `Close a User Data Stream by invalidating the listen key.
 
 Use this when you're done receiving real-time updates.
 After closing, the WebSocket connection will be terminated.
 
 This endpoint requires API key but does NOT require signature.`,
-    {
-      listenKey: z.string().describe("The listen key to close/invalidate"),
+      inputSchema: {
+        listenKey: z.string().describe("The listen key to close/invalidate"),
+      },
     },
-    async ({ listenKey }) => {
+    async (params: { listenKey: string }) => {
+      const { listenKey } = params;
       try {
         await makeSignedRequest("DELETE", "/api/v3/userDataStream", { listenKey });
 
@@ -178,14 +182,14 @@ To receive real-time updates again, create a new listen key.`,
   // =====================================================================
   server.registerTool(
     "binance_us_websocket_info",
-    {},
-    `Get information about available WebSocket streams on Binance.US.
+    {
+      description: `Get information about available WebSocket streams on Binance.US.
 
 Returns details about:
 - Market data streams (public)
 - User data streams (requires listen key)
 - Connection URLs and limits`,
-    {},
+    },
     async () => {
       const info = {
         baseUrl: BINANCE_US_CONFIG.WS_URL,

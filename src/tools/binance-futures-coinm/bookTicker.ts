@@ -27,7 +27,7 @@ export function registerBinanceFuturesCOINMBookTicker(server: McpServer) {
         if (symbol) params.symbol = symbol;
         if (pair) params.pair = pair;
 
-        const data = await deliveryClient.tickerBookTicker(params);
+        const data = await deliveryClient.bookTicker(params);
 
         return {
           content: [

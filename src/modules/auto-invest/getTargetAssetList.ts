@@ -35,7 +35,7 @@ export function registerAutoInvestGetTargetAssetList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.targetAssetList({
+        const response = await (autoInvestClient as any).restAPI.getTargetAssetList({
           ...(params.targetAsset && { targetAsset: params.targetAsset }),
           ...(params.size && { size: params.size }),
           ...(params.current && { current: params.current }),

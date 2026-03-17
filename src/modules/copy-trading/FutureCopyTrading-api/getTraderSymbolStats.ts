@@ -25,7 +25,7 @@ export function registerBinanceGetTraderSymbolStats(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getTraderSymbolStats({
+        const response = await (copyTradingClient as any).restAPI.getTraderSymbolStats({
           leadPortfolioId: params.leadPortfolioId,
           ...(params.tradeType && { tradeType: params.tradeType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

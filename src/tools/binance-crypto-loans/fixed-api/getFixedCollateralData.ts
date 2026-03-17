@@ -25,7 +25,7 @@ export function registerBinanceCryptoLoansFixedCollateral(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getCollateralAssetsData({
+        const response = await (cryptoLoanClient as any).restAPI.getCollateralAssetsData({
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

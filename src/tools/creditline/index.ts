@@ -25,8 +25,8 @@ export function registerCreditLineTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_cl_account",
-    {},
-    `Get comprehensive credit line account information.
+    {
+      description: `Get comprehensive credit line account information.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 This API is only available to institutional users with approved credit facilities.
@@ -61,18 +61,21 @@ Loan Information:
 
 Balances:
 - balances: Array of asset balances (free, locked)`,
-    {
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Request validity window in ms (max: 60000)"),
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window in ms (max: 60000)"),
+      },
     },
-    async (params) => {
+    async (params: Record<string, unknown>) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", {
-          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+          ...(params.recvWindow != null && {
+            recvWindow: params.recvWindow as number,
+          }),
         });
 
         // Calculate risk level based on LTV
@@ -121,8 +124,8 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_alert_history",
-    {},
-    `Get margin call and liquidation alert history for credit line account.
+    {
+      description: `Get margin call and liquidation alert history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -143,27 +146,28 @@ Use this to:
 - Review past risk events
 - Understand account risk patterns
 - Audit margin call history`,
-    {
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(1000)
-        .optional()
-        .default(200)
-        .describe("Max records (default: 200)"),
-      alertType: z
-        .enum(["LIQUIDATION_CALL", "MARGIN_CALL"])
-        .optional()
-        .describe("Filter by alert type"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Request validity window (max: 60000)"),
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .default(200)
+          .describe("Max records (default: 200)"),
+        alertType: z
+          .enum(["LIQUIDATION_CALL", "MARGIN_CALL"])
+          .optional()
+          .describe("Filter by alert type"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -211,8 +215,8 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_transfer_history",
-    {},
-    `Get transfer history for credit line account.
+    {
+      description: `Get transfer history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -232,28 +236,29 @@ Use this to:
 - Track collateral movements
 - Audit deposit/withdrawal history
 - Reconcile account activity`,
-    {
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .default(20)
-        .describe("Max records (default: 20, max: 100)"),
-      transferType: z
-        .enum(["TRANSFER_IN", "TRANSFER_OUT"])
-        .optional()
-        .describe("Filter by transfer direction"),
-      asset: z.string().optional().describe("Filter by asset (e.g., BTC, USD)"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Request validity window (max: 60000)"),
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .default(20)
+          .describe("Max records (default: 20, max: 100)"),
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .optional()
+          .describe("Filter by transfer direction"),
+        asset: z.string().optional().describe("Filter by asset (e.g., BTC, USD)"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -300,8 +305,8 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_transfer",
-    {},
-    `Execute a transfer in or out of the credit line account.
+    {
+      description: `Execute a transfer in or out of the credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -321,18 +326,19 @@ Transfer Types:
 Response includes:
 - transferId: Unique transfer identifier
 - status: SUCCESS, PENDING, or FAILED`,
-    {
-      transferType: z
-        .enum(["TRANSFER_IN", "TRANSFER_OUT"])
-        .describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
-      transferAssetType: z.string().describe("Asset to transfer (e.g., BTC, USD)"),
-      quantity: z.number().positive().describe("Amount to transfer"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Request validity window (max: 60000)"),
+      inputSchema: {
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
+        transferAssetType: z.string().describe("Asset to transfer (e.g., BTC, USD)"),
+        quantity: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
     },
     async (params) => {
       try {
@@ -378,8 +384,8 @@ Full Response: ${JSON.stringify(response, null, 2)}`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_liquidation_history",
-    {},
-    `Get liquidation history for credit line account.
+    {
+      description: `Get liquidation history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -396,23 +402,24 @@ Use this to:
 - Review past liquidation events
 - Understand liquidation patterns
 - Audit risk management effectiveness`,
-    {
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .default(20)
-        .describe("Max records (default: 20, max: 100)"),
-      recvWindow: z
-        .number()
-        .int()
-        .max(60000)
-        .optional()
-        .describe("Request validity window (max: 60000)"),
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .default(20)
+          .describe("Max records (default: 20, max: 100)"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
     },
     async (params) => {
       try {

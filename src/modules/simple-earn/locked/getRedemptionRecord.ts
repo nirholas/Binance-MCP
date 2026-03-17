@@ -30,7 +30,7 @@ export function registerSimpleEarnLockedRedemptionRecord(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getLockedRedemptionRecord({
+        const response = await (simpleEarnClient as any).restAPI.getLockedRedemptionRecord({
           ...(params.positionId && { positionId: params.positionId }),
           ...(params.redeemId && { redeemId: params.redeemId }),
           ...(params.asset && { asset: params.asset }),

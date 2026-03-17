@@ -35,7 +35,7 @@ export function registerBinanceMarginGetAllOco(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.queryMarginAccountsAllOco({
+        const response = await (marginClient as any).restAPI.queryMarginAccountsAllOco({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.fromId !== undefined && { fromId: params.fromId }),
           ...(params.startTime && { startTime: params.startTime }),

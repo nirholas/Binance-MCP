@@ -46,7 +46,7 @@ export function registerBinanceWalletWithdrawTravelRule(server: McpServer) {
         if (name !== undefined) params.name = name;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.withdrawTravelRule(params);
+        const response = await (walletClient as any).restAPI.withdrawTravelRule(params);
         const data = await response.data();
 
         return {

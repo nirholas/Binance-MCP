@@ -23,7 +23,7 @@ export function registerSimpleEarnAccount(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getSimpleEarnAccount({
+        const response = await (simpleEarnClient as any).restAPI.getSimpleEarnAccount({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

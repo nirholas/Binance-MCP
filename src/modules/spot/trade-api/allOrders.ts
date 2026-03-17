@@ -30,7 +30,7 @@ export function registerBinanceAllOrders(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.allOrders(params);
+        const response = await (spotClient as any).restAPI.allOrders(params);
 
         const data = await response.data();
 

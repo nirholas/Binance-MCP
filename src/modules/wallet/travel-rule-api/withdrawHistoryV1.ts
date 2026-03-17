@@ -31,7 +31,7 @@ export function registerBinanceWalletWithdrawHistoryV1(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.withdrawHistoryV1(params);
+        const response = await (walletClient as any).restAPI.withdrawHistoryV1(params);
         const data = await response.data();
 
         return {

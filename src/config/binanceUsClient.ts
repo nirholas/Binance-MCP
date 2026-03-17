@@ -430,7 +430,7 @@ export async function makeSignedRequest(
       ? `${BASE_URL}${endpoint}?${signedQueryString}`
       : `${BASE_URL}${endpoint}`;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "X-MBX-APIKEY": API_KEY,
     "Content-Type": "application/x-www-form-urlencoded",
   };
@@ -469,10 +469,13 @@ export async function makeSignedRequest(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
+    const errorData = (await response.json().catch(() => ({ msg: response.statusText }))) as {
+      code?: number;
+      msg?: string;
+    };
     throw new BinanceUsApiError(
-      errorData.code || response.status,
-      errorData.msg || response.statusText,
+      errorData.code ?? response.status,
+      errorData.msg ?? response.statusText,
       response.status,
       rateLimitInfo,
     );
@@ -516,10 +519,13 @@ export async function makePublicRequest(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
+    const errorData = (await response.json().catch(() => ({ msg: response.statusText }))) as {
+      code?: number;
+      msg?: string;
+    };
     throw new BinanceUsApiError(
-      errorData.code || response.status,
-      errorData.msg || response.statusText,
+      errorData.code ?? response.status,
+      errorData.msg ?? response.statusText,
       response.status,
       rateLimitInfo,
     );
@@ -555,7 +561,7 @@ export async function makeMarketDataRequest(
   const queryString = buildQueryString(params);
   const url = queryString ? `${BASE_URL}${endpoint}?${queryString}` : `${BASE_URL}${endpoint}`;
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "X-MBX-APIKEY": API_KEY,
   };
 
@@ -583,10 +589,13 @@ export async function makeMarketDataRequest(
   }
 
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ msg: response.statusText }));
+    const errorData = (await response.json().catch(() => ({ msg: response.statusText }))) as {
+      code?: number;
+      msg?: string;
+    };
     throw new BinanceUsApiError(
-      errorData.code || response.status,
-      errorData.msg || response.statusText,
+      errorData.code ?? response.status,
+      errorData.msg ?? response.statusText,
       response.status,
       rateLimitInfo,
     );

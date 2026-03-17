@@ -31,7 +31,7 @@ export function registerBinanceMyTrades(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.myTrades(params);
+        const response = await (spotClient as any).restAPI.myTrades(params);
 
         const data = await response.data();
 

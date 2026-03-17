@@ -56,7 +56,7 @@ export function registerBinanceOrderOco(server: McpServer) {
         if (limitIcebergQty !== undefined) params.limitIcebergQty = limitIcebergQty;
         if (stopIcebergQty !== undefined) params.stopIcebergQty = stopIcebergQty;
 
-        const response = await spotClient.restAPI.orderOco(params);
+        const response = await (spotClient as any).restAPI.orderOco(params);
 
         const data = await response.data();
 

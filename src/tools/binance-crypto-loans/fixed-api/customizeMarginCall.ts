@@ -25,7 +25,7 @@ export function registerBinanceCryptoLoansFixedMarginCall(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.customizeMarginCall({
+        const response = await (cryptoLoanClient as any).restAPI.customizeMarginCall({
           orderId: params.orderId,
           marginCall: params.marginCall,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

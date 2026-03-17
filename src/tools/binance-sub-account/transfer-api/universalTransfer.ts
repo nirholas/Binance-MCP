@@ -43,7 +43,7 @@ export function registerBinanceSubAccountUniversalTransfer(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.universalTransfer({
+        const response = await (spotClient as any).restAPI.universalTransfer({
           fromAccountType: params.fromAccountType,
           toAccountType: params.toAccountType,
           asset: params.asset,

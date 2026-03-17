@@ -25,7 +25,7 @@ export function registerBinanceIsolatedMarginRepay(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.marginBorrowRepay({
+        const response = await (marginClient as any).restAPI.marginBorrowRepay({
           asset: params.asset,
           isIsolated: "TRUE",
           symbol: params.symbol,

@@ -28,7 +28,7 @@ export function registerSimpleEarnFlexibleRateHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleRateHistory({
+        const response = await (simpleEarnClient as any).restAPI.getFlexibleRewardsHistory({
           productId: params.productId,
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),

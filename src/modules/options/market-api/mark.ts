@@ -28,11 +28,9 @@ export function registerOptionsMarketMark(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.mark({
+        const data = await optionsClient.mark({
           ...(params.symbol && { symbol: params.symbol }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Mark Prices\n\n`;
 

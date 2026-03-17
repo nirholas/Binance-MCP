@@ -23,7 +23,7 @@ export function registerBinanceCopyTradingGetCopyPositions(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getCopyPositions({
+        const response = await (copyTradingClient as any).restAPI.getCopyPositions({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

@@ -30,7 +30,7 @@ export function registerBinancePayCreateOrder(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await payClient.restAPI.createOrder({
+        const response = await (payClient as any).restAPI.createOrder({
           orderId: params.orderId,
           currency: params.currency,
           totalAmount: params.totalAmount,

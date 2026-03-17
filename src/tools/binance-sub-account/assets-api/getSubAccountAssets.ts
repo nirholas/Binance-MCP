@@ -24,7 +24,7 @@ export function registerBinanceSubAccountAssets(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.querySubAccountAssetsV4({
+        const response = await (spotClient as any).restAPI.querySubAccountAssetsV4({
           email: params.email,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

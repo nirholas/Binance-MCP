@@ -9,7 +9,7 @@ export function registerBinanceWalletOnboardedVaspList(server: McpServer) {
     { description: "Get list of onboarded VASPs (Virtual Asset Service Providers)." },
     async () => {
       try {
-        const response = await walletClient.restAPI.onboardedVaspList();
+        const response = await (walletClient as any).restAPI.onboardedVaspList();
         const data = await response.data();
 
         return {

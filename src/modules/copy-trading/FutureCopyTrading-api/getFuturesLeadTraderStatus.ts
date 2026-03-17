@@ -21,7 +21,7 @@ export function registerBinanceGetFuturesLeadTraderStatus(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getFuturesLeadTraderStatus({
+        const response = await (copyTradingClient as any).restAPI.getFuturesLeadTraderStatus({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

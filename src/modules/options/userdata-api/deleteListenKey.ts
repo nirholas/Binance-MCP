@@ -26,10 +26,9 @@ export function registerOptionsDeleteListenKey(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.deleteListenKey({
-          ...(params.listenKey && { listenKey: params.listenKey }),
-        });
-        const data = await response.data();
+        const data = await optionsClient.closeListenKey(
+          params.listenKey ? { listenKey: params.listenKey } : {},
+        );
 
         return {
           content: [

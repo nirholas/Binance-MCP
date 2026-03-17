@@ -29,7 +29,7 @@ export function registerSimpleEarnLockedSubscriptionRecord(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getLockedSubscriptionRecord({
+        const response = await (simpleEarnClient as any).restAPI.getLockedSubscriptionRecord({
           ...(params.purchaseId && { purchaseId: params.purchaseId }),
           ...(params.asset && { asset: params.asset }),
           ...(params.startTime && { startTime: params.startTime }),

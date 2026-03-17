@@ -24,7 +24,9 @@ export function registerAutoInvestGetIndexLinkedPlanPositionDetails(server: McpS
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.planId({
+        const response = await (
+          autoInvestClient as any
+        ).restAPI.queryIndexLinkedPlanPositionDetails({
           planId: params.planId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

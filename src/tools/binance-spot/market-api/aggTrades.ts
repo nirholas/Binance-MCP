@@ -27,7 +27,7 @@ export function registerBinanceAggTrades(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.aggTrades(params);
+        const response = await (spotClient as any).restAPI.aggTrades(params);
 
         const data = await response.data();
 

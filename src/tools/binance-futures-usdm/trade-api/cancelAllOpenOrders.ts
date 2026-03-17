@@ -23,7 +23,9 @@ export function registerBinanceFuturesCancelAllOpenOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await futuresClient.restAPI.cancelAllOpenOrders(params.symbol);
+        const response = await futuresClient.restAPI.cancelAllOpenOrders({
+          symbol: params.symbol,
+        });
 
         return {
           content: [

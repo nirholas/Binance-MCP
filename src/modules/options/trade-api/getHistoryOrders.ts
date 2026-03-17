@@ -33,7 +33,7 @@ export function registerOptionsGetHistoryOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.historyOrders({
+        const data = await optionsClient.historyOrders({
           symbol: params.symbol,
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.startTime && { startTime: params.startTime }),
@@ -41,8 +41,6 @@ export function registerOptionsGetHistoryOrders(server: McpServer) {
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Order History - ${params.symbol}\n\n`;
 

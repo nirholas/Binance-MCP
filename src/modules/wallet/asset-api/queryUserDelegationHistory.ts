@@ -30,7 +30,7 @@ export function registerBinanceWalletQueryUserDelegationHistory(server: McpServe
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.queryUserDelegationHistory(params);
+        const response = await (walletClient as any).restAPI.queryUserDelegationHistory(params);
         const data = await response.data();
 
         return {

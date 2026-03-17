@@ -25,7 +25,7 @@ export function registerSimpleEarnSetAutoSubscribe(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.setLockedAutoSubscribe({
+        const response = await (simpleEarnClient as any).restAPI.setLockedAutoSubscribe({
           positionId: params.positionId,
           autoSubscribe: params.autoSubscribe,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

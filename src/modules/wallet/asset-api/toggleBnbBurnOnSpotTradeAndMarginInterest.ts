@@ -23,8 +23,9 @@ export function registerBinanceWalletToggleBnbBurnOnSpotTradeAndMarginInterest(s
         if (interestBNBBurn !== undefined) params.interestBNBBurn = interestBNBBurn;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response =
-          await walletClient.restAPI.toggleBnbBurnOnSpotTradeAndMarginInterest(params);
+        const response = await (
+          walletClient as any
+        ).restAPI.toggleBnbBurnOnSpotTradeAndMarginInterest(params);
         const data = await response.data();
 
         return {

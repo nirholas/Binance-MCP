@@ -26,10 +26,9 @@ export function registerOptionsRenewListenKey(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.renewListenKey({
-          ...(params.listenKey && { listenKey: params.listenKey }),
-        });
-        const data = await response.data();
+        const data = await optionsClient.keepAliveListenKey(
+          params.listenKey ? { listenKey: params.listenKey } : {},
+        );
 
         return {
           content: [

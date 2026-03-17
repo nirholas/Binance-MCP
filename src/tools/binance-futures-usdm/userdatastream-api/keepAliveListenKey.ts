@@ -27,10 +27,7 @@ export function registerBinanceFuturesKeepAliveListenKey(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await futuresClient.restAPI.renewListenKey({
-          ...(params.listenKey && { listenKey: params.listenKey }),
-          ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        });
+        const response = await futuresClient.restAPI.renewListenKey();
 
         const data = await response.data();
 

@@ -20,7 +20,7 @@ export function registerBinanceCryptoLoanGetCollateralRepayRate(server: McpServe
       try {
         const params: any = { loanCoin, collateralCoin, repayAmount };
 
-        const response = await cryptoLoanClient.restAPI.checkCollateralRepayRate(params);
+        const response = await (cryptoLoanClient as any).restAPI.checkCollateralRepayRate(params);
         const data = await response.data();
 
         return {

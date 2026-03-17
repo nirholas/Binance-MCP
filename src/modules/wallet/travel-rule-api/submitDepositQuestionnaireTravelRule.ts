@@ -24,7 +24,9 @@ export function registerBinanceWalletSubmitDepositQuestionnaireTravelRule(server
         };
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.submitDepositQuestionnaireTravelRule(params);
+        const response = await (walletClient as any).restAPI.submitDepositQuestionnaireTravelRule(
+          params,
+        );
         const data = await response.data();
 
         return {

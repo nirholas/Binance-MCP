@@ -32,14 +32,12 @@ export function registerOptionsMarketExerciseHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.exerciseHistory({
+        const data = await optionsClient.exerciseRecord({
           ...(params.underlying && { underlying: params.underlying }),
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Exercise History\n\n`;
 

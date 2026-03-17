@@ -20,8 +20,8 @@ export function registerStakingTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_staking_asset_info",
-    {},
-    `Get staking information for supported assets on Binance.US.
+    {
+      description: `Get staking information for supported assets on Binance.US.
 
 Returns details about staking options including APR, APY, and staking limits.
 
@@ -36,13 +36,14 @@ Response includes for each asset:
 - autoRestake: Whether rewards are automatically restaked
 
 If no asset is specified, returns information for all staking assets.`,
-    {
-      stakingAsset: z
-        .string()
-        .optional()
-        .describe("Asset symbol (e.g., BNB, ETH). If empty, returns all staking assets"),
+      inputSchema: {
+        stakingAsset: z
+          .string()
+          .optional()
+          .describe("Asset symbol (e.g., BNB, ETH). If empty, returns all staking assets"),
+      },
     },
-    async (params) => {
+    async (params: { stakingAsset?: string }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/asset", {
           ...(params.stakingAsset && { stakingAsset: params.stakingAsset.toUpperCase() }),
@@ -72,8 +73,8 @@ If no asset is specified, returns information for all staking assets.`,
   // =====================================================================
   server.registerTool(
     "binance_us_staking_stake",
-    {},
-    `Stake a supported asset on Binance.US to earn staking rewards.
+    {
+      description: `Stake a supported asset on Binance.US to earn staking rewards.
 
 ⚠️ IMPORTANT:
 - Staking locks your assets for a period of time
@@ -89,16 +90,17 @@ Parameters:
 Response includes:
 - result: SUCCESS or failure status
 - purchaseRecordId: Record ID for the staking transaction`,
-    {
-      stakingAsset: z.string().describe("Asset symbol to stake (e.g., BNB, ETH)"),
-      amount: z.number().positive().describe("Amount to stake"),
-      autoRestake: z
-        .boolean()
-        .optional()
-        .default(true)
-        .describe("Automatically restake rewards (default: true)"),
+      inputSchema: {
+        stakingAsset: z.string().describe("Asset symbol to stake (e.g., BNB, ETH)"),
+        amount: z.number().positive().describe("Amount to stake"),
+        autoRestake: z
+          .boolean()
+          .optional()
+          .default(true)
+          .describe("Automatically restake rewards (default: true)"),
+      },
     },
-    async (params) => {
+    async (params: { stakingAsset: string; amount: number; autoRestake?: boolean }) => {
       try {
         const response = await makeSignedRequest("POST", "/sapi/v1/staking/stake", {
           stakingAsset: params.stakingAsset.toUpperCase(),
@@ -130,8 +132,8 @@ Response includes:
   // =====================================================================
   server.registerTool(
     "binance_us_staking_unstake",
-    {},
-    `Unstake a previously staked asset on Binance.US.
+    {
+      description: `Unstake a previously staked asset on Binance.US.
 
 ⚠️ IMPORTANT:
 - Unstaking may take time (check unstakingPeriod in asset info)
@@ -144,11 +146,12 @@ Parameters:
 
 Response includes:
 - result: SUCCESS or failure status`,
-    {
-      stakingAsset: z.string().describe("Asset symbol to unstake (e.g., BNB, ETH)"),
-      amount: z.number().positive().describe("Amount to unstake"),
+      inputSchema: {
+        stakingAsset: z.string().describe("Asset symbol to unstake (e.g., BNB, ETH)"),
+        amount: z.number().positive().describe("Amount to unstake"),
+      },
     },
-    async (params) => {
+    async (params: { stakingAsset: string; amount: number }) => {
       try {
         const response = await makeSignedRequest("POST", "/sapi/v1/staking/unstake", {
           stakingAsset: params.stakingAsset.toUpperCase(),
@@ -179,8 +182,8 @@ Response includes:
   // =====================================================================
   server.registerTool(
     "binance_us_staking_balance",
-    {},
-    `Get current staking balance for assets on Binance.US.
+    {
+      description: `Get current staking balance for assets on Binance.US.
 
 Returns your current staking positions and their details.
 
@@ -193,13 +196,14 @@ Response includes for each staked asset:
 - autoRestake: Whether auto-restaking is enabled
 
 If no asset is specified, returns balances for all staked assets.`,
-    {
-      asset: z
-        .string()
-        .optional()
-        .describe("Staked asset symbol. If empty, returns all assets with balances"),
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Staked asset symbol. If empty, returns all assets with balances"),
+      },
     },
-    async (params) => {
+    async (params: { asset?: string }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/stakingBalance", {
           ...(params.asset && { asset: params.asset.toUpperCase() }),
@@ -229,8 +233,8 @@ If no asset is specified, returns balances for all staked assets.`,
   // =====================================================================
   server.registerTool(
     "binance_us_staking_history",
-    {},
-    `Get staking transaction history for assets on Binance.US.
+    {
+      description: `Get staking transaction history for assets on Binance.US.
 
 Returns a history of staking and unstaking transactions.
 
@@ -242,24 +246,37 @@ Response includes for each transaction:
 - status: Transaction status (SUCCESS, PENDING, etc.)
 
 If no asset is specified, returns history for all assets.`,
-    {
-      asset: z
-        .string()
-        .optional()
-        .describe("Asset symbol. If empty, returns all assets with history"),
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      page: z.number().int().positive().optional().default(1).describe("Page number (default: 1)"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(500)
-        .optional()
-        .default(500)
-        .describe("Records per page (default: 500, max: 500)"),
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Asset symbol. If empty, returns all assets with history"),
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        page: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .default(1)
+          .describe("Page number (default: 1)"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(500)
+          .optional()
+          .default(500)
+          .describe("Records per page (default: 500, max: 500)"),
+      },
     },
-    async (params) => {
+    async (params: {
+      asset?: string;
+      startTime?: number;
+      endTime?: number;
+      page?: number;
+      limit?: number;
+    }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/history", {
           ...(params.asset && { asset: params.asset.toUpperCase() }),
@@ -293,8 +310,8 @@ If no asset is specified, returns history for all assets.`,
   // =====================================================================
   server.registerTool(
     "binance_us_staking_rewards",
-    {},
-    `Get staking rewards history for assets on Binance.US.
+    {
+      description: `Get staking rewards history for assets on Binance.US.
 
 Returns a history of staking rewards earned over time.
 
@@ -311,24 +328,31 @@ Each reward record contains:
 - autoRestaked: Whether the reward was automatically restaked
 
 If no asset is specified, returns rewards for all staked assets.`,
-    {
-      asset: z
-        .string()
-        .optional()
-        .describe("Staked asset. If empty, returns all assets with rewards"),
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      page: z.number().int().positive().optional().describe("Page/batch number"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(500)
-        .optional()
-        .default(500)
-        .describe("Records per batch (default: 500)"),
+      inputSchema: {
+        asset: z
+          .string()
+          .optional()
+          .describe("Staked asset. If empty, returns all assets with rewards"),
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        page: z.number().int().positive().optional().describe("Page/batch number"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(500)
+          .optional()
+          .default(500)
+          .describe("Records per batch (default: 500)"),
+      },
     },
-    async (params) => {
+    async (params: {
+      asset?: string;
+      startTime?: number;
+      endTime?: number;
+      page?: number;
+      limit?: number;
+    }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/staking/stakingRewardsHistory", {
           ...(params.asset && { asset: params.asset.toUpperCase() }),

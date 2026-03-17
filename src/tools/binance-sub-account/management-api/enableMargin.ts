@@ -24,7 +24,7 @@ export function registerBinanceSubAccountEnableMargin(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.enableMarginForSubAccount({
+        const response = await (spotClient as any).restAPI.enableMarginForSubAccount({
           email: params.email,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

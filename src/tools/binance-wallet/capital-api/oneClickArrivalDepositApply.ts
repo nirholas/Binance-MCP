@@ -21,7 +21,7 @@ export function registerBinanceWalletOneClickArrivalDepositApply(server: McpServ
         if (subAccountId !== undefined) params.subAccountId = subAccountId;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.oneClickArrivalDepositApply(params);
+        const response = await (walletClient as any).restAPI.oneClickArrivalDepositApply(params);
         const data = await response.data();
 
         return {

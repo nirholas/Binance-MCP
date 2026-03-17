@@ -25,7 +25,7 @@ export function registerBinanceTicker(server: McpServer) {
         if (symbol) params.symbol = symbol;
         if (windowSize) params.windowSize = windowSize;
 
-        const response = await spotClient.restAPI.ticker(params);
+        const response = await (spotClient as any).restAPI.ticker(params);
 
         const data = await response.data();
 

@@ -30,7 +30,7 @@ export function registerSimpleEarnSubscribeLocked(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.subscribeLockedProduct({
+        const response = await (simpleEarnClient as any).restAPI.subscribeLockedProduct({
           projectId: params.projectId,
           amount: params.amount,
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),

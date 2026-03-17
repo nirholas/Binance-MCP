@@ -31,7 +31,7 @@ export function registerBinanceCryptoLoansFlexibleRepay(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.flexibleLoanRepay({
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanRepay({
           loanCoin: params.loanCoin,
           collateralCoin: params.collateralCoin,
           repayAmount: params.repayAmount,

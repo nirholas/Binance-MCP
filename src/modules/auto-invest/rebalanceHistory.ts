@@ -33,7 +33,7 @@ export function registerAutoInvestRebalanceHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.rebalanceHistory({
+        const response = await (autoInvestClient as any).restAPI.indexLinkedPlanRebalanceDetails({
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.size && { size: params.size }),

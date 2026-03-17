@@ -26,7 +26,7 @@ export function registerSimpleEarnLockedSubscriptionPreview(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getLockedSubscriptionPreview({
+        const response = await (simpleEarnClient as any).restAPI.getLockedSubscriptionPreview({
           projectId: params.projectId,
           amount: params.amount,
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),

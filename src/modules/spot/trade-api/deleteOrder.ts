@@ -23,7 +23,7 @@ export function registerBinanceDeleteOrder(server: McpServer) {
         if (orderId) params.orderId = orderId;
         if (origClientOrderId) params.origClientOrderId = origClientOrderId;
 
-        const response = await spotClient.restAPI.deleteOrder(params);
+        const response = await (spotClient as any).restAPI.deleteOrder(params);
 
         const data = await response.data();
 

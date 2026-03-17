@@ -16,7 +16,7 @@ export function registerBinanceDeleteUserDataStream(server: McpServer) {
     },
     async ({ listenKey }) => {
       try {
-        const response = await spotClient.restAPI.deleteUserDataStream({
+        const response = await (spotClient as any).restAPI.deleteUserDataStream({
           listenKey: listenKey,
         });
 

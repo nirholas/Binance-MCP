@@ -29,7 +29,7 @@ export function registerBinanceMyAllocations(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.myAllocations(params);
+        const response = await (spotClient as any).restAPI.myAllocations(params);
 
         const data = await response.data();
 

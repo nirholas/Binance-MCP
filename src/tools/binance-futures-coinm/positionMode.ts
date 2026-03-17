@@ -16,7 +16,7 @@ export function registerBinanceFuturesCOINMPositionMode(server: McpServer) {
     },
     async ({ dualSidePosition }) => {
       try {
-        const data = await deliveryClient.positionSideDual({
+        const data = await deliveryClient.positionMode({
           dualSidePosition: dualSidePosition ? "true" : "false",
         });
 

@@ -28,7 +28,7 @@ export function registerBinanceAutoInvestRedemption(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.redemption({
+        const response = await (autoInvestClient as any).restAPI.redemption({
           indexId: params.indexId,
           redemptionPercentage: params.redemptionPercentage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

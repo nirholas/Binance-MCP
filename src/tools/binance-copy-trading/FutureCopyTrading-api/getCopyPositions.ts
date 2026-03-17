@@ -19,7 +19,7 @@ export function registerBinanceCopyTradingGetPositions(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getCopyTradingPositions({
+        const response = await (copyTradingClient as any).restAPI.getCopyTradingPositions({
           ...(params.portfolioId && { portfolioId: params.portfolioId }),
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

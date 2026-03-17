@@ -34,7 +34,7 @@ export function registerOptionsGetBillHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.bill({
+        const data = await optionsClient.bill({
           currency: params.currency,
           ...(params.recordId && { recordId: params.recordId }),
           ...(params.startTime && { startTime: params.startTime }),
@@ -42,8 +42,6 @@ export function registerOptionsGetBillHistory(server: McpServer) {
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Bill History\n\n`;
 

@@ -24,7 +24,7 @@ export function registerAutoInvestGetIndexInfo(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.indexInfo({
+        const response = await (autoInvestClient as any).restAPI.queryIndexDetails({
           ...(params.indexId && { indexId: params.indexId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

@@ -30,7 +30,7 @@ export function registerSimpleEarnFlexibleSubscriptionRecord(server: McpServer) 
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleSubscriptionRecord({
+        const response = await (simpleEarnClient as any).restAPI.getFlexibleSubscriptionRecord({
           ...(params.productId && { productId: params.productId }),
           ...(params.purchaseId && { purchaseId: params.purchaseId }),
           ...(params.asset && { asset: params.asset }),

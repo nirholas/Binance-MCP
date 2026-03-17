@@ -20,7 +20,7 @@ export function registerBinanceAccountCommission(server: McpServer) {
         const params: any = { symbol };
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.accountCommission(params);
+        const response = await (spotClient as any).restAPI.accountCommission(params);
 
         const data = await response.data();
 

@@ -18,8 +18,7 @@ export function registerOptionsCreateListenKey(server: McpServer) {
     },
     async () => {
       try {
-        const response = await optionsClient.restAPI.createListenKey();
-        const data = await response.data();
+        const data = await optionsClient.createListenKey();
 
         return {
           content: [

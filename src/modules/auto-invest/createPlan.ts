@@ -48,7 +48,7 @@ export function registerAutoInvestCreatePlan(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.planAdd({
+        const response = await (autoInvestClient as any).restAPI.investmentPlanCreation({
           sourceType: params.sourceType,
           planType: params.planType,
           subscriptionAmount: params.subscriptionAmount,

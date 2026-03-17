@@ -142,7 +142,43 @@ async function makePublicRequest(endpoint: string, params: Record<string, any> =
   return response.json();
 }
 
-// Portfolio Margin client wrapper
+// Portfolio Margin uses papi.binance.com for trade/account sub-endpoints
+const PAPI_BASE_URL = URLS.PAPI_BASE_URL;
+
+async function makePapiSignedRequest(
+  method: "GET" | "POST" | "DELETE" | "PUT",
+  endpoint: string,
+  params: Record<string, any> = {},
+): Promise<any> {
+  const timestamp = Date.now();
+  const queryParams = { ...params, timestamp };
+  const queryString = new URLSearchParams(
+    Object.fromEntries(Object.entries(queryParams).map(([k, v]) => [k, String(v)])),
+  ).toString();
+  const signature = generateSignature(queryString);
+  const url = `${PAPI_BASE_URL}${endpoint}?${queryString}&signature=${signature}`;
+
+  const response = await fetch(url, {
+    method,
+    headers: {
+      "X-MBX-APIKEY": API_KEY,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Binance API error: ${response.status} - ${JSON.stringify(errorData)}`);
+  }
+
+  return response.json();
+}
+
+function wrapData<T>(p: Promise<T>): Promise<{ data: () => Promise<T> }> {
+  return p.then((data) => ({ data: () => Promise.resolve(data) }));
+}
+
+// Portfolio Margin client wrapper (includes restAPI for modules that expect .restAPI.method().then(r => r.data()))
 export const portfolioMarginClient = {
   getAccount: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/portfolio/account", params),
@@ -172,6 +208,85 @@ export const portfolioMarginClient = {
     makeSignedRequest("GET", "/sapi/v1/portfolio/margin-asset-leverage", params),
   getBalance: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/portfolio/balance", params),
+  restAPI: {
+    account: (params: Record<string, any> = {}) =>
+      wrapData(makeSignedRequest("GET", "/sapi/v1/portfolio/account", params)),
+    balance: (params: Record<string, any> = {}) =>
+      wrapData(makeSignedRequest("GET", "/sapi/v1/portfolio/balance", params)),
+    umAccount: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/account", params)),
+    umPositionRisk: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/positionRisk", params)),
+    cmAccount: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/account", params)),
+    cmPositionRisk: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/positionRisk", params)),
+    marginAccount: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/marginAccount", params)),
+    marginMaxWithdraw: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/marginMaxWithdraw", params)),
+    marginMaxBorrowable: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/marginMaxBorrowable", params)),
+    umNewOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/um/order", params)),
+    umCancelOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/um/order", params)),
+    umOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/order", params)),
+    umOpenOrders: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/openOrders", params)),
+    umAllOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/allOrders", params)),
+    umUserTrades: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/um/userTrades", params)),
+    umLeverage: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/um/leverage", params)),
+    umMarginType: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/um/marginType", params)),
+    umCancelAllOpenOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/um/allOpenOrders", params)),
+    cmNewOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/cm/order", params)),
+    cmCancelOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/cm/order", params)),
+    cmOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/order", params)),
+    cmOpenOrders: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/openOrders", params)),
+    cmAllOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/allOrders", params)),
+    cmUserTrades: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/cm/userTrades", params)),
+    cmLeverage: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/cm/leverage", params)),
+    cmMarginType: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/cm/marginType", params)),
+    cmCancelAllOpenOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/cm/allOpenOrders", params)),
+    marginNewOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/margin/order", params)),
+    marginCancelOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/margin/order", params)),
+    marginOrder: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/margin/order", params)),
+    marginOpenOrders: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/margin/openOrders", params)),
+    marginAllOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/margin/allOrders", params)),
+    marginMyTrades: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("GET", "/papi/v1/margin/myTrades", params)),
+    marginLoan: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/margin/loan", params)),
+    marginRepay: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("POST", "/papi/v1/margin/repay", params)),
+    marginCancelAllOpenOrders: (params: Record<string, any>) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/margin/allOpenOrders", params)),
+    createListenKey: () => wrapData(makePapiSignedRequest("POST", "/papi/v1/listenKey", {})),
+    deleteListenKey: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("DELETE", "/papi/v1/listenKey", params)),
+    renewListenKey: (params: Record<string, any> = {}) =>
+      wrapData(makePapiSignedRequest("PUT", "/papi/v1/listenKey", params)),
+  },
 };
 
 // Gift Card client wrapper
@@ -190,6 +305,15 @@ export const giftCardClient = {
     makeSignedRequest("POST", "/sapi/v1/giftcard/buyCode", params),
   getTokenLimit: (params: Record<string, any> = {}) =>
     makeSignedRequest("GET", "/sapi/v1/giftcard/buyCode/token-limit", params),
+  restAPI: {
+    createCode: (p: Record<string, any> = {}) => wrapData(giftCardClient.createCode(p)),
+    createDualTokenCode: (p: Record<string, any> = {}) =>
+      wrapData(giftCardClient.createDualTokenCode(p)),
+    redeemCode: (p: Record<string, any> = {}) => wrapData(giftCardClient.redeemCode(p)),
+    redeemDualTokenCode: (p: Record<string, any> = {}) => wrapData(giftCardClient.redeemCode(p)),
+    verify: (p: Record<string, any> = {}) => wrapData(giftCardClient.verify(p)),
+    tokenLimit: (p: Record<string, any> = {}) => wrapData(giftCardClient.getTokenLimit(p)),
+  },
 };
 
 // Margin client wrapper
@@ -357,6 +481,8 @@ export const futuresClient = {
   // Account/Trade
   newOrder: (params: Record<string, any>) =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/order", params),
+  modifyOrder: (params: Record<string, any>) =>
+    makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "PUT", "/fapi/v1/order", params),
   batchOrders: (params: Record<string, any>) =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/batchOrders", params),
   getOrder: (params: Record<string, any>) =>
@@ -397,6 +523,8 @@ export const futuresClient = {
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/positionSide/dual", params),
   changePositionMode: (params: Record<string, any>) =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/positionSide/dual", params),
+  multiAssetsMargin: (params: Record<string, any>) =>
+    makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/multiAssetsMargin", params),
   // User Data Stream
   createListenKey: () =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/listenKey", {}),
@@ -404,6 +532,126 @@ export const futuresClient = {
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "PUT", "/fapi/v1/listenKey", {}),
   closeListenKey: () =>
     makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "DELETE", "/fapi/v1/listenKey", {}),
+  restAPI: {
+    account: (p: Record<string, any> = {}) => wrapData(futuresClient.account(p)),
+    balance: (p: Record<string, any> = {}) => wrapData(futuresClient.balance(p)),
+    positionRisk: (p: Record<string, any> = {}) => wrapData(futuresClient.positionRisk(p)),
+    ping: () => wrapData(futuresClient.ping()),
+    time: () => wrapData(futuresClient.time()),
+    exchangeInfo: () => wrapData(futuresClient.exchangeInfo()),
+    depth: (p: Record<string, any>) => wrapData(futuresClient.depth(p)),
+    trades: (p: Record<string, any>) => wrapData(futuresClient.trades(p)),
+    historicalTrades: (p: Record<string, any>) => wrapData(futuresClient.historicalTrades(p)),
+    aggTrades: (p: Record<string, any>) => wrapData(futuresClient.aggTrades(p)),
+    klines: (p: Record<string, any>) => wrapData(futuresClient.klines(p)),
+    continuousKlines: (p: Record<string, any>) => wrapData(futuresClient.continuousKlines(p)),
+    indexPriceKlines: (p: Record<string, any>) => wrapData(futuresClient.indexPriceKlines(p)),
+    markPriceKlines: (p: Record<string, any>) => wrapData(futuresClient.markPriceKlines(p)),
+    premiumIndex: (p: Record<string, any> = {}) => wrapData(futuresClient.premiumIndex(p)),
+    fundingRate: (p: Record<string, any>) => wrapData(futuresClient.fundingRate(p)),
+    ticker24hr: (p: Record<string, any> = {}) => wrapData(futuresClient.ticker24hr(p)),
+    tickerPrice: (p: Record<string, any>) => wrapData(futuresClient.tickerPrice(p)),
+    bookTicker: (p: Record<string, any> = {}) => wrapData(futuresClient.bookTicker(p)),
+    openInterest: (p: Record<string, any>) => wrapData(futuresClient.openInterest(p)),
+    newOrder: (p: Record<string, any>) => wrapData(futuresClient.newOrder(p)),
+    modifyOrder: (p: Record<string, any>) => wrapData(futuresClient.modifyOrder(p)),
+    getOrder: (p: Record<string, any>) => wrapData(futuresClient.getOrder(p)),
+    queryOrder: (p: Record<string, any>) => wrapData(futuresClient.getOrder(p)),
+    cancelOrder: (p: Record<string, any>) => wrapData(futuresClient.cancelOrder(p)),
+    cancelAllOpenOrders: (p: Record<string, any> = {}) =>
+      wrapData(futuresClient.cancelAllOpenOrders(p)),
+    cancelBatchOrders: (p: Record<string, any>) => wrapData(futuresClient.cancelBatchOrders(p)),
+    openOrders: (p: Record<string, any> = {}) => wrapData(futuresClient.openOrders(p)),
+    allOrders: (p: Record<string, any>) => wrapData(futuresClient.allOrders(p)),
+    userTrades: (p: Record<string, any>) => wrapData(futuresClient.userTrades(p)),
+    income: (p: Record<string, any> = {}) => wrapData(futuresClient.income(p)),
+    commissionRate: (p: Record<string, any>) => wrapData(futuresClient.commissionRate(p)),
+    adlQuantile: (p: Record<string, any> = {}) => wrapData(futuresClient.adlQuantile(p)),
+    forceOrders: (p: Record<string, any>) => wrapData(futuresClient.forceOrders(p)),
+    positionMode: (p: Record<string, any> = {}) => wrapData(futuresClient.positionMode(p)),
+    getPositionMode: (p: Record<string, any> = {}) => wrapData(futuresClient.positionMode(p)),
+    changePositionMode: (p: Record<string, any>) => wrapData(futuresClient.changePositionMode(p)),
+    leverage: (p: Record<string, any>) => wrapData(futuresClient.leverage(p)),
+    changeInitialLeverage: (p: Record<string, any>) => wrapData(futuresClient.leverage(p)),
+    marginType: (p: Record<string, any>) => wrapData(futuresClient.marginType(p)),
+    changeMarginType: (p: Record<string, any>) => wrapData(futuresClient.marginType(p)),
+    positionMargin: (p: Record<string, any>) => wrapData(futuresClient.positionMargin(p)),
+    modifyIsolatedPositionMargin: (p: Record<string, any>) =>
+      wrapData(futuresClient.positionMargin(p)),
+    currentAllOpenOrders: (p: Record<string, any> = {}) => wrapData(futuresClient.openOrders(p)),
+    createListenKey: () => wrapData(futuresClient.createListenKey()),
+    keepAliveListenKey: () => wrapData(futuresClient.keepAliveListenKey()),
+    closeListenKey: () => wrapData(futuresClient.closeListenKey()),
+    fundingInfo: () =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/fapi/v1/fundingRate", {})),
+    assetIndex: (p: Record<string, any> = {}) =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/fapi/v1/assetIndex", p)),
+    // Aliases / additional endpoints for tool compatibility
+    apiTradingStatus: (p: Record<string, any> = {}) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/apiTradingStatus", p),
+      ),
+    downloadIdForFuturesTransactionHistory: (p: Record<string, any> = {}) =>
+      wrapData(makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/income/asyn", p)),
+    leverageBracket: (p: Record<string, any> = {}) =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/fapi/v1/leverageBracket", p)),
+    getMultiAssetsMode: (p: Record<string, any> = {}) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/multiAssetsMargin", p),
+      ),
+    getPositionMarginChangeHistory: (p: Record<string, any> = {}) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/positionMargin/history", p),
+      ),
+    getPositionMarginHistory: (p: Record<string, any> = {}) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "GET", "/fapi/v1/positionMargin/history", p),
+      ),
+    globalLongShortAccountRatio: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesPublicRequest(
+          FUTURES_USD_BASE_URL,
+          "/futures/data/globalLongShortAccountRatio",
+          p,
+        ),
+      ),
+    indexInfo: (p: Record<string, any> = {}) =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/fapi/v1/indexInfo", p)),
+    lvtKlines: (p: Record<string, any>) =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/futures/data/lvtKlines", p)),
+    openInterestHist: (p: Record<string, any>) =>
+      wrapData(makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/futures/data/openInterestHist", p)),
+    takerlongshortRatio: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/futures/data/takerlongshortRatio", p),
+      ),
+    tickerBookTicker: (p: Record<string, any> = {}) => wrapData(futuresClient.bookTicker(p)),
+    topLongShortAccountRatio: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesPublicRequest(FUTURES_USD_BASE_URL, "/futures/data/topLongShortAccountRatio", p),
+      ),
+    topLongShortPositionRatio: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesPublicRequest(
+          FUTURES_USD_BASE_URL,
+          "/futures/data/topLongShortPositionRatio",
+          p,
+        ),
+      ),
+    placeMultipleOrders: (p: Record<string, any>) => wrapData(futuresClient.batchOrders(p)),
+    cancelMultipleOrders: (p: Record<string, any>) => wrapData(futuresClient.cancelBatchOrders(p)),
+    changeMultiAssetsMode: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/multiAssetsMargin", p),
+      ),
+    autoCancelAllOpenOrders: (p: Record<string, any>) =>
+      wrapData(
+        makeFuturesSignedRequest(FUTURES_USD_BASE_URL, "POST", "/fapi/v1/countdownCancelAll", p),
+      ),
+    queryCurrentOpenOrder: (p: Record<string, any>) => wrapData(futuresClient.getOrder(p)),
+    currentOpenOrder: (p: Record<string, any> = {}) => wrapData(futuresClient.openOrders(p)),
+    renewListenKey: () => wrapData(futuresClient.keepAliveListenKey()),
+  },
 };
 
 // Futures COIN-M client wrapper (delivery)
@@ -440,6 +688,10 @@ export const deliveryClient = {
     makeFuturesPublicRequest(FUTURES_COIN_BASE_URL, "/dapi/v1/ticker/bookTicker", params),
   openInterest: (params: Record<string, any>) =>
     makeFuturesPublicRequest(FUTURES_COIN_BASE_URL, "/dapi/v1/openInterest", params),
+  openInterestHist: (params: Record<string, any>) =>
+    makeFuturesPublicRequest(FUTURES_COIN_BASE_URL, "/dapi/v1/openInterestHist", params),
+  leverageBracket: (params: Record<string, any> = {}) =>
+    makeFuturesPublicRequest(FUTURES_COIN_BASE_URL, "/dapi/v1/leverageBracket", params),
   // Account/Trade
   newOrder: (params: Record<string, any>) =>
     makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "POST", "/dapi/v1/order", params),
@@ -486,10 +738,72 @@ export const deliveryClient = {
   // User Data Stream
   createListenKey: () =>
     makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "POST", "/dapi/v1/listenKey", {}),
-  keepAliveListenKey: () =>
-    makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "PUT", "/dapi/v1/listenKey", {}),
-  closeListenKey: () =>
-    makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "DELETE", "/dapi/v1/listenKey", {}),
+  keepAliveListenKey: (params: Record<string, any> = {}) =>
+    makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "PUT", "/dapi/v1/listenKey", params),
+  closeListenKey: (params: Record<string, any> = {}) =>
+    makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "DELETE", "/dapi/v1/listenKey", params),
+  autoCancelAllOpenOrders: (params: Record<string, any>) =>
+    makeFuturesSignedRequest(FUTURES_COIN_BASE_URL, "POST", "/dapi/v1/countdownCancelAll", params),
+  restAPI: {
+    account: (p: Record<string, any> = {}) => wrapData(deliveryClient.account(p)),
+    balance: (p: Record<string, any> = {}) => wrapData(deliveryClient.balance(p)),
+    positionRisk: (p: Record<string, any> = {}) => wrapData(deliveryClient.positionRisk(p)),
+    ping: () => wrapData(deliveryClient.ping()),
+    time: () => wrapData(deliveryClient.time()),
+    exchangeInfo: () => wrapData(deliveryClient.exchangeInfo()),
+    depth: (p: Record<string, any>) => wrapData(deliveryClient.depth(p)),
+    trades: (p: Record<string, any>) => wrapData(deliveryClient.trades(p)),
+    historicalTrades: (p: Record<string, any>) => wrapData(deliveryClient.historicalTrades(p)),
+    aggTrades: (p: Record<string, any>) => wrapData(deliveryClient.aggTrades(p)),
+    klines: (p: Record<string, any>) => wrapData(deliveryClient.klines(p)),
+    continuousKlines: (p: Record<string, any>) => wrapData(deliveryClient.continuousKlines(p)),
+    indexPriceKlines: (p: Record<string, any>) => wrapData(deliveryClient.indexPriceKlines(p)),
+    markPriceKlines: (p: Record<string, any>) => wrapData(deliveryClient.markPriceKlines(p)),
+    premiumIndex: (p: Record<string, any> = {}) => wrapData(deliveryClient.premiumIndex(p)),
+    fundingRate: (p: Record<string, any>) => wrapData(deliveryClient.fundingRate(p)),
+    ticker24hr: (p: Record<string, any> = {}) => wrapData(deliveryClient.ticker24hr(p)),
+    tickerPrice: (p: Record<string, any>) => wrapData(deliveryClient.tickerPrice(p)),
+    bookTicker: (p: Record<string, any> = {}) => wrapData(deliveryClient.bookTicker(p)),
+    tickerBookTicker: (p: Record<string, any> = {}) => wrapData(deliveryClient.bookTicker(p)),
+    openInterest: (p: Record<string, any>) => wrapData(deliveryClient.openInterest(p)),
+    openInterestHist: (p: Record<string, any>) => wrapData(deliveryClient.openInterestHist(p)),
+    leverageBracket: (p: Record<string, any> = {}) => wrapData(deliveryClient.leverageBracket(p)),
+    newOrder: (p: Record<string, any>) => wrapData(deliveryClient.newOrder(p)),
+    getOrder: (p: Record<string, any>) => wrapData(deliveryClient.getOrder(p)),
+    queryOrder: (p: Record<string, any>) => wrapData(deliveryClient.getOrder(p)),
+    cancelOrder: (p: Record<string, any>) => wrapData(deliveryClient.cancelOrder(p)),
+    cancelAllOpenOrders: (p: Record<string, any> = {}) =>
+      wrapData(deliveryClient.cancelAllOpenOrders(p)),
+    cancelBatchOrders: (p: Record<string, any>) => wrapData(deliveryClient.cancelBatchOrders(p)),
+    cancelMultipleOrders: (p: Record<string, any>) => wrapData(deliveryClient.cancelBatchOrders(p)),
+    openOrders: (p: Record<string, any> = {}) => wrapData(deliveryClient.openOrders(p)),
+    currentAllOpenOrders: (p: Record<string, any> = {}) => wrapData(deliveryClient.openOrders(p)),
+    allOrders: (p: Record<string, any>) => wrapData(deliveryClient.allOrders(p)),
+    currentOpenOrder: (p: Record<string, any>) => wrapData(deliveryClient.getOrder(p)),
+    userTrades: (p: Record<string, any>) => wrapData(deliveryClient.userTrades(p)),
+    income: (p: Record<string, any> = {}) => wrapData(deliveryClient.income(p)),
+    commissionRate: (p: Record<string, any>) => wrapData(deliveryClient.commissionRate(p)),
+    adlQuantile: (p: Record<string, any> = {}) => wrapData(deliveryClient.adlQuantile(p)),
+    forceOrders: (p: Record<string, any>) => wrapData(deliveryClient.forceOrders(p)),
+    positionMode: (p: Record<string, any> = {}) => wrapData(deliveryClient.positionMode(p)),
+    getPositionMode: (p: Record<string, any> = {}) => wrapData(deliveryClient.positionMode(p)),
+    changePositionMode: (p: Record<string, any>) => wrapData(deliveryClient.changePositionMode(p)),
+    leverage: (p: Record<string, any>) => wrapData(deliveryClient.leverage(p)),
+    changeInitialLeverage: (p: Record<string, any>) => wrapData(deliveryClient.leverage(p)),
+    marginType: (p: Record<string, any>) => wrapData(deliveryClient.marginType(p)),
+    changeMarginType: (p: Record<string, any>) => wrapData(deliveryClient.marginType(p)),
+    positionMargin: (p: Record<string, any>) => wrapData(deliveryClient.positionMargin(p)),
+    modifyIsolatedPositionMargin: (p: Record<string, any>) =>
+      wrapData(deliveryClient.positionMargin(p)),
+    batchOrders: (p: Record<string, any>) => wrapData(deliveryClient.batchOrders(p)),
+    placeMultipleOrders: (p: Record<string, any>) => wrapData(deliveryClient.batchOrders(p)),
+    autoCancelAllOpenOrders: (p: Record<string, any>) =>
+      wrapData(deliveryClient.autoCancelAllOpenOrders(p)),
+    createListenKey: () => wrapData(deliveryClient.createListenKey()),
+    keepAliveListenKey: () => wrapData(deliveryClient.keepAliveListenKey()),
+    renewListenKey: (p: Record<string, any> = {}) => wrapData(deliveryClient.keepAliveListenKey(p)),
+    closeListenKey: (p: Record<string, any> = {}) => wrapData(deliveryClient.closeListenKey(p)),
+  },
 };
 
 // Sub-Account client wrapper (using REST API)
@@ -582,13 +896,23 @@ export const optionsClient = {
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "GET", "/eapi/v1/account", params),
   exerciseRecord: (params: Record<string, any> = {}) =>
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "GET", "/eapi/v1/exerciseRecord", params),
+  openInterest: (params: Record<string, any> = {}) =>
+    makeFuturesPublicRequest(OPTIONS_BASE_URL, "/eapi/v1/openInterest", params),
   bill: (params: Record<string, any> = {}) =>
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "GET", "/eapi/v1/bill", params),
+  incomeAsyn: (params: Record<string, any> = {}) =>
+    makeFuturesSignedRequest(OPTIONS_BASE_URL, "GET", "/eapi/v1/incomeAsyn", params),
+  incomeAsynId: (params: Record<string, any>) =>
+    makeFuturesSignedRequest(OPTIONS_BASE_URL, "GET", "/eapi/v1/incomeAsynId", params),
+  historicalTrades: (params: Record<string, any>) =>
+    makeFuturesPublicRequest(OPTIONS_BASE_URL, "/eapi/v1/historicalTrades", params),
+  cancelAllOpenOrdersByUnderlying: (params: Record<string, any>) =>
+    makeFuturesSignedRequest(OPTIONS_BASE_URL, "DELETE", "/eapi/v1/allOpenOrders", params),
   // User Data Stream
   createListenKey: () =>
     makeFuturesSignedRequest(OPTIONS_BASE_URL, "POST", "/eapi/v1/listenKey", {}),
-  keepAliveListenKey: () =>
-    makeFuturesSignedRequest(OPTIONS_BASE_URL, "PUT", "/eapi/v1/listenKey", {}),
-  closeListenKey: () =>
-    makeFuturesSignedRequest(OPTIONS_BASE_URL, "DELETE", "/eapi/v1/listenKey", {}),
+  keepAliveListenKey: (params: Record<string, any> = {}) =>
+    makeFuturesSignedRequest(OPTIONS_BASE_URL, "PUT", "/eapi/v1/listenKey", params),
+  closeListenKey: (params: Record<string, any> = {}) =>
+    makeFuturesSignedRequest(OPTIONS_BASE_URL, "DELETE", "/eapi/v1/listenKey", params),
 };

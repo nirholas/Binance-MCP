@@ -21,6 +21,7 @@ const PROD_SPOT_WS_STREAM_URL = "wss://stream.binance.com";
 const PROD_FUTURES_USD_BASE_URL = "https://fapi.binance.com";
 const PROD_FUTURES_COIN_BASE_URL = "https://dapi.binance.com";
 const PROD_OPTIONS_BASE_URL = "https://eapi.binance.com";
+const PROD_PAPI_BASE_URL = "https://papi.binance.com";
 
 export const URLS = {
   SPOT_BASE_URL: IS_TESTNET ? TESTNET_SPOT_BASE_URL : PROD_SPOT_BASE_URL,
@@ -28,8 +29,9 @@ export const URLS = {
   SPOT_WS_STREAM_URL: IS_TESTNET ? TESTNET_SPOT_WS_STREAM_URL : PROD_SPOT_WS_STREAM_URL,
   FUTURES_USD_BASE_URL: IS_TESTNET ? TESTNET_FUTURES_BASE_URL : PROD_FUTURES_USD_BASE_URL,
   FUTURES_COIN_BASE_URL: IS_TESTNET ? TESTNET_FUTURES_BASE_URL : PROD_FUTURES_COIN_BASE_URL,
-  // No testnet for options — always production
+  // No testnet for options / portfolio margin — always production
   OPTIONS_BASE_URL: PROD_OPTIONS_BASE_URL,
+  PAPI_BASE_URL: PROD_PAPI_BASE_URL,
 } as const;
 
 /**

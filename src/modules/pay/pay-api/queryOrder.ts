@@ -25,7 +25,7 @@ export function registerBinancePayQueryOrder(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await payClient.restAPI.queryOrder({
+        const response = await (payClient as any).restAPI.queryOrder({
           ...(params.merchantId && { merchantId: params.merchantId }),
           ...(params.prepayId && { prepayId: params.prepayId }),
           ...(params.merchantTradeNo && { merchantTradeNo: params.merchantTradeNo }),

@@ -38,7 +38,7 @@ export function registerOptionsGetUserTrades(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.userTrades({
+        const data = await optionsClient.userTrades({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.underlying && { underlying: params.underlying }),
           ...(params.fromId && { fromId: params.fromId }),
@@ -47,8 +47,6 @@ export function registerOptionsGetUserTrades(server: McpServer) {
           ...(params.limit && { limit: params.limit }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Trade History\n\n`;
 

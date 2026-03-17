@@ -29,8 +29,8 @@ export function registerCustodialSolutionTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_balance",
-    {},
-    `Get balance information for Binance.US exchange wallet and custodial sub-account.
+    {
+      description: `Get balance information for Binance.US exchange wallet and custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY - Regular API keys will not work.
 
@@ -44,10 +44,14 @@ Each balance includes:
 - locked: Locked balance (in orders, etc.)
 - inSettlement: Amount in settlement process (custodial only)
 - lastUpdatedTime: Last update timestamp`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase, e.g., 'FIREBLOCKS')"),
+      inputSchema: {
+        rail: z
+          .string()
+          .describe("Custodial partner identifier (all uppercase, e.g., 'FIREBLOCKS')"),
+      },
     },
-    async ({ rail }) => {
+    async (params: { rail: string }) => {
+      const { rail } = params;
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/balance", {
           rail: rail.toUpperCase(),
@@ -77,8 +81,8 @@ Each balance includes:
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_supported_assets",
-    {},
-    `Get list of assets supported for custodial transfers and settlements.
+    {
+      description: `Get list of assets supported for custodial transfers and settlements.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 
@@ -90,10 +94,12 @@ Each asset includes:
 - asset: Asset symbol
 - precision: Decimal precision
 - network: Supported networks for the asset`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+      },
     },
-    async ({ rail }) => {
+    async (params: { rail: string }) => {
+      const { rail } = params;
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/custodian/supportedAssetList", {
           rail: rail.toUpperCase(),
@@ -123,22 +129,23 @@ Each asset includes:
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_wallet_transfer",
-    {},
-    `Transfer assets from your Binance.US exchange wallet to your custodial sub-account.
+    {
+      description: `Transfer assets from your Binance.US exchange wallet to your custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 ⚠️ This moves funds - verify details carefully!
 
 This transfers from your main Binance.US account to your custodial sub-account,
 which can then be traded or settled to your custodial partner.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      asset: z.string().describe("Asset to transfer (e.g., BTC, ETH)"),
-      amount: z.number().positive().describe("Amount to transfer"),
-      clientOrderId: z
-        .string()
-        .optional()
-        .describe("Your reference ID (auto-generated if not provided)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        asset: z.string().describe("Asset to transfer (e.g., BTC, ETH)"),
+        amount: z.number().positive().describe("Amount to transfer"),
+        clientOrderId: z
+          .string()
+          .optional()
+          .describe("Your reference ID (auto-generated if not provided)"),
+      },
     },
     async ({ rail, asset, amount, clientOrderId }) => {
       try {
@@ -179,22 +186,23 @@ which can then be traded or settled to your custodial partner.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_custodian_transfer",
-    {},
-    `Request asset transfer from a custodial partner account to Binance.US custodial sub-account.
+    {
+      description: `Request asset transfer from a custodial partner account to Binance.US custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 ⚠️ This initiates a transfer request to your custody partner!
 
 This requests your custodial partner to transfer assets to your Binance.US account.
 The actual transfer is executed by the custody partner.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      asset: z.string().describe("Asset to transfer (e.g., BTC, ETH)"),
-      amount: z.number().positive().describe("Amount to transfer"),
-      clientOrderId: z
-        .string()
-        .optional()
-        .describe("Your reference ID (auto-generated if not provided)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        asset: z.string().describe("Asset to transfer (e.g., BTC, ETH)"),
+        amount: z.number().positive().describe("Amount to transfer"),
+        clientOrderId: z
+          .string()
+          .optional()
+          .describe("Your reference ID (auto-generated if not provided)"),
+      },
     },
     async ({ rail, asset, amount, clientOrderId }) => {
       try {
@@ -237,16 +245,17 @@ The actual transfer is executed by the custody partner.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_undo_transfer",
-    {},
-    `Undo a previous transfer from your custodial partner.
+    {
+      description: `Undo a previous transfer from your custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 ⚠️ Only certain transfers can be undone - check with your custodial partner.
 
 This reverses a previous custodian transfer by its transfer ID.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      originTransferId: z.string().describe("The transfer ID of the original transfer to undo"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        originTransferId: z.string().describe("The transfer ID of the original transfer to undo"),
+      },
     },
     async ({ rail, originTransferId }) => {
       try {
@@ -279,24 +288,25 @@ This reverses a previous custodian transfer by its transfer ID.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_wallet_transfer_history",
-    {},
-    `Get history of transfers from Binance.US exchange wallet to custodial sub-account.
+    {
+      description: `Get history of transfers from Binance.US exchange wallet to custodial sub-account.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 
 Returns transfer history with status, amounts, and timestamps.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      transferId: z.string().optional().describe("Filter by specific transfer ID"),
-      clientOrderId: z.string().optional().describe("Filter by your reference ID"),
-      asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
-      startTime: z
-        .number()
-        .optional()
-        .describe("Start time in milliseconds (default: 90 days ago)"),
-      endTime: z.number().optional().describe("End time in milliseconds (default: now)"),
-      page: z.number().optional().describe("Page number (default: 1)"),
-      limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        transferId: z.string().optional().describe("Filter by specific transfer ID"),
+        clientOrderId: z.string().optional().describe("Filter by your reference ID"),
+        asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
+        startTime: z
+          .number()
+          .optional()
+          .describe("Start time in milliseconds (default: 90 days ago)"),
+        endTime: z.number().optional().describe("End time in milliseconds (default: now)"),
+        page: z.number().optional().describe("Page number (default: 1)"),
+        limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      },
     },
     async ({ rail, transferId, clientOrderId, asset, startTime, endTime, page, limit }) => {
       try {
@@ -341,25 +351,26 @@ Returns transfer history with status, amounts, and timestamps.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_custodian_transfer_history",
-    {},
-    `Get history of transfers from custodial partner, including ExpressTrade and Undo transfers.
+    {
+      description: `Get history of transfers from custodial partner, including ExpressTrade and Undo transfers.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 
 Returns transfer history with status, amounts, and timestamps.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      transferId: z.string().optional().describe("Filter by specific transfer ID"),
-      clientOrderId: z.string().optional().describe("Filter by your reference ID"),
-      expressTradeTransfer: z
-        .boolean()
-        .optional()
-        .describe("Filter by ExpressTrade transfers only"),
-      asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number (default: 1)"),
-      limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        transferId: z.string().optional().describe("Filter by specific transfer ID"),
+        clientOrderId: z.string().optional().describe("Filter by your reference ID"),
+        expressTradeTransfer: z
+          .boolean()
+          .optional()
+          .describe("Filter by ExpressTrade transfers only"),
+        asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number (default: 1)"),
+        limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      },
     },
     async ({
       rail,
@@ -415,22 +426,23 @@ Returns transfer history with status, amounts, and timestamps.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_settlement",
-    {},
-    `Request settlement of assets from custodial sub-account to custodial partner.
+    {
+      description: `Request settlement of assets from custodial sub-account to custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 ⚠️ This sends funds to your custodial partner!
 
 This settles (withdraws) assets from your Binance.US custodial sub-account
 to your custody partner's vault.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      asset: z.string().describe("Asset to settle (e.g., BTC, ETH)"),
-      amount: z.number().positive().describe("Amount to settle"),
-      clientOrderId: z
-        .string()
-        .optional()
-        .describe("Your reference ID (auto-generated if not provided)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        asset: z.string().describe("Asset to settle (e.g., BTC, ETH)"),
+        amount: z.number().positive().describe("Amount to settle"),
+        clientOrderId: z
+          .string()
+          .optional()
+          .describe("Your reference ID (auto-generated if not provided)"),
+      },
     },
     async ({ rail, asset, amount, clientOrderId }) => {
       try {
@@ -467,21 +479,22 @@ to your custody partner's vault.`,
   // =====================================================================
   server.registerTool(
     "binance_us_custodial_settlement_history",
-    {},
-    `Get history of settlements from custodial sub-account to custodial partner.
+    {
+      description: `Get history of settlements from custodial sub-account to custodial partner.
 
 ⚠️ REQUIRES CUSTODIAL SOLUTION API KEY
 
 Returns settlement history with status, amounts, and timestamps.`,
-    {
-      rail: z.string().describe("Custodial partner identifier (all uppercase)"),
-      settlementId: z.string().optional().describe("Filter by specific settlement ID"),
-      clientOrderId: z.string().optional().describe("Filter by your reference ID"),
-      asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      page: z.number().optional().describe("Page number (default: 1)"),
-      limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      inputSchema: {
+        rail: z.string().describe("Custodial partner identifier (all uppercase)"),
+        settlementId: z.string().optional().describe("Filter by specific settlement ID"),
+        clientOrderId: z.string().optional().describe("Filter by your reference ID"),
+        asset: z.string().optional().describe("Filter by asset (e.g., BTC)"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        page: z.number().optional().describe("Page number (default: 1)"),
+        limit: z.number().optional().describe("Results per page (default: 20, max: 100)"),
+      },
     },
     async ({ rail, settlementId, clientOrderId, asset, startTime, endTime, page, limit }) => {
       try {

@@ -19,7 +19,7 @@ export function registerBinanceTickerTradingDay(server: McpServer) {
         const params: any = {};
         if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.tickerTradingDay(params);
+        const response = await (spotClient as any).restAPI.tickerTradingDay(params);
 
         const data = await response.data();
 

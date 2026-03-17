@@ -19,7 +19,7 @@ export function registerBinanceOpenOrderList(server: McpServer) {
         const params: any = {};
         if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.openOrderList(params);
+        const response = await (spotClient as any).restAPI.openOrderList(params);
 
         const data = await response.data();
 

@@ -28,7 +28,7 @@ export function registerBinanceC2CGetAds(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await c2cClient.restAPI.getAds({
+        const response = await (c2cClient as any).restAPI.getAds({
           ...(params.asset && { asset: params.asset }),
           ...(params.fiat && { fiat: params.fiat }),
           ...(params.tradeType && { tradeType: params.tradeType }),

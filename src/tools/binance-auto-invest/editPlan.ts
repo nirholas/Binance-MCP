@@ -47,7 +47,7 @@ export function registerBinanceAutoInvestEditPlan(server: McpServer) {
         if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
         if (details) params.details = details;
 
-        const response = await autoInvestClient.restAPI.investmentPlanAdjustment(params);
+        const response = await (autoInvestClient as any).restAPI.investmentPlanAdjustment(params);
         const data = await response.data();
 
         return {

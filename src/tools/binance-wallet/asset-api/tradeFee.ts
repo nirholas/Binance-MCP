@@ -21,7 +21,7 @@ export function registerBinanceWalletTradeFee(server: McpServer) {
         if (symbol !== undefined) params.symbol = symbol;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.tradeFee(params);
+        const response = await (walletClient as any).restAPI.tradeFee(params);
         const data = await response.data();
 
         return {

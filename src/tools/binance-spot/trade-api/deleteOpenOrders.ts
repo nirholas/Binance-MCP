@@ -16,7 +16,7 @@ export function registerBinanceDeleteOpenOrders(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const response = await spotClient.restAPI.deleteOpenOrders({
+        const response = await (spotClient as any).restAPI.deleteOpenOrders({
           symbol: symbol,
         });
 

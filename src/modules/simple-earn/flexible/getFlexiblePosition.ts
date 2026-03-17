@@ -27,7 +27,7 @@ export function registerSimpleEarnFlexiblePosition(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleProductPosition({
+        const response = await (simpleEarnClient as any).restAPI.getFlexibleProductPosition({
           ...(params.asset && { asset: params.asset }),
           ...(params.productId && { productId: params.productId }),
           ...(params.current && { current: params.current }),

@@ -24,7 +24,7 @@ export function registerSimpleEarnRedeemLocked(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.redeemLockedProduct({
+        const response = await (simpleEarnClient as any).restAPI.redeemLockedProduct({
           positionId: params.positionId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

@@ -19,7 +19,9 @@ export function registerBinanceWalletGetAssetsThatCanBeConvertedIntoBnb(server: 
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.getAssetsThatCanBeConvertedIntoBnb(params);
+        const response = await (walletClient as any).restAPI.getAssetsThatCanBeConvertedIntoBnb(
+          params,
+        );
         const data = await response.data();
 
         return {

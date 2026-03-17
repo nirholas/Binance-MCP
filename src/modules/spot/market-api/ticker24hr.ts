@@ -19,7 +19,7 @@ export function registerBinanceTicker24hr(server: McpServer) {
         const params: any = {};
         if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.ticker24hr(params);
+        const response = await (spotClient as any).restAPI.ticker24hr(params);
 
         const data = await response.data();
 

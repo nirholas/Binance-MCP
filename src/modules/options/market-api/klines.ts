@@ -35,15 +35,13 @@ export function registerOptionsMarketKlines(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.klines({
+        const data = await optionsClient.klines({
           symbol: params.symbol,
           interval: params.interval,
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Klines - ${params.symbol} (${params.interval})\n\n`;
 

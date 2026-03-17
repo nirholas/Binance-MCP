@@ -24,7 +24,7 @@ export function registerBinanceCryptoLoanFlexibleLoanRepay(server: McpServer) {
         if (collateralReturn !== undefined) params.collateralReturn = collateralReturn;
         if (fullRepayment !== undefined) params.fullRepayment = fullRepayment;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanRepay(params);
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanRepay(params);
         const data = await response.data();
 
         return {

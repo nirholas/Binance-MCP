@@ -36,7 +36,7 @@ export function registerBinanceCopyTradingFollow(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.followLeadTrader({
+        const response = await (copyTradingClient as any).restAPI.followLeadTrader({
           portfolioId: params.portfolioId,
           ...(params.copyRatio && { copyRatio: params.copyRatio }),
           ...(params.stopLossRatio && { stopLossRatio: params.stopLossRatio }),

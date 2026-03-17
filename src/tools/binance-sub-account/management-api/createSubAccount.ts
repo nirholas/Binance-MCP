@@ -28,7 +28,7 @@ export function registerBinanceSubAccountCreate(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.createVirtualSubAccount({
+        const response = await (spotClient as any).restAPI.createVirtualSubAccount({
           subAccountString: params.subAccountString,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

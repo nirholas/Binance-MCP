@@ -23,7 +23,7 @@ export function registerBinanceAutoInvestGetTargetAssetList(server: McpServer) {
         if (size !== undefined) params.size = size;
         if (current !== undefined) params.current = current;
 
-        const response = await autoInvestClient.restAPI.getTargetAssetList(params);
+        const response = await (autoInvestClient as any).restAPI.getTargetAssetList(params);
         const data = await response.data();
 
         return {

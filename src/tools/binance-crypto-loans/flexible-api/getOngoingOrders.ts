@@ -27,7 +27,7 @@ export function registerBinanceCryptoLoansFlexibleOngoing(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanOngoingOrders({
+        const response = await (cryptoLoanClient as any).restAPI.getFlexibleLoanOngoingOrders({
           ...(params.loanCoin && { loanCoin: params.loanCoin }),
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.current && { current: params.current }),

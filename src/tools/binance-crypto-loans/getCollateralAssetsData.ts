@@ -21,7 +21,9 @@ export function registerBinanceCryptoLoanGetCollateralAssetsDataV2(server: McpSe
         if (collateralCoin) params.collateralCoin = collateralCoin;
         if (vipLevel !== undefined) params.vipLevel = vipLevel;
 
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanCollateralAssetsData(params);
+        const response = await (
+          cryptoLoanClient as any
+        ).restAPI.getFlexibleLoanCollateralAssetsData(params);
         const data = await response.data();
 
         return {

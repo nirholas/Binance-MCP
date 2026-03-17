@@ -20,8 +20,8 @@ export function registerOtcTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_otc_coin_pairs",
-    {},
-    `Get a list of supported OTC (Over-The-Counter) trading pairs on Binance.US.
+    {
+      description: `Get a list of supported OTC (Over-The-Counter) trading pairs on Binance.US.
 
 OTC trading allows large block trades to be executed outside the regular order book, 
 minimizing market impact. This endpoint returns available coin pairs with their 
@@ -33,11 +33,12 @@ Response includes:
 - toCoinMinAmount/toCoinMaxAmount: Min/max amounts for the buy coin
 
 Example: Convert large amounts of BTC to USDT without affecting market price.`,
-    {
-      fromCoin: z.string().optional().describe("Filter by source coin (e.g., BTC, SHIB)"),
-      toCoin: z.string().optional().describe("Filter by destination coin (e.g., USDT, KSHIB)"),
+      inputSchema: {
+        fromCoin: z.string().optional().describe("Filter by source coin (e.g., BTC, SHIB)"),
+        toCoin: z.string().optional().describe("Filter by destination coin (e.g., USDT, KSHIB)"),
+      },
     },
-    async (params) => {
+    async (params: { fromCoin?: string; toCoin?: string }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/otc/coinPairs", {
           ...(params.fromCoin && { fromCoin: params.fromCoin.toUpperCase() }),
@@ -68,8 +69,8 @@ Example: Convert large amounts of BTC to USDT without affecting market price.`,
   // =====================================================================
   server.registerTool(
     "binance_us_otc_quote",
-    {},
-    `Request a quote for an OTC (Over-The-Counter) trade on Binance.US.
+    {
+      description: `Request a quote for an OTC (Over-The-Counter) trade on Binance.US.
 
 This endpoint requests a price quote for converting one coin to another via OTC.
 The quote is valid for a limited time (check validTimestamp in response).
@@ -88,15 +89,21 @@ Response includes:
 - inverseRatio: Inverse conversion ratio
 - validTimestamp: Unix timestamp when quote expires
 - toAmount/fromAmount: Calculated amounts for the trade`,
-    {
-      fromCoin: z.string().describe("Coin to sell (e.g., BTC, SHIB)"),
-      toCoin: z.string().describe("Coin to buy (e.g., USDT, KSHIB)"),
-      requestCoin: z
-        .string()
-        .describe("Which coin's amount you're specifying (fromCoin or toCoin)"),
-      requestAmount: z.number().positive().describe("Amount of the request coin"),
+      inputSchema: {
+        fromCoin: z.string().describe("Coin to sell (e.g., BTC, SHIB)"),
+        toCoin: z.string().describe("Coin to buy (e.g., USDT, KSHIB)"),
+        requestCoin: z
+          .string()
+          .describe("Which coin's amount you're specifying (fromCoin or toCoin)"),
+        requestAmount: z.number().positive().describe("Amount of the request coin"),
+      },
     },
-    async (params) => {
+    async (params: {
+      fromCoin: string;
+      toCoin: string;
+      requestCoin: string;
+      requestAmount: number;
+    }) => {
       try {
         const response = await makeSignedRequest("POST", "/sapi/v1/otc/quotes", {
           fromCoin: params.fromCoin.toUpperCase(),
@@ -129,8 +136,8 @@ Response includes:
   // =====================================================================
   server.registerTool(
     "binance_us_otc_place_order",
-    {},
-    `Place an OTC (Over-The-Counter) trade order using a previously acquired quote.
+    {
+      description: `Place an OTC (Over-The-Counter) trade order using a previously acquired quote.
 
 ⚠️ IMPORTANT: You must first call binance_us_otc_quote to get a quoteId before placing an order.
 The quote expires quickly, so place the order immediately after receiving the quote.
@@ -145,14 +152,15 @@ Response includes:
 - orderId: Unique order identifier
 - createTime: Order creation timestamp
 - orderStatus: Current status of the order`,
-    {
-      quoteId: z
-        .string()
-        .describe(
-          "Quote ID received from binance_us_otc_quote (e.g., '4e5446f2cc6f44ab86ab02abf19a2fd2')",
-        ),
+      inputSchema: {
+        quoteId: z
+          .string()
+          .describe(
+            "Quote ID received from binance_us_otc_quote (e.g., '4e5446f2cc6f44ab86ab02abf19a2fd2')",
+          ),
+      },
     },
-    async (params) => {
+    async (params: { quoteId: string }) => {
       try {
         const response = await makeSignedRequest("POST", "/sapi/v1/otc/orders", {
           quoteId: params.quoteId,
@@ -182,8 +190,8 @@ Response includes:
   // =====================================================================
   server.registerTool(
     "binance_us_otc_get_order",
-    {},
-    `Get detailed information about a specific OTC (Over-The-Counter) trade order.
+    {
+      description: `Get detailed information about a specific OTC (Over-The-Counter) trade order.
 
 Use this to check the status and details of a previously placed OTC order.
 
@@ -195,10 +203,11 @@ Response includes:
 - toCoin/toAmount: Bought coin and amount
 - ratio/inverseRatio: Exchange rates
 - createTime: Order creation timestamp`,
-    {
-      orderId: z.string().describe("OTC order ID to query (e.g., '10002349')"),
+      inputSchema: {
+        orderId: z.string().describe("OTC order ID to query (e.g., '10002349')"),
+      },
     },
-    async (params) => {
+    async (params: { orderId: string }) => {
       try {
         const response = await makeSignedRequest("GET", `/sapi/v1/otc/orders/${params.orderId}`);
 
@@ -226,8 +235,8 @@ Response includes:
   // =====================================================================
   server.registerTool(
     "binance_us_otc_all_orders",
-    {},
-    `Query all OTC (Over-The-Counter) trade orders with optional filters.
+    {
+      description: `Query all OTC (Over-The-Counter) trade orders with optional filters.
 
 Use this to retrieve your OTC trading history with various filtering options.
 
@@ -237,22 +246,31 @@ Response includes:
 
 Each order contains: quoteId, orderId, orderStatus, fromCoin, fromAmount, 
 toCoin, toAmount, ratio, inverseRatio, createTime`,
-    {
-      orderId: z.string().optional().describe("Filter by specific order ID"),
-      fromCoin: z.string().optional().describe("Filter by source coin (e.g., BTC, KSHIB)"),
-      toCoin: z.string().optional().describe("Filter by destination coin (e.g., USDT, SHIB)"),
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      page: z.number().int().positive().optional().describe("Page number (starts from 1)"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Records per page (default: 10, max: 100)"),
+      inputSchema: {
+        orderId: z.string().optional().describe("Filter by specific order ID"),
+        fromCoin: z.string().optional().describe("Filter by source coin (e.g., BTC, KSHIB)"),
+        toCoin: z.string().optional().describe("Filter by destination coin (e.g., USDT, SHIB)"),
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        page: z.number().int().positive().optional().describe("Page number (starts from 1)"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Records per page (default: 10, max: 100)"),
+      },
     },
-    async (params) => {
+    async (params: {
+      orderId?: string;
+      fromCoin?: string;
+      toCoin?: string;
+      startTime?: number;
+      endTime?: number;
+      page?: number;
+      limit?: number;
+    }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/otc/orders", {
           ...(params.orderId && { orderId: params.orderId }),
@@ -288,8 +306,8 @@ toCoin, toAmount, ratio, inverseRatio, createTime`,
   // =====================================================================
   server.registerTool(
     "binance_us_ocbs_orders",
-    {},
-    `Query all OCBS (One-Click-Buy-Sell) fiat orders on Binance.US.
+    {
+      description: `Query all OCBS (One-Click-Buy-Sell) fiat orders on Binance.US.
 
 OCBS allows direct fiat-to-crypto conversions. This endpoint retrieves your 
 OCBS order history for fiat transactions (e.g., USD to BTC).
@@ -305,20 +323,27 @@ Each order contains:
 - feeCoin/feeAmount: Fee details
 - ratio: Exchange rate
 - createTime: Order timestamp`,
-    {
-      orderId: z.string().optional().describe("Filter by specific order ID"),
-      startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-      endTime: z.number().optional().describe("End timestamp in milliseconds"),
-      page: z.number().int().positive().optional().describe("Page number (starts from 1)"),
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .optional()
-        .describe("Records per page (default: 10, max: 100)"),
+      inputSchema: {
+        orderId: z.string().optional().describe("Filter by specific order ID"),
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        page: z.number().int().positive().optional().describe("Page number (starts from 1)"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .describe("Records per page (default: 10, max: 100)"),
+      },
     },
-    async (params) => {
+    async (params: {
+      orderId?: string;
+      startTime?: number;
+      endTime?: number;
+      page?: number;
+      limit?: number;
+    }) => {
       try {
         const response = await makeSignedRequest("GET", "/sapi/v1/ocbs/orders", {
           ...(params.orderId && { orderId: params.orderId }),

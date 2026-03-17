@@ -23,7 +23,7 @@ export function registerBinanceSubAccountMarginSummary(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountMarginAccountSummary({
+        const response = await (spotClient as any).restAPI.getSubAccountMarginAccountSummary({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

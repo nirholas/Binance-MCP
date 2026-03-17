@@ -29,7 +29,7 @@ export function registerBinanceCryptoLoansFlexibleBorrowHistory(server: McpServe
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanBorrowHistory({
+        const response = await (cryptoLoanClient as any).restAPI.getFlexibleLoanBorrowHistory({
           ...(params.loanCoin && { loanCoin: params.loanCoin }),
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),
           ...(params.startTime && { startTime: params.startTime }),

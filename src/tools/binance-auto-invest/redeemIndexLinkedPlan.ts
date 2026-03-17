@@ -21,7 +21,7 @@ export function registerBinanceAutoInvestRedeemIndexLinkedPlan(server: McpServer
         const params: any = { indexId, redemptionPercentage };
         if (requestId) params.requestId = requestId;
 
-        const response = await autoInvestClient.restAPI.indexLinkedPlanRedemption(params);
+        const response = await (autoInvestClient as any).restAPI.indexLinkedPlanRedemption(params);
         const data = await response.data();
 
         return {

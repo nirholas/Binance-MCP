@@ -23,9 +23,7 @@ export function registerBinanceDeliveryCreateListenKey(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await deliveryClient.restAPI.createListenKey({
-          ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        });
+        const response = await deliveryClient.restAPI.createListenKey();
 
         const data = await response.data();
 

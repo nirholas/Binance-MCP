@@ -43,7 +43,7 @@ export function registerBinanceCryptoLoansFlexibleBorrow(server: McpServer) {
           };
         }
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanBorrow({
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanBorrow({
           loanCoin: params.loanCoin,
           collateralCoin: params.collateralCoin,
           ...(params.loanAmount && { loanAmount: params.loanAmount }),

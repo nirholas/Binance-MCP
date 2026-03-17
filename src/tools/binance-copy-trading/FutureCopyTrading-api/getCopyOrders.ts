@@ -23,7 +23,7 @@ export function registerBinanceCopyTradingGetOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getCopyTradingOrders({
+        const response = await (copyTradingClient as any).restAPI.getCopyTradingOrders({
           ...(params.portfolioId && { portfolioId: params.portfolioId }),
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.startTime && { startTime: params.startTime }),

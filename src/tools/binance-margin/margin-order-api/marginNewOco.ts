@@ -55,7 +55,7 @@ export function registerBinanceMarginNewOco(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.marginAccountNewOco({
+        const response = await (marginClient as any).restAPI.marginAccountNewOco({
           symbol: params.symbol,
           side: params.side,
           quantity: params.quantity,

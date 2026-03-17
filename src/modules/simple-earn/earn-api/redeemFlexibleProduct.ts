@@ -43,7 +43,7 @@ export function registerBinanceRedeemFlexibleProduct(server: McpServer) {
           };
         }
 
-        const response = await simpleEarnClient.restAPI.redeemFlexibleProduct({
+        const response = await (simpleEarnClient as any).restAPI.redeemFlexibleProduct({
           productId,
           ...(redeemAll !== undefined && { redeemAll }),
           ...(amount !== undefined && { amount }),

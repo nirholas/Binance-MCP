@@ -55,7 +55,7 @@ export function registerBinanceWalletBrokerWithdraw(server: McpServer) {
         if (name !== undefined) params.name = name;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.brokerWithdraw(params);
+        const response = await (walletClient as any).restAPI.brokerWithdraw(params);
         const data = await response.data();
 
         return {

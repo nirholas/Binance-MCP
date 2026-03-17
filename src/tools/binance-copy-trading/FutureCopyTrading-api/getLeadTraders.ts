@@ -31,7 +31,7 @@ export function registerBinanceCopyTradingGetLeaders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getLeadTraders({
+        const response = await (copyTradingClient as any).restAPI.getLeadTraders({
           ...(params.pageNumber && { pageNumber: params.pageNumber }),
           ...(params.pageSize && { pageSize: params.pageSize }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

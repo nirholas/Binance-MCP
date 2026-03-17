@@ -31,7 +31,7 @@ export function registerBinanceCryptoLoansFixedAssets(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getLoanableAssetsData({
+        const response = await (cryptoLoanClient as any).restAPI.getLoanableAssetsData({
           ...(params.loanCoin && { loanCoin: params.loanCoin }),
           ...(params.vipLevel !== undefined && { vipLevel: params.vipLevel }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

@@ -9,7 +9,7 @@ export function registerBinanceWalletSystemStatus(server: McpServer) {
     { description: "Get Binance Wallet system status." },
     async () => {
       try {
-        const response = await walletClient.restAPI.systemStatus();
+        const response = await (walletClient as any).restAPI.systemStatus();
         const data = await response.data();
 
         return {

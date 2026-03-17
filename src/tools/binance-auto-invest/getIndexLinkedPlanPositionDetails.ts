@@ -23,7 +23,9 @@ export function registerBinanceAutoInvestGetIndexLinkedPlanPositionDetails(serve
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.getIndexLinkedPlanPositionDetails({
+        const response = await (
+          autoInvestClient as any
+        ).restAPI.queryIndexLinkedPlanPositionDetails({
           indexId: params.indexId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

@@ -19,7 +19,7 @@ export function registerBinanceWalletAccountStatus(server: McpServer) {
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.accountStatus(params);
+        const response = await (walletClient as any).restAPI.accountStatus(params);
         const data = await response.data();
 
         return {

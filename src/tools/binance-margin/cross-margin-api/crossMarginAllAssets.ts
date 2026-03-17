@@ -29,7 +29,7 @@ export function registerBinanceCrossMarginAllAssets(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.getAllCrossMarginPairs({
+        const response = await (marginClient as any).restAPI.getAllCrossMarginPairs({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

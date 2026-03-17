@@ -21,7 +21,7 @@ export function registerBinanceCryptoLoanGetLoanableAssetsDataV2(server: McpServ
         if (loanCoin) params.loanCoin = loanCoin;
         if (vipLevel !== undefined) params.vipLevel = vipLevel;
 
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanAssetsData(params);
+        const response = await (cryptoLoanClient as any).restAPI.getFlexibleLoanAssetsData(params);
         const data = await response.data();
 
         return {

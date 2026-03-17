@@ -16,7 +16,7 @@ export function registerBinanceFuturesCOINMBalance(server: McpServer) {
     },
     async (params) => {
       try {
-        const data = await deliveryClient.getBalance({
+        const data = await deliveryClient.balance({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

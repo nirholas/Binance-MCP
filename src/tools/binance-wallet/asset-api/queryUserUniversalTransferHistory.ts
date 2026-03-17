@@ -32,7 +32,9 @@ export function registerBinanceWalletQueryUserUniversalTransferHistory(server: M
         if (toSymbol !== undefined) params.toSymbol = toSymbol;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.queryUserUniversalTransferHistory(params);
+        const response = await (walletClient as any).restAPI.queryUserUniversalTransferHistory(
+          params,
+        );
         const data = await response.data();
 
         return {

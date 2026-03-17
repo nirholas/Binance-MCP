@@ -28,7 +28,7 @@ export function registerSimpleEarnCollateralRecord(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleCollateralRecord({
+        const response = await (simpleEarnClient as any).restAPI.getCollateralRecord({
           ...(params.productId && { productId: params.productId }),
           ...(params.asset && { asset: params.asset }),
           ...(params.startTime && { startTime: params.startTime }),

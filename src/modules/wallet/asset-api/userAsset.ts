@@ -21,7 +21,7 @@ export function registerBinanceWalletUserAsset(server: McpServer) {
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
         if (needBtcValuation !== undefined) params.needBtcValuation = needBtcValuation;
 
-        const response = await walletClient.restAPI.userAsset(params);
+        const response = await (walletClient as any).restAPI.userAsset(params);
         const data = await response.data();
 
         return {

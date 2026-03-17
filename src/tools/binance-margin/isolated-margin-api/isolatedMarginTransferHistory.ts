@@ -31,7 +31,7 @@ export function registerBinanceIsolatedMarginTransferHistory(server: McpServer) 
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.getIsolatedMarginTransferHistory({
+        const response = await (marginClient as any).restAPI.getIsolatedMarginTransferHistory({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.asset && { asset: params.asset }),
           ...(params.transFrom && { transFrom: params.transFrom }),

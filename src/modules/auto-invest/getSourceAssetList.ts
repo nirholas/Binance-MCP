@@ -30,7 +30,7 @@ export function registerAutoInvestGetSourceAssetList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.sourceAssetList({
+        const response = await (autoInvestClient as any).restAPI.querySourceAssetList({
           ...(params.usageType && { usageType: params.usageType }),
           ...(params.targetAsset && { targetAsset: params.targetAsset }),
           ...(params.indexId && { indexId: params.indexId }),

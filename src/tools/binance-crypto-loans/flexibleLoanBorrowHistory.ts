@@ -29,7 +29,7 @@ export function registerBinanceCryptoLoanFlexibleLoanBorrowHistory(server: McpSe
         if (current !== undefined) params.current = current;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanBorrowHistory(params);
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanBorrowHistory(params);
         const data = await response.data();
 
         return {

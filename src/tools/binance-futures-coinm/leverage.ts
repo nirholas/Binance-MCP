@@ -18,7 +18,7 @@ export function registerBinanceFuturesCOINMLeverage(server: McpServer) {
     },
     async (params) => {
       try {
-        const data = await deliveryClient.changeInitialLeverage({
+        const data = await deliveryClient.leverage({
           symbol: params.symbol,
           leverage: params.leverage,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

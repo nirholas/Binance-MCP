@@ -24,12 +24,10 @@ export function registerOptionsGetIncomeAsynId(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.incomeAsynId({
+        const data = await optionsClient.incomeAsynId({
           downloadId: params.downloadId,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Income Download Status\n\n`;
         result += `Download ID: ${params.downloadId}\n`;

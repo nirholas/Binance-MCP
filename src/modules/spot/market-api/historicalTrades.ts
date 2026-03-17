@@ -23,7 +23,7 @@ export function registerBinanceHistoricalTrades(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (fromId !== undefined) params.fromId = fromId;
 
-        const response = await spotClient.restAPI.historicalTrades(params);
+        const response = await (spotClient as any).restAPI.historicalTrades(params);
 
         const data = await response.data();
 

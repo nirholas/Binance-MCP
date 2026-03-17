@@ -54,7 +54,7 @@ export function registerAutoInvestOneTimeTransaction(server: McpServer) {
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         };
 
-        const response = await autoInvestClient.restAPI.oneOff(requestParams);
+        const response = await (autoInvestClient as any).restAPI.oneTimeTransaction(requestParams);
         const data = await response.data();
 
         return {

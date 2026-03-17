@@ -26,7 +26,7 @@ export function registerAutoInvestChangePlanStatus(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.planEditStatus({
+        const response = await (autoInvestClient as any).restAPI.changePlanStatus({
           planId: params.planId,
           status: params.status,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

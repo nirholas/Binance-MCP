@@ -19,7 +19,7 @@ export function registerBinanceWalletQueryUserWalletBalance(server: McpServer) {
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.queryUserWalletBalance(params);
+        const response = await (walletClient as any).restAPI.queryUserWalletBalance(params);
         const data = await response.data();
 
         return {

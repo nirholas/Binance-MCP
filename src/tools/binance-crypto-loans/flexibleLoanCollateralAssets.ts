@@ -19,7 +19,9 @@ export function registerBinanceCryptoLoanFlexibleLoanCollateralAssets(server: Mc
         const params: any = {};
         if (collateralCoin) params.collateralCoin = collateralCoin;
 
-        const response = await cryptoLoanClient.restAPI.getFlexibleLoanCollateralAssetsData(params);
+        const response = await (
+          cryptoLoanClient as any
+        ).restAPI.getFlexibleLoanCollateralAssetsData(params);
         const data = await response.data();
 
         return {

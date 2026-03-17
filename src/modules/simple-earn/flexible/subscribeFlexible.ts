@@ -33,7 +33,7 @@ export function registerSimpleEarnSubscribeFlexible(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.subscribeFlexibleProduct({
+        const response = await (simpleEarnClient as any).restAPI.subscribeFlexibleProduct({
           productId: params.productId,
           amount: params.amount,
           ...(params.autoSubscribe !== undefined && { autoSubscribe: params.autoSubscribe }),

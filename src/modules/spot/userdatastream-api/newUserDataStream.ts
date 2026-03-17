@@ -9,7 +9,7 @@ export function registerBinanceNewUserDataStream(server: McpServer) {
     { description: "Create a new user data stream to receive account updates via WebSocket." },
     async () => {
       try {
-        const response = await spotClient.restAPI.newUserDataStream();
+        const response = await (spotClient as any).restAPI.newUserDataStream();
 
         const data = await response.data();
 

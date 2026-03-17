@@ -26,7 +26,7 @@ export function registerBinanceCryptoLoansFixedCollateralRate(server: McpServer)
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.checkCollateralRepayRate({
+        const response = await (cryptoLoanClient as any).restAPI.checkCollateralRepayRate({
           loanCoin: params.loanCoin,
           collateralCoin: params.collateralCoin,
           repayAmount: params.repayAmount,

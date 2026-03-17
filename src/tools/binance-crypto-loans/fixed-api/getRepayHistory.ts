@@ -29,7 +29,7 @@ export function registerBinanceCryptoLoansFixedRepayHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.getLoanRepaymentHistory({
+        const response = await (cryptoLoanClient as any).restAPI.getLoanRepaymentHistory({
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.loanCoin && { loanCoin: params.loanCoin }),
           ...(params.collateralCoin && { collateralCoin: params.collateralCoin }),

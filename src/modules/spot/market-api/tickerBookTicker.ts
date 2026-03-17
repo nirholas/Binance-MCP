@@ -19,7 +19,7 @@ export function registerBinanceTickerBookTicker(server: McpServer) {
         const params: any = {};
         if (symbol) params.symbol = symbol;
 
-        const response = await spotClient.restAPI.tickerBookTicker(params);
+        const response = await (spotClient as any).restAPI.tickerBookTicker(params);
 
         const data = await response.data();
 

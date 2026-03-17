@@ -24,12 +24,10 @@ export function registerOptionsCancelAllOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.cancelAllOpenOrders({
+        const data = await optionsClient.cancelAllOrders({
           symbol: params.symbol,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         return {
           content: [

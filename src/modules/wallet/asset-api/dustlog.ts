@@ -23,7 +23,7 @@ export function registerBinanceWalletDustlog(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.dustlog(params);
+        const response = await (walletClient as any).restAPI.dustlog(params);
         const data = await response.data();
 
         return {

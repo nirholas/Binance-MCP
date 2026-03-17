@@ -49,7 +49,7 @@ export function registerBinanceWalletWithdraw(server: McpServer) {
         if (transactionFeeFlag !== undefined) params.transactionFeeFlag = transactionFeeFlag;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.withdraw(params);
+        const response = await (walletClient as any).restAPI.withdraw(params);
         const data = await response.data();
 
         return {

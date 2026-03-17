@@ -15,8 +15,7 @@ export function registerOptionsMarketTime(server: McpServer) {
     { description: "Get the current server time from the Options API." },
     async () => {
       try {
-        const response = await optionsClient.restAPI.time();
-        const data = await response.data();
+        const data = await optionsClient.time();
 
         const serverTime = new Date(data.serverTime).toISOString();
 

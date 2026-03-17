@@ -28,7 +28,7 @@ export function registerSimpleEarnLockedPosition(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getLockedProductPosition({
+        const response = await (simpleEarnClient as any).restAPI.getLockedProductPosition({
           ...(params.asset && { asset: params.asset }),
           ...(params.positionId && { positionId: params.positionId }),
           ...(params.projectId && { projectId: params.projectId }),

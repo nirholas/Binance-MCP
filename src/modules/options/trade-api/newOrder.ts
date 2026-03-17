@@ -36,7 +36,7 @@ export function registerOptionsNewOrder(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.newOrder({
+        const data = await optionsClient.newOrder({
           symbol: params.symbol,
           side: params.side,
           type: params.type,
@@ -49,8 +49,6 @@ export function registerOptionsNewOrder(server: McpServer) {
           ...(params.isMmp !== undefined && { isMmp: params.isMmp }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         return {
           content: [

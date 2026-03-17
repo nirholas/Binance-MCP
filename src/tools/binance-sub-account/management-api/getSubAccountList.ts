@@ -33,7 +33,7 @@ export function registerBinanceSubAccountList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.querySubAccountList({
+        const response = await (spotClient as any).restAPI.querySubAccountList({
           ...(params.email && { email: params.email }),
           ...(params.isFreeze && { isFreeze: params.isFreeze }),
           ...(params.page && { page: params.page }),

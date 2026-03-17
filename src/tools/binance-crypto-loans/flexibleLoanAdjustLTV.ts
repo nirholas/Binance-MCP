@@ -23,7 +23,7 @@ export function registerBinanceCryptoLoanFlexibleLoanAdjustLTV(server: McpServer
       try {
         const params: any = { loanCoin, collateralCoin, adjustmentAmount, direction };
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanAdjustLtv(params);
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanAdjustLtv(params);
         const data = await response.data();
 
         return {

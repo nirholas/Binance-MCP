@@ -40,12 +40,10 @@ export function registerOptionsBatchOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.batchOrders({
+        const data = await optionsClient.batchOrders({
           orders: JSON.stringify(params.orders),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Batch Options Orders Placed\n\n`;
 

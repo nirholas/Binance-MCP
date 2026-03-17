@@ -23,7 +23,7 @@ export function registerBinanceEnableIsolatedMarginAccount(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.enableIsolatedMarginAccount({
+        const response = await (marginClient as any).restAPI.enableIsolatedMarginAccount({
           symbol: params.symbol,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

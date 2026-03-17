@@ -27,7 +27,7 @@ export function registerBinanceCryptoLoansFixedAdjustLTV(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.cryptoLoanAdjustLtv({
+        const response = await (cryptoLoanClient as any).restAPI.cryptoLoanAdjustLtv({
           orderId: params.orderId,
           amount: params.amount,
           direction: params.direction,

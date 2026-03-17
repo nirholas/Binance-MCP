@@ -18,7 +18,9 @@ export function registerBinanceAutoInvestGetIndexLinkedPlanPositionList(server: 
       try {
         const params: any = { indexId };
 
-        const response = await autoInvestClient.restAPI.queryIndexLinkedPlanPositionDetails(params);
+        const response = await (
+          autoInvestClient as any
+        ).restAPI.queryIndexLinkedPlanPositionDetails(params);
         const data = await response.data();
 
         return {

@@ -32,13 +32,13 @@ export function registerBinanceHashRateResaleDetail(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await miningClient.restAPI.hashrateResaleDetail({
+        const response = await (miningClient as any).restAPI.hashrateResaleDetail({
           configId: params.configId,
           userName: params.userName,
           ...(params.pageIndex && { pageIndex: params.pageIndex }),
           ...(params.pageSize && { pageSize: params.pageSize }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        });
+        } as any);
 
         const data = await response.data();
 

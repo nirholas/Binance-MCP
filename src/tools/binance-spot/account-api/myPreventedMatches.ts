@@ -29,7 +29,7 @@ export function registerBinanceMyPreventedMatches(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.myPreventedMatches(params);
+        const response = await (spotClient as any).restAPI.myPreventedMatches(params);
 
         const data = await response.data();
 

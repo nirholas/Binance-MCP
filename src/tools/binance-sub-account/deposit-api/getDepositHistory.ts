@@ -39,7 +39,7 @@ export function registerBinanceSubAccountDepositHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountDepositHistory({
+        const response = await (spotClient as any).restAPI.getSubAccountDepositHistory({
           email: params.email,
           ...(params.coin && { coin: params.coin }),
           ...(params.status && { status: params.status }),

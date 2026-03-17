@@ -30,7 +30,7 @@ export function registerBinanceMarginGetOpenOco(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.queryMarginAccountsOpenOco({
+        const response = await (marginClient as any).restAPI.queryMarginAccountsOpenOco({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.isIsolated && { isIsolated: params.isIsolated }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

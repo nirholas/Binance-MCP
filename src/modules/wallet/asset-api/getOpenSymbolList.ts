@@ -9,7 +9,7 @@ export function registerBinanceWalletGetOpenSymbolList(server: McpServer) {
     { description: "Get open symbol list." },
     async () => {
       try {
-        const response = await walletClient.restAPI.getOpenSymbolList();
+        const response = await (walletClient as any).restAPI.getOpenSymbolList();
         const data = await response.data();
 
         return {

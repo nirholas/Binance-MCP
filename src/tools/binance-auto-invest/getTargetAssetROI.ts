@@ -21,7 +21,7 @@ export function registerBinanceAutoInvestGetTargetAssetROI(server: McpServer) {
       try {
         const params: any = { targetAsset, hisRoiType };
 
-        const response = await autoInvestClient.restAPI.getTargetAssetRoiData(params);
+        const response = await (autoInvestClient as any).restAPI.getTargetAssetRoiData(params);
         const data = await response.data();
 
         return {

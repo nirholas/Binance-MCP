@@ -47,7 +47,7 @@ export function registerBinanceKlines(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.klines(params);
+        const response = await (spotClient as any).restAPI.klines(params);
 
         const data = await response.data();
 

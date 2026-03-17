@@ -28,11 +28,9 @@ export function registerOptionsMarketTicker(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.ticker({
+        const data = await optionsClient.ticker({
           ...(params.symbol && { symbol: params.symbol }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options 24hr Ticker Statistics\n\n`;
 

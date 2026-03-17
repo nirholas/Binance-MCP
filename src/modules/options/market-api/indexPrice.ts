@@ -23,11 +23,9 @@ export function registerOptionsMarketIndex(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.index({
+        const data = await optionsClient.index({
           underlying: params.underlying,
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Index Price\n\n`;
 

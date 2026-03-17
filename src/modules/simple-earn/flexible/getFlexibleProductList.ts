@@ -32,7 +32,7 @@ export function registerSimpleEarnFlexibleProductList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getSimpleEarnFlexibleProductList({
+        const response = await (simpleEarnClient as any).restAPI.getSimpleEarnFlexibleProductList({
           ...(params.asset && { asset: params.asset }),
           ...(params.current && { current: params.current }),
           ...(params.size && { size: params.size }),

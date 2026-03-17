@@ -22,7 +22,7 @@ export function registerBinanceWalletDepositAddress(server: McpServer) {
         if (network !== undefined) params.network = network;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.depositAddress(params);
+        const response = await (walletClient as any).restAPI.depositAddress(params);
         const data = await response.data();
 
         return {

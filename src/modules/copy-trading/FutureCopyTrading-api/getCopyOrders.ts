@@ -27,7 +27,7 @@ export function registerBinanceCopyTradingGetCopyOrders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getCopyOrders({
+        const response = await (copyTradingClient as any).restAPI.getCopyOrders({
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.pageNumber && { pageNumber: params.pageNumber }),

@@ -32,7 +32,7 @@ export function registerBinancePayGetHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await payClient.restAPI.getPayTradeHistory({
+        const response = await (payClient as any).restAPI.getPayTradeHistory({
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.limit && { limit: params.limit }),

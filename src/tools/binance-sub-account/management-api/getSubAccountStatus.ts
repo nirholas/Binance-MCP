@@ -24,7 +24,7 @@ export function registerBinanceSubAccountStatus(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountStatus({
+        const response = await (spotClient as any).restAPI.getSubAccountStatus({
           ...(params.email && { email: params.email }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

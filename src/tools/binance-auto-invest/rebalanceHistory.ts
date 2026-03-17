@@ -32,7 +32,7 @@ export function registerBinanceAutoInvestRebalanceHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.getRebalanceHistory({
+        const response = await (autoInvestClient as any).restAPI.getRebalanceHistory({
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),
           ...(params.size && { size: params.size }),

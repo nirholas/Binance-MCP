@@ -27,7 +27,7 @@ export function registerBinanceSubAccountFuturesSummary(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountFuturesAccountSummaryV2({
+        const response = await (spotClient as any).restAPI.getSubAccountFuturesAccountSummaryV2({
           ...(params.futuresType && { futuresType: params.futuresType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

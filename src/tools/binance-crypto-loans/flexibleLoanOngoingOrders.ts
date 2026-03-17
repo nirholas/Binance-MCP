@@ -25,7 +25,7 @@ export function registerBinanceCryptoLoanFlexibleLoanOngoingOrders(server: McpSe
         if (current !== undefined) params.current = current;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanOngoingOrders(params);
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanOngoingOrders(params);
         const data = await response.data();
 
         return {

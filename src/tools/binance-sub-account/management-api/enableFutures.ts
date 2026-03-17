@@ -24,7 +24,7 @@ export function registerBinanceSubAccountEnableFutures(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.enableFuturesForSubAccount({
+        const response = await (spotClient as any).restAPI.enableFuturesForSubAccount({
           email: params.email,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

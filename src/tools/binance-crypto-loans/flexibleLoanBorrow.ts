@@ -23,7 +23,7 @@ export function registerBinanceCryptoLoanFlexibleLoanBorrow(server: McpServer) {
         if (loanAmount !== undefined) params.loanAmount = loanAmount;
         if (collateralAmount !== undefined) params.collateralAmount = collateralAmount;
 
-        const response = await cryptoLoanClient.restAPI.flexibleLoanBorrow(params);
+        const response = await (cryptoLoanClient as any).restAPI.flexibleLoanBorrow(params);
         const data = await response.data();
 
         return {

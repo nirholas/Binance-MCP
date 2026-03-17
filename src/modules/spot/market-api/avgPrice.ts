@@ -16,7 +16,7 @@ export function registerBinanceAvgPrice(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const response = await spotClient.restAPI.avgPrice({
+        const response = await (spotClient as any).restAPI.avgPrice({
           symbol: symbol,
         });
 

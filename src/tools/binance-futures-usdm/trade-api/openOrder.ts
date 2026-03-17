@@ -37,7 +37,8 @@ export function registerBinanceFuturesOpenOrder(server: McpServer) {
           };
         }
 
-        const response = await futuresClient.restAPI.currentOpenOrder(params.symbol, {
+        const response = await futuresClient.restAPI.currentOpenOrder({
+          symbol: params.symbol,
           orderId: params.orderId,
           origClientOrderId: params.origClientOrderId,
         });

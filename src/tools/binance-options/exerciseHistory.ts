@@ -25,7 +25,7 @@ export function registerBinanceOptionsExerciseHistory(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (limit !== undefined) params.limit = limit;
 
-        const data = await optionsClient.exerciseHistory(params);
+        const data = await optionsClient.exerciseRecord(params);
 
         return {
           content: [

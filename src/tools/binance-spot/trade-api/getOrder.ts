@@ -23,7 +23,7 @@ export function registerBinanceGetOrder(server: McpServer) {
         if (orderId) params.orderId = orderId;
         if (origClientOrderId) params.origClientOrderId = origClientOrderId;
 
-        const response = await spotClient.restAPI.getOrder(params);
+        const response = await (spotClient as any).restAPI.getOrder(params);
 
         const data = await response.data();
 

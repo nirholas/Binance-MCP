@@ -21,7 +21,7 @@ export function registerBinanceWalletAssetDetail(server: McpServer) {
         if (asset !== undefined) params.asset = asset;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.assetDetail(params);
+        const response = await (walletClient as any).restAPI.assetDetail(params);
         const data = await response.data();
 
         return {

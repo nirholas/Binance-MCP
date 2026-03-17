@@ -24,7 +24,7 @@ export function registerBinanceAutoInvestChangeIndexPlanStatus(server: McpServer
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.changeIndexPlanStatus({
+        const response = await (autoInvestClient as any).restAPI.changePlanStatus({
           indexId: params.indexId,
           status: params.status,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),

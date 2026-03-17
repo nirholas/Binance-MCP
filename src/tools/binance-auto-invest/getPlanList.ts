@@ -19,7 +19,7 @@ export function registerBinanceAutoInvestGetPlanList(server: McpServer) {
         const params: any = {};
         if (planType) params.planType = planType;
 
-        const response = await autoInvestClient.restAPI.getListOfPlans(params);
+        const response = await (autoInvestClient as any).restAPI.getListOfPlans(params);
         const data = await response.data();
 
         return {

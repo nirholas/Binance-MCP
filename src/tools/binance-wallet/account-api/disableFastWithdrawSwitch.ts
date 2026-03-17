@@ -19,7 +19,7 @@ export function registerBinanceWalletDisableFastWithdrawSwitch(server: McpServer
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.disableFastWithdrawSwitch(params);
+        const response = await (walletClient as any).restAPI.disableFastWithdrawSwitch(params);
         const data = await response.data();
 
         return {

@@ -25,13 +25,11 @@ export function registerOptionsGetIncomeAsyn(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.incomeAsyn({
+        const data = await optionsClient.incomeAsyn({
           startTime: params.startTime,
           endTime: params.endTime,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         return {
           content: [

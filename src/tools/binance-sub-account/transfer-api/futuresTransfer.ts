@@ -28,7 +28,7 @@ export function registerBinanceSubAccountFuturesTransfer(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.subAccountFuturesInternalTransfer({
+        const response = await (spotClient as any).restAPI.subAccountFuturesInternalTransfer({
           fromEmail: params.fromEmail,
           toEmail: params.toEmail,
           futuresType: params.futuresType,

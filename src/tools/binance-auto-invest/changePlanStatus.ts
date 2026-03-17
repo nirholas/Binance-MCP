@@ -19,7 +19,7 @@ export function registerBinanceAutoInvestChangePlanStatus(server: McpServer) {
       try {
         const params: any = { planId, status };
 
-        const response = await autoInvestClient.restAPI.changePlanStatus(params);
+        const response = await (autoInvestClient as any).restAPI.changePlanStatus(params);
         const data = await response.data();
 
         return {

@@ -31,7 +31,9 @@ export function registerBinanceAutoInvestGetSubscriptionHistory(server: McpServe
         if (current !== undefined) params.current = current;
         if (size !== undefined) params.size = size;
 
-        const response = await autoInvestClient.restAPI.querySubscriptionTransactionHistory(params);
+        const response = await (
+          autoInvestClient as any
+        ).restAPI.querySubscriptionTransactionHistory(params);
         const data = await response.data();
 
         return {

@@ -37,14 +37,12 @@ export function registerOptionsCancelOrder(server: McpServer) {
           };
         }
 
-        const response = await optionsClient.restAPI.cancelOrder({
+        const data = await optionsClient.cancelOrder({
           symbol: params.symbol,
           ...(params.orderId && { orderId: params.orderId }),
           ...(params.clientOrderId && { clientOrderId: params.clientOrderId }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         return {
           content: [

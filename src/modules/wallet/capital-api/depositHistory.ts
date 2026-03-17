@@ -31,7 +31,7 @@ export function registerBinanceWalletDepositHistory(server: McpServer) {
         if (limit !== undefined) params.limit = limit;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.depositHistory(params);
+        const response = await (walletClient as any).restAPI.depositHistory(params);
         const data = await response.data();
 
         return {

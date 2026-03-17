@@ -37,7 +37,7 @@ export function registerBinanceAutoInvestGetHistoryList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.getHistoryList({
+        const response = await (autoInvestClient as any).restAPI.getHistoryList({
           ...(params.planId && { planId: params.planId }),
           ...(params.startTime && { startTime: params.startTime }),
           ...(params.endTime && { endTime: params.endTime }),

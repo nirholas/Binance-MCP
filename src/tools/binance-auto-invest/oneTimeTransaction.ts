@@ -41,7 +41,7 @@ export function registerBinanceAutoInvestOneTimeTransaction(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.oneTimeTransaction({
+        const response = await (autoInvestClient as any).restAPI.oneTimeTransaction({
           sourceType: params.sourceType,
           subscriptionAmount: params.subscriptionAmount,
           sourceAsset: params.sourceAsset,

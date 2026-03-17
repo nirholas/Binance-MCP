@@ -7,17 +7,18 @@ import { algoClient } from "../config/client.js";
 export function registerBinanceTimeWeightedAveragePriceFutureAlgo(server: McpServer) {
   server.registerTool(
     "binanceTimeWeightedAveragePriceFutureAlgo",
-    {},
-    `Place a new spot TWAP order with Algo service. Trading for large orders can generate significant selling pressure on the market`,
     {
-      symbol: z.string().describe("symbol: exemple: BTCUSDT"),
-      side: z.enum(["BUY", "SELL"]).describe("BUY or SELL"),
-      quantity: z
-        .number()
-        .describe(
-          "quantity Quantity of base asset; Maximum notional per order is 200k, 2mm or 10mm, depending on symbol. Please reduce your size if you order is above the maximum notional per order.",
-        ),
-      duration: z.number().describe("duration Duration for TWAP orders in seconds. [300, 86400]"),
+      description: `Place a new spot TWAP order with Algo service. Trading for large orders can generate significant selling pressure on the market`,
+      inputSchema: {
+        symbol: z.string().describe("symbol: exemple: BTCUSDT"),
+        side: z.enum(["BUY", "SELL"]).describe("BUY or SELL"),
+        quantity: z
+          .number()
+          .describe(
+            "quantity Quantity of base asset; Maximum notional per order is 200k, 2mm or 10mm, depending on symbol. Please reduce your size if you order is above the maximum notional per order.",
+          ),
+        duration: z.number().describe("duration Duration for TWAP orders in seconds. [300, 86400]"),
+      },
     },
     async ({ symbol, side, quantity, duration }) => {
       try {

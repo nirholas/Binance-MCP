@@ -16,10 +16,7 @@ export function registerBinanceOptionsExchangeInfo(server: McpServer) {
     },
     async ({ symbol }) => {
       try {
-        const params: any = {};
-        if (symbol) params.symbol = symbol;
-
-        const data = await optionsClient.exchangeInfo(params);
+        const data = await optionsClient.exchangeInfo();
 
         return {
           content: [

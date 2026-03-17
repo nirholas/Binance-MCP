@@ -44,14 +44,12 @@ export function registerOptionsCancelBatchOrders(server: McpServer) {
           };
         }
 
-        const response = await optionsClient.restAPI.cancelBatchOrders({
+        const data = await optionsClient.cancelBatchOrders({
           symbol: params.symbol,
           ...(params.orderIds && { orderIds: JSON.stringify(params.orderIds) }),
           ...(params.clientOrderIds && { clientOrderIds: JSON.stringify(params.clientOrderIds) }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Batch Options Orders Cancelled\n\n`;
 

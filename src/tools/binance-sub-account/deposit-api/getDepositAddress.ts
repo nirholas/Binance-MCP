@@ -26,7 +26,7 @@ export function registerBinanceSubAccountDepositAddress(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.getSubAccountDepositAddress({
+        const response = await (spotClient as any).restAPI.getSubAccountDepositAddress({
           email: params.email,
           coin: params.coin,
           ...(params.network && { network: params.network }),

@@ -32,7 +32,7 @@ export function registerBinanceCryptoLoansFixedRepay(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await cryptoLoanClient.restAPI.cryptoLoanRepay({
+        const response = await (cryptoLoanClient as any).restAPI.cryptoLoanRepay({
           orderId: params.orderId,
           amount: params.amount,
           ...(params.type && { type: params.type }),

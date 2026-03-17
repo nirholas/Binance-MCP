@@ -44,7 +44,7 @@ export function registerBinanceMarginCancelOco(server: McpServer) {
           };
         }
 
-        const response = await marginClient.restAPI.marginAccountCancelOco({
+        const response = await (marginClient as any).restAPI.marginAccountCancelOco({
           symbol: params.symbol,
           ...(params.orderListId !== undefined && { orderListId: params.orderListId }),
           ...(params.listClientOrderId && { listClientOrderId: params.listClientOrderId }),

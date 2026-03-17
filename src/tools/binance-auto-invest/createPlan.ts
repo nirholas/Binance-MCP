@@ -50,7 +50,7 @@ export function registerBinanceAutoInvestCreatePlan(server: McpServer) {
         };
         if (flexibleAllowedToUse !== undefined) params.flexibleAllowedToUse = flexibleAllowedToUse;
 
-        const response = await autoInvestClient.restAPI.investmentPlanCreation(params);
+        const response = await (autoInvestClient as any).restAPI.investmentPlanCreation(params);
         const data = await response.data();
 
         return {

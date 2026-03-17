@@ -19,7 +19,7 @@ export function registerBinanceRateLimitOrder(server: McpServer) {
         const params: any = {};
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await spotClient.restAPI.rateLimitOrder(params);
+        const response = await (spotClient as any).restAPI.rateLimitOrder(params);
 
         const data = await response.data();
 

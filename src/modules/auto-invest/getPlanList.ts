@@ -26,7 +26,7 @@ export function registerAutoInvestGetPlanList(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await autoInvestClient.restAPI.planList({
+        const response = await (autoInvestClient as any).restAPI.getListOfPlans({
           ...(params.planType && { planType: params.planType }),
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

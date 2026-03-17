@@ -47,7 +47,7 @@ export function registerBinanceUiKlines(server: McpServer) {
         if (endTime !== undefined) params.endTime = endTime;
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.uiKlines(params);
+        const response = await (spotClient as any).restAPI.uiKlines(params);
 
         const data = await response.data();
 

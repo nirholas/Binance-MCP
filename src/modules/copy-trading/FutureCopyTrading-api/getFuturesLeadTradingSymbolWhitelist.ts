@@ -21,7 +21,9 @@ export function registerBinanceGetFuturesLeadTradingSymbolWhitelist(server: McpS
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getFuturesLeadTradingSymbolWhitelist({
+        const response = await (
+          copyTradingClient as any
+        ).restAPI.getFuturesLeadTradingSymbolWhitelist({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
 

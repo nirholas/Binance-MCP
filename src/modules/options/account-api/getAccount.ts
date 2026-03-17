@@ -22,11 +22,9 @@ export function registerOptionsGetAccount(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.account({
+        const data = await optionsClient.account({
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Options Account Information\n\n`;
 

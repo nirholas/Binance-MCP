@@ -34,13 +34,11 @@ export function registerOptionsMarketHistoricalTrades(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await optionsClient.restAPI.historicalTrades({
+        const data = await optionsClient.historicalTrades({
           symbol: params.symbol,
           ...(params.limit && { limit: params.limit }),
           ...(params.fromId && { fromId: params.fromId }),
         });
-
-        const data = await response.data();
 
         let result = `✅ Historical Trades - ${params.symbol}\n\n`;
 

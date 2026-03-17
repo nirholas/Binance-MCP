@@ -23,9 +23,7 @@ export function registerBinanceFuturesCreateListenKey(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await futuresClient.restAPI.createListenKey({
-          ...(params.recvWindow && { recvWindow: params.recvWindow }),
-        });
+        const response = await futuresClient.restAPI.createListenKey();
 
         const data = await response.data();
 

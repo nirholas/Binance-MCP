@@ -27,7 +27,7 @@ export function registerBinanceGetLeadTraders(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await copyTradingClient.restAPI.getLeadTraders({
+        const response = await (copyTradingClient as any).restAPI.getLeadTraders({
           ...(params.isShared !== undefined && { isShared: params.isShared }),
           ...(params.tradeType && { tradeType: params.tradeType }),
           ...(params.pageNumber && { pageNumber: params.pageNumber }),

@@ -20,7 +20,9 @@ export function registerBinanceAutoInvestGetOneTimePlans(server: McpServer) {
         const params: any = { planId };
         if (requestId) params.requestId = requestId;
 
-        const response = await autoInvestClient.restAPI.queryOneTimeTransactionStatus(params);
+        const response = await (autoInvestClient as any).restAPI.queryOneTimeTransactionStatus(
+          params,
+        );
         const data = await response.data();
 
         return {

@@ -23,7 +23,7 @@ export function registerBinanceIsolatedMarginSymbol(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await marginClient.restAPI.queryIsolatedMarginSymbol({
+        const response = await (marginClient as any).restAPI.queryIsolatedMarginSymbol({
           symbol: params.symbol,
           ...(params.recvWindow && { recvWindow: params.recvWindow }),
         });

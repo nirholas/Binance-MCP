@@ -39,7 +39,7 @@ export function registerBinanceExchangeInfo(server: McpServer) {
         if (permissions?.length && !params.symbol && !params.symbols)
           params.permissions = permissions;
 
-        const response = await spotClient.restAPI.exchangeInfo(params);
+        const response = await (spotClient as any).restAPI.exchangeInfo(params);
 
         const data = await response.data();
 

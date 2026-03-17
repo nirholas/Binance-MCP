@@ -30,8 +30,8 @@ export function registerCreditLineTools(server: McpServer) {
   // =====================================================================
   server.registerTool(
     "binance_us_cl_account",
-    {},
-    `Get current credit line account information including LTV ratios, balances, and loan details.
+    {
+      description: `Get current credit line account information including LTV ratios, balances, and loan details.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
 ⚠️ Requires institutional credit line agreement with Binance.US.
@@ -48,8 +48,9 @@ Returns comprehensive account information including:
 - availableAmountToTransferOut: How much can be withdrawn
 - loanAssets: Details of borrowed assets
 - balances: Current asset balances (collateral)`,
-    {
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      inputSchema: {
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {
@@ -111,8 +112,8 @@ Available to Withdraw: ${response.availableAmountToTransferOut}`;
   // =====================================================================
   server.registerTool(
     "binance_us_cl_alert_history",
-    {},
-    `Get margin call and liquidation alert history for your credit line account.
+    {
+      description: `Get margin call and liquidation alert history for your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
 ⚠️ Requires institutional credit line agreement with Binance.US.
@@ -128,15 +129,16 @@ Returns alert records including:
 
 Use this to monitor your account's health history and understand
 when margin calls or liquidation warnings have occurred.`,
-    {
-      alertType: z
-        .enum(["MARGIN_CALL", "LIQUIDATION_CALL"])
-        .optional()
-        .describe("Filter by alert type"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of results. Default: 200"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      inputSchema: {
+        alertType: z
+          .enum(["MARGIN_CALL", "LIQUIDATION_CALL"])
+          .optional()
+          .describe("Filter by alert type"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Number of results. Default: 200"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {
@@ -186,8 +188,8 @@ when margin calls or liquidation warnings have occurred.`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_transfer_history",
-    {},
-    `Get transfer history for your credit line account.
+    {
+      description: `Get transfer history for your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
 ⚠️ Requires institutional credit line agreement with Binance.US.
@@ -201,16 +203,17 @@ Returns transfer records including:
 - transferTime: When the transfer occurred
 
 Use this to track deposits and withdrawals from your credit line account.`,
-    {
-      transferType: z
-        .enum(["TRANSFER_IN", "TRANSFER_OUT"])
-        .optional()
-        .describe("Filter by transfer type"),
-      asset: z.string().optional().describe("Filter by asset, e.g., BTC, USD"),
-      startTime: z.number().optional().describe("Start time in milliseconds"),
-      endTime: z.number().optional().describe("End time in milliseconds"),
-      limit: z.number().optional().describe("Number of results. Default: 20, Max: 100"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      inputSchema: {
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .optional()
+          .describe("Filter by transfer type"),
+        asset: z.string().optional().describe("Filter by asset, e.g., BTC, USD"),
+        startTime: z.number().optional().describe("Start time in milliseconds"),
+        endTime: z.number().optional().describe("End time in milliseconds"),
+        limit: z.number().optional().describe("Number of results. Default: 20, Max: 100"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {
@@ -266,8 +269,8 @@ Use this to track deposits and withdrawals from your credit line account.`,
   // =====================================================================
   server.registerTool(
     "binance_us_cl_transfer",
-    {},
-    `Transfer assets in or out of your credit line account.
+    {
+      description: `Transfer assets in or out of your credit line account.
 
 ⚠️ REQUIRES CREDIT LINE API KEY - Standard API keys will not work.
 ⚠️ Requires institutional credit line agreement with Binance.US.
@@ -279,13 +282,14 @@ Transfer types:
 
 Note: Transferring out may be restricted if it would cause LTV to exceed limits.
 Check availableAmountToTransferOut in binance_us_cl_account first.`,
-    {
-      transferType: z
-        .enum(["TRANSFER_IN", "TRANSFER_OUT"])
-        .describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
-      transferAssetType: z.string().describe("Asset to transfer, e.g., BTC, USD"),
-      quantity: z.number().positive().describe("Amount to transfer"),
-      recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      inputSchema: {
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
+        transferAssetType: z.string().describe("Asset to transfer, e.g., BTC, USD"),
+        quantity: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z.number().optional().describe("The value cannot be greater than 60000"),
+      },
     },
     async (params) => {
       try {

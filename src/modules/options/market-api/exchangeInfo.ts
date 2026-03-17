@@ -18,8 +18,7 @@ export function registerOptionsMarketExchangeInfo(server: McpServer) {
     },
     async () => {
       try {
-        const response = await optionsClient.restAPI.exchangeInfo();
-        const data = await response.data();
+        const data = await optionsClient.exchangeInfo();
 
         // Summarize the response
         const optionSymbols = data.optionSymbols || [];

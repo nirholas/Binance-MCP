@@ -30,7 +30,7 @@ export function registerBinanceWalletUserUniversalTransfer(server: McpServer) {
         if (toSymbol !== undefined) params.toSymbol = toSymbol;
         if (recvWindow !== undefined) params.recvWindow = recvWindow;
 
-        const response = await walletClient.restAPI.userUniversalTransfer(params);
+        const response = await (walletClient as any).restAPI.userUniversalTransfer(params);
         const data = await response.data();
 
         return {

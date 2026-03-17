@@ -31,7 +31,7 @@ export function registerBinanceSubAccountTransferHistory(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await spotClient.restAPI.querySubAccountTransferHistoryV1({
+        const response = await (spotClient as any).restAPI.querySubAccountTransferHistoryV1({
           ...(params.asset && { asset: params.asset }),
           ...(params.type && { type: params.type }),
           ...(params.startTime && { startTime: params.startTime }),

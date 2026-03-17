@@ -30,7 +30,7 @@ export function registerSimpleEarnRewardRecord(server: McpServer) {
     },
     async (params) => {
       try {
-        const response = await simpleEarnClient.restAPI.getFlexibleRewardsRecord({
+        const response = await (simpleEarnClient as any).restAPI.getFlexibleRewardsHistory({
           ...(params.productId && { productId: params.productId }),
           ...(params.asset && { asset: params.asset }),
           ...(params.type && { type: params.type }),

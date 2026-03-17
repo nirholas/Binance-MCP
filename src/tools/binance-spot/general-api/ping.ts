@@ -9,7 +9,7 @@ export function registerBinancePing(server: McpServer) {
     { description: "Test connectivity to the Binance API." },
     async () => {
       try {
-        const response = await spotClient.restAPI.ping();
+        const response = await (spotClient as any).restAPI.ping();
 
         const data = await response.data();
 

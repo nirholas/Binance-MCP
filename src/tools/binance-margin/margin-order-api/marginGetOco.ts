@@ -43,7 +43,7 @@ export function registerBinanceMarginGetOco(server: McpServer) {
           };
         }
 
-        const response = await marginClient.restAPI.queryMarginAccountsOco({
+        const response = await (marginClient as any).restAPI.queryMarginAccountsOco({
           ...(params.symbol && { symbol: params.symbol }),
           ...(params.orderListId !== undefined && { orderListId: params.orderListId }),
           ...(params.origClientOrderId && { origClientOrderId: params.origClientOrderId }),

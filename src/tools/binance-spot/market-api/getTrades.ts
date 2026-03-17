@@ -21,7 +21,7 @@ export function registerBinanceGetTrades(server: McpServer) {
 
         if (limit !== undefined) params.limit = limit;
 
-        const response = await spotClient.restAPI.getTrades(params);
+        const response = await (spotClient as any).restAPI.getTrades(params);
 
         const data = await response.data();
 
