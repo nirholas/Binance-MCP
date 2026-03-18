@@ -158,6 +158,29 @@ npm run dev      # STDIO
 npm run dev:sse  # SSE
 ```
 
+### Troubleshooting: "Invalid API-key, IP, or permissions"
+
+If you use **IP whitelist** on Binance and see this error, Binance may be seeing a different IP than the one you whitelisted:
+
+- **Proxy** — The process can inherit `HTTP_PROXY` / `HTTPS_PROXY` (e.g. from Cursor or your shell). Outbound requests to Binance then go through the proxy, so Binance sees the proxy’s IP.
+- **VPN** — System-wide VPN changes your exit IP.
+- **IPv4 vs IPv6** — Your machine might reach Binance via IPv6 while you whitelisted an IPv4 address (or the reverse).
+
+**Fix (proxy):** Bypass the proxy for Binance by setting `NO_PROXY` when starting the server. In `.env`:
+
+```env
+NO_PROXY=api.binance.com,api1.binance.com,api2.binance.com,api3.binance.com
+```
+
+Or in the shell before running:
+
+```bash
+export NO_PROXY=api.binance.com,api1.binance.com,api2.binance.com,api3.binance.com
+npm run dev:sse
+```
+
+If using Cursor’s MCP config, add `NO_PROXY` to the server’s `env` so the MCP process gets it.
+
 ---
 
 ## 🖥️ Client Configuration

@@ -1,4 +1,15 @@
 #!/usr/bin/env node
+import "dotenv/config";
+
+// If Binance API is IP-restricted, ensure requests bypass any proxy (HTTP_PROXY/HTTPS_PROXY)
+// so Binance sees your real IP. See README "Troubleshooting: Invalid API-key, IP, or permissions".
+if (!process.env.NO_PROXY?.includes("binance.com")) {
+  const binanceNoProxy = "api.binance.com,api1.binance.com,api2.binance.com,api3.binance.com";
+  process.env.NO_PROXY = process.env.NO_PROXY
+    ? `${process.env.NO_PROXY},${binanceNoProxy}`
+    : binanceNoProxy;
+}
+
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Server } from "http";
 

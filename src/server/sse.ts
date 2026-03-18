@@ -14,9 +14,36 @@ import Logger from "../utils/logger.js";
 import { startServer } from "./base.js";
 
 // src/server/sse.ts
+// Credentials are not passed per-request here. They are loaded at process startup (see index.ts
+// dotenv/config) and applied when config/binanceClient.ts is first required by tool handlers.
 import "dotenv/config";
 
 const PORT = process.env.PORT || 3002;
+
+function ensureBinanceEnv(): void {
+  const key = process.env.BINANCE_API_KEY;
+  const secret = process.env.BINANCE_API_SECRET;
+  if (!key?.trim() || !secret?.trim()) {
+    Logger.warn(
+      "[SSE] BINANCE_API_KEY or BINANCE_API_SECRET is missing or empty. Signed API calls will fail.",
+    );
+  }
+}
+
+/** Log the outbound IP this process uses (same as Binance would see). Helps debug IP whitelist / proxy issues. */
+async function logOutboundIp(): Promise<void> {
+  try {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = (await res.json()) as { ip?: string };
+    const ip = data?.ip ?? "(unknown)";
+    Logger.info(`[SSE] Outbound IP (Binance will see this): ${ip}`);
+  } catch (err) {
+    Logger.warn(
+      "[SSE] Could not resolve outbound IP:",
+      err instanceof Error ? err.message : String(err),
+    );
+  }
+}
 
 /** Transport + Streamable HTTP handleRequest for routing and logging. */
 type StreamableTransportWithHandle = Transport & {
@@ -164,9 +191,11 @@ export const startSSEServer = async (): Promise<Server | undefined> => {
       res.json({ status: "ok", mode: "streamable-http" });
     });
 
-    const httpServer = app.listen(PORT, () => {
+    const httpServer = app.listen(PORT, async () => {
       Logger.info(`Binance MCP Server running in Streamable HTTP mode at http://localhost:${PORT}`);
       Logger.info(`MCP endpoints: http://localhost:${PORT}/mcp and http://localhost:${PORT}/sse`);
+      ensureBinanceEnv();
+      await logOutboundIp();
     });
 
     return httpServer;
