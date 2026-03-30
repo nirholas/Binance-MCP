@@ -138,7 +138,10 @@ interface SessionEntry {
 // Start the server in Streamable HTTP mode (replaces deprecated SSE transport)
 export const startSSEServer = async (): Promise<Server | undefined> => {
   try {
-    const app = createMcpExpressApp();
+    // Default createMcpExpressApp() uses host 127.0.0.1 → localhostHostValidation()
+    // rejects any other Host (403). Private URLs like binance-mcp.railway.internal
+    // must be allowed when the process listens on 0.0.0.0 (Railway, Docker, LAN).
+    const app = createMcpExpressApp({ host: "0.0.0.0" });
     app.use(cors());
 
     const sessions = new Map<string, SessionEntry>();
