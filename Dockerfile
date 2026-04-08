@@ -1,10 +1,12 @@
 # syntax=docker/dockerfile:1
+# oven/bun:1 tracks latest Bun 1.x (includes 1.2+ text lockfile default). No lockfile COPY:
+# .gitignore uses *.lock and lockfiles are often absent in clones — install resolves from package.json.
 
 FROM oven/bun:1 AS builder
 WORKDIR /app
 
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+COPY package.json ./
+RUN bun install
 
 COPY tsconfig.json ./
 COPY src ./src
@@ -16,8 +18,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3002
 
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production
+COPY package.json ./
+RUN bun install --production
 
 COPY --from=builder /app/build ./build
 
