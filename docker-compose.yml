@@ -1,0 +1,15 @@
+services:
+  binance-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: binance-mcp:latest
+    container_name: binance-mcp
+    restart: unless-stopped
+    # App listens on 3002 inside the container; host port 80 is the default (override with HOST_PORT).
+    ports:
+      - "${HOST_PORT:-80}:3002"
+    env_file:
+      - .env
+    environment:
+      PORT: "3002"
