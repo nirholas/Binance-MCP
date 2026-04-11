@@ -59,8 +59,17 @@ type StreamableTransportWithHandle = Transport & {
  * 4. Protocol (SDK) puts it in response.result and calls transport.send({ jsonrpc, id, result }).
  * 5. StreamableHTTPServerTransport.send() writes the JSON to the response/SSE stream.
  *
- * This wrapper logs every tools/call request and every tool result content.
+ * This wrapper optionally logs tools/call requests and tool result content for selected tools
+ * (see {@link MCP_TOOLS_TO_LOG}).
  */
+
+/** MCP tool names to log at console (request args + result content). Add names here as needed. */
+const MCP_TOOLS_TO_LOG = new Set<string>(["BinanceNewOrder", "BinanceOrderOco", "BinanceGetOrder", "BinanceGetOpenOrders"]);
+
+function shouldLogMcpTool(name: unknown): name is string {
+  return typeof name === "string" && MCP_TOOLS_TO_LOG.has(name);
+}
+
 function wrapTransportWithToolLogging(
   transport: StreamableHTTPServerTransport,
 ): StreamableTransportWithHandle {
@@ -101,12 +110,13 @@ function wrapTransportWithToolLogging(
       const msg = message as { id?: string | number; result?: { content?: unknown } };
       if (msg?.result && msg.result.content !== undefined) {
         const toolName = pendingToolCalls.get(msg.id as string | number);
-
-        console.log(
-          "[MCP Streamable HTTP] tool result content",
-          toolName !== undefined ? `(tool: ${toolName})` : "",
-          JSON.stringify(msg.result.content),
-        );
+        if (toolName !== undefined) {
+          console.log(
+            "[MCP Streamable HTTP] tool result content",
+            `(tool: ${toolName})`,
+            JSON.stringify(msg.result.content),
+          );
+        }
         if (msg.id !== undefined) pendingToolCalls.delete(msg.id);
       }
 
@@ -116,7 +126,7 @@ function wrapTransportWithToolLogging(
       const body = parsedBody ?? (req as IncomingMessage & { body?: unknown }).body;
       const parsed = typeof body === "string" ? JSON.parse(body as string) : body;
 
-      if (parsed?.method === "tools/call" && parsed.params) {
+      if (parsed?.method === "tools/call" && parsed.params && shouldLogMcpTool(parsed.params.name)) {
         console.log(
           "[MCP Streamable HTTP] tools/call request",
           parsed.params.name,
