@@ -59,14 +59,14 @@ type StreamableTransportWithHandle = Transport & {
  * 4. Protocol (SDK) puts it in response.result and calls transport.send({ jsonrpc, id, result }).
  * 5. StreamableHTTPServerTransport.send() writes the JSON to the response/SSE stream.
  *
- * This wrapper optionally logs tools/call requests and tool result content for selected tools
- * (see {@link MCP_TOOLS_TO_LOG}).
+ * This wrapper logs every tools/call (tool name). Request arguments and tool result content are
+ * logged only for names in {@link MCP_TOOLS_TO_LOG}.
  */
 
-/** MCP tool names to log at console (request args + result content). Add names here as needed. */
+/** MCP tool names for which we log request arguments and result content. Add names here as needed. */
 const MCP_TOOLS_TO_LOG = new Set<string>(["BinanceNewOrder", "BinanceOrderOco", "BinanceGetOrder", "BinanceGetOpenOrders"]);
 
-function shouldLogMcpTool(name: unknown): name is string {
+function shouldLogMcpToolContent(name: unknown): name is string {
   return typeof name === "string" && MCP_TOOLS_TO_LOG.has(name);
 }
 
@@ -126,13 +126,19 @@ function wrapTransportWithToolLogging(
       const body = parsedBody ?? (req as IncomingMessage & { body?: unknown }).body;
       const parsed = typeof body === "string" ? JSON.parse(body as string) : body;
 
-      if (parsed?.method === "tools/call" && parsed.params && shouldLogMcpTool(parsed.params.name)) {
-        console.log(
-          "[MCP Streamable HTTP] tools/call request",
-          parsed.params.name,
-          parsed.params.arguments,
-        );
-        if (parsed.id !== undefined) pendingToolCalls.set(parsed.id, parsed.params.name);
+      if (parsed?.method === "tools/call" && parsed.params) {
+        const name = parsed.params.name;
+        if (typeof name === "string") {
+          console.log("[MCP Streamable HTTP] tools/call request", name);
+          if (shouldLogMcpToolContent(name)) {
+            console.log(
+              "[MCP Streamable HTTP] tools/call arguments",
+              name,
+              parsed.params.arguments,
+            );
+            if (parsed.id !== undefined) pendingToolCalls.set(parsed.id, name);
+          }
+        }
       }
 
       return transport.handleRequest(req, res, parsedBody ?? body);
