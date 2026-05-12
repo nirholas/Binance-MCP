@@ -1,34 +1,42 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginAccount.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { marginClient } from "../../../config/binanceClient.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { z } from "zod";
 
-export function registerBinanceCrossMarginAccount(server: McpServer) {
-    server.tool(
-        "BinanceCrossMarginAccount",
-        "Query Cross Margin account details including balances, margin level, and collateral info.",
-        {
-            recvWindow: z.number().int().optional().describe("Time window for request validity")
-        },
-        async (params) => {
-            try {
-                const data = await marginClient.getAccount({
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+import { marginClient } from "../../../config/binanceClient.js";
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Cross Margin Account Details: ${JSON.stringify(data, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to query account: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+export function registerBinanceCrossMarginAccount(server: McpServer) {
+  server.registerTool(
+    "BinanceCrossMarginAccount",
+    {
+      description:
+        "Query Cross Margin account details including balances, margin level, and collateral info.",
+      inputSchema: {
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
+    },
+    async (params) => {
+      try {
+        const data = await marginClient.getAccount({
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Cross Margin Account Details: ${JSON.stringify(data, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [{ type: "text", text: `Failed to query account: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
 }

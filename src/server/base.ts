@@ -1,24 +1,28 @@
 // src/server/base.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { registerBinance } from "../binance.js"
-import Logger from "../utils/logger.js"
+import { registerBinance } from "../binance.js";
+import { IS_TESTNET } from "../config/testnet.js";
+import Logger from "../utils/logger.js";
 
-// Create and start the MCP server
 export const startServer = () => {
   try {
-    // Create a new MCP server instance
-    const server = new McpServer({
-      name: "binance-mcp",
-      version: "1.0.0",
-      description: "MCP server for Binance exchange - spot trading, staking, wallet, NFT, pay, mining, and more"
-    })
+    const name = IS_TESTNET ? "binance-mcp (TESTNET)" : "binance-mcp";
+    const description = IS_TESTNET
+      ? "MCP server for Binance Spot Test Network — only /api endpoints (spot trading & market data) are available"
+      : "MCP server for Binance exchange - spot trading, staking, wallet, NFT, pay, mining, and more";
 
-    // Register all Binance modules
-    registerBinance(server)
-    return server
+    const server = new McpServer({
+      name,
+      version: "1.0.0",
+      description,
+    });
+
+    registerBinance(server);
+
+    return server;
   } catch (error) {
-    Logger.error("Failed to initialize server:", error)
-    process.exit(1)
+    Logger.error("Failed to initialize server:", error);
+    process.exit(1);
   }
-}
+};

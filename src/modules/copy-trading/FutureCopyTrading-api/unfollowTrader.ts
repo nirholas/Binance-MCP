@@ -5,43 +5,53 @@
  * @license Apache-2.0
  */
 // src/modules/copy-trading/FutureCopyTrading-api/unfollowTrader.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { copyTradingClient } from "../../../config/binanceClient.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { z } from "zod";
 
+import { copyTradingClient } from "../../../config/binanceClient.js";
+
 export function registerBinanceCopyTradingUnfollowTrader(server: McpServer) {
-    server.tool(
-        "BinanceCopyTradingUnfollowTrader",
+  server.registerTool(
+    "BinanceCopyTradingUnfollowTrader",
+    {
+      description:
         "Stop following a lead trader. Your existing copied positions will remain open until manually closed.",
-        {
-            leadPortfolioId: z.string().describe("Lead trader's portfolio ID to unfollow"),
-            recvWindow: z.number().int().optional().describe("Request validity window in ms")
-        },
-        async (params) => {
-            try {
-                const response = await copyTradingClient.restAPI.unfollowTrader({
-                    leadPortfolioId: params.leadPortfolioId,
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        leadPortfolioId: z.string().describe("Lead trader's portfolio ID to unfollow"),
+        recvWindow: z.number().int().optional().describe("Request validity window in ms"),
+      },
+    },
+    async (params) => {
+      try {
+        const response = await (copyTradingClient as any).restAPI.unfollowTrader({
+          leadPortfolioId: params.leadPortfolioId,
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
 
-                const data = await response.data();
+        const _data = await response.data();
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `✅ Stopped Following Trader!\n\nPortfolio: ${params.leadPortfolioId}\n\n💡 Note: Existing positions from copy trading are still open. You may want to close them manually.`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{
-                        type: "text",
-                        text: `❌ Failed to unfollow trader: ${errorMessage}`
-                    }],
-                    isError: true
-                };
-            }
-        }
-    );
+        return {
+          content: [
+            {
+              type: "text",
+              text: `✅ Stopped Following Trader!\n\nPortfolio: ${params.leadPortfolioId}\n\n💡 Note: Existing positions from copy trading are still open. You may want to close them manually.`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `❌ Failed to unfollow trader: ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
 }

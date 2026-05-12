@@ -1,38 +1,45 @@
 // src/tools/binance-margin/cross-margin-api/crossMarginMaxTransferable.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { marginClient } from "../../../config/binanceClient.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { z } from "zod";
 
-export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
-    server.tool(
-        "BinanceCrossMarginMaxTransferable",
-        "Query maximum transferable amount for an asset in Cross Margin.",
-        {
-            asset: z.string().describe("Asset (e.g., BTC, USDT)"),
-            isolatedSymbol: z.string().optional().describe("Isolated symbol"),
-            recvWindow: z.number().int().optional().describe("Time window for request validity")
-        },
-        async (params) => {
-            try {
-                const data = await marginClient.getMaxTransferable({
-                    asset: params.asset,
-                    ...(params.isolatedSymbol && { isolatedSymbol: params.isolatedSymbol }),
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+import { marginClient } from "../../../config/binanceClient.js";
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Max Transferable for ${params.asset}: ${JSON.stringify(data, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to query max transferable: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+export function registerBinanceCrossMarginMaxTransferable(server: McpServer) {
+  server.registerTool(
+    "BinanceCrossMarginMaxTransferable",
+    {
+      description: "Query maximum transferable amount for an asset in Cross Margin.",
+      inputSchema: {
+        asset: z.string().describe("Asset (e.g., BTC, USDT)"),
+        isolatedSymbol: z.string().optional().describe("Isolated symbol"),
+        recvWindow: z.number().int().optional().describe("Time window for request validity"),
+      },
+    },
+    async (params) => {
+      try {
+        const data = await marginClient.getMaxTransferable({
+          asset: params.asset,
+          ...(params.isolatedSymbol && { isolatedSymbol: params.isolatedSymbol }),
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Max Transferable for ${params.asset}: ${JSON.stringify(data, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [{ type: "text", text: `Failed to query max transferable: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
 }

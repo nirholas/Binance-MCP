@@ -58,22 +58,34 @@ export interface SymbolInfo {
   allowedSelfTradePreventionModes: string[];
 }
 
-export type SymbolStatus = "PRE_TRADING" | "TRADING" | "POST_TRADING" | "END_OF_DAY" | "HALT" | "AUCTION_MATCH" | "BREAK";
+export type SymbolStatus =
+  | "PRE_TRADING"
+  | "TRADING"
+  | "POST_TRADING"
+  | "END_OF_DAY"
+  | "HALT"
+  | "AUCTION_MATCH"
+  | "BREAK";
 
-export type OrderType = "LIMIT" | "MARKET" | "STOP_LOSS_LIMIT" | "TAKE_PROFIT_LIMIT" | "LIMIT_MAKER";
+export type OrderType =
+  | "LIMIT"
+  | "MARKET"
+  | "STOP_LOSS_LIMIT"
+  | "TAKE_PROFIT_LIMIT"
+  | "LIMIT_MAKER";
 
 export type OrderSide = "BUY" | "SELL";
 
 export type TimeInForce = "GTC" | "IOC" | "FOK";
 
-export type OrderStatus = 
-  | "NEW" 
-  | "PARTIALLY_FILLED" 
-  | "FILLED" 
-  | "CANCELED" 
-  | "PENDING_CANCEL" 
-  | "REJECTED" 
-  | "EXPIRED" 
+export type OrderStatus =
+  | "NEW"
+  | "PARTIALLY_FILLED"
+  | "FILLED"
+  | "CANCELED"
+  | "PENDING_CANCEL"
+  | "REJECTED"
+  | "EXPIRED"
   | "EXPIRED_IN_MATCH";
 
 export interface SymbolFilter {
@@ -107,12 +119,12 @@ export interface Trade {
  * Aggregate Trade
  */
 export interface AggregateTrade {
-  a: number;  // Aggregate tradeId
-  p: string;  // Price
-  q: string;  // Quantity
-  f: number;  // First tradeId
-  l: number;  // Last tradeId
-  T: number;  // Timestamp
+  a: number; // Aggregate tradeId
+  p: string; // Price
+  q: string; // Quantity
+  f: number; // First tradeId
+  l: number; // Last tradeId
+  T: number; // Timestamp
   m: boolean; // Was the buyer the maker?
   M: boolean; // Was the trade the best price match?
 }
@@ -121,18 +133,18 @@ export interface AggregateTrade {
  * Candlestick/Kline
  */
 export type Kline = [
-  number,   // Open time
-  string,   // Open
-  string,   // High
-  string,   // Low
-  string,   // Close
-  string,   // Volume
-  number,   // Close time
-  string,   // Quote asset volume
-  number,   // Number of trades
-  string,   // Taker buy base asset volume
-  string,   // Taker buy quote asset volume
-  string    // Ignore
+  number, // Open time
+  string, // Open
+  string, // High
+  string, // Low
+  string, // Close
+  string, // Volume
+  number, // Close time
+  string, // Quote asset volume
+  number, // Number of trades
+  string, // Taker buy base asset volume
+  string, // Taker buy quote asset volume
+  string, // Ignore
 ];
 
 /**
@@ -508,4 +520,4 @@ export const ERROR_CODES = {
   ORDER_ARCHIVED: -2026,
 } as const;
 
-export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];
+export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

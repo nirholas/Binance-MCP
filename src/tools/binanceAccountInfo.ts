@@ -1,32 +1,44 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import { spotClient } from "../config/client.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { AccountSnapshotType } from "@binance/connector-typescript";
+
+import { spotClient } from "../config/client.js";
 export function registerBinanceAccountInfo(server: McpServer) {
-  server.tool(
+  server.registerTool(
     "binanceAccountInfo",
-    "check binance account info",
-    {},
-    async ({}) => {
+    { description: "check binance account info" },
+    async (_params) => {
       try {
         const accountInfo = await spotClient.accountInformation();
-        const accountSnapshot = await spotClient.dailyAccountSnapshot(AccountSnapshotType.SPOT, { limit: 7 });
-        const userAsset = await spotClient.userAsset({ needBtcValuation: true })
+        const accountSnapshot = await spotClient.dailyAccountSnapshot(AccountSnapshotType.SPOT, {
+          limit: 7,
+        });
+        const userAsset = await spotClient.userAsset({
+          needBtcValuation: true,
+        });
         if (userAsset) {
-          const balances = userAsset.map(item => ({
-            asset: item.asset, free: item.free, locked: item.locked
-          }))
-          const totalAssetOfBtc = userAsset.reduce((sum, item) => sum + parseFloat(item.btcValuation || "0"), 0).toFixed(20).replace(/\.?0+$/, "");
+          const balances = userAsset.map((item) => ({
+            asset: item.asset,
+            free: item.free,
+            locked: item.locked,
+          }));
+          const totalAssetOfBtc = userAsset
+            .reduce((sum, item) => sum + parseFloat(item.btcValuation || "0"), 0)
+            .toFixed(20)
+            .replace(/\.?0+$/, "");
           accountSnapshot.snapshotVos.push({
             type: "spot",
             updateTime: Date.now(),
             data: {
               totalAssetOfBtc,
               balances,
-            }
-          })
+            },
+          });
         }
-        const btcPrice = await spotClient.symbolPriceTicker({ symbol: "BTCUSDT" });
+        const btcPrice = await spotClient.symbolPriceTicker({
+          symbol: "BTCUSDT",
+        });
+
         return {
           content: [
             {
@@ -44,15 +56,13 @@ export function registerBinanceAccountInfo(server: McpServer) {
           ],
         };
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
         return {
-          content: [
-            { type: "text", text: `Server failed: ${errorMessage}` },
-          ],
+          content: [{ type: "text", text: `Server failed: ${errorMessage}` }],
           isError: true,
         };
       }
-    }
+    },
   );
 }

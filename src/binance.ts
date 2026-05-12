@@ -1,27 +1,27 @@
 // src/binance.ts
 // Central registration file for all Binance modules
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
+import { registerBinanceAlgoTools } from "./modules/algo/index.js";
+import { registerBinanceC2CTradeHistoryTools } from "./modules/c2c/index.js";
+import { registerBinanceConvertTools } from "./modules/convert/index.js";
+import { registerBinanceCopyTradingTools } from "./modules/copy-trading/index.js";
+import { registerBinanceDualInvestmentTools } from "./modules/dual-investment/index.js";
+import { registerBinanceFiatDepositWithdrawHistoryTools } from "./modules/fiat/index.js";
+import { registerGiftCard } from "./modules/gift-card/index.js";
+import { registerBinanceMiningTools } from "./modules/mining/index.js";
+import { registerBinanceNFTTools } from "./modules/nft/index.js";
+import { registerBinancePayTools } from "./modules/pay/index.js";
+import { registerPortfolioMargin } from "./modules/portfolio-margin/index.js";
+import { registerBinanceRebateTools } from "./modules/rebate/index.js";
+import { registerBinanceSimpleEarnTools } from "./modules/simple-earn/index.js";
 // Import module registration functions
-import { registerBinanceSpotTools } from "./modules/spot/index.js"
-import { registerBinanceAlgoTools } from "./modules/algo/index.js"
-import { registerBinanceSimpleEarnTools } from "./modules/simple-earn/index.js"
-import { registerBinanceC2CTradeHistoryTools } from "./modules/c2c/index.js"
-import { registerBinanceConvertTools } from "./modules/convert/index.js"
-import { registerBinanceWalletTools } from "./modules/wallet/index.js"
-import { registerBinanceCopyTradingTools } from "./modules/copy-trading/index.js"
-import { registerBinanceFiatDepositWithdrawHistoryTools } from "./modules/fiat/index.js"
-import { registerBinanceNFTTools } from "./modules/nft/index.js"
-import { registerBinancePayTools } from "./modules/pay/index.js"
-import { registerBinanceRebateTools } from "./modules/rebate/index.js"
-import { registerBinanceDualInvestmentTools } from "./modules/dual-investment/index.js"
-import { registerBinanceMiningTools } from "./modules/mining/index.js"
-import { registerBinanceVipLoanTools } from "./modules/vip-loan/index.js"
-import { registerBinanceStakingTools } from "./modules/staking/index.js"
-import { registerPortfolioMargin } from "./modules/portfolio-margin/index.js"
-import { registerGiftCard } from "./modules/gift-card/index.js"
-import { registerSubAccount } from "./modules/sub-account/index.js"
+import { registerBinanceSpotTools } from "./modules/spot/index.js";
+import { registerBinanceStakingTools } from "./modules/staking/index.js";
+import { registerSubAccount } from "./modules/sub-account/index.js";
+import { registerBinanceVipLoanTools } from "./modules/vip-loan/index.js";
+import { registerBinanceWalletTools } from "./modules/wallet/index.js";
 
 // NOTE: The following modules are disabled due to missing/incompatible npm packages:
 // - Margin (@binance/margin doesn't exist, needs refactoring to use connector-typescript)
@@ -36,37 +36,36 @@ import { registerSubAccount } from "./modules/sub-account/index.js"
  */
 export function registerBinance(server: McpServer) {
   // Core trading modules
-  registerBinanceSpotTools(server)
-  registerBinanceAlgoTools(server)
-  
-  // Earn & Investment modules
-  registerBinanceSimpleEarnTools(server)
-  registerBinanceDualInvestmentTools(server)
-  registerBinanceStakingTools(server)
-  
-  // Trading modules
-  registerBinanceC2CTradeHistoryTools(server)
-  registerBinanceConvertTools(server)
-  registerBinanceCopyTradingTools(server)
-  
-  // Wallet & Finance modules
-  registerBinanceWalletTools(server)
-  registerBinanceFiatDepositWithdrawHistoryTools(server)
-  registerBinanceVipLoanTools(server)
-  
-  // Portfolio Margin module
-  registerPortfolioMargin(server)
-  
-  // Gift Card module
-  registerGiftCard(server)
-  
-  // Sub-Account Management module
-  registerSubAccount(server)
-  
-  // Other modules
-  registerBinanceNFTTools(server)
-  registerBinancePayTools(server)
-  registerBinanceRebateTools(server)
-  registerBinanceMiningTools(server)
-}
+  registerBinanceSpotTools(server);
+  registerBinanceAlgoTools(server);
 
+  // Earn & Investment modules
+  registerBinanceSimpleEarnTools(server);
+  registerBinanceDualInvestmentTools(server);
+  registerBinanceStakingTools(server);
+
+  // Trading modules
+  registerBinanceC2CTradeHistoryTools(server);
+  registerBinanceConvertTools(server);
+  registerBinanceCopyTradingTools(server);
+
+  // Wallet & Finance modules
+  registerBinanceWalletTools(server);
+  registerBinanceFiatDepositWithdrawHistoryTools(server);
+  registerBinanceVipLoanTools(server);
+
+  // Portfolio Margin module
+  registerPortfolioMargin(server);
+
+  // Gift Card module
+  registerGiftCard(server);
+
+  // Sub-Account Management module
+  registerSubAccount(server);
+
+  // Other modules
+  registerBinanceNFTTools(server);
+  registerBinancePayTools(server);
+  registerBinanceRebateTools(server);
+  registerBinanceMiningTools(server);
+}

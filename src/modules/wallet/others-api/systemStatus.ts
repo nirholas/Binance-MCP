@@ -1,34 +1,33 @@
 // src/tools/binance-wallet/others-api/systemStatus.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { walletClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceWalletSystemStatus(server: McpServer) {
-    server.tool(
-        "BinanceWalletSystemStatus",
-        "Get Binance Wallet system status.",
-        {},
-        async () => {
-            try {
-                const response = await walletClient.restAPI.systemStatus();
-                const data = await response.data();
+  server.registerTool(
+    "BinanceWalletSystemStatus",
+    { description: "Get Binance Wallet system status." },
+    async () => {
+      try {
+        const response = await (walletClient as any).restAPI.systemStatus();
+        const data = await response.data();
 
-                return {
-                    content: [
-                        {
-                            type: "text",
-                            text: `Retrieved system status. Response: ${JSON.stringify(data)}`
-                        }
-                    ]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [
-                        { type: "text", text: `Failed to retrieve system status: ${errorMessage}` }
-                    ],
-                    isError: true
-                };
-            }
-        }
-    );
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Retrieved system status. Response: ${JSON.stringify(data)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [{ type: "text", text: `Failed to retrieve system status: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
 }

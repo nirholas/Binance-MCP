@@ -1,49 +1,69 @@
 // src/tools/binance-spot/general-api/exchangeInfo.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { z } from "zod";
+
 import { spotClient } from "../../../config/binanceClient.js";
 
 export function registerBinanceExchangeInfo(server: McpServer) {
-    server.tool(
-        "BinanceExchangeInfo",
-        "Get exchange information including rate limits, symbol configs, etc.",
-        {
-            symbol: z.string().optional().describe("Symbol of the trading pair (e.g., BTCUSDT)"),
-            symbols: z.array(z.string()).optional().describe("Array of symbols to get info for"),
-            permissions: z.array(z.string()).optional().describe("Array of permissions to filter by")
-        },
-        async ({ symbol, symbols, permissions }) => {
-            try {
-                const params: any = {};
-                
-                if (symbol) params.symbol = symbol;
-                if (symbols) params.symbols = symbols;
-                if (permissions) params.permissions = permissions;
-                
-                const response = await spotClient.restAPI.exchangeInfo(params);
+  server.registerTool(
+    "BinanceExchangeInfo",
+    {
+      description: "Get exchange information including rate limits, symbol configs, etc.",
+      inputSchema: {
+        symbol: z
+          .string()
+          .optional()
+          .describe(
+            "Single trading pair in UPPERCASE, no separators (e.g. BTCUSDT, SOLUSDT). Use this for one pair; do not use both symbol and symbols.",
+          ),
+        symbols: z
+          .array(z.string())
+          .optional()
+          .describe(
+            'Multiple pairs as array; each symbol UPPERCASE (e.g. ["BTCUSDT","ETHUSDT"]). Do not use with symbol.',
+          ),
+        permissions: z.array(z.string()).optional().describe("Array of permissions to filter by"),
+      },
+    },
+    async ({ symbol, symbols, permissions }) => {
+      try {
+        const params: Record<string, unknown> = {};
 
-                const data = await response.data();
-
-                const symbolCount = data.symbols?.length || 0;
-                const exchangeFiltersCount = data.exchangeFilters?.length || 0;
-
-                return {
-                    content: [
-                        {
-                            type: "text",
-                            text: `Retrieved exchange information. Total symbols: ${symbolCount}, Exchange filters: ${exchangeFiltersCount}. Response: ${JSON.stringify(data)}`
-                        }
-                    ]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [
-                        { type: "text", text: `Failed to retrieve exchange information: ${errorMessage}` }
-                    ],
-                    isError: true
-                };
-            }
+        if (symbol) params.symbol = symbol.toUpperCase();
+        if (symbols?.length) {
+          // Binance expects symbols as a JSON string; symbols must be UPPERCASE (legal range: [^a-z]).
+          params.symbols = JSON.stringify(symbols.map((s) => s.toUpperCase()));
         }
-    );
+        // Only send permissions when not filtering by symbol(s); API rejects "permissions" when symbol/symbols are present.
+        if (permissions?.length && !params.symbol && !params.symbols)
+          params.permissions = permissions;
+
+        const response = await (spotClient as any).restAPI.exchangeInfo(params);
+
+        const data = await response.data();
+
+        const symbolCount = data.symbols?.length || 0;
+        const exchangeFiltersCount = data.exchangeFilters?.length || 0;
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Retrieved exchange information. Total symbols: ${symbolCount}, Exchange filters: ${exchangeFiltersCount}. Response: ${JSON.stringify(data)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [
+            { type: "text", text: `Failed to retrieve exchange information: ${errorMessage}` },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
 }

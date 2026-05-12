@@ -1,15 +1,27 @@
 #!/usr/bin/env node
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import "dotenv/config";
 
-import { startSSEServer } from "./server/sse.js"
-import { startStdioServer } from "./server/stdio.js"
-import Logger from "./utils/logger.js"
+// If Binance API is IP-restricted, ensure requests bypass any proxy (HTTP_PROXY/HTTPS_PROXY)
+// so Binance sees your real IP. See README "Troubleshooting: Invalid API-key, IP, or permissions".
+if (!process.env.NO_PROXY?.includes("binance.com")) {
+  const binanceNoProxy = "api.binance.com,api1.binance.com,api2.binance.com,api3.binance.com";
+  process.env.NO_PROXY = process.env.NO_PROXY
+    ? `${process.env.NO_PROXY},${binanceNoProxy}`
+    : binanceNoProxy;
+}
 
-const args = process.argv.slice(2)
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { Server } from "http";
+
+import { logTestnetStatus } from "./config/testnet.js";
+import { startSSEServer } from "./server/sse.js";
+import { startStdioServer } from "./server/stdio.js";
+import Logger from "./utils/logger.js";
+
+const args = process.argv.slice(2);
 
 // Transport mode flags
-const sseMode = args.includes("--sse") || args.includes("-s")
-// Default to stdio mode (for Claude Desktop)
+const sseMode = args.includes("--sse") || args.includes("-s");
 
 function printUsage() {
   console.log(`
@@ -25,6 +37,7 @@ Environment Variables:
   PORT                Server port for SSE mode (default: 3002)
   BINANCE_API_KEY     Binance API key
   BINANCE_API_SECRET  Binance API secret
+  BINANCE_TESTNET     Set to "true" to use Binance Spot Test Network
   LOG_LEVEL           Logging level (DEBUG, INFO, WARN, ERROR)
 
 Examples:
@@ -33,40 +46,42 @@ Examples:
 
   # SSE mode
   binance-mcp --sse
-`)
+`);
 }
 
 async function main() {
   if (args.includes("--help")) {
-    printUsage()
-    process.exit(0)
+    printUsage();
+    process.exit(0);
   }
 
-  let server: McpServer | undefined
+  logTestnetStatus();
+
+  let handle: McpServer | Server | undefined;
 
   if (sseMode) {
-    Logger.info("Starting in SSE mode")
-    server = await startSSEServer()
+    Logger.info("Starting in SSE mode");
+    handle = await startSSEServer();
   } else {
-    // Default: stdio mode for Claude Desktop
-    server = await startStdioServer()
+    handle = await startStdioServer();
   }
 
-  if (!server) {
-    Logger.error("Failed to start server")
-    process.exit(1)
+  if (!handle) {
+    Logger.error("Failed to start server");
+    process.exit(1);
   }
+
+  const server = handle;
 
   const handleShutdown = async () => {
     if ("close" in server && typeof server.close === "function") {
-      await server.close()
+      await server.close();
     }
-    process.exit(0)
-  }
+    process.exit(0);
+  };
 
-  // Handle process termination
-  process.on("SIGINT", handleShutdown)
-  process.on("SIGTERM", handleShutdown)
+  process.on("SIGINT", handleShutdown);
+  process.on("SIGTERM", handleShutdown);
 }
 
-main()
+main();

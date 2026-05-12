@@ -2,28 +2,31 @@
 // Binance.US Credit Line Tools
 // For institutional credit line agreements
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import { z } from "zod";
+
 import { makeSignedRequest } from "../../config/binanceUsClient.js";
 
 /**
  * Register all Binance.US Credit Line tools
- * 
+ *
  * ⚠️ IMPORTANT: These APIs require a Credit Line agreement with Binance.US.
  * They are only available to institutional users with approved credit facilities.
  * Standard Binance.US accounts do NOT have access to these endpoints.
- * 
+ *
  * Credit Line allows institutional traders to trade with borrowed funds,
  * similar to margin trading but with different risk parameters and
  * institutional-grade features.
  */
 export function registerCreditLineTools(server: McpServer) {
-    // =====================================================================
-    // GET /sapi/v2/cl/account - Get Credit Line Account Information
-    // =====================================================================
-    server.tool(
-        "binance_us_cl_account",
-        `Get comprehensive credit line account information.
+  // =====================================================================
+  // GET /sapi/v2/cl/account - Get Credit Line Account Information
+  // =====================================================================
+  server.registerTool(
+    "binance_us_cl_account",
+    {
+      description: `Get comprehensive credit line account information.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 This API is only available to institutional users with approved credit facilities.
@@ -58,33 +61,42 @@ Loan Information:
 
 Balances:
 - balances: Array of asset balances (free, locked)`,
-        {
-            recvWindow: z.number().int().max(60000).optional().describe("Request validity window in ms (max: 60000)")
-        },
-        async (params) => {
-            try {
-                const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", {
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window in ms (max: 60000)"),
+      },
+    },
+    async (params: Record<string, unknown>) => {
+      try {
+        const response = await makeSignedRequest("GET", "/sapi/v2/cl/account", {
+          ...(params.recvWindow != null && {
+            recvWindow: params.recvWindow as number,
+          }),
+        });
 
-                // Calculate risk level based on LTV
-                let riskLevel = "LOW";
-                const currentLTV = parseFloat(response.currentLTV);
-                const marginCallLTV = parseFloat(response.marginCallLTV);
-                const liquidationLTV = parseFloat(response.liquidationLTV);
-                
-                if (currentLTV >= liquidationLTV) {
-                    riskLevel = "CRITICAL - LIQUIDATION IMMINENT";
-                } else if (currentLTV >= marginCallLTV) {
-                    riskLevel = "HIGH - MARGIN CALL";
-                } else if (currentLTV >= marginCallLTV * 0.9) {
-                    riskLevel = "MEDIUM";
-                }
+        // Calculate risk level based on LTV
+        let riskLevel = "LOW";
+        const currentLTV = parseFloat(response.currentLTV);
+        const marginCallLTV = parseFloat(response.marginCallLTV);
+        const liquidationLTV = parseFloat(response.liquidationLTV);
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Credit Line Account Info retrieved.
+        if (currentLTV >= liquidationLTV) {
+          riskLevel = "CRITICAL - LIQUIDATION IMMINENT";
+        } else if (currentLTV >= marginCallLTV) {
+          riskLevel = "HIGH - MARGIN CALL";
+        } else if (currentLTV >= marginCallLTV * 0.9) {
+          riskLevel = "MEDIUM";
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Credit Line Account Info retrieved.
 
 ⚠️ Risk Level: ${riskLevel}
 📊 Current LTV: ${(currentLTV * 100).toFixed(2)}%
@@ -92,25 +104,28 @@ Balances:
 🔴 Liquidation LTV: ${(liquidationLTV * 100).toFixed(2)}%
 💰 Interest Rate: ${(parseFloat(response.interestRate) * 100).toFixed(2)}% annual
 
-Full Response: ${JSON.stringify(response, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to get credit line account: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+Full Response: ${JSON.stringify(response, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
-    // =====================================================================
-    // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Call & Liquidation)
-    // =====================================================================
-    server.tool(
-        "binance_us_cl_alert_history",
-        `Get margin call and liquidation alert history for credit line account.
+        return {
+          content: [{ type: "text", text: `Failed to get credit line account: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // =====================================================================
+  // GET /sapi/v1/cl/alert/history - Get Alert History (Margin Call & Liquidation)
+  // =====================================================================
+  server.registerTool(
+    "binance_us_cl_alert_history",
+    {
+      description: `Get margin call and liquidation alert history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -131,55 +146,77 @@ Use this to:
 - Review past risk events
 - Understand account risk patterns
 - Audit margin call history`,
-        {
-            startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-            endTime: z.number().optional().describe("End timestamp in milliseconds"),
-            limit: z.number().int().min(1).max(1000).optional().default(200).describe("Max records (default: 200)"),
-            alertType: z.enum(["LIQUIDATION_CALL", "MARGIN_CALL"]).optional().describe("Filter by alert type"),
-            recvWindow: z.number().int().max(60000).optional().describe("Request validity window (max: 60000)")
-        },
-        async (params) => {
-            try {
-                const response = await makeSignedRequest("GET", "/sapi/v1/cl/alert/history", {
-                    ...(params.startTime && { startTime: params.startTime }),
-                    ...(params.endTime && { endTime: params.endTime }),
-                    ...(params.limit && { limit: params.limit }),
-                    ...(params.alertType && { alertType: params.alertType }),
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(1000)
+          .optional()
+          .default(200)
+          .describe("Max records (default: 200)"),
+        alertType: z
+          .enum(["LIQUIDATION_CALL", "MARGIN_CALL"])
+          .optional()
+          .describe("Filter by alert type"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
+    },
+    async (params) => {
+      try {
+        const response = await makeSignedRequest("GET", "/sapi/v1/cl/alert/history", {
+          ...(params.startTime && { startTime: params.startTime }),
+          ...(params.endTime && { endTime: params.endTime }),
+          ...(params.limit && { limit: params.limit }),
+          ...(params.alertType && { alertType: params.alertType }),
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
 
-                const alerts = Array.isArray(response) ? response : [];
-                const marginCalls = alerts.filter((a: any) => a.alertType === "MARGIN_CALL").length;
-                const liquidationCalls = alerts.filter((a: any) => a.alertType === "LIQUIDATION_CALL").length;
+        const alerts = Array.isArray(response) ? response : [];
+        const marginCalls = alerts.filter((a: any) => a.alertType === "MARGIN_CALL").length;
+        const liquidationCalls = alerts.filter(
+          (a: any) => a.alertType === "LIQUIDATION_CALL",
+        ).length;
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Credit Line Alert History retrieved.
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Credit Line Alert History retrieved.
 
 📊 Total Alerts: ${alerts.length}
 ⚠️ Margin Calls: ${marginCalls}
 🔴 Liquidation Calls: ${liquidationCalls}
 
-Full Response: ${JSON.stringify(response, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to get alert history: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+Full Response: ${JSON.stringify(response, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
-    // =====================================================================
-    // GET /sapi/v1/cl/transferHistory - Get Transfer History
-    // =====================================================================
-    server.tool(
-        "binance_us_cl_transfer_history",
-        `Get transfer history for credit line account.
+        return {
+          content: [{ type: "text", text: `Failed to get alert history: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // =====================================================================
+  // GET /sapi/v1/cl/transferHistory - Get Transfer History
+  // =====================================================================
+  server.registerTool(
+    "binance_us_cl_transfer_history",
+    {
+      description: `Get transfer history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -199,57 +236,77 @@ Use this to:
 - Track collateral movements
 - Audit deposit/withdrawal history
 - Reconcile account activity`,
-        {
-            startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-            endTime: z.number().optional().describe("End timestamp in milliseconds"),
-            limit: z.number().int().min(1).max(100).optional().default(20).describe("Max records (default: 20, max: 100)"),
-            transferType: z.enum(["TRANSFER_IN", "TRANSFER_OUT"]).optional().describe("Filter by transfer direction"),
-            asset: z.string().optional().describe("Filter by asset (e.g., BTC, USD)"),
-            recvWindow: z.number().int().max(60000).optional().describe("Request validity window (max: 60000)")
-        },
-        async (params) => {
-            try {
-                const response = await makeSignedRequest("GET", "/sapi/v1/cl/transferHistory", {
-                    ...(params.startTime && { startTime: params.startTime }),
-                    ...(params.endTime && { endTime: params.endTime }),
-                    ...(params.limit && { limit: params.limit }),
-                    ...(params.transferType && { transferType: params.transferType }),
-                    ...(params.asset && { asset: params.asset.toUpperCase() }),
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .default(20)
+          .describe("Max records (default: 20, max: 100)"),
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .optional()
+          .describe("Filter by transfer direction"),
+        asset: z.string().optional().describe("Filter by asset (e.g., BTC, USD)"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
+    },
+    async (params) => {
+      try {
+        const response = await makeSignedRequest("GET", "/sapi/v1/cl/transferHistory", {
+          ...(params.startTime && { startTime: params.startTime }),
+          ...(params.endTime && { endTime: params.endTime }),
+          ...(params.limit && { limit: params.limit }),
+          ...(params.transferType && { transferType: params.transferType }),
+          ...(params.asset && { asset: params.asset.toUpperCase() }),
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
 
-                const transfers = Array.isArray(response) ? response : [];
-                const transfersIn = transfers.filter((t: any) => t.transferType === "TRANSFER_IN").length;
-                const transfersOut = transfers.filter((t: any) => t.transferType === "TRANSFER_OUT").length;
+        const transfers = Array.isArray(response) ? response : [];
+        const transfersIn = transfers.filter((t: any) => t.transferType === "TRANSFER_IN").length;
+        const transfersOut = transfers.filter((t: any) => t.transferType === "TRANSFER_OUT").length;
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Credit Line Transfer History retrieved.
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Credit Line Transfer History retrieved.
 
 📊 Total Transfers: ${transfers.length}
 📥 Transfers In: ${transfersIn}
 📤 Transfers Out: ${transfersOut}
 
-Full Response: ${JSON.stringify(response, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to get transfer history: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+Full Response: ${JSON.stringify(response, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
-    // =====================================================================
-    // POST /sapi/v1/cl/transfer - Execute Transfer
-    // =====================================================================
-    server.tool(
-        "binance_us_cl_transfer",
-        `Execute a transfer in or out of the credit line account.
+        return {
+          content: [{ type: "text", text: `Failed to get transfer history: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // =====================================================================
+  // POST /sapi/v1/cl/transfer - Execute Transfer
+  // =====================================================================
+  server.registerTool(
+    "binance_us_cl_transfer",
+    {
+      description: `Execute a transfer in or out of the credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -269,29 +326,37 @@ Transfer Types:
 Response includes:
 - transferId: Unique transfer identifier
 - status: SUCCESS, PENDING, or FAILED`,
-        {
-            transferType: z.enum(["TRANSFER_IN", "TRANSFER_OUT"]).describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
-            transferAssetType: z.string().describe("Asset to transfer (e.g., BTC, USD)"),
-            quantity: z.number().positive().describe("Amount to transfer"),
-            recvWindow: z.number().int().max(60000).optional().describe("Request validity window (max: 60000)")
-        },
-        async (params) => {
-            try {
-                const response = await makeSignedRequest("POST", "/sapi/v1/cl/transfer", {
-                    transferType: params.transferType,
-                    transferAssetType: params.transferAssetType.toUpperCase(),
-                    quantity: params.quantity,
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        transferType: z
+          .enum(["TRANSFER_IN", "TRANSFER_OUT"])
+          .describe("Direction: TRANSFER_IN (deposit) or TRANSFER_OUT (withdraw)"),
+        transferAssetType: z.string().describe("Asset to transfer (e.g., BTC, USD)"),
+        quantity: z.number().positive().describe("Amount to transfer"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
+    },
+    async (params) => {
+      try {
+        const response = await makeSignedRequest("POST", "/sapi/v1/cl/transfer", {
+          transferType: params.transferType,
+          transferAssetType: params.transferAssetType.toUpperCase(),
+          quantity: params.quantity,
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
 
-                const actionText = params.transferType === "TRANSFER_IN" 
-                    ? "deposited into" 
-                    : "withdrawn from";
+        const actionText =
+          params.transferType === "TRANSFER_IN" ? "deposited into" : "withdrawn from";
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Credit Line Transfer executed.
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Credit Line Transfer executed.
 
 ${params.transferType === "TRANSFER_OUT" ? "⚠️ Your LTV ratio has increased. Monitor your position." : "✅ Collateral added. Your LTV ratio has decreased."}
 
@@ -299,25 +364,28 @@ ${params.transferType === "TRANSFER_OUT" ? "⚠️ Your LTV ratio has increased.
 📋 Transfer ID: ${response.transferId}
 ✅ Status: ${response.status}
 
-Full Response: ${JSON.stringify(response, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to execute transfer: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+Full Response: ${JSON.stringify(response, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
 
-    // =====================================================================
-    // GET /sapi/v1/cl/liquidation/history - Get Liquidation History
-    // =====================================================================
-    server.tool(
-        "binance_us_cl_liquidation_history",
-        `Get liquidation history for credit line account.
+        return {
+          content: [{ type: "text", text: `Failed to execute transfer: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // =====================================================================
+  // GET /sapi/v1/cl/liquidation/history - Get Liquidation History
+  // =====================================================================
+  server.registerTool(
+    "binance_us_cl_liquidation_history",
+    {
+      description: `Get liquidation history for credit line account.
 
 ⚠️ REQUIRES INSTITUTIONAL CREDIT LINE AGREEMENT
 
@@ -334,41 +402,57 @@ Use this to:
 - Review past liquidation events
 - Understand liquidation patterns
 - Audit risk management effectiveness`,
-        {
-            startTime: z.number().optional().describe("Start timestamp in milliseconds"),
-            endTime: z.number().optional().describe("End timestamp in milliseconds"),
-            limit: z.number().int().min(1).max(100).optional().default(20).describe("Max records (default: 20, max: 100)"),
-            recvWindow: z.number().int().max(60000).optional().describe("Request validity window (max: 60000)")
-        },
-        async (params) => {
-            try {
-                const response = await makeSignedRequest("GET", "/sapi/v1/cl/liquidation/history", {
-                    ...(params.startTime && { startTime: params.startTime }),
-                    ...(params.endTime && { endTime: params.endTime }),
-                    ...(params.limit && { limit: params.limit }),
-                    ...(params.recvWindow && { recvWindow: params.recvWindow })
-                });
+      inputSchema: {
+        startTime: z.number().optional().describe("Start timestamp in milliseconds"),
+        endTime: z.number().optional().describe("End timestamp in milliseconds"),
+        limit: z
+          .number()
+          .int()
+          .min(1)
+          .max(100)
+          .optional()
+          .default(20)
+          .describe("Max records (default: 20, max: 100)"),
+        recvWindow: z
+          .number()
+          .int()
+          .max(60000)
+          .optional()
+          .describe("Request validity window (max: 60000)"),
+      },
+    },
+    async (params) => {
+      try {
+        const response = await makeSignedRequest("GET", "/sapi/v1/cl/liquidation/history", {
+          ...(params.startTime && { startTime: params.startTime }),
+          ...(params.endTime && { endTime: params.endTime }),
+          ...(params.limit && { limit: params.limit }),
+          ...(params.recvWindow && { recvWindow: params.recvWindow }),
+        });
 
-                const liquidations = Array.isArray(response) ? response : [];
+        const liquidations = Array.isArray(response) ? response : [];
 
-                return {
-                    content: [{
-                        type: "text",
-                        text: `Credit Line Liquidation History retrieved.
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Credit Line Liquidation History retrieved.
 
 🔴 Total Liquidations: ${liquidations.length}
 ${liquidations.length > 0 ? "⚠️ Review your risk management strategy." : "✅ No liquidation events found."}
 
-Full Response: ${JSON.stringify(response, null, 2)}`
-                    }]
-                };
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                return {
-                    content: [{ type: "text", text: `Failed to get liquidation history: ${errorMessage}` }],
-                    isError: true
-                };
-            }
-        }
-    );
+Full Response: ${JSON.stringify(response, null, 2)}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+          content: [{ type: "text", text: `Failed to get liquidation history: ${errorMessage}` }],
+          isError: true,
+        };
+      }
+    },
+  );
 }
