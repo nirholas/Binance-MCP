@@ -1,8 +1,6 @@
 <div align="center">   
  
 # 🔶 Binance MCP Server 
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-≥18.0.0-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
 [![MCP](https://img.shields.io/badge/MCP-1.11.0-purple)](https://modelcontextprotocol.io/)
@@ -595,7 +593,6 @@ artificial general intelligence agent, AGI agent, narrow AI agent, weak AI agent
 *Total Keywords: 6500+*
 *Last Updated: January 29, 2026*
 </details>
-
 
 ---
 
