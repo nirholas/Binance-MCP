@@ -68,4 +68,4 @@ Welcome to the Binance.US MCP Server documentation. This server provides a compl
 
 - [Binance.US API Documentation](https://docs.binance.us/)
 - [MCP Protocol](https://modelcontextprotocol.io/)
-- [GitHub Issues](https://github.com/nirholas/universal-crypto-mcp/issues)
+- [GitHub Issues](https://github.com/nirholas/Binance-MCP/issues)
