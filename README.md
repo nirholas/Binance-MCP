@@ -1,5 +1,5 @@
 <div align="center">   
- 
+  
 # 🔶 Binance MCP Server 
 [![Node.js](https://img.shields.io/badge/Node.js-≥18.0.0-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
