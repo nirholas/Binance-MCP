@@ -672,3 +672,10 @@ curl -X POST https://modelcontextprotocol.name/mcp/binance-mcp \
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=nirholas/Binance-MCP&type=Date)](https://star-history.com/#nirholas/Binance-MCP&Date)
+
+## Documentation
+
+Full documentation site: **https://nirholas.github.io/Binance-MCP/**
+
+- [Getting started](docs/getting-started.md) covers install and first run.
+- [Examples](docs/examples.md) has copy-paste snippets.
