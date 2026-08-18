@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/nirholas-binance-mcp-badge.png)](https://mseep.ai/app/nirholas-binance-mcp)
+
 <div align="center">   
   
 # 🔶 Binance MCP Server 
