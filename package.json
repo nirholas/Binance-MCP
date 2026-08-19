@@ -85,5 +85,6 @@
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "mcpName": "io.github.nirholas/binance-mcp"
 }
