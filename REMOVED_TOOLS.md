@@ -97,3 +97,11 @@ These tools may also have issues but were not removed yet:
 
 ### binance-modules (src/modules/)
 - Various files have similar issues with SDK method mismatches
+
+## Date: October 31, 2026
+
+### binance-spot/userdatastream-api (src/modules/spot)
+`@binance/spot` no longer exposes the REST listen-key methods (`newUserDataStream`, `putUserDataStream`, `deleteUserDataStream`); user data streams moved to the WebSocket API (`userDataStreamSubscribe`). The three tools were removed from the registered spot module.
+
+### Build scope
+`npm run build` compiles only the graph reachable from `src/index.ts` and `src/init.ts`. Unregistered legacy trees under `src/tools/` and `src/modules/` that call SDK methods which do not exist are not compiled until they are ported.

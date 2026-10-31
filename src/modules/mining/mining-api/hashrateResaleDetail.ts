@@ -9,7 +9,6 @@ export function registerBinanceHashRateResaleDetail(server: McpServer) {
         "Retrieves details of hashrate resale transactions, including the transferring and receiving subaccounts, algorithm, hash rate, transfer date, and associated income.",
         {
             configId: z.number().int().min(1).describe("Mining ID"),
-            userName: z.string().min(1).describe("Mining Account"),
             pageIndex: z
                 .number()
                 .int()
@@ -23,7 +22,6 @@ export function registerBinanceHashRateResaleDetail(server: McpServer) {
             try {
                 const response = await miningClient.restAPI.hashrateResaleDetail({
                     configId: params.configId,
-                    userName: params.userName,
                     ...(params.pageIndex && { pageIndex: params.pageIndex }),
                     ...(params.pageSize && { pageSize: params.pageSize }),
                     ...(params.recvWindow && { recvWindow: params.recvWindow })

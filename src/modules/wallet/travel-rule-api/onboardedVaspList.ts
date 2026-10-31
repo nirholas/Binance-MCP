@@ -10,7 +10,7 @@ export function registerBinanceWalletOnboardedVaspList(server: McpServer) {
         {},
         async () => {
             try {                
-                const response = await walletClient.restAPI.onboardedVaspList();
+                const response = await walletClient.restAPI.vaspList();
                 const data = await response.data();
 
                 return {
