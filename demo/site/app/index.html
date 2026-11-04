@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Console · Binance MCP Cloud</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/kit/kit.css">
+<link rel="stylesheet" href="/bmcp.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo-mark">B</span> Binance MCP Cloud</a>
+    <nav class="nav-links"><a href="/">Home</a><a href="/#api">API &amp; MCP</a><a href="https://github.com/nirholas/Binance-MCP" rel="noopener">GitHub</a></nav>
+    <div data-kit-auth></div>
+  </div>
+</header>
+
+<main class="app-main wrap">
+  <div id="app" hidden>
+    <div class="app-head"><h1>Console</h1><span class="muted" id="who"></span></div>
+    <div class="tabs" role="tablist">
+      <button type="button" data-tab="market" role="tab">Market</button>
+      <button type="button" data-tab="paper" role="tab">Paper trade</button>
+      <button type="button" data-tab="alerts" role="tab">Alerts</button>
+      <button type="button" data-tab="wallet" role="tab">BNB Chain wallet</button>
+      <button type="button" data-tab="listings" role="tab">Listings</button>
+      <button type="button" data-tab="tools" role="tab">Tools</button>
+      <button type="button" data-tab="mcp" role="tab">MCP</button>
+      <button type="button" data-tab="keys" role="tab">API keys</button>
+      <button type="button" data-tab="usage" role="tab">Usage</button>
+    </div>
+    <datalist id="sym-list"></datalist>
+
+    <section data-panel="market" class="stack">
+      <div class="card stack">
+        <form id="mk-form" class="form-grid">
+          <label class="field">Pair<input class="input" name="symbol" required value="BTCUSDT" list="sym-list" autocomplete="off" spellcheck="false" maxlength="20"></label>
+          <label class="field">Interval<select class="input" name="interval">
+            <option>1m</option><option>5m</option><option>15m</option><option>30m</option><option selected>1h</option><option>4h</option><option>1d</option><option>1w</option><option>1M</option>
+          </select></label>
+          <div class="row end"><button class="btn btn-primary" type="submit">Load</button><button class="btn" type="button" id="mk-trade">Trade</button><button class="btn btn-ghost" type="button" id="mk-alert">Alert</button></div>
+        </form>
+      </div>
+      <div id="mk-kpis" class="quote-grid"></div>
+      <div class="card stack"><div class="row"><h3 class="grow" id="mk-title">Price</h3><span class="muted" id="mk-range"></span></div><div id="mk-chart"></div></div>
+      <div class="grid-2">
+        <div class="card stack"><h3>Order book</h3><div id="mk-book"></div></div>
+        <div class="card stack"><h3>Recent trades</h3><div id="mk-trades"></div></div>
+      </div>
+    </section>
+
+    <section data-panel="paper" class="stack" hidden>
+      <div class="grid-2">
+        <div class="card stack">
+          <div class="row"><h3 class="grow">Place an order</h3><div class="seg" role="group" aria-label="Side"><button type="button" class="buy" data-side="buy" aria-pressed="true">Buy</button><button type="button" class="sell" data-side="sell" aria-pressed="false">Sell</button></div></div>
+          <form id="po-form" class="form-grid">
+            <label class="field">Pair<input class="input" name="symbol" required value="BTCUSDT" list="sym-list" autocomplete="off" spellcheck="false" maxlength="20"></label>
+            <label class="field">Type<select class="input" name="type"><option value="market">Market</option><option value="limit">Limit</option></select></label>
+            <label class="field" data-show="limit" hidden>Limit price<input class="input" name="price" type="number" step="any" min="0"></label>
+            <label class="field">Quantity (base)<input class="input" name="quantity" type="number" step="any" min="0" placeholder="0.01"></label>
+            <label class="field" data-show="market-buy">or spend (quote)<input class="input" name="quoteAmount" type="number" step="any" min="0" placeholder="100"></label>
+            <p class="muted span" id="po-hint"></p>
+            <div class="row end span"><button class="btn" type="button" id="po-preview">Preview fill</button><button class="btn btn-primary" type="submit" id="po-submit">Buy</button></div>
+          </form>
+          <div id="po-out"></div>
+        </div>
+        <div class="card stack">
+          <div class="row"><h3 class="grow">Paper account</h3><button type="button" class="btn btn-sm btn-ghost" id="pa-reload">Refresh</button><button type="button" class="btn btn-sm" id="pa-reset">Reset</button></div>
+          <div id="pa-account"></div>
+        </div>
+      </div>
+      <div class="card stack"><div class="row"><h3 class="grow">Open orders</h3><button type="button" class="btn btn-sm btn-ghost" id="oo-reload">Refresh</button></div><div id="oo-list"></div></div>
+      <div class="card stack"><h3>Order history</h3><div id="oh-list"></div></div>
+    </section>
+
+    <section data-panel="alerts" class="stack" hidden>
+      <div class="card stack">
+        <h3>New price alert</h3>
+        <p class="muted">Alerts are checked against live Binance prices every minute. Leave the direction on auto to set it from the current price.</p>
+        <form id="al-form" class="form-grid">
+          <label class="field">Pair<input class="input" name="symbol" required value="BTCUSDT" list="sym-list" autocomplete="off" spellcheck="false" maxlength="20"></label>
+          <label class="field">Price<input class="input" name="price" type="number" step="any" min="0" required></label>
+          <label class="field">Direction<select class="input" name="direction"><option value="">Auto</option><option value="above">Crosses above</option><option value="below">Crosses below</option></select></label>
+          <label class="field">Note (optional)<input class="input" name="note" maxlength="140" placeholder="Take profit"></label>
+          <div class="row end span"><button class="btn btn-primary" type="submit">Create alert</button></div>
+        </form>
+      </div>
+      <div class="card stack"><div class="row"><h3 class="grow">Your alerts</h3><button type="button" class="btn btn-sm btn-ghost" id="al-reload">Refresh</button></div><div id="al-list"></div></div>
+    </section>
+
+    <section data-panel="wallet" class="stack" hidden>
+      <div class="card stack">
+        <h3>BNB Smart Chain balances</h3>
+        <p class="muted">Reads BNB and the major BEP-20 tokens (USDT, USDC, FDUSD, BTCB, ETH) on-chain, priced in USD from Binance.</p>
+        <form id="wa-form" class="form-grid">
+          <label class="field span">Address<input class="input" name="address" maxlength="64" placeholder="0x… (leave blank for your signed-in wallet)" autocomplete="off" spellcheck="false"></label>
+          <div class="row end span"><button class="btn btn-primary" type="submit">Look up</button></div>
+        </form>
+      </div>
+      <div id="wa-out"></div>
+    </section>
+
+    <section data-panel="listings" class="stack" hidden>
+      <div class="card stack"><div class="row"><h3 class="grow">New cryptocurrency listings</h3><button type="button" class="btn btn-sm btn-ghost" id="li-reload">Refresh</button></div><div id="li-list"></div></div>
+    </section>
+
+    <section data-panel="tools" class="stack" hidden>
+      <div class="grid-2">
+        <div class="card stack">
+          <input class="input" id="tool-filter" type="search" placeholder="Filter tools…" aria-label="Filter tools">
+          <div id="tool-list" class="tool-list"></div>
+        </div>
+        <div class="card stack" id="tool-pane"><p class="empty-inline muted">Pick a tool to run it against live Binance data.</p></div>
+      </div>
+    </section>
+
+    <section data-panel="mcp" class="stack" hidden>
+      <div class="card stack">
+        <h3>Connect an MCP client</h3>
+        <p class="muted">This is a stateless Streamable HTTP endpoint. Authenticate with an API key from the API keys tab. Paper trades and alerts made over MCP land in the same account you see here.</p>
+        <div class="row"><code class="grow trunc" id="mcp-url"></code><button type="button" class="btn btn-sm" id="mcp-copy">Copy URL</button></div>
+        <pre class="code" id="mcp-config"></pre>
+        <pre class="code" id="mcp-curl"></pre>
+      </div>
+      <div class="card stack"><h3>Tools exposed</h3><div id="mcp-tools"></div></div>
+    </section>
+
+    <section data-panel="keys" class="stack" hidden><div id="keys"></div></section>
+    <section data-panel="usage" class="stack" hidden><div id="usage"></div></section>
+  </div>
+</main>
+
+<footer class="footer"><div class="wrap row"><span class="grow muted">Binance MCP Cloud · unofficial demo · paper trading only: no order ever reaches an exchange</span><a href="https://github.com/nirholas/Binance-MCP" rel="noopener">Source</a></div></footer>
+<script type="module" src="/app/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+name = "binance-mcp"
+main = "src/worker.ts"
+compatibility_date = "2025-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Binance blocks US egress; run fetch handlers next to an allowed region.
+[placement]
+region = "gcp:europe-west1"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/mcp"]
+not_found_handling = "404-page"
+
+# Every minute: fire price alerts and fill resting paper limit orders.
+[triggers]
+crons = ["* * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "binance-mcp"
+database_id = "3c837ed3-8d09-4ed8-900c-c73ed94d64b1"

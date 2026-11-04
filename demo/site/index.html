@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Binance MCP Cloud — live Binance market data and paper trading for agents</title>
+<meta name="description" content="Binance MCP Cloud is an unofficial, hosted demo of the Binance MCP server. It has 19 tools for live Binance spot prices, order books, candles, top movers and new listings, plus a paper-trading account that fills against the real book, price alerts and BNB Chain wallet balances. Sign in with a wallet and use it from the browser, a REST API or MCP.">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/kit/kit.css">
+<link rel="stylesheet" href="/bmcp.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="logo-mark">B</span> Binance MCP Cloud</a>
+    <nav class="nav-links">
+      <a href="#live">Live market</a>
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#api">API &amp; MCP</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div data-kit-auth></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Hosted MCP · live Binance spot data · paper trading</span>
+      <h1>Binance market data,<br><span class="grad">ready for your agents.</span></h1>
+      <p class="lede">Binance MCP Cloud is an unofficial, hosted demo of the Binance MCP server. People and AI agents get the same 19 tools: live prices, order books, trades, candles, top movers and new listings. There is also a paper-trading account that fills against the real order book, price alerts that are checked every minute, and BNB Chain wallet balances. You can use them from the browser console, a REST API or a single MCP URL.</p>
+      <div class="row">
+        <a class="btn btn-primary btn-lg" href="/app/">Open the console</a>
+        <a class="btn btn-lg" href="#how">See how it works</a>
+        <a class="btn btn-ghost btn-lg" href="https://github.com/nirholas/Binance-MCP" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="live">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Live from the Binance spot market</h2>
+        <p>The worker reads these from Binance's public market-data API and caches them for 15 seconds. This page refreshes every 30 seconds. Movers are USDT pairs with at least $5M of 24-hour volume.</p>
+      </div>
+      <div class="ticker" id="ticker" aria-live="polite"></div>
+      <div class="grid-2 mt">
+        <div class="card stack"><h3>Top gainers (24h)</h3><div id="gainers"></div></div>
+        <div class="card stack"><h3>Top losers (24h)</h3><div id="losers"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Real market data, simulated money</h2>
+        <p>Sign in with MetaMask, Rabby, Coinbase Wallet, Phantom or any EIP-6963 or Solana wallet. Every price comes from the live Binance book. No exchange account or API secret is needed, and no real order is ever placed.</p>
+      </div>
+      <div class="grid">
+        <div class="card feature"><div class="ico">◎</div><h3>Market explorer</h3><p class="muted">Search every trading Binance spot pair. You get the 24-hour ticker, a candlestick chart from 1 minute to 1 month, the live order book and the latest trades.</p></div>
+        <div class="card feature"><div class="ico">⇄</div><h3>Paper trading</h3><p class="muted">Start with 10,000 USDT. Market orders walk the real order book level by level, so you see true slippage. Limit orders rest until the market crosses them. Fees are 0.1%, as on Binance.</p></div>
+        <div class="card feature"><div class="ico">◔</div><h3>Price alerts</h3><p class="muted">Set up to 50 alerts above or below any price. A cron job checks them against live prices every minute and records when and where each one fired.</p></div>
+        <div class="card feature"><div class="ico">⚖</div><h3>Fill simulator</h3><p class="muted">Before you trade, preview the average price, worst price, slippage and price impact for any size against the top 1,000 levels of the book.</p></div>
+        <div class="card feature"><div class="ico">⌁</div><h3>MCP endpoint</h3><p class="muted">Point Claude, Cursor or any MCP client at <code>/mcp</code> with an API key. All 19 tools are listed with JSON Schemas, so the agent knows exactly what each one needs.</p></div>
+        <div class="card feature"><div class="ico">⬡</div><h3>Listings &amp; BNB Chain</h3><p class="muted">Follow Binance's new-listing announcements. You can also read BNB, USDT, USDC, FDUSD, BTCB and ETH balances on BNB Smart Chain for any address, priced in USD.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>From wallet to first fill in four steps</h2>
+        <p>Every step is a real call against live market data. Nothing costs gas, and no funds move.</p>
+      </div>
+      <div class="steps">
+        <div class="card"><h3>Sign in</h3><p class="muted">Connect a wallet and sign one message (SIWE or SIWS). You don't pay gas or create an account, and your session lasts 30 days.</p></div>
+        <div class="card"><h3>Pick a pair</h3><p class="muted">Open any spot pair, such as BTCUSDT or SOLUSDT, to see its chart, book and trades.</p></div>
+        <div class="card"><h3>Preview the fill</h3><p class="muted">Enter a size to see the average price and slippage the live book would give you.</p></div>
+        <div class="card"><h3>Trade on paper</h3><p class="muted">Place a market or limit order. Your balances, equity and P&amp;L update from live prices.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="api">
+    <div class="wrap grid-2">
+      <div>
+        <h2>Built for agents first</h2>
+        <p class="muted">The console calls the same routes your agents do. Create a key under <a href="/app/#keys">API keys</a> and call these routes:</p>
+        <ul>
+          <li><code>GET /api/tools</code> lists every tool with its JSON Schema</li>
+          <li><code>POST /api/run/:tool</code> runs one tool with a JSON body</li>
+          <li><code>GET /api/live</code> returns the public market board shown above</li>
+          <li><code>POST /mcp</code> is a stateless MCP endpoint over Streamable HTTP (JSON-RPC, batches allowed)</li>
+        </ul>
+      </div>
+      <pre class="code"><span class="c"># Simulate a 0.5 BTC market buy against the live book</span>
+curl -s -X POST https://binance-mcp.ninabrekkerese.workers.dev/api/run/simulate_market_order \
+  -H "authorization: Bearer $BMCP_KEY" \
+  -H "content-type: application/json" \
+  -d '{"symbol":"BTCUSDT","side":"buy","quantity":0.5}'
+
+<span class="c"># mcp.json</span>
+{
+  "mcpServers": {
+    "binance": {
+      "type": "http",
+      "url": "https://binance-mcp.ninabrekkerese.workers.dev/mcp",
+      "headers": { "Authorization": "Bearer sk_bmcp_…" }
+    }
+  }
+}</pre>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Pricing</h2>
+        <p>Binance MCP Cloud is a public demo of the Binance MCP server. It is not affiliated with or endorsed by Binance.</p>
+      </div>
+      <div class="grid">
+        <div class="card price featured">
+          <h3>Demo</h3>
+          <div class="v">$0</div>
+          <ul><li>All 19 tools in the console and over MCP</li><li>10,000 USDT paper account that you can reset at any time</li><li>50 price alerts, API keys and a full usage log</li></ul>
+          <a class="btn btn-primary" href="/app/">Start now</a>
+        </div>
+        <div class="card price">
+          <h3>Risk</h3>
+          <div class="v">None</div>
+          <ul><li>Paper orders never reach an exchange</li><li>No exchange API key or secret is ever requested</li><li>Your wallet only signs a sign-in message</li></ul>
+          <a class="btn" href="/app/#paper">Try paper trading</a>
+        </div>
+        <div class="card price">
+          <h3>Self-host</h3>
+          <div class="v">Source</div>
+          <ul><li><code>npx @nirholas/binance-mcp-server</code></li><li>The full stdio server covers spot, futures, wallet and more with your own keys</li><li>This demo runs on Cloudflare Workers + D1</li><li>See the repository for license terms</li></ul>
+          <a class="btn" href="https://github.com/nirholas/Binance-MCP" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap row">
+    <span class="grow muted">Binance MCP Cloud · unofficial, not affiliated with Binance · market data from the Binance public API · BNB Chain RPC by publicnode</span>
+    <a href="https://github.com/nirholas/Binance-MCP" rel="noopener">GitHub</a>
+    <a href="/app/">Console</a>
+  </div>
+</footer>
+<script type="module" src="/landing.js"></script>
+</body>
+</html>
