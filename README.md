@@ -675,7 +675,7 @@ curl -X POST https://modelcontextprotocol.name/mcp/binance-mcp \
 
 ## Documentation
 
-Full documentation site: **https://nirholas.github.io/Binance-MCP/**
+Full documentation site: **https://binance-mcp.modelcontextprotocol.name/**
 
 - [Getting started](docs/getting-started.md) covers install and first run.
 - [Examples](docs/examples.md) has copy-paste snippets.
