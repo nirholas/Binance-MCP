@@ -679,3 +679,13 @@ Full documentation site: **https://binance-mcp.modelcontextprotocol.name/**
 
 - [Getting started](docs/getting-started.md) covers install and first run.
 - [Examples](docs/examples.md) has copy-paste snippets.
+
+<!-- nirholas:watermark -->
+
+---
+
+<p align="center">
+  Built by <a href="https://github.com/nirholas"><b>nirholas</b></a> · <a href="https://x.com/nichxbt">@nichxbt</a> · <a href="https://github.com/nirholas">github.com/nirholas</a>
+</p>
+
+<!-- /nirholas:watermark -->
