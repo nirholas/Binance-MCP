@@ -1,0 +1,1 @@
+{"mcpServers":{"binance":{"command":"npx","args":["-y","@nirholas/binance-mcp-server"],"env":{"BINANCE_API_KEY":"${BINANCE_API_KEY:-}"}}}}
